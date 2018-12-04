@@ -13,6 +13,13 @@
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
+    "@material/react-button": "^0.7.1",
+    "@material/react-card": "^0.7.1",
+    "@material/react-drawer": "^0.7.1",
+    "@material/react-layout-grid": "^0.7.1",
+    "@material/react-list": "^0.7.1",
+    "@material/react-text-field": "^0.7.1",
+    "@material/react-top-app-bar": "^0.7.1",
     "dotenv": "^6.0.0",
     "express": "^4.16.4",
     "express-basic-auth": "^1.1.5",
