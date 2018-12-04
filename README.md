@@ -157,7 +157,7 @@ The three vertical dots in the top of the app. Here you can:
 
 ## Requirements
 
-You need an Android phone with a minimum version of 4.0.3 (SDK 15 - ICE_CREAM_SANDWICH_MR1)
+Any browser on any device!
 
 ## Contributing Bug reports
 
@@ -203,7 +203,14 @@ basic advice.
 
 **Build Instructions**
 
-**#TODO**
+Setup environment file based upon the README.env environment file and use the following commands to start your local server:
+
+```
+npm install
+npm run dev // runs development server with nodemon listening for server changes
+npm run build // builds the next js app
+npm run start // for production builds
+```
 
 ---
 
