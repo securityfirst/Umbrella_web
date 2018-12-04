@@ -192,13 +192,9 @@ something you want to help out with in the interim, then here is some
 basic advice.
 
 1.  Fork it!
-
 2.  Create your feature branch: git checkout -b my-new-feature
-
 3.  Commit your changes: git commit -am 'Add some feature'
-
 4.  Push to the branch: git push origin my-new-feature
-
 5.  Submit a pull request :D
 
 **Build Instructions**
@@ -220,13 +216,9 @@ Thanks to everyone who has contributed code to Umbrella. It wouldn’t
 have happened without you.
 
 *   [Rok Biderman – Security First Lead Developer](https://github.com/Coccodrillo)
-
 *   [Vesna Planko – Security First Lead UI/UX Designer](https://github.com/VesnaPlanko)
-
 *   [Alex Guerrieri – Security First Developer](https://github.com/klaidliadon)
-
 *   [Adam Hani Schakaki – Security First Developer](https://github.com/krzd)
-
 
 **Cryptography Notice**
 
