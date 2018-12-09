@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /error
+
+# Javascript, CSS and Images
+
+User-agent: *
+# CSS, JS, Images
+
+User-agent: Twitterbot
+Disallow: /error
+
+Sitemap: https://umbrella.secfirst.org/sitemap.xml
