@@ -8,16 +8,20 @@ import Tab from '@material-ui/core/Tab';
 
 import Layout from '../components/Layout.js';
 
-import { contentStyles } from '../lib/view';
+import { contentStyles } from '../utils/view';
+
+const styles = theme => contentStyles(theme, {
+	tabs: {
+		backgroundColor: theme.palette.background.paper,
+	},
+});
 
 class Checklists extends React.Component {
 	state = {
 		tabIndex: 0
 	};
 
-	handleTabSelect = (e, v) => {
-		this.setState({tabIndex: v});
-	}
+	handleTabSelect = (e, v) => this.setState({tabIndex: v});
 
 	renderOverview = () => (
 		<Typography paragraph>
@@ -32,7 +36,7 @@ class Checklists extends React.Component {
 			at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
 			ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
 		</Typography>
-	)
+	);
 
 	renderCustom = () => (
 		<Typography paragraph>
@@ -47,7 +51,7 @@ class Checklists extends React.Component {
 			at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
 			ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
 		</Typography>
-	)
+	);
 
 	render() {
 		const { classes } = this.props;
@@ -83,4 +87,4 @@ Checklists.propTypes = {
 
 };
 
-export default withStyles(contentStyles, {withTheme: true})(Checklists);
+export default withStyles(styles, {withTheme: true})(Checklists);

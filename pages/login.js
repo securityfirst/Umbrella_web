@@ -7,7 +7,9 @@ import Typography from '@material-ui/core/Typography';
 
 import Layout from '../components/Layout.js';
 
-import { contentStyles } from '../lib/view';
+import { contentStyles } from '../utils/view';
+
+const styles = theme => contentStyles(theme);
 
 class Login extends React.Component {
 	render() {
@@ -38,4 +40,4 @@ class Login extends React.Component {
 	}
 }
 
-export default withStyles(contentStyles, {withTheme: true})(Login);
+export default withStyles(styles, {withTheme: true})(Login);

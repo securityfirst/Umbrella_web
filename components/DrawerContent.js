@@ -16,6 +16,9 @@ import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 import { setAppbarTitle } from '../store/actions/view';
+import { toggleLessonsMenu } from '../store/actions/view';
+
+import { mapStateToProps } from '../utils/store';
 
 const links = [
 	{name: 'Feeds', path: '/feeds', icon: (color) => <CalendarViewDayIcon color={color} />},
@@ -31,7 +34,13 @@ class DrawerContent extends React.Component {
 			<List>
 				{links.map((link, i) => (
 					<Link href={link.path} key={i}>
-						<ListItem button onClick={() => this.props.dispatch(setAppbarTitle(link.name))}>
+						<ListItem button onClick={() => {
+							this.props.dispatch(setAppbarTitle(link.name));
+
+							switch (link.name) {
+								case 'Lessons': this.props.dispatch(toggleLessonsMenu(true)); break;
+							}
+						}}>
 							<ListItemIcon>{link.icon(this.props.router.pathname == link.path ? "secondary" : "inherit")}</ListItemIcon>
 							<ListItemText primary={link.name} />
 						</ListItem>
@@ -41,7 +50,5 @@ class DrawerContent extends React.Component {
 		);
 	}
 }
-
-const mapStateToProps = (state) => ({...state.view});
 
 export default connect(mapStateToProps)(withRouter(DrawerContent));

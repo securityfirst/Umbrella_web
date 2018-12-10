@@ -10,6 +10,13 @@ export default function reducer(state = initialState, action) {
 				...state,
 				appbarTitle: action.payload,
 			};
+
+		/* TOGGLE_LESSONS_MENU */
+		case viewTypes.TOGGLE_LESSONS_MENU:
+			return {
+				...state,
+				lessonsMenuOpened: action.payload,
+			};
 	}
 
 	return state;

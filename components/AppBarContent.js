@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 
 import Typography from '@material-ui/core/Typography';
 
+import { mapStateToProps } from '../utils/store';
+
 class AppBarContent extends React.Component {
 	render() {
 		const { router, appbarTitle } = this.props;
@@ -22,7 +24,5 @@ class AppBarContent extends React.Component {
 AppBarContent.propTypes = {
 	router: PropTypes.object.isRequired,
 };
-
-const mapStateToProps = (state) => ({...state.view});
 
 export default withRouter(connect(mapStateToProps)(AppBarContent));

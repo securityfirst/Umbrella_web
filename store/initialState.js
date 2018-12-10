@@ -32,7 +32,7 @@ const checklists = {
 
 const view = {
 	appbarTitle: null,
-	checklistMenuIndex: 0,
+	lessonsMenuOpened: 0,
 };
 
 export default {

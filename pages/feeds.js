@@ -7,7 +7,9 @@ import Typography from '@material-ui/core/Typography';
 
 import Layout from '../components/Layout.js';
 
-import { contentStyles } from '../lib/view';
+import { contentStyles } from '../utils/view';
+
+const styles = theme => contentStyles(theme);
 
 class Feeds extends React.Component {
 	getInitialProps = (ctx, router) => {
@@ -43,4 +45,4 @@ class Feeds extends React.Component {
 	}
 }
 
-export default withStyles(contentStyles, {withTheme: true})(Feeds);
+export default withStyles(styles, {withTheme: true})(Feeds);

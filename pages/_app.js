@@ -17,6 +17,9 @@ const theme = createMuiTheme({
 			main: '#87bd34',
 			dark: '#558d00',
 		},
+		background: {
+			paper: '#fdfdfd',
+		},
 	},
 	typography: {
 		useNextVariants: true,
@@ -32,8 +35,6 @@ class MyApp extends App {
 	static getInitialProps({Component, router, ctx}) {
 		let pageProps = {};
 
-		console.log("Component.getInitialProps: ", Component.getInitialProps);
-
 		if (Component.getInitialProps) {
 			pageProps = Component.getInitialProps(ctx, router);
 		}
@@ -47,7 +48,7 @@ class MyApp extends App {
 		return (
 			<MuiThemeProvider theme={theme}>
 				<Container>
-					<NProgress color="#8b2a42" spinner={false} />
+					<NProgress color="#fff" spinner={false} />
 
 					<Provider store={reduxStore}>
 						<Component {...pageProps} />

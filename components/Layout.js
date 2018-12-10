@@ -23,7 +23,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AppBarContent from './AppBarContent';
 import DrawerContent from './DrawerContent';
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const styles = theme => ({
 	root: {
@@ -61,7 +61,7 @@ const styles = theme => ({
 		width: drawerWidth,
 		flexShrink: 0,
 		whiteSpace: 'nowrap',
-		backgroundColor: '#fdfdfd',
+		backgroundColor: theme.palette.background.paper,
 	},
 	drawerOpen: {
 		width: drawerWidth,
@@ -86,7 +86,7 @@ const styles = theme => ({
 		alignItems: 'center',
 		justifyContent: 'flex-end',
 		padding: '0 8px',
-		backgroundColor: '#fdfdfd',
+		backgroundColor: theme.palette.background.paper,
 		...theme.mixins.toolbar,
 	},
 	main: {
@@ -103,17 +103,11 @@ class Layout extends React.Component {
 		drawerToggled: false,
 	};
 
-	handleDrawerOpen = () => {
-		this.setState({ drawerToggled: true });
-	};
+	handleDrawerOpen = () => this.setState({ drawerToggled: true });
 
-	handleDrawerClose = () => {
-		this.setState({ drawerToggled: false });
-	};
+	handleDrawerClose = () => this.setState({ drawerToggled: false });
 
-	handleDrawerToggle = () => {
-		this.setState({ drawerToggled: !this.state.drawerToggled });
-	};
+	handleDrawerToggle = () => this.setState(state => ({ drawerToggled: !state.drawerToggled }));
 
 	render() {
 		const { router, classes, theme } = this.props;

@@ -7,7 +7,9 @@ import Typography from '@material-ui/core/Typography';
 
 import Layout from '../components/Layout.js';
 
-import { contentStyles } from '../lib/view';
+import { contentStyles } from '../utils/view';
+
+const styles = theme => contentStyles(theme);
 
 class Forms extends React.Component {
 	render() {
@@ -38,4 +40,4 @@ class Forms extends React.Component {
 	}
 }
 
-export default withStyles(contentStyles, {withTheme: true})(Forms);
+export default withStyles(styles, {withTheme: true})(Forms);

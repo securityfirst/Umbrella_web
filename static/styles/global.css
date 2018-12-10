@@ -1,1 +1,10 @@
 @import url("https://unpkg.com/tachyons@4.10.0/css/tachyons.min.css");
+
+#nprogress {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+	height: 5px;
+    z-index: 9999;
+}
