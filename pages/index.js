@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 class Index extends React.Component {
 	render() {
 		return (
-			<Layout>
+			<Layout title="Umbrella | Home" description="Umbrella web application">
 				<Typography paragraph>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
 					incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent

@@ -35,7 +35,7 @@ class MyApp extends App {
 		return (
 			<MuiThemeProvider theme={theme}>
 				<Container>
-					<NProgress color="#000" spinner={false} />
+					<NProgress color="#8b2a42" spinner={false} />
 
 					<Provider store={reduxStore}>
 						<Component {...pageProps} />
