@@ -28,5 +28,5 @@ export const checklistsTypes = {
 };
 
 export const viewTypes = {
-	TOGGLE_CHECKLISTS_MENU: 'TOGGLE_CHECKLISTS_MENU',
+	SET_APPBAR_TITLE: 'SET_APPBAR_TITLE',
 };

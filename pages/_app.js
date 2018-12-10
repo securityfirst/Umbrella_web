@@ -8,9 +8,14 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 const theme = createMuiTheme({
 	palette: {
 		primary: {
-			// light: ,
+			light: '#ee6883',
 			main: '#b83657',
-			dark: '#8b2a42',
+			dark: '#83002e',
+		},
+		secondary: {
+			light: '#baf066',
+			main: '#87bd34',
+			dark: '#558d00',
 		},
 	},
 	typography: {
