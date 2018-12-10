@@ -89,6 +89,7 @@ const styles = theme => ({
 	},
 	content: {
 		flexGrow: 1,
+		minWidth: 'calc(100vw - 73px)',
 		padding: theme.spacing.unit * 3,
 	},
 });
