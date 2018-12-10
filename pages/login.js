@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
-import Layout from '../components/Layout.js';
+import Layout from '../components/layout';
 
 import { contentStyles } from '../utils/view';
 
@@ -40,4 +41,6 @@ class Login extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(Login);
+const mapStateToProps = state => ({...state.account});
+
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Login));
