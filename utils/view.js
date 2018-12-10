@@ -9,3 +9,7 @@ export const contentStyles = (theme, options = {}) => ({
 	},
 	...options
 });
+
+export const viewConstants = {
+	drawerWidth: 200,
+};

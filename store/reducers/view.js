@@ -4,6 +4,13 @@ import initialState from '../initialState.js';
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
+		/* TOGGLE_MAIN_MENU */
+		case viewTypes.TOGGLE_MAIN_MENU:
+			return {
+				...state,
+				mainMenuOpened: action.payload,
+			};
+
 		/* SET_APPBAR_TITLE */
 		case viewTypes.SET_APPBAR_TITLE:
 			return {

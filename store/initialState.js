@@ -1,5 +1,7 @@
 const account = {
-	loggedIn: false
+	loading: false,
+	error: null,
+	loggedIn: false,
 };
 
 const feeds = {

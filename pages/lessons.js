@@ -22,10 +22,9 @@ import LanguageIcon from '@material-ui/icons/Language';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-import Layout from '../components/Layout.js';
+import Layout from '../components/layout';
 
 import { contentStyles } from '../utils/view';
-import { mapStateToProps } from '../utils/store';
 
 const menuWidth = 300;
 
@@ -156,5 +155,7 @@ class Lessons extends React.Component {
 		);
 	}
 }
+
+const mapStateToProps = state => ({...state.view});
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Lessons));
