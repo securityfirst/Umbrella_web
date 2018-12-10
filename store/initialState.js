@@ -31,7 +31,7 @@ const checklists = {
 };
 
 const view = {
-	appbarTitle: 'Umbrella',
+	appbarTitle: null,
 	checklistMenuIndex: 0,
 };
 

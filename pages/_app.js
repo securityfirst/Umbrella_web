@@ -29,11 +29,13 @@ const theme = createMuiTheme({
 });
 
 class MyApp extends App {
-	static async getInitialProps({Component, router, ctx}) {
+	static getInitialProps({Component, router, ctx}) {
 		let pageProps = {};
 
+		console.log("Component.getInitialProps: ", Component.getInitialProps);
+
 		if (Component.getInitialProps) {
-			pageProps = await Component.getInitialProps(ctx);
+			pageProps = Component.getInitialProps(ctx, router);
 		}
 
 		return pageProps;

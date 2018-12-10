@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
+import { withRouter } from 'next/router';
 
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -115,7 +116,7 @@ class Layout extends React.Component {
 	};
 
 	render() {
-		const { classes, theme } = this.props;
+		const { router, classes, theme } = this.props;
 
 		return (
 		
@@ -186,8 +187,9 @@ class Layout extends React.Component {
 }
 
 Layout.propTypes = {
+	router: PropTypes.object.isRequired,
 	classes: PropTypes.object.isRequired,
 	theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(Layout);
+export default withRouter(withStyles(styles, { withTheme: true })(Layout));

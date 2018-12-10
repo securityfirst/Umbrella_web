@@ -10,6 +10,11 @@ import Layout from '../components/Layout.js';
 import { contentStyles } from '../lib/view';
 
 class Feeds extends React.Component {
+	getInitialProps = (ctx, router) => {
+		console.log("ctx: ", ctx);
+		console.log("router: ", router);
+	}
+
 	render() {
 		const { classes } = this.props;
 
