@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'next/router';
 import { connect } from 'react-redux';
+import { withRouter } from 'next/router';
+import Link from 'next/link';
 
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -10,6 +11,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import { toggleMainMenu } from '../../store/actions/view';
@@ -40,11 +42,26 @@ const styles = theme => ({
 			marginRight: 24,
 		}
 	},
+	title: {
+		flexGrow: 1,
+	},
 });
 
 class Appbar extends React.Component {
-	renderContent() {
-		const { router, appbarTitle } = this.props;
+	renderRightContent() {
+		if (!this.props.loggedIn) {
+			return (
+				<Link href="/login">
+					<Button component="button" color="inherit">LOGIN</Button>
+				</Link>
+			);
+		}
+
+		return null;
+	}
+
+	renderLeftContent() {
+		const { router, classes, appbarTitle } = this.props;
 
 		const title = appbarTitle || (
 			router.pathname == '/'
@@ -52,7 +69,7 @@ class Appbar extends React.Component {
 				: router.pathname.charAt(1).toUpperCase() + router.pathname.slice(2, router.pathname.length) 
 		);
 
-		return <Typography variant="h6" color="inherit" noWrap>{title}</Typography>;
+		return <Typography className={classes.title} variant="h6" color="inherit" noWrap>{title}</Typography>;
 	}
 
 	render() {
@@ -75,7 +92,9 @@ class Appbar extends React.Component {
 						<MenuIcon />
 					</IconButton>
 					
-					{this.renderContent()}
+					{this.renderLeftContent()}
+
+					{this.renderRightContent()}
 				</Toolbar>
 			</AppBar>
 		);
@@ -86,6 +105,9 @@ Appbar.propTypes = {
 	router: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({...state.view});
+const mapStateToProps = state => ({
+	...state.view,
+	...state.account,
+});
 
 export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Appbar)));
