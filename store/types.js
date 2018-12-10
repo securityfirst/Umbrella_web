@@ -28,5 +28,6 @@ export const checklistsTypes = {
 };
 
 export const viewTypes = {
-	TOGGLE_CHECKLISTS_MENU: 'TOGGLE_CHECKLISTS_MENU',
+	SET_APPBAR_TITLE: 'SET_APPBAR_TITLE',
+	TOGGLE_LESSONS_MENU: 'TOGGLE_LESSONS_MENU',
 };

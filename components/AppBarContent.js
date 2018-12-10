@@ -1,50 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { withRouter } from 'next/router';
-import Link from 'next/link';
+import { connect } from 'react-redux';
 
 import Typography from '@material-ui/core/Typography';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 
-import { selectChecklistMenu } from '../store/actions/view';
+import { mapStateToProps } from '../utils/store';
 
 class AppBarContent extends React.Component {
-	handleTabSelect = (e, v) => {
-		this.props.dispatch(selectChecklistMenu(v));
-	}
-
-	renderText = (text) => {
-		return <Typography variant="h6" color="inherit" noWrap>{text}</Typography>;
-	}
-
-	renderChecklistsMenu = () => {
-		const { checklistMenuIndex } = this.props;
-
-		return (
-			<Tabs value={checklistMenuIndex} onChange={this.handleTabSelect}>
-				<Tab label="OVERVIEW" />
-				<Tab label="CUSTOM" />
-			</Tabs>
-		);
-	}
-
 	render() {
-		const { pathname } = this.props.router;
-		console.log("this.props: ", this.props);
+		const { router, appbarTitle } = this.props;
 
-		switch (pathname) {
-			case '/account': 
-				return this.renderText('Account');
-			case '/checklists': 
-				return this.renderChecklistsMenu();
-		}
+		const title = appbarTitle || (
+			router.pathname == '/'
+				? 'Umbrella'
+				: router.pathname.charAt(1).toUpperCase() + router.pathname.slice(2, router.pathname.length) 
+		);
 
-		return this.renderText('Umbrella');
+		return <Typography variant="h6" color="inherit" noWrap>{title}</Typography>;
 	}
 }
 
-const mapStateToProps = (state) => ({...state.view});
+AppBarContent.propTypes = {
+	router: PropTypes.object.isRequired,
+};
 
-export default connect(mapStateToProps)(withRouter(AppBarContent));
+export default withRouter(connect(mapStateToProps)(AppBarContent));

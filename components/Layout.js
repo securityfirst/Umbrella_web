@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import Link from 'next/link';
+import { withRouter } from 'next/router';
 
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,25 +17,19 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import CalendarViewDayIcon from '@material-ui/icons/CalendarViewDay';
-import MapIcon from '@material-ui/icons/Map';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
-import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 import AppBarContent from './AppBarContent';
+import DrawerContent from './DrawerContent';
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const styles = theme => ({
 	root: {
 		display: 'flex',
+		minHeight: '100vh',
+		backgroundColor: '#ececec',
 	},
 	appBar: {
 		zIndex: theme.zIndex.drawer + 1,
@@ -67,7 +61,7 @@ const styles = theme => ({
 		width: drawerWidth,
 		flexShrink: 0,
 		whiteSpace: 'nowrap',
-		backgroundColor: '#fdfdfd',
+		backgroundColor: theme.palette.background.paper,
 	},
 	drawerOpen: {
 		width: drawerWidth,
@@ -92,50 +86,31 @@ const styles = theme => ({
 		alignItems: 'center',
 		justifyContent: 'flex-end',
 		padding: '0 8px',
-		backgroundColor: '#fdfdfd',
+		backgroundColor: theme.palette.background.paper,
 		...theme.mixins.toolbar,
 	},
 	main: {
 		flexGrow: 1,
-		minWidth: 'calc(100vw - 73px)',
-		padding: theme.spacing.unit * 3,
-	},
-	content: {
-		maxWidth: '45rem',
-		margin: '0 auto',
-		[theme.breakpoints.up('sm')]: {
-			padding: '0 2rem',
-		}
+		marginTop: 48,
+		[theme.breakpoints.down('sm')]: {
+			minWidth: 'calc(100vw - 73px)',
+		},
 	},
 });
-
-const links = [
-	{name: 'Feeds', path: '/feeds', icon: <CalendarViewDayIcon />},
-	{name: 'Forms', path: '/forms', icon: <MapIcon />},
-	{name: 'Checklists', path: '/checklists', icon: <DoneAllIcon />},
-	{name: 'Lessons', path: '/lessons', icon: <LocalLibraryIcon />},
-	{name: 'Account', path: '/account', icon: <AccountBoxIcon />},
-];
 
 class Layout extends React.Component {
 	state = {
 		drawerToggled: false,
 	};
 
-	handleDrawerOpen = () => {
-		this.setState({ drawerToggled: true });
-	};
+	handleDrawerOpen = () => this.setState({ drawerToggled: true });
 
-	handleDrawerClose = () => {
-		this.setState({ drawerToggled: false });
-	};
+	handleDrawerClose = () => this.setState({ drawerToggled: false });
 
-	handleDrawerToggle = () => {
-		this.setState({ drawerToggled: !this.state.drawerToggled });
-	};
+	handleDrawerToggle = () => this.setState(state => ({ drawerToggled: !state.drawerToggled }));
 
 	render() {
-		const { classes, theme } = this.props;
+		const { router, classes, theme } = this.props;
 
 		return (
 		
@@ -193,25 +168,12 @@ class Layout extends React.Component {
 
 						<Divider />
 
-						<List>
-							{links.map((link, i) => (
-								<Link href={link.path} key={i}>
-									<ListItem button>
-										<ListItemIcon>{link.icon}</ListItemIcon>
-										<ListItemText primary={link.name} />
-									</ListItem>
-								</Link>
-							))}
-						</List>
+						<DrawerContent />
 					</Drawer>
 				</ClickAwayListener>
 
 				<main className={classes.main}>
-					<div className={classes.toolbar} />
-					
-					<div className={classes.content}>
-						{this.props.children}
-					</div>
+					{this.props.children}
 				</main>
 			</div>
 		);
@@ -219,8 +181,9 @@ class Layout extends React.Component {
 }
 
 Layout.propTypes = {
+	router: PropTypes.object.isRequired,
 	classes: PropTypes.object.isRequired,
 	theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(Layout);
+export default withRouter(withStyles(styles, { withTheme: true })(Layout));

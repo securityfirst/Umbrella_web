@@ -31,7 +31,8 @@ const checklists = {
 };
 
 const view = {
-	checklistMenuIndex: 0,
+	appbarTitle: null,
+	lessonsMenuOpened: 0,
 };
 
 export default {
