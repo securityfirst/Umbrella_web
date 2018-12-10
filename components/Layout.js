@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
+import Link from 'next/link';
 
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -94,6 +95,14 @@ const styles = theme => ({
 	},
 });
 
+const links = [
+	{name: 'Feeds', path: '/feeds', icon: <CalendarViewDayIcon />},
+	{name: 'Forms', path: '/forms', icon: <MapIcon />},
+	{name: 'Checklists', path: '/checklists', icon: <DoneAllIcon />},
+	{name: 'Lessons', path: '/lessons', icon: <LocalLibraryIcon />},
+	{name: 'Account', path: '/account', icon: <AccountBoxIcon />},
+];
+
 class Layout extends React.Component {
 	state = {
 		menuToggled: false,
@@ -169,26 +178,14 @@ class Layout extends React.Component {
 					<Divider />
 
 					<List>
-						<ListItem button key={0}>
-							<ListItemIcon><CalendarViewDayIcon /></ListItemIcon>
-							<ListItemText primary='Feeds' />
-						</ListItem>
-						<ListItem button key={1}>
-							<ListItemIcon><MapIcon /></ListItemIcon>
-							<ListItemText primary='Forms' />
-						</ListItem>
-						<ListItem button key={2}>
-							<ListItemIcon><DoneAllIcon /></ListItemIcon>
-							<ListItemText primary='Checklists' />
-						</ListItem>
-						<ListItem button key={3}>
-							<ListItemIcon><LocalLibraryIcon /></ListItemIcon>
-							<ListItemText primary='Lessons' />
-						</ListItem>
-						<ListItem button key={4}>
-							<ListItemIcon><AccountBoxIcon /></ListItemIcon>
-							<ListItemText primary='Account' />
-						</ListItem>
+						{links.map((link, i) => (
+							<Link href={link.path} key={i}>
+								<ListItem button>
+									<ListItemIcon>{link.icon}</ListItemIcon>
+									<ListItemText primary={link.name} />
+								</ListItem>
+							</Link>
+						))}
 					</List>
 				</Drawer>
 
