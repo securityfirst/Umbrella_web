@@ -27,7 +27,7 @@ import Layout from '../components/Layout.js';
 import { contentStyles } from '../utils/view';
 import { mapStateToProps } from '../utils/store';
 
-const menuWidth = 275;
+const menuWidth = 300;
 
 const styles = theme => contentStyles(theme, {
 	wrapper: {
