@@ -3,14 +3,14 @@ import { pending, rejected, fulfilled } from '../helpers/asyncStatusGenerator.js
 import initialState from '../initialState.js';
 
 export default function reducer(state = initialState, action) {
-	const {TOGGLE_MENU} = viewTypes;
+	const {TOGGLE_CHECKLISTS_MENU} = viewTypes;
 
 	switch (action.type) {
-		/* TOGGLE_MENU */
-		case TOGGLE_MENU:
+		/* TOGGLE_CHECKLISTS_MENU */
+		case TOGGLE_CHECKLISTS_MENU:
 			return {
 				...state,
-				menuToggled: !state.view.menuToggled,
+				checklistMenuIndex: action.payload,
 			};
 	}
 

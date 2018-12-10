@@ -1,4 +1,6 @@
 import { viewTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
-import { formatError } from '../utils/error.js';
+export function selectChecklistMenu(tabSelected) {
+	return {type: viewTypes.TOGGLE_CHECKLISTS_MENU, payload: tabSelected};
+}

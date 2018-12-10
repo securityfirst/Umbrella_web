@@ -31,7 +31,7 @@ const checklists = {
 };
 
 const view = {
-	menuToggled: false,
+	checklistMenuIndex: 0,
 };
 
 export default {

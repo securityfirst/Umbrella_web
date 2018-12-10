@@ -3,6 +3,25 @@ import App, { Container } from 'next/app';
 import NProgress from 'next-nprogress/component';
 import { Provider } from 'react-redux';
 import withReduxStore from '../lib/redux.js';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+	palette: {
+		primary: {
+			// light: ,
+			main: '#b83657',
+			dark: '#8b2a42',
+		},
+	},
+	typography: {
+		useNextVariants: true,
+	},
+	mixins: {
+		toolbar: {
+			minHeight: 48,
+		},
+	},
+});
 
 class MyApp extends App {
 	static async getInitialProps({Component, router, ctx}) {
@@ -12,20 +31,22 @@ class MyApp extends App {
 			pageProps = await Component.getInitialProps(ctx);
 		}
 
-		return {pageProps};
+		return pageProps;
 	}
 
 	render () {
 		const {Component, pageProps, reduxStore} = this.props;
 
 		return (
-			<Container>
-				<NProgress color="#000" spinner={false} />
+			<MuiThemeProvider theme={theme}>
+				<Container>
+					<NProgress color="#8b2a42" spinner={false} />
 
-				<Provider store={reduxStore}>
-					<Component {...pageProps} />
-				</Provider>
-			</Container>
+					<Provider store={reduxStore}>
+						<Component {...pageProps} />
+					</Provider>
+				</Container>
+			</MuiThemeProvider>
 		);
 	}
 }
