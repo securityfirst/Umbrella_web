@@ -29,6 +29,8 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
+import AppBarContent from './AppBarContent';
+
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -51,8 +53,12 @@ const styles = theme => ({
 		}),
 	},
 	menuButton: {
-		marginLeft: 12,
-		marginRight: 24,
+		marginLeft: 5,
+		marginRight: 5,
+		[theme.breakpoints.up('sm')]: {
+			marginLeft: 12,
+			marginRight: 24,
+		}
 	},
 	hide: {
 		display: 'none',
@@ -97,7 +103,9 @@ const styles = theme => ({
 	content: {
 		maxWidth: '45rem',
 		margin: '0 auto',
-		padding: '0 2rem',
+		[theme.breakpoints.up('sm')]: {
+			padding: '0 2rem',
+		}
 	},
 });
 
@@ -157,9 +165,8 @@ class Layout extends React.Component {
 						>
 							<MenuIcon />
 						</IconButton>
-						<Typography variant="h6" color="inherit" noWrap>
-							Umbrella
-						</Typography>
+						
+						<AppBarContent />
 					</Toolbar>
 				</AppBar>
 

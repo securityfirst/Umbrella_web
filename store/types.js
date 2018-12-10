@@ -28,5 +28,5 @@ export const checklistsTypes = {
 };
 
 export const viewTypes = {
-	MENU_TOGGLE: 'MENU_TOGGLE',
+	TOGGLE_CHECKLISTS_MENU: 'TOGGLE_CHECKLISTS_MENU',
 };

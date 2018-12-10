@@ -16,6 +16,11 @@ const theme = createMuiTheme({
 	typography: {
 		useNextVariants: true,
 	},
+	mixins: {
+		toolbar: {
+			minHeight: 48,
+		},
+	},
 });
 
 class MyApp extends App {
