@@ -54,7 +54,11 @@ const styles = theme => contentStyles(theme, {
 			duration: theme.transitions.duration.enteringScreen * 5,
 		}),
 	},
-	menuListNested: {
+	menuListItemSelected: {
+		borderTop: '1px solid ' + theme.palette.grey[300],
+		borderBottom: '1px solid ' + theme.palette.grey[300],
+	},
+	menuListSubItem: {
 		paddingLeft: theme.spacing.unit * 3,
 	},
 });
@@ -62,14 +66,14 @@ const styles = theme => contentStyles(theme, {
 const mockSubList = ['Preparation', 'Borders', 'Vehicles', 'Checkpoints', 'Kidnapping'];
 
 const menuList = [
-	{name: 'Information', icon: <DevicesOtherIcon />, subList: mockSubList},
-	{name: 'Communications', icon: <SettingsPhoneIcon />, subList: mockSubList},
-	{name: 'Travel', icon: <BusinessCenterIcon />, subList: mockSubList},
-	{name: 'Operations', icon: <PeopleIcon />, subList: mockSubList},
-	{name: 'Personal', icon: <AccessibilityIcon />, subList: mockSubList},
-	{name: 'Emergency Support', icon: <BusinessIcon />, subList: mockSubList},
-	{name: 'Tools', icon: <LocalHospitalIcon />, subList: mockSubList},
-	{name: 'Glossary', icon: <LanguageIcon />, subList: mockSubList},
+	{name: 'Information', icon: (color) => <DevicesOtherIcon color={color} />, subList: mockSubList},
+	{name: 'Communications', icon: (color) => <SettingsPhoneIcon color={color} />, subList: mockSubList},
+	{name: 'Travel', icon: (color) => <BusinessCenterIcon color={color} />, subList: mockSubList},
+	{name: 'Operations', icon: (color) => <PeopleIcon color={color} />, subList: mockSubList},
+	{name: 'Personal', icon: (color) => <AccessibilityIcon color={color} />, subList: mockSubList},
+	{name: 'Emergency Support', icon: (color) => <BusinessIcon color={color} />, subList: mockSubList},
+	{name: 'Tools', icon: (color) => <LocalHospitalIcon color={color} />, subList: mockSubList},
+	{name: 'Glossary', icon: (color) => <LanguageIcon color={color} />, subList: mockSubList},
 ];
 
 class Lessons extends React.Component {
@@ -98,10 +102,10 @@ class Lessons extends React.Component {
 					const isSelected = this.state.menuItemSelected == i;
 
 					return (
-						<div key={i}>
+						<div key={i} className={isSelected ? classes.menuListItemSelected : ''}>
 							<ListItem button onClick={() => this.handleMenuItemSelect(i)}>
 								<ListItemIcon>
-									{item.icon}
+									{item.icon(isSelected ? 'primary' : 'inherit')}
 								</ListItemIcon>
 								<ListItemText inset primary={item.name} />
 								{isSelected ? <ExpandLess /> : <ExpandMore />}
@@ -110,7 +114,7 @@ class Lessons extends React.Component {
 								<List component="div" disablePadding>
 									{item.subList.map((subItem, i) => {
 										return (
-											<ListItem button className={classes.menuListNested} key={i}>
+											<ListItem button className={classes.menuListSubItem} key={i}>
 												<ListItemText inset primary={subItem} />
 											</ListItem>
 										);
