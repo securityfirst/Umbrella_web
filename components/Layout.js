@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import classNames from 'classnames';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -105,15 +106,19 @@ const links = [
 
 class Layout extends React.Component {
 	state = {
-		menuToggled: false,
+		drawerToggled: false,
 	};
 
 	handleDrawerOpen = () => {
-		this.setState({ menuToggled: true });
+		this.setState({ drawerToggled: true });
 	};
 
 	handleDrawerClose = () => {
-		this.setState({ menuToggled: false });
+		this.setState({ drawerToggled: false });
+	};
+
+	handleDrawerToggle = () => {
+		this.setState({ drawerToggled: !this.state.drawerToggled });
 	};
 
 	render() {
@@ -135,17 +140,15 @@ class Layout extends React.Component {
 				<AppBar 
 					position='fixed'
 					className={classNames(classes.appBar, {
-						[classes.appBarShift]: this.state.menuToggled,
+						[classes.appBarShift]: this.state.drawerToggled,
 					})}
 				>
 					<Toolbar disableGutters={true}>
 						<IconButton 
 							color="inherit" 
 							aria-label="Open drawer"
-							onClick={this.handleDrawerOpen}
-							className={classNames(classes.menuButton, {
-								[classes.hide]: this.state.open,
-							})}
+							onClick={this.handleDrawerToggle}
+							className={classes.menuButton}
 						>
 							<MenuIcon />
 						</IconButton>
@@ -155,39 +158,41 @@ class Layout extends React.Component {
 					</Toolbar>
 				</AppBar>
 
-				<Drawer
-					variant="permanent"
-					className={classNames(classes.drawer, {
-						[classes.drawerOpen]: this.state.menuToggled,
-						[classes.drawerClose]: !this.state.menuToggled,
-					})}
-					classes={{
-						paper: classNames({
-							[classes.drawerOpen]: this.state.menuToggled,
-							[classes.drawerClose]: !this.state.menuToggled,
-						}),
-					}}
-					open={this.state.menuToggled}
-				>
-					<div className={classes.toolbar}>
-						<IconButton onClick={this.handleDrawerClose}>
-							{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-						</IconButton>
-					</div>
+				<ClickAwayListener onClickAway={this.handleDrawerClose}>
+					<Drawer
+						variant="permanent"
+						className={classNames(classes.drawer, {
+							[classes.drawerOpen]: this.state.drawerToggled,
+							[classes.drawerClose]: !this.state.drawerToggled,
+						})}
+						classes={{
+							paper: classNames({
+								[classes.drawerOpen]: this.state.drawerToggled,
+								[classes.drawerClose]: !this.state.drawerToggled,
+							}),
+						}}
+						open={this.state.drawerToggled}
+					>
+						<div className={classes.toolbar}>
+							<IconButton onClick={this.handleDrawerClose}>
+								{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+							</IconButton>
+						</div>
 
-					<Divider />
+						<Divider />
 
-					<List>
-						{links.map((link, i) => (
-							<Link href={link.path} key={i}>
-								<ListItem button>
-									<ListItemIcon>{link.icon}</ListItemIcon>
-									<ListItemText primary={link.name} />
-								</ListItem>
-							</Link>
-						))}
-					</List>
-				</Drawer>
+						<List>
+							{links.map((link, i) => (
+								<Link href={link.path} key={i}>
+									<ListItem button>
+										<ListItemIcon>{link.icon}</ListItemIcon>
+										<ListItemText primary={link.name} />
+									</ListItem>
+								</Link>
+							))}
+						</List>
+					</Drawer>
+				</ClickAwayListener>
 
 				<main className={classes.content}>
 					<div className={classes.toolbar} />
