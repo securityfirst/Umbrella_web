@@ -89,10 +89,15 @@ const styles = theme => ({
 		backgroundColor: '#fdfdfd',
 		...theme.mixins.toolbar,
 	},
-	content: {
+	main: {
 		flexGrow: 1,
 		minWidth: 'calc(100vw - 73px)',
 		padding: theme.spacing.unit * 3,
+	},
+	content: {
+		maxWidth: '45rem',
+		margin: '0 auto',
+		padding: '0 2rem',
 	},
 });
 
@@ -194,10 +199,12 @@ class Layout extends React.Component {
 					</Drawer>
 				</ClickAwayListener>
 
-				<main className={classes.content}>
+				<main className={classes.main}>
 					<div className={classes.toolbar} />
 					
-					{this.props.children}
+					<div className={classes.content}>
+						{this.props.children}
+					</div>
 				</main>
 			</div>
 		);
