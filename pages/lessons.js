@@ -27,6 +27,10 @@ import Layout from '../components/layout';
 
 import { contentStyles } from '../utils/view';
 
+import { setLessonCategories } from '../store/actions/lessons';
+
+import { categories } from '../mock/lessons';
+
 const menuWidth = 300;
 
 const styles = theme => ({
@@ -78,14 +82,17 @@ const menuList = [
 ];
 
 class Lessons extends React.Component {
-	static async getInitialProps({req}) {
-		if (!process.browser) {
-			const categoriesReq = await fetch('https://api.secfirst.org/v1/categories', {mode: "cors"});
-			const categories = await categoriesReq.json();
+	static async getInitialProps({reduxStore}) {
+		let results;
+		// let categories;
 
-			return {
-				categories
-			};
+		try {
+			const categoriesReq = await fetch('https://api.secfirst.org/v1/categories', {mode: "cors"});
+			results = await categoriesReq.json();
+			// categories = await categoriesReq.json();
+			reduxStore.dispatch(setLessonCategories({categories}));
+		} catch (e) {
+			console.error(`Error fetching categories: `, e);
 		}
 	}
 
@@ -142,7 +149,6 @@ class Lessons extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		console.log("this.props.categories: ", this.props.categories);
 
 		return (
 			<Layout title="Umbrella | Lessons" description="Umbrella web application">
@@ -170,6 +176,9 @@ class Lessons extends React.Component {
 	}
 }
 
-const mapStateToProps = state => ({...state.view});
+const mapStateToProps = state => ({
+	...state.view,
+	...state.lessons,
+});
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Lessons));

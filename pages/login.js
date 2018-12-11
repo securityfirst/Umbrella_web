@@ -74,7 +74,7 @@ const styles = theme => ({
 
 class Login extends React.Component {
 	state = {
-		password: null,
+		password: '',
 		error: false,
 		errorMessage: null,
 	};
@@ -82,7 +82,7 @@ class Login extends React.Component {
 	handleLoginSubmit = () => {
 		const { password } = this.state;
 
-		if (!password) {
+		if (!password || !password.length) {
 			this.setState({
 				error: true,
 				errorMessage: 'Password is required',
@@ -96,6 +96,7 @@ class Login extends React.Component {
 
 	render() {
 		const { classes } = this.props;
+		const { password, error, errorMessage } = this.state;
 
 		return (
 			<Layout title="Umbrella | Login" description="Umbrella web application">
@@ -109,7 +110,7 @@ class Login extends React.Component {
 							<FormControl fullWidth>
 								<InputLabel
 									htmlFor="login-password"
-									error={this.state.error}
+									error={error}
 									classes={{
 										root: classes.loginLabel,
 										focused: classes.loginFocused,
@@ -121,9 +122,9 @@ class Login extends React.Component {
 									required 
 									autoFocus
 									fullWidth
-									error={this.state.error}
+									error={error}
 									id="login-password"
-									value={this.state.password} 
+									value={password} 
 									type="password" 
 									classes={{
 										underline: classes.loginUnderline,
@@ -134,7 +135,7 @@ class Login extends React.Component {
 									}}
 									onChange={(e,v) => this.setState({password: v})}
 								/>
-								{!!this.state.error && <FormHelperText className={classes.loginHelperText}>{this.state.errorMessage}</FormHelperText>}
+								{!!error && <FormHelperText className={classes.loginHelperText}>{errorMessage}</FormHelperText>}
 							</FormControl>
 							<FormControl className={classes.loginButtonFormControl} fullWidth>
 								<ClickAwayListener onClickAway={this.removeError}>

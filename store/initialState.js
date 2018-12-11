@@ -21,7 +21,7 @@ const forms = {
 const lessons = {
 	loading: true,
 	erorr: null,
-	data: [],
+	categories: [],
 	current: null,
 };
 

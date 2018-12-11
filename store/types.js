@@ -4,23 +4,24 @@ export const accountTypes = {
 };
 
 export const feedsTypes = {
-	GET_FEEDS: 'GET_FEEDS',
+	SET_FEEDS: 'SET_FEEDS',
 	POST_FEED: 'POST_FEED',
 	UPDATE_FEED: 'UPDATE_FEED',
 };
 
 export const formsTypes = {
-	GET_FORMS: 'GET_FORMS',
+	SET_FORMS: 'SET_FORMS',
 	POST_FORM: 'POST_FORM',
 	UPDATE_FORM: 'UPDATE_FORM',
 };
 
 export const lessonsTypes = {
+	SET_LESSON_CATEGORIES: 'SET_LESSON_CATEGORIES',
 	GET_LESSON_CARDS: 'GET_LESSON_CARDS',
 };
 
 export const checklistsTypes = {
-	GET_CHECKLISTS: 'GET_CHECKLISTS',
+	SET_CHECKLISTS: 'SET_CHECKLISTS',
 	POST_CHECKLIST: 'POST_CHECKLIST',
 	UPDATE_CHECKLIST: 'UPDATE_CHECKLIST',
 };

@@ -17,7 +17,6 @@ exports.renderAndCache = async function(app, ssrCache, req, res, pagePath, query
 		console.log('non-cached');
 		// If not let's render the page into HTML
 		const html = await app.renderToHTML(req, res, pagePath, queryParams)
-		console.log("html: ", html);
 
 		// Something is wrong with the request, let's skip the cache
 		if (res.statusCode !== 200) {
