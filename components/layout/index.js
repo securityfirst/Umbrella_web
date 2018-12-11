@@ -5,7 +5,6 @@ import { withRouter } from 'next/router';
 
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import Appbar from './Appbar';
 import Menu from './Menu';
