@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { withRouter } from 'next/router';
 
 import { withStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 
 import Appbar from './Appbar';
 import Menu from './Menu';
@@ -42,8 +41,6 @@ class Layout extends React.Component {
 					<meta name='description' content={this.props.description} />
 					<link href="/static/styles/global.css" rel="stylesheet" />
 				</Head>
-
-				<CssBaseline />
 
 				<Appbar />
 

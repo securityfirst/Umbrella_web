@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import 'isomorphic-unfetch';
 
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
@@ -77,6 +78,17 @@ const menuList = [
 ];
 
 class Lessons extends React.Component {
+	static async getInitialProps({req}) {
+		if (!process.browser) {
+			const categoriesReq = await fetch('https://api.secfirst.org/v1/categories', {mode: "cors"});
+			const categories = await categoriesReq.json();
+
+			return {
+				categories
+			};
+		}
+	}
+
 	state = {
 		menuItemSelected: null,
 		lessonSelected: null,
@@ -130,6 +142,7 @@ class Lessons extends React.Component {
 
 	render() {
 		const { classes } = this.props;
+		console.log("this.props.categories: ", this.props.categories);
 
 		return (
 			<Layout title="Umbrella | Lessons" description="Umbrella web application">

@@ -2,59 +2,64 @@ import React from 'react';
 import App, { Container } from 'next/app';
 import NProgress from 'next-nprogress/component';
 import { Provider } from 'react-redux';
-import withReduxStore from '../lib/redux.js';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
-const theme = createMuiTheme({
-	palette: {
-		primary: {
-			light: '#ee6883',
-			main: '#b83657',
-			dark: '#83002e',
-		},
-		secondary: {
-			light: '#baf066',
-			main: '#87bd34',
-			dark: '#558d00',
-		},
-		background: {
-			paper: '#fdfdfd',
-		},
-	},
-	typography: {
-		useNextVariants: true,
-	},
-	mixins: {
-		toolbar: {
-			minHeight: 48,
-		},
-	},
-});
+import { withReduxStore } from '../lib/redux.js';
+import JssProvider from 'react-jss/lib/JssProvider';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { getPageContext } from '../lib/mui';
 
 class MyApp extends App {
-	static getInitialProps({Component, router, ctx}) {
+	constructor(props) {
+		super(props);
+		this.pageContext = getPageContext();
+	}
+
+	static async getInitialProps({Component, router, ctx}) {
 		let pageProps = {};
 
 		if (Component.getInitialProps) {
-			pageProps = Component.getInitialProps(ctx, router);
+			pageProps = await Component.getInitialProps(ctx);
 		}
 
-		return pageProps;
+		return {pageProps};
 	}
 
+	componentDidMount() {
+		// Remove the server-side injected CSS.
+		const jssStyles = document.querySelector('#jss-server-side');
+		
+		if (jssStyles && jssStyles.parentNode) {
+			jssStyles.parentNode.removeChild(jssStyles);
+		}
+	}
 	render () {
 		const {Component, pageProps, reduxStore} = this.props;
 
 		return (
-			<MuiThemeProvider theme={theme}>
-				<Container>
-					<NProgress color="#fff" spinner={false} />
+			<JssProvider
+				registry={this.pageContext.sheetsRegistry}
+				generateClassName={this.pageContext.generateClassName}
+			>
+				{/* MuiThemeProvider makes the theme available down the React
+				tree thanks to React context. */}
+				<MuiThemeProvider 
+					theme={this.pageContext.theme}
+					sheetsManager={this.pageContext.sheetsManager}
+				>
+					{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+					<CssBaseline />
+					
+					<Container>
+						<NProgress color="#fff" spinner={false} />
 
-					<Provider store={reduxStore}>
-						<Component {...pageProps} />
-					</Provider>
-				</Container>
-			</MuiThemeProvider>
+						<Provider store={reduxStore}>
+							{/* Pass pageContext to the _document though the renderPage enhancer
+							to render collected styles on server side. */}
+							<Component {...pageProps} pageContext={this.pageContext} />
+						</Provider>
+					</Container>
+				</MuiThemeProvider>
+			</JssProvider>
 		);
 	}
 }

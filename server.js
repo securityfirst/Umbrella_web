@@ -22,8 +22,15 @@ app.prepare().then(() => {
 	
 	// server routes
 	const api = require('./server/routes/api');
+	const auth = require('./server/routes/auth');
 	// pages
 	const index = require('./server/routes/index');
+	const login = require('./server/routes/login');
+	const account = require('./server/routes/account');
+	const feeds = require('./server/routes/feeds');
+	const forms = require('./server/routes/forms');
+	const checklists = require('./server/routes/checklists');
+	const lessons = require('./server/routes/lessons');
 
 	// security - like to not display the backend is built on express ;)
 	server.disable('x-powered-by');
@@ -50,9 +57,16 @@ app.prepare().then(() => {
 
 	// setup server routes
 	server.use('/api', api);
+	server.use('/auth', auth);
 
 	// pages
 	server.get('/', index.index(app));
+	server.get('/login', login.index(app));
+	server.get('/account', account.index(app));
+	server.get('/feeds', feeds.index(app));
+	server.get('/forms', forms.index(app));
+	server.get('/checklists', checklists.index(app));
+	server.get('/lessons', lessons.index(app));
 	
 	// next/js routes that don't require backend routes
 	server.get('*', (req, res) => {
