@@ -3,23 +3,21 @@ import { pending, rejected, fulfilled } from '../helpers/asyncStatusGenerator.js
 import initialState from '../initialState.js';
 
 export default function reducer(state = initialState, action) {
-	const {LOGIN, LOGOUT} = accountTypes;
-
 	switch (action.type) {
 		/* LOGIN */
-		case pending(LOGIN):
+		case pending(accountTypes.LOGIN):
 			return {
 				...state,
 				loading: true,
 			};
-		case rejected(LOGIN):
+		case rejected(accountTypes.LOGIN):
 			return {
 				...state,
 				loading: false,
 				error: action.payload,
 				isLoggedIn: false,
 			};
-		case fulfilled(LOGIN):
+		case fulfilled(accountTypes.LOGIN):
 			return {
 				...state,
 				loading: false,
@@ -28,19 +26,19 @@ export default function reducer(state = initialState, action) {
 			};
 
 		/* LOGOUT */
-		case pending(LOGOUT):
+		case pending(accountTypes.LOGOUT):
 			return {
 				...state,
 				loading: true,
 			};
-		case rejected(LOGOUT):
+		case rejected(accountTypes.LOGOUT):
 			return {
 				...state,
 				loading: false,
 				error: action.payload,
 				isLoggedIn: false,
 			};
-		case fulfilled(LOGOUT):
+		case fulfilled(accountTypes.LOGOUT):
 			return {
 				...state,
 				loading: false,

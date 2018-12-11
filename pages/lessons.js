@@ -12,6 +12,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 
+import SecurityIcon from '@material-ui/icons/Security';
 import DevicesOtherIcon from '@material-ui/icons/DevicesOther';
 import SettingsPhoneIcon from '@material-ui/icons/SettingsPhone';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
@@ -20,12 +21,17 @@ import AccessibilityIcon from '@material-ui/icons/Accessibility';
 import BusinessIcon from '@material-ui/icons/Business';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import LanguageIcon from '@material-ui/icons/Language';
+import InfoIcon from '@material-ui/icons/Info';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import Layout from '../components/layout';
 
 import { contentStyles } from '../utils/view';
+
+import { setLessonCategories } from '../store/actions/lessons';
+
+import { categories } from '../mock/lessons';
 
 const menuWidth = 300;
 
@@ -64,28 +70,31 @@ const styles = theme => ({
 	...contentStyles(theme),
 });
 
-const mockSubList = ['Preparation', 'Borders', 'Vehicles', 'Checkpoints', 'Kidnapping'];
-
-const menuList = [
-	{name: 'Information', icon: (color) => <DevicesOtherIcon color={color} />, subList: mockSubList},
-	{name: 'Communications', icon: (color) => <SettingsPhoneIcon color={color} />, subList: mockSubList},
-	{name: 'Travel', icon: (color) => <BusinessCenterIcon color={color} />, subList: mockSubList},
-	{name: 'Operations', icon: (color) => <PeopleIcon color={color} />, subList: mockSubList},
-	{name: 'Personal', icon: (color) => <AccessibilityIcon color={color} />, subList: mockSubList},
-	{name: 'Emergency Support', icon: (color) => <BusinessIcon color={color} />, subList: mockSubList},
-	{name: 'Tools', icon: (color) => <LocalHospitalIcon color={color} />, subList: mockSubList},
-	{name: 'Glossary', icon: (color) => <LanguageIcon color={color} />, subList: mockSubList},
-];
+const menuSet = {
+	'My Security': { icon: (color) => <SecurityIcon color={color} /> },
+	'Information': { icon: (color) => <DevicesOtherIcon color={color} /> },
+	'Communications': { icon: (color) => <SettingsPhoneIcon color={color} /> },
+	'Travel': { icon: (color) => <BusinessCenterIcon color={color} /> },
+	'Operations': { icon: (color) => <PeopleIcon color={color} /> },
+	'Personal': { icon: (color) => <AccessibilityIcon color={color} /> },
+	'Emergency Support': { icon: (color) => <BusinessIcon color={color} /> },
+	'Tools': { icon: (color) => <LocalHospitalIcon color={color} /> },
+	'Index / Glossary': { icon: (color) => <LanguageIcon color={color} /> },
+	'About': { icon: (color) => <InfoIcon color={color} /> },
+};
 
 class Lessons extends React.Component {
-	static async getInitialProps({req}) {
-		if (!process.browser) {
-			const categoriesReq = await fetch('https://api.secfirst.org/v1/categories', {mode: "cors"});
-			const categories = await categoriesReq.json();
+	static async getInitialProps({reduxStore}) {
+		let results;
+		// let categories;
 
-			return {
-				categories
-			};
+		try {
+			const categoriesReq = await fetch('https://api.secfirst.org/v1/categories', {mode: "cors"});
+			results = await categoriesReq.json();
+			// categories = await categoriesReq.json();
+			reduxStore.dispatch(setLessonCategories({categories}));
+		} catch (e) {
+			console.error(`Error fetching categories: `, e);
 		}
 	}
 
@@ -100,7 +109,16 @@ class Lessons extends React.Component {
 	}
 
 	renderMenuList = () => {
-		const { classes, lessonsMenuOpened } = this.props;
+		const { classes, lessonsMenuOpened, categories } = this.props;
+		const categoriesSet = categories.reduce((set, cat) => {
+			if (cat.parent === 0) {
+				if (!set[cat.category]) set.set(cat.category, []);
+			} else {
+				set.get(cat.parentName).push(cat);
+			}
+
+			return set;
+		}, new Map());
 
 		return (
 			<List
@@ -110,24 +128,26 @@ class Lessons extends React.Component {
 					[classes.menuListOpened]: lessonsMenuOpened,
 				})}
 			>
-				{menuList.map((item, i) => {
+				{[...categoriesSet].map((item, i) => {
 					const isSelected = this.state.menuItemSelected == i;
+					const subList = categoriesSet.get(item[0]);
+					const menuItem = menuSet[item[0]];
 
-					return (
+					if (subList.length) return (
 						<div key={i} className={isSelected ? classes.menuListItemSelected : ''}>
 							<ListItem button onClick={() => this.handleMenuItemSelect(i)}>
-								<ListItemIcon>
-									{item.icon(isSelected ? 'primary' : 'inherit')}
-								</ListItemIcon>
-								<ListItemText inset primary={item.name} />
+								{!!menuItem && <ListItemIcon>
+									{menuItem.icon(isSelected ? 'primary' : 'inherit')}
+								</ListItemIcon>}
+								<ListItemText inset primary={item[0]} />
 								{isSelected ? <ExpandLess /> : <ExpandMore />}
 							</ListItem>
 							<Collapse in={isSelected} timeout="auto" unmountOnExit>
 								<List component="div" disablePadding>
-									{item.subList.map((subItem, i) => {
+									{subList.map((subItem, i) => {
 										return (
 											<ListItem button className={classes.menuListSubItem} key={i}>
-												<ListItemText inset primary={subItem} />
+												<ListItemText inset primary={subItem.category} />
 											</ListItem>
 										);
 									})}
@@ -142,7 +162,6 @@ class Lessons extends React.Component {
 
 	render() {
 		const { classes } = this.props;
-		console.log("this.props.categories: ", this.props.categories);
 
 		return (
 			<Layout title="Umbrella | Lessons" description="Umbrella web application">
@@ -170,6 +189,9 @@ class Lessons extends React.Component {
 	}
 }
 
-const mapStateToProps = state => ({...state.view});
+const mapStateToProps = state => ({
+	...state.view,
+	...state.lessons,
+});
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Lessons));
