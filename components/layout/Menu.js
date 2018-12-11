@@ -6,7 +6,6 @@ import Link from 'next/link';
 
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
@@ -39,13 +38,19 @@ const links = [
 
 const styles = theme => ({
 	drawer: {
-		width: viewConstants.drawerWidth,
+		width: viewConstants.drawerIconWidth(theme),
+		[theme.breakpoints.up('sm')]: {
+			width: viewConstants.drawerWidth,
+		},
 		flexShrink: 0,
 		whiteSpace: 'nowrap',
 		backgroundColor: theme.palette.background.paper,
 	},
 	drawerOpen: {
-		width: viewConstants.drawerWidth,
+		width: viewConstants.drawerIconWidth(theme),
+		[theme.breakpoints.up('sm')]: {
+			width: viewConstants.drawerWidth,
+		},
 		transition: theme.transitions.create('width', {
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.enteringScreen,
@@ -57,7 +62,7 @@ const styles = theme => ({
 			duration: theme.transitions.duration.leavingScreen,
 		}),
 		overflowX: 'hidden',
-		width: theme.spacing.unit * 7 + 1,
+		width: 0,
 		[theme.breakpoints.up('sm')]: {
 			width: theme.spacing.unit * 9 + 1,
 		},

@@ -12,4 +12,5 @@ export const contentStyles = (theme, options = {}) => ({
 
 export const viewConstants = {
 	drawerWidth: 200,
+	drawerIconWidth: theme => theme.spacing.unit * 7 + 1
 };

@@ -27,8 +27,14 @@ const styles = theme => ({
 		}),
 	},
 	appBarShift: {
-		marginLeft: viewConstants.drawerWidth,
-		width: `calc(100% - ${viewConstants.drawerWidth}px)`,
+		marginLeft: viewConstants.drawerIconWidth(theme),
+		[theme.breakpoints.up('sm')]: {
+			marginLeft: viewConstants.drawerWidth,
+		},
+		width: `calc(100% - ${viewConstants.drawerIconWidth(theme)}px)`,
+		[theme.breakpoints.up('sm')]: {
+			width: `calc(100% - ${viewConstants.drawerWidth}px)`,
+		},
 		transition: theme.transitions.create(['width', 'margin'], {
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.enteringScreen,
@@ -52,7 +58,7 @@ class Appbar extends React.Component {
 		if (!this.props.loggedIn) {
 			return (
 				<Link href="/login">
-					<Button component="button" color="inherit">LOGIN</Button>
+					<Button component="button" color="inherit">Login</Button>
 				</Link>
 			);
 		}
