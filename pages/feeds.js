@@ -12,11 +12,6 @@ import { contentStyles } from '../utils/view';
 const styles = theme => contentStyles(theme);
 
 class Feeds extends React.Component {
-	getInitialProps = (ctx, router) => {
-		console.log("ctx: ", ctx);
-		console.log("router: ", router);
-	}
-
 	render() {
 		const { classes } = this.props;
 
