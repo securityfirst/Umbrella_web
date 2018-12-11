@@ -28,7 +28,7 @@ import { contentStyles } from '../utils/view';
 
 const menuWidth = 300;
 
-const styles = theme => contentStyles(theme, {
+const styles = theme => ({
 	wrapper: {
 		display: 'flex',
 		flex: 1,
@@ -60,6 +60,7 @@ const styles = theme => contentStyles(theme, {
 	menuListSubItem: {
 		paddingLeft: theme.spacing.unit * 3,
 	},
+	...contentStyles(theme),
 });
 
 const mockSubList = ['Preparation', 'Borders', 'Vehicles', 'Checkpoints', 'Kidnapping'];
