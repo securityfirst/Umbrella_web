@@ -16,9 +16,7 @@ export const formsTypes = {
 };
 
 export const lessonsTypes = {
-	GET_LESSONS: 'GET_LESSONS',
-	POST_LESSON: 'POST_LESSON',
-	UPDATE_LESSON: 'UPDATE_LESSON',
+	GET_LESSON_CARDS: 'GET_LESSON_CARDS',
 };
 
 export const checklistsTypes = {

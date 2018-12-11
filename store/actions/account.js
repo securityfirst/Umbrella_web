@@ -1,5 +1,3 @@
-import axios from 'axios';;
-
 import { accountTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
@@ -11,7 +9,14 @@ export function login(credentials) {
 	return (dispatch, getState) => {
 		dispatch(pending(LOGIN));
 
-		axios.post('/auth/account', credentials)
+		fetch('/auth/account', {
+			method: "POST",
+			credentials: "same-origin", // include, *same-origin, omit
+			headers: {
+				"Content-Type": "application/json; charset=utf-8",
+			},
+			body: JSON.stringify(credentials), // body data type must match "Content-Type" header
+		})
 			.then(res => {
 				dispatch(fulfilled(LOGIN, true));
 			})
