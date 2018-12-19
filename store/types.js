@@ -16,7 +16,7 @@ export const formsTypes = {
 };
 
 export const lessonsTypes = {
-	SET_LESSON_CATEGORIES: 'SET_LESSON_CATEGORIES',
+	GET_LESSON_CATEGORIES: 'GET_LESSON_CATEGORIES',
 	GET_LESSON_CARDS: 'GET_LESSON_CARDS',
 };
 

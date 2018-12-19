@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import 'isomorphic-unfetch';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -29,9 +30,7 @@ import Layout from '../components/layout';
 
 import { contentStyles } from '../utils/view';
 
-import { setLessonCategories } from '../store/actions/lessons';
-
-import { categories } from '../mock/lessons';
+import { getLessonCategories } from '../store/actions/lessons';
 
 const menuWidth = 300;
 
@@ -70,32 +69,23 @@ const styles = theme => ({
 	...contentStyles(theme),
 });
 
-const menuSet = {
-	'My Security': { icon: (color) => <SecurityIcon color={color} /> },
-	'Information': { icon: (color) => <DevicesOtherIcon color={color} /> },
-	'Communications': { icon: (color) => <SettingsPhoneIcon color={color} /> },
-	'Travel': { icon: (color) => <BusinessCenterIcon color={color} /> },
-	'Operations': { icon: (color) => <PeopleIcon color={color} /> },
-	'Personal': { icon: (color) => <AccessibilityIcon color={color} /> },
-	'Emergency Support': { icon: (color) => <BusinessIcon color={color} /> },
-	'Tools': { icon: (color) => <LocalHospitalIcon color={color} /> },
-	'Index / Glossary': { icon: (color) => <LanguageIcon color={color} /> },
-	'About': { icon: (color) => <InfoIcon color={color} /> },
-};
+// const menuSet = {
+// 	'My Security': { icon: (color) => <SecurityIcon color={color} /> },
+// 	'Information': { icon: (color) => <DevicesOtherIcon color={color} /> },
+// 	'Communications': { icon: (color) => <SettingsPhoneIcon color={color} /> },
+// 	'Travel': { icon: (color) => <BusinessCenterIcon color={color} /> },
+// 	'Operations': { icon: (color) => <PeopleIcon color={color} /> },
+// 	'Personal': { icon: (color) => <AccessibilityIcon color={color} /> },
+// 	'Emergency Support': { icon: (color) => <BusinessIcon color={color} /> },
+// 	'Tools': { icon: (color) => <LocalHospitalIcon color={color} /> },
+// 	'Index / Glossary': { icon: (color) => <LanguageIcon color={color} /> },
+// 	'About': { icon: (color) => <InfoIcon color={color} /> },
+// };
 
 class Lessons extends React.Component {
-	static async getInitialProps({reduxStore}) {
-		let results;
-		// let categories;
-
-		try {
-			const categoriesReq = await fetch('https://api.secfirst.org/v1/categories', {mode: "cors"});
-			results = await categoriesReq.json();
-			// categories = await categoriesReq.json();
-			reduxStore.dispatch(setLessonCategories({categories}));
-		} catch (e) {
-			console.error(`Error fetching categories: `, e);
-		}
+	static async getInitialProps({reduxStore, isServer}) {
+		reduxStore.dispatch(getLessonCategories());
+		return { isServer };
 	}
 
 	state = {
@@ -109,16 +99,17 @@ class Lessons extends React.Component {
 	}
 
 	renderMenuList = () => {
-		const { classes, lessonsMenuOpened, categories } = this.props;
-		const categoriesSet = categories.reduce((set, cat) => {
-			if (cat.parent === 0) {
-				if (!set[cat.category]) set.set(cat.category, []);
-			} else {
-				set.get(cat.parentName).push(cat);
-			}
+		const { classes, lessonsMenuOpened/*, categories*/, categories } = this.props;
+		console.log("categories: ", categories);
+		// const categoriesSet = categories.reduce((set, cat) => {
+		// 	if (cat.parent === 0) {
+		// 		if (!set[cat.category]) set.set(cat.category, []);
+		// 	} else {
+		// 		set.get(cat.parentName).push(cat);
+		// 	}
 
-			return set;
-		}, new Map());
+		// 	return set;
+		// }, new Map());
 
 		return (
 			<List
@@ -128,7 +119,7 @@ class Lessons extends React.Component {
 					[classes.menuListOpened]: lessonsMenuOpened,
 				})}
 			>
-				{[...categoriesSet].map((item, i) => {
+				{/*[...categoriesSet].map((item, i) => {
 					const isSelected = this.state.menuItemSelected == i;
 					const subList = categoriesSet.get(item[0]);
 					const menuItem = menuSet[item[0]];
@@ -155,7 +146,7 @@ class Lessons extends React.Component {
 							</Collapse>
 						</div>
 					);
-				})}
+				})*/}
 			</List>
 		);
 	}
@@ -194,4 +185,8 @@ const mapStateToProps = state => ({
 	...state.lessons,
 });
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Lessons));
+const mapDispatchToProps = dispatch => ({
+	getLessonCategories: bindActionCreators(getLessonCategories, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Lessons));

@@ -16,6 +16,7 @@ const dev = process.env.NODE_ENV === 'development';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+require('isomorphic-unfetch');
 
 app.prepare().then(() => {
 	const server = express();
