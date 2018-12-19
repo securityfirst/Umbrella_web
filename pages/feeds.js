@@ -35,7 +35,7 @@ class Feeds extends React.Component {
 	renderContent = () => {
 		const { isEdit, tabIndex } = this.state;
 
-		if (isEdit) return <FeedsEdit />;
+		if (isEdit) return <FeedsEdit toggleEdit={() => this.setState({isEdit: false})} />;
 
 		switch (tabIndex) {
 			case 0: return <FeedsAll toggleEdit={() => this.setState({isEdit: true})} />;

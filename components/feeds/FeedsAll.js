@@ -1,33 +1,68 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 
 import { withStyles } from '@material-ui/core/styles';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import TouchRipple from '@material-ui/core/ButtonBase/TouchRipple';
 
-import { contentStyles } from '../../utils/view';
+import red from '@material-ui/core/colors/red';
 
-const styles = theme => contentStyles(theme);
+const styles = theme => ({
+	heading: {
+		flexBasis: '33.33%',
+		flexShrink: 0,
+		fontSize: theme.typography.pxToRem(15),
+		fontWeight: 500,
+	},
+	headingLocation: {
+		marginLeft: '.5rem',
+		color: red[800],
+		fontWeight: 500,
+	},
+	location: {
+		color: red[800],
+	},
+	locationPanelDetails: {
+		display: 'block',
+	},
+	locationChangeLink: {
+		color: theme.palette.secondary.main,
+		textAlign: 'right',
+		cursor: 'pointer',
+	},
+});
 
 class FeedsAll extends React.Component {
+	state = {
+		expanded: false,
+	};
+
+	handleChange = () => this.setState({expanded: !this.state.expanded})
+
+	renderLocation = () => <span className={this.props.classes.headingLocation}>Ireland</span>
+
 	render() {
-		const { toggleEdit } = this.props;
+		const { classes, toggleEdit } = this.props;
+		const { expanded } = this.state;
+
 		return (
 			<div>
-				<Typography paragraph>
-					<strong>FEEDS ALL</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-					incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-					elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-					hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-					velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-					Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-					viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-					Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-					at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-					ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-				</Typography>
-				
-				<Button variant="contained" onClick={toggleEdit}>Edit</Button>
+				<ExpansionPanel expanded={expanded === true} onChange={this.handleChange}>
+					<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+						<Typography className={classes.heading}>Location: 
+							{!expanded && <span className={classes.headingLocation}>Ireland</span>}
+						</Typography>
+					</ExpansionPanelSummary>
+					<ExpansionPanelDetails className={classes.locationPanelDetails}>
+						<Typography variant="body1"><span className={classes.location}>Ireland</span></Typography>
+						<Typography variant="body1" className={classes.locationChangeLink} onClick={toggleEdit}>Change</Typography>
+					</ExpansionPanelDetails>
+				</ExpansionPanel>
 			</div>
 		);
 	}
