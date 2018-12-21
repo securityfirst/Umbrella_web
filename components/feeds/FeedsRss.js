@@ -11,8 +11,11 @@ import { contentStyles } from '../../utils/view';
 const styles = theme => ({
 	addButton: {
 		position: 'fixed',
-		top: '25vh',
-		right: '5vw',
+		top: '85vh',
+		right: '10vw',
+		[theme.breakpoints.up('sm')]: {
+			top: '25vh',
+		},
 	},
 	addIcon: {
 		color: theme.palette.common.white,
