@@ -54,10 +54,10 @@ class FeedsEdit extends React.Component {
 
 		// set modal inner content
 		switch (i) {
-			case 0: state.modalContent = <FeedsEditLocation />;
-			case 1: state.modalContent = <FeedsEditLocation />;
-			case 2: state.modalContent = <FeedsEditLocation />;
-			case 3: state.modalContent = <FeedsEditLocation />;
+			case 0: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />;
+			case 1: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />;
+			case 2: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />;
+			case 3: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />;
 		}
 
 		this.setState(state);

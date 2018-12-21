@@ -20,8 +20,24 @@ class FeedsEditLocation extends React.Component {
 		errorMessage: null,
 	};
 
+	handleSubmit = () => {
+		const { location } = this.state;
+
+		// TODO: Handle submit here, then close on callback
+
+		this.props.closeModal();
+	}
+
+	handleCancel = () => {
+		this.handleRemoveError();
+		this.setState({location: null});
+		this.props.closeModal();
+	}
+
+	handleRemoveError = () => this.setState({error: null, errorMessage: null})
+
 	render() {
-		const { theme, classes, cancel, confirm } = this.props;
+		const { theme, classes, closeModal, confirm } = this.props;
 		const { location, error, errorMessage } = this.state;
 
 		return (
@@ -34,11 +50,12 @@ class FeedsEditLocation extends React.Component {
 						value={location}
 						error={error}
 						errorMessage={errorMessage}
-						onChange={(e,v) => this.setState({password: v})}
+						onChange={(e,v) => this.setState({location: v})}
+						onSubmit={this.handleSubmit}
+						removeError={this.handleRemoveError}
+						cancel={this.handleCancel}
 					/>
-				}
-				cancel={this.handleModalClose} 
-				confirm={this.handleModalClose} 
+				} 
 			/>
 		);
 	}

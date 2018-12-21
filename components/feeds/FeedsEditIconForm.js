@@ -6,9 +6,11 @@ import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import Button from '@material-ui/core/Button';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 const styles = theme => ({
-	form: {
+	formInputControl: {
 		margin: '2rem 0 5rem',
 	},
 	input: {
@@ -32,15 +34,23 @@ const styles = theme => ({
 		lineHeight: '1.5rem',
 		overflow: 'visible',
 	},
+	buttonsWrapper: {
+		display: 'flex',
+		justifyContent: 'flex-end',
+		flexDirection: 'row',
+		...theme.mixins.gutters(),
+		paddingTop: theme.spacing.unit * 2,
+		paddingBottom: theme.spacing.unit * 2,
+	},
 });
 
 class FeedsEditIconForm extends React.Component {
 	render() {
-		const { classes, id, label, value, error, errorMessage, onChange } = this.props;
+		const { classes, id, label, value, error, errorMessage, onChange, onSubmit, removeError, cancel } = this.props;
 
 		return (
-			<form className={classes.form}>
-				<FormControl fullWidth>
+			<form>
+				<FormControl className={classes.formInputControl} fullWidth>
 					<InputLabel
 						htmlFor={id}
 						error={error}
@@ -69,7 +79,19 @@ class FeedsEditIconForm extends React.Component {
 					/>
 					{!!error && <FormHelperText className={classes.helperText}>{errorMessage}</FormHelperText>}
 				</FormControl>
-			</form>			
+
+				<FormControl className={classes.buttonsWrapper} fullWidth>
+					<Button component="button" onClick={cancel}>Cancel</Button>
+					<ClickAwayListener onClickAway={removeError}>
+						<Button color="secondary" onClick={onSubmit}>OK</Button>
+					</ClickAwayListener>
+				</FormControl>
+{/*
+				<div >
+					<Button onClick={cancel}>Cancel</Button>
+					<Button color="secondary" onClick={confirm}>OK</Button>
+				</div>*/}
+			</form>
 		);
 	}
 }

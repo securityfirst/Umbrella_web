@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 
 import yellow from '@material-ui/core/colors/yellow';
-import grey from '@material-ui/core/colors/grey';
 
 const styles = theme => ({
 	wrapper: {
@@ -14,7 +13,8 @@ const styles = theme => ({
 		maxWidth: '32rem',
 		[theme.breakpoints.down('sm')]: {
 			height: '100%',
-			maxHeight: '32rem',
+			maxHeight: '30rem',
+			margin: '1rem',
 		},
 	},
 	iconWrapper: {
@@ -30,13 +30,13 @@ const styles = theme => ({
 		paddingBottom: theme.spacing.unit * 2,
 		color: theme.palette.primary.main,
 	},
-	buttonsWrapper: {
-		display: 'flex',
-		justifyContent: 'flex-end',
-		...theme.mixins.gutters(),
-		paddingTop: theme.spacing.unit * 2,
-		paddingBottom: theme.spacing.unit * 2,
-	},
+	// buttonsWrapper: {
+	// 	display: 'flex',
+	// 	justifyContent: 'flex-end',
+	// 	...theme.mixins.gutters(),
+	// 	paddingTop: theme.spacing.unit * 2,
+	// 	paddingBottom: theme.spacing.unit * 2,
+	// },
 });
 
 class FeedsEditIconModalContent extends React.Component {
@@ -51,10 +51,10 @@ class FeedsEditIconModalContent extends React.Component {
 				<div className={classes.contentWrapper}>
 					{content}
 				</div>
-				<div className={classes.buttonsWrapper}>
+				{/*<div className={classes.buttonsWrapper}>
 					<Button onClick={cancel}>Cancel</Button>
 					<Button color="secondary" onClick={confirm}>OK</Button>
-				</div>
+				</div>*/}
 			</Paper>
 		);
 	}
