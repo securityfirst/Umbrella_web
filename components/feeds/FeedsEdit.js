@@ -7,7 +7,9 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 
+import FeedsEditInterval from './FeedsEditInterval';
 import FeedsEditLocation from './FeedsEditLocation';
+import FeedsEditSources from './FeedsEditSources';
 
 const styles = theme => ({
 	panel: {
@@ -49,15 +51,15 @@ class FeedsEdit extends React.Component {
 		modalContent: null,
 	};
 
-	handleChangeClick = (i) => () => {
+	handleFormOpen = (i) => () => {
 		let state = {modalOpen: true};
 
 		// set modal inner content
 		switch (i) {
-			case 0: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />;
-			case 1: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />;
-			case 2: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />;
-			case 3: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />;
+			case 0: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />; break;
+			case 1: state.modalContent = <FeedsEditInterval closeModal={this.handleModalClose} />; break;
+			case 2: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />; break;
+			case 3: state.modalContent = <FeedsEditSources closeModal={this.handleModalClose} />; break;
 		}
 
 		this.setState(state);
@@ -75,12 +77,12 @@ class FeedsEdit extends React.Component {
 						<Typography className={classes.panelTitle} variant="h6">{panel.title}</Typography>
 						<Typography className={classes.panelContent} paragraph>{panel.content}</Typography>
 						<div className={classes.changeButtonWrapper}>
-							<Button className={classes.cancelButton} color="secondary" onClick={this.handleChangeClick(i)}>Set</Button>
+							<Button className={classes.cancelButton} color="secondary" onClick={this.handleFormOpen(i)}>Set</Button>
 						</div>
 					</Paper>
 				))}
 
-				<Button className={classes.cancelButton} variant="contained" onClick={toggleEdit}>Cancel</Button>
+				<Button className={classes.cancelButton} variant="contained" onClick={toggleEdit}>Done</Button>
 
 				<Modal
 					className={classes.modal}

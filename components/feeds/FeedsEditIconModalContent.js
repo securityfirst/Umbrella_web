@@ -30,13 +30,6 @@ const styles = theme => ({
 		paddingBottom: theme.spacing.unit * 2,
 		color: theme.palette.primary.main,
 	},
-	// buttonsWrapper: {
-	// 	display: 'flex',
-	// 	justifyContent: 'flex-end',
-	// 	...theme.mixins.gutters(),
-	// 	paddingTop: theme.spacing.unit * 2,
-	// 	paddingBottom: theme.spacing.unit * 2,
-	// },
 });
 
 class FeedsEditIconModalContent extends React.Component {
@@ -51,10 +44,6 @@ class FeedsEditIconModalContent extends React.Component {
 				<div className={classes.contentWrapper}>
 					{content}
 				</div>
-				{/*<div className={classes.buttonsWrapper}>
-					<Button onClick={cancel}>Cancel</Button>
-					<Button color="secondary" onClick={confirm}>OK</Button>
-				</div>*/}
 			</Paper>
 		);
 	}

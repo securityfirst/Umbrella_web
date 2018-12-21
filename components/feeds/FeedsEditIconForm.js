@@ -86,11 +86,6 @@ class FeedsEditIconForm extends React.Component {
 						<Button color="secondary" onClick={onSubmit}>OK</Button>
 					</ClickAwayListener>
 				</FormControl>
-{/*
-				<div >
-					<Button onClick={cancel}>Cancel</Button>
-					<Button color="secondary" onClick={confirm}>OK</Button>
-				</div>*/}
 			</form>
 		);
 	}
