@@ -15,9 +15,6 @@ import red from '@material-ui/core/colors/red';
 import { feeds } from '../../mock/feeds';
 
 const styles = theme => ({
-	wrapper: {
-		position: 'relative',
-	},
 	heading: {
 		flexBasis: '33.33%',
 		flexShrink: 0,
@@ -78,8 +75,6 @@ class FeedsAll extends React.Component {
 		const { classes, toggleEdit } = this.props;
 		const { expanded } = this.state;
 
-		console.log("feeds: ", feeds);
-
 		return (
 			<div className={classes.wrapper}>
 				<ExpansionPanel expanded={expanded === true} onChange={this.handleChange}>
@@ -99,8 +94,8 @@ class FeedsAll extends React.Component {
 						<Paper key={i} className={classes.feed}>
 							<Typography className={classes.feedTitle} variant="h6">{feed.title}</Typography>
 							<Typography paragraph>
-								<Typography className={classes.feedSite}>Via {(feed.site || "").toUpperCase()}</Typography>
-								<Typography className={classes.feedDate}>{new Date(feed.timestamp).toLocaleString()}</Typography>
+								<span className={classes.feedSite}>Via {(feed.site || "").toUpperCase()}</span>
+								<span className={classes.feedDate}>{new Date(feed.timestamp).toLocaleString()}</span>
 							</Typography>
 							<Typography className={classes.feedContent} paragraph>{feed.content}</Typography>
 						</Paper>
