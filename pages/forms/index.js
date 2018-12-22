@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 
 import Layout from '../../components/layout';
 
-import { contentStyles } from '../../utils/view';
+import { contentStyles, paperStyles } from '../../utils/view';
 
 import { getFormTypes, getForms } from '../../store/actions/forms';
 
@@ -19,10 +19,8 @@ const styles = theme => ({
 		fontSize: '.875rem',
 	},
 	formPanel: {
-		...theme.mixins.gutters(),
 		margin: '.75rem 0',
-		paddingTop: theme.spacing.unit * 2,
-		paddingBottom: theme.spacing.unit * 2,
+		...paperStyles(theme),
 	},
 	formPanelButtonsWrapper: {
 		display: 'flex',
@@ -34,6 +32,7 @@ const styles = theme => ({
 
 class Forms extends React.Component {
 	static async getInitialProps({reduxStore, isServer}) {
+		// TODO: Doesn't render serverside
 		await reduxStore.dispatch(getFormTypes());
 		await reduxStore.dispatch(getForms());
 		return isServer;
@@ -68,15 +67,11 @@ class Forms extends React.Component {
 	render() {
 		const { classes, formTypes, forms } = this.props;
 
-		console.log("forms: ", forms);
-
 		let sorted = forms.reduce((set, form) => {
 			if (!set[form.status]) set[form.status] = [];
 			set[form.status].push(form);
 			return set;
 		}, {});
-
-		console.log("sorted: ", sorted);
 
 		return (
 			<Layout title="Umbrella | Forms" description="Umbrella web application">

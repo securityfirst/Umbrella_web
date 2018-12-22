@@ -11,12 +11,12 @@ import FeedsEditInterval from './FeedsEditInterval';
 import FeedsEditLocation from './FeedsEditLocation';
 import FeedsEditSources from './FeedsEditSources';
 
+import { paperStyles } from '../../utils/view';
+
 const styles = theme => ({
 	panel: {
-		...theme.mixins.gutters(),
 		margin: '.75rem 0',
-		paddingTop: theme.spacing.unit * 2,
-		paddingBottom: theme.spacing.unit * 2,
+		...paperStyles(theme),
 	},
 	panelTitle: {
 		fontSize: '1.5rem',

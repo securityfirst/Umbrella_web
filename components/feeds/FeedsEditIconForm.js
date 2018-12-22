@@ -9,9 +9,11 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
+import { paperStyles } from '../../utils/view';
+
 const styles = theme => ({
 	formInputControl: {
-		margin: '2rem 0 5rem',
+		margin: '2rem 0 4rem',
 	},
 	input: {
 		height: 'initial',
@@ -38,9 +40,7 @@ const styles = theme => ({
 		display: 'flex',
 		justifyContent: 'flex-end',
 		flexDirection: 'row',
-		...theme.mixins.gutters(),
-		paddingTop: theme.spacing.unit * 2,
-		paddingBottom: theme.spacing.unit * 2,
+		...paperStyles(theme),
 	},
 });
 

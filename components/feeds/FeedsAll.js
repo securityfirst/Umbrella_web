@@ -12,6 +12,8 @@ import Paper from '@material-ui/core/Paper';
 
 import red from '@material-ui/core/colors/red';
 
+import { paperStyles } from '../../utils/view';
+
 import { feeds } from '../../mock/feeds';
 
 const styles = theme => ({
@@ -38,10 +40,8 @@ const styles = theme => ({
 		cursor: 'pointer',
 	},
 	feed: {
-		...theme.mixins.gutters(),
 		margin: '.75rem 0',
-		paddingTop: theme.spacing.unit * 2,
-		paddingBottom: theme.spacing.unit * 2,
+		...paperStyles(theme),
 	},
 	feedTitle: {
 		fontSize: '1.125rem',

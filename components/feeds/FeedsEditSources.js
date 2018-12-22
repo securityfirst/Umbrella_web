@@ -15,11 +15,11 @@ import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
 
 import teal from '@material-ui/core/colors/teal';
 
+import { paperStyles } from '../../utils/view';
+
 const styles = theme => ({
 	container: {
-		...theme.mixins.gutters(),
-		paddingTop: theme.spacing.unit * 2,
-		paddingBottom: theme.spacing.unit * 2,
+		...paperStyles(theme),
 	},
 	checkboxControl: {
 		margin: '1rem 0 3rem',
