@@ -7,14 +7,10 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 
-import teal from '@material-ui/core/colors/teal';
-
 import Layout from '../components/layout';
+import FormInputControl from '../components/reusables/FormInputControl';
 
 import { contentStyles } from '../utils/view';
 
@@ -36,20 +32,6 @@ const styles = theme => ({
 			margin: '3rem',
 		},
 	},
-	loginInput: {
-		height: 'initial',
-	},
-	loginLabel: {
-		'&$loginFocused': {
-			color: teal[500],
-		},
-	},
-	loginFocused: {},
-	loginUnderline: {
-		'&:after': {
-			borderBottomColor: teal[500],
-		},
-	},
 	loginButtonFormControl: {
 		margin: '2rem 0',
 		[theme.breakpoints.up('sm')]: {
@@ -61,13 +43,6 @@ const styles = theme => ({
 	},
 	loginButtonText: {
 		color: theme.palette.common.white,
-	},
-	loginHelperText: {
-		height: 0,
-		minHeight: 0,
-		marginTop: 0,
-		lineHeight: '1.5rem',
-		overflow: 'visible',
 	},
 	...contentStyles(theme)
 });
@@ -107,36 +82,16 @@ class Login extends React.Component {
 						<Typography className={classes.description} variant="h6" align="center">Log in with your password</Typography>
 
 						<form>
-							<FormControl fullWidth>
-								<InputLabel
-									htmlFor="login-password"
-									error={error}
-									classes={{
-										root: classes.loginLabel,
-										focused: classes.loginFocused,
-									}}
-								>
-									Password*
-								</InputLabel>
-								<Input
-									required 
-									autoFocus
-									fullWidth
-									error={error}
-									id="login-password"
-									value={password} 
-									type="password" 
-									classes={{
-										underline: classes.loginUnderline,
-									}}
-									inputProps={{
-										className: classes.loginInput,
-										required: true,
-									}}
-									onChange={(e,v) => this.setState({password: v})}
-								/>
-								{!!error && <FormHelperText className={classes.loginHelperText}>{errorMessage}</FormHelperText>}
-							</FormControl>
+							<FormInputControl 
+								id="login-password"
+								label="Password*"
+								value={password}
+								type="password"
+								error={error}
+								errorMessage={errorMessage}
+								onChange={(e,v) => this.setState({password: v})}
+							/>
+
 							<FormControl className={classes.loginButtonFormControl} fullWidth>
 								<ClickAwayListener onClickAway={this.removeError}>
 									<Button 
