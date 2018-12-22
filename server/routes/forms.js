@@ -10,3 +10,8 @@ exports.index = (app) => (req, res) => {
 	const actualPage = '/forms';
 	return renderAndCache(app, ssrCache, req, res, actualPage);
 }
+
+exports.edit = (app) => (req, res) => {
+	const actualPage = '/forms/edit';
+	return renderAndCache(app, ssrCache, req, res, actualPage);
+}
