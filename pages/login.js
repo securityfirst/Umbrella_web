@@ -15,6 +15,7 @@ import FormInputControl from '../components/reusables/FormInputControl';
 import { contentStyles } from '../utils/view';
 
 const styles = theme => ({
+	...contentStyles(theme),
 	paper: {
 		padding: '2rem 1rem',
 		[theme.breakpoints.up('sm')]: {
@@ -44,7 +45,6 @@ const styles = theme => ({
 	loginButtonText: {
 		color: theme.palette.common.white,
 	},
-	...contentStyles(theme)
 });
 
 class Login extends React.Component {

@@ -14,10 +14,10 @@ import FeedsRss from '../components/feeds/FeedsRss';
 import { contentStyles } from '../utils/view';
 
 const styles = theme => ({
+	...contentStyles(theme),
 	tabs: {
 		backgroundColor: theme.palette.background.paper,
 	},
-	...contentStyles(theme)
 });
 
 class Feeds extends React.Component {

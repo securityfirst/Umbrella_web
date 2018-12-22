@@ -36,6 +36,7 @@ import { categories } from '../mock/lessons';
 const menuWidth = 300;
 
 const styles = theme => ({
+	...contentStyles(theme),
 	wrapper: {
 		display: 'flex',
 		flex: 1,
@@ -67,7 +68,6 @@ const styles = theme => ({
 	menuListSubItem: {
 		paddingLeft: theme.spacing.unit * 3,
 	},
-	...contentStyles(theme),
 });
 
 const menuSet = {

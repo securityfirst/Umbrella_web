@@ -14,6 +14,7 @@ import { contentStyles, paperStyles } from '../../utils/view';
 import { getFormTypes, getForms } from '../../store/actions/forms';
 
 const styles = theme => ({
+	...contentStyles(theme),
 	label: {
 		color: theme.palette.grey[500],
 		fontSize: '.875rem',
@@ -27,7 +28,6 @@ const styles = theme => ({
 		justifyContent: 'flex-end',
 		flexDirection: 'row',
 	},
-	...contentStyles(theme),
 });
 
 class Forms extends React.Component {

@@ -11,10 +11,10 @@ import Layout from '../components/layout';
 import { contentStyles } from '../utils/view';
 
 const styles = theme => ({
+	...contentStyles(theme),
 	tabs: {
 		backgroundColor: theme.palette.background.paper,
 	},
-	...contentStyles(theme)
 });
 
 class Checklists extends React.Component {

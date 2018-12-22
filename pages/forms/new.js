@@ -15,6 +15,7 @@ import FormsNewContact from '../../components/forms/FormsNewContact';
 import { contentStyles } from '../../utils/view';
 
 const styles = theme => ({
+	...contentStyles(theme),
 	stepperWrapper: {
 		backgroundColor: theme.palette.common.white,
 	},
@@ -42,7 +43,6 @@ const styles = theme => ({
 		marginTop: theme.spacing.unit,
 		marginBottom: theme.spacing.unit,
 	},
-	...contentStyles(theme),
 });
 
 const steps = ['Contact', 'Incident', 'Impact', 'Data'];

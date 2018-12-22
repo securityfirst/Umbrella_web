@@ -6,13 +6,13 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import { contentStyles } from '../../utils/view';
+import { paperStyles, contentStyles } from '../../utils/view';
 
 const styles = theme => ({
-	wrapper: {
-
-	},
 	...contentStyles(theme),
+	wrapper: {
+		...paperStyles(theme),
+	},
 });
 
 const steps = ['Contact', 'Incident', 'Impact', 'Data'];
