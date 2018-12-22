@@ -14,8 +14,8 @@ const feeds = {
 const forms = {
 	loading: true,
 	erorr: null,
-	data: [],
-	current: null,
+	formTypes: [],
+	forms: [],
 };
 
 const lessons = {

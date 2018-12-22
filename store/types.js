@@ -10,7 +10,8 @@ export const feedsTypes = {
 };
 
 export const formsTypes = {
-	SET_FORMS: 'SET_FORMS',
+	GET_FORM_TYPES: 'GET_FORM_TYPES',
+	GET_FORMS: 'GET_FORMS',
 	POST_FORM: 'POST_FORM',
 	UPDATE_FORM: 'UPDATE_FORM',
 };

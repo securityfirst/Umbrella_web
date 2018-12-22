@@ -1,3 +1,5 @@
+import 'isomorphic-unfetch';
+
 import { lessonsTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
