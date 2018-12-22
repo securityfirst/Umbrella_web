@@ -78,8 +78,6 @@ class FeedsEditSources extends React.Component {
 		const { classes } = this.props;
 		const { sourcesSelected, error, errorMessage } = this.state;
 
-		console.log("sourcesSelected: ", sourcesSelected);
-
 		return (
 			<Paper className={classes.container}>
 				<form>
