@@ -31,14 +31,16 @@ const styles = theme => ({
 });
 
 const FormInput = (props) => {
-	const { classes, className, id, label, value, type, error, errorMessage, onChange, autoFocus, required } = props;
+	const { classes, className, id, label, value, type, error, errorMessage, onChange, autoFocus, multiline, rows, required } = props;
 
-	let wrapperClass = {};
+	let wrapperProps = {};
+	let inputProps = {};
 
-	if (className) wrapperClass.className = className;
+	if (className) wrapperProps.className = className;
+	if (multiline && rows) inputProps.rows = rows; 
 
 	return (
-		<FormControl {...wrapperClass} fullWidth>
+		<FormControl {...wrapperProps} fullWidth>
 			<InputLabel
 				htmlFor={id}
 				error={props.error}
@@ -50,9 +52,6 @@ const FormInput = (props) => {
 				{label}
 			</InputLabel>
 			<Input
-				required={required}
-				autoFocus={autoFocus}
-				fullWidth
 				error={error}
 				id={id}
 				value={value} 
@@ -65,6 +64,11 @@ const FormInput = (props) => {
 					required: true,
 				}}
 				onChange={onChange}
+				required={required}
+				autoFocus={autoFocus}
+				fullWidth
+				multiline
+				{...inputProps}
 			/>
 			{!!error && <FormHelperText className={classes.loginHelperText}>{errorMessage}</FormHelperText>}
 		</FormControl>

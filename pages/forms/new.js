@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Layout from '../../components/layout';
 import FormsNewContact from '../../components/forms/FormsNewContact';
+import FormsNewIncident from '../../components/forms/FormsNewIncident';
 
 import { contentStyles } from '../../utils/view';
 
@@ -78,7 +79,13 @@ class FormsNew extends React.Component {
 		});
 	}
 
-	handleBack = () => this.setState(state => ({activeStep: state.activeStep - 1, progress: state.progress - 25}))
+	handleBack = (formName, form) => {
+		this.setState(state => ({
+			activeStep: state.activeStep - 1, 
+			progress: state.progress - 25,
+			[formName]: form,
+		}));
+	}
 
 	handleSkip = () => {
 		const { activeStep } = this.state;
@@ -109,10 +116,10 @@ class FormsNew extends React.Component {
 		const { activeStep } = this.state;
 
 		switch (activeStep) {
-			case 0: return <FormsNewContact onSubmit={(form) => this.handleNext('contactForm', form)} />;
-			case 1: return <FormsNewContact onSubmit={(form) => this.handleNext('incidentForm', form)} />;
-			case 2: return <FormsNewContact onSubmit={(form) => this.handleNext('impactForm', form)} />;
-			case 3: return <FormsNewContact onSubmit={(form) => this.handleNext('dataForm', form)} />;
+			case 0: return <FormsNewContact onSubmit={form => this.handleNext('contactForm', form)} />;
+			case 1: return <FormsNewIncident onGoBack={form => this.handleBack('incidentForm', form)} onSubmit={form => this.handleNext('incidentForm', form)} />;
+			case 2: return <FormsNewContact onGoBack={form => this.handleBack('impactForm', form)} onSubmit={form => this.handleNext('impactForm', form)} />;
+			case 3: return <FormsNewContact onGoBack={form => this.handleBack('dataForm', form)} onSubmit={form => this.handleNext('dataForm', form)} />;
 		}
 	}
 
