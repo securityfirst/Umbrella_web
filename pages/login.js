@@ -10,7 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 
 import Layout from '../components/layout';
-import FormInputControl from '../components/reusables/FormInputControl';
+import FormControlInput from '../components/reusables/FormControlInput';
 
 import { contentStyles } from '../utils/view';
 
@@ -82,7 +82,7 @@ class Login extends React.Component {
 						<Typography className={classes.description} variant="h6" align="center">Log in with your password</Typography>
 
 						<form>
-							<FormInputControl 
+							<FormControlInput 
 								id="login-password"
 								label="Password*"
 								value={password}

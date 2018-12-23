@@ -6,12 +6,12 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-import FormInputControl from '../../components/reusables/FormInputControl';
+import FormControlInput from '../../components/reusables/FormControlInput';
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view';
 
 const styles = theme => ({
-	formInputControl: {
+	formControlInput: {
 		margin: '2rem 0 4rem',
 	},
 	buttonsWrapper: {
@@ -26,8 +26,8 @@ class FeedsEditIconForm extends React.Component {
 
 		return (
 			<form>
-				<FormInputControl 
-					className={classes.formInputControl}
+				<FormControlInput 
+					className={classes.formControlInput}
 					id={id}
 					label={label}
 					value={value}

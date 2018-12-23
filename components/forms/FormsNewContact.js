@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-import FormInputControl from '../../components/reusables/FormInputControl';
+import FormControlInput from '../../components/reusables/FormControlInput';
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view';
 
@@ -16,7 +16,7 @@ const styles = theme => ({
 	wrapper: {
 		...paperStyles(theme),
 	},
-	formInputControl: {
+	formControlInput: {
 		margin: '.5rem 0',
 	},
 	methodDescriptionWrapper: {
@@ -65,8 +65,8 @@ class FormsNewContact extends React.Component {
 				<Typography variant="h6" color="primary">Contact Information for this Incident</Typography>
 
 				<form>
-					<FormInputControl 
-						className={classes.formInputControl}
+					<FormControlInput 
+						className={classes.formControlInput}
 						id="forms-new-name"
 						label="Name"
 						value={name}
@@ -77,8 +77,8 @@ class FormsNewContact extends React.Component {
 						autoFocus
 					/>
 
-					<FormInputControl 
-						className={classes.formInputControl}
+					<FormControlInput 
+						className={classes.formControlInput}
 						id="forms-new-title"
 						label="Title"
 						value={title}
@@ -87,8 +87,8 @@ class FormsNewContact extends React.Component {
 						onChange={(e) => this.setState({title: e.target.value})}
 					/>
 
-					<FormInputControl 
-						className={classes.formInputControl}
+					<FormControlInput 
+						className={classes.formControlInput}
 						id="forms-new-phone"
 						label="Phone"
 						value={phone}
@@ -99,8 +99,8 @@ class FormsNewContact extends React.Component {
 						required
 					/>
 
-					<FormInputControl 
-						className={classes.formInputControl}
+					<FormControlInput 
+						className={classes.formControlInput}
 						id="forms-new-email"
 						label="Email Address"
 						value={email}
@@ -116,8 +116,8 @@ class FormsNewContact extends React.Component {
 						<Typography className={classes.methodHint}>(e.g Signal Safety Number, PGP Email ID)</Typography>
 					</div>
 
-					<FormInputControl 
-						className={classes.formInputControl}
+					<FormControlInput 
+						className={classes.formControlInput}
 						id="forms-new-method"
 						label="Secure Communication Method"
 						value={method}

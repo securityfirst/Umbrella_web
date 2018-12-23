@@ -30,7 +30,7 @@ const styles = theme => ({
 	},
 });
 
-const FormInput = (props) => {
+const FormControlInput = (props) => {
 	const { classes, className, id, label, value, type, error, errorMessage, onChange, autoFocus, multiline, rows, required } = props;
 
 	let wrapperProps = {};
@@ -75,4 +75,4 @@ const FormInput = (props) => {
 	);
 }
 
-export default withStyles(styles, {withTheme: true})(FormInput);
+export default withStyles(styles, {withTheme: true})(FormControlInput);

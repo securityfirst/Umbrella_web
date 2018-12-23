@@ -30,7 +30,7 @@ const styles = theme => ({
 
 const steps = ['Contact', 'Incident', 'Impact', 'Data'];
 
-class FormsNewIncident extends React.Component {
+class FormsNewImpact extends React.Component {
 	state = {
 		incident: this.props.form ? this.props.form.incident : "",
 		error: null,
@@ -57,8 +57,8 @@ class FormsNewIncident extends React.Component {
 
 		return (
 			<Paper className={classes.wrapper} square>
-				<Typography variant="h6" color="primary">Incident Description</Typography>
-				<Typography className={classes.hint}>Provide a brief description</Typography>
+				<Typography variant="h6" color="primary">Impact / Potential Impact</Typography>
+				<Typography className={classes.hint}>Check all of the following that apply to this incident.</Typography>
 
 				<form>
 					<FormControlInput 
@@ -86,4 +86,4 @@ class FormsNewIncident extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FormsNewIncident);
+export default withStyles(styles, {withTheme: true})(FormsNewImpact);
