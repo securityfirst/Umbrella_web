@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-import FormControlInput from '../../components/reusables/FormControlInput';
+import FormControlCheckbox from '../../components/reusables/FormControlCheckbox';
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view';
 
@@ -19,6 +19,9 @@ const styles = theme => ({
 	hint: {
 		color: theme.palette.grey[500],
 	},
+	optionsWrapper: {
+		margin: '2rem 0 1rem',
+	},
 	formControlInput: {
 		margin: '2rem 0',
 	},
@@ -28,32 +31,46 @@ const styles = theme => ({
 	},
 });
 
-const steps = ['Contact', 'Incident', 'Impact', 'Data'];
+const options = [
+	{name: 'Outside access to data', value: 'outside_access'},
+	{name: 'Loss of access to account', value: 'loss_of_access'},
+	{name: 'Phishing / Malware attacks on contacts', value: 'phishing_malware'},
+	{name: 'Loss / Compromise of Data', value: 'loss_of_data'},
+	{name: 'Damage to Systems', value: 'system_damage'},
+	{name: 'Website down', value: 'website_down'},
+];
 
 class FormsNewImpact extends React.Component {
 	state = {
-		incident: this.props.form ? this.props.form.incident : "",
+		optionsSelected: this.props.form ? this.props.form.options : "",
 		error: null,
 		errorMessage: null,
+	}
+
+	handleSelect = (sourceValue) => () => {
+		const { optionsSelected } = this.state;
+
+		if (optionsSelected.includes(sourceValue)) this.setState({optionsSelected: optionsSelected.filter(value => value !== sourceValue)});
+		else this.setState({optionsSelected: optionsSelected.concat([sourceValue])});
 	}
 
 	removeError = () => this.setState({error: null, errorMessage: null})
 
 	onGoBack = () => {
 		this.props.onGoBack({
-			incident: this.state.incident,
+			options: this.state.optionsSelected,
 		});
 	}
 
 	onSubmit = () => {
 		this.props.onSubmit({
-			incident: this.state.incident,
+			options: this.state.optionsSelected,
 		});
 	}
 
 	render() {
 		const { classes, goBack } = this.props;
-		const { incident, error, errorMessage } = this.state;
+		const { optionsSelected, error, errorMessage } = this.state;
 
 		return (
 			<Paper className={classes.wrapper} square>
@@ -61,18 +78,19 @@ class FormsNewImpact extends React.Component {
 				<Typography className={classes.hint}>Check all of the following that apply to this incident.</Typography>
 
 				<form>
-					<FormControlInput 
-						className={classes.formControlInput}
-						id="forms-new-incident"
-						label="Description"
-						value={incident}
-						error={error}
-						errorMessage={errorMessage}
-						onChange={(e) => this.setState({incident: e.target.value})}
-						required
-						autoFocus
-						multiline
-					/>
+					<div className={classes.optionsWrapper}>
+						{options.map((option, i) => {
+							return (
+								<FormControlCheckbox
+									key={i}
+									name={option.name}
+									value={option.value}
+									checked={optionsSelected.includes(option.value)} 
+									onChange={this.handleSelect(option.value)} 
+								/>
+							);
+						})}
+					</div>
 
 					<FormControl className={classes.buttonsWrapper} fullWidth>
 						<Button onClick={this.onGoBack}>Go Back</Button>

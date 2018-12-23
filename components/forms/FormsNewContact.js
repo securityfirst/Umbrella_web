@@ -31,15 +31,13 @@ const styles = theme => ({
 	},
 });
 
-const steps = ['Contact', 'Incident', 'Impact', 'Data'];
-
 class FormsNewContact extends React.Component {
 	state = {
-		name: "",
-		title: "",
-		phone: "",
-		email: "",
-		method: "",
+		name: this.props.form ? this.props.form.name : "",
+		title: this.props.form ? this.props.form.title : "",
+		phone: this.props.form ? this.props.form.phone : "",
+		email: this.props.form ? this.props.form.email : "",
+		method: this.props.form ? this.props.form.method : "",
 		error: null,
 		errorMessage: null,
 	}

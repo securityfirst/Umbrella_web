@@ -20,15 +20,13 @@ const styles = theme => ({
 		color: theme.palette.grey[500],
 	},
 	formControlInput: {
-		margin: '2rem 0',
+		margin: '2rem 0 1rem',
 	},
 	buttonsWrapper: {
 		margin: '1rem 0 0',
 		...buttonWrapperStyles(theme),
 	},
 });
-
-const steps = ['Contact', 'Incident', 'Impact', 'Data'];
 
 class FormsNewIncident extends React.Component {
 	state = {

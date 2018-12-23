@@ -5,6 +5,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import teal from '@material-ui/core/colors/teal';
 
 const styles = theme => ({
+	label: {
+		display: 'flex',
+	},
 	checkboxRoot: {
 		padding: '.375rem .75rem',
 		'&$checkboxChecked': {
@@ -19,6 +22,7 @@ const FormControlCheckbox = (props) => {
 
 	return (
 		<FormControlLabel
+			className={classes.label}
 			control={
 				<Checkbox 
 					classes={{
