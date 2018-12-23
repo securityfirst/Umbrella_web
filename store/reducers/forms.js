@@ -8,19 +8,19 @@ export default function reducer(state = initialState, action) {
 		case pending(formsTypes.GET_FORM_TYPES):
 			return {
 				...state,
-				loading: true,
+				getFormTypesLoading: true,
 			};
 		case rejected(formsTypes.GET_FORM_TYPES):
 			return {
 				...state,
-				loading: false,
-				error: action.payload,
+				getFormTypesLoading: false,
+				getFormTypesError: action.payload,
 			};
 		case fulfilled(formsTypes.GET_FORM_TYPES):
 			return {
 				...state,
-				loading: false,
-				error: null,
+				getFormTypesLoading: false,
+				getFormTypesError: null,
 				formTypes: action.payload,
 			};
 
@@ -28,20 +28,49 @@ export default function reducer(state = initialState, action) {
 		case pending(formsTypes.GET_FORMS):
 			return {
 				...state,
-				loading: true,
+				getFormsLoading: true,
 			};
 		case rejected(formsTypes.GET_FORMS):
 			return {
 				...state,
-				loading: false,
-				error: action.payload,
+				getFormsLoading: false,
+				getFormsError: action.payload,
 			};
 		case fulfilled(formsTypes.GET_FORMS):
 			return {
 				...state,
-				loading: false,
-				error: null,
+				getFormsLoading: false,
+				getFormsError: null,
 				forms: action.payload,
+			};
+
+		/* POST_FORM */
+		case pending(formsTypes.POST_FORM):
+			return {
+				...state,
+				postFormLoading: true,
+			};
+		case rejected(formsTypes.POST_FORM):
+			return {
+				...state,
+				postFormLoading: false,
+				postFormError: action.payload,
+			};
+		case fulfilled(formsTypes.POST_FORM):
+			return {
+				...state,
+				postFormLoading: false,
+				postFormError: null,
+				postFormSuccess: true,
+			};
+
+		/* RESET_POST_FORM */
+		case formsTypes.RESET_POST_FORM:
+			return {
+				...state,
+				postFormLoading: false,
+				postFormError: null,
+				postFormSuccess: false,
 			};
 	}
 

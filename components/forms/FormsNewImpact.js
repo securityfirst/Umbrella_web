@@ -56,17 +56,9 @@ class FormsNewImpact extends React.Component {
 
 	removeError = () => this.setState({error: null, errorMessage: null})
 
-	onGoBack = () => {
-		this.props.onGoBack({
-			options: this.state.optionsSelected,
-		});
-	}
+	onGoBack = () => this.props.onGoBack({options: this.state.optionsSelected})
 
-	onSubmit = () => {
-		this.props.onSubmit({
-			options: this.state.optionsSelected,
-		});
-	}
+	onSubmit = () => this.props.onSubmit({options: this.state.optionsSelected})
 
 	render() {
 		const { classes, goBack } = this.props;

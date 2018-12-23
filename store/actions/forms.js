@@ -18,7 +18,6 @@ export function getFormTypes() {
 			})
 			.catch(err => {
 				dispatch(rejected(formsTypes.GET_FORM_TYPES, formatError(err)));
-				if (err.response.status === 401) dispatch(logout());
 			});
 	}
 }
@@ -34,7 +33,28 @@ export function getForms() {
 			})
 			.catch(err => {
 				dispatch(rejected(formsTypes.GET_FORMS, formatError(err)));
-				if (err.response.status === 401) dispatch(logout());
 			});
 	}
+}
+
+export function postForm(data) {
+	return (dispatch, getState) => {
+		dispatch(pending(formsTypes.POST_FORM));
+
+		/* TODO: Replace with API */
+		fetch('https://jsonplaceholder.typicode.com/users', {
+			method: 'post',
+			// body: data,
+		})
+			.then(res => {
+				dispatch(fulfilled(formsTypes.POST_FORM));
+			})
+			.catch(err => {
+				dispatch(rejected(formsTypes.POST_FORM, formatError(err)));
+			});
+	}
+}
+
+export function resetPostForm() {
+	return {type: formsTypes.RESET_POST_FORM};
 }

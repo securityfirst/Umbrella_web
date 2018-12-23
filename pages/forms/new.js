@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import { withStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
@@ -13,8 +14,12 @@ import Layout from '../../components/layout';
 import FormsNewContact from '../../components/forms/FormsNewContact';
 import FormsNewIncident from '../../components/forms/FormsNewIncident';
 import FormsNewImpact from '../../components/forms/FormsNewImpact';
+import FormsNewData from '../../components/forms/FormsNewData';
+import FormsNewSubmit from '../../components/forms/FormsNewSubmit';
 
 import { contentStyles } from '../../utils/view';
+
+import { resetPostForm } from '../../store/actions/forms';
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -113,6 +118,20 @@ class FormsNew extends React.Component {
 
 	isStepSkipped = (step) => this.state.skipped.has(step)
 
+	onSubmitSuccess = () => {
+		this.setState({
+			activeStep: 0,
+			skipped: new Set(),
+			progress: 0,
+			contactForm: null,
+			incidentForm: null,
+			impactForm: null,
+			dataForm: null,
+		});
+
+		this.props.dispatch(resetPostForm());
+	}
+
 	renderStage = () => {
 		const { activeStep, contactForm, incidentForm, impactForm, dataForm } = this.state;
 
@@ -120,7 +139,8 @@ class FormsNew extends React.Component {
 			case 0: return <FormsNewContact form={contactForm} onSubmit={form => this.handleNext('contactForm', form)} />;
 			case 1: return <FormsNewIncident form={incidentForm} onGoBack={form => this.handleBack('incidentForm', form)} onSubmit={form => this.handleNext('incidentForm', form)} />;
 			case 2: return <FormsNewImpact form={impactForm} onGoBack={form => this.handleBack('impactForm', form)} onSubmit={form => this.handleNext('impactForm', form)} />;
-			case 3: return <FormsNewContact form={dataForm} onGoBack={form => this.handleBack('dataForm', form)} onSubmit={form => this.handleNext('dataForm', form)} />;
+			case 3: return <FormsNewData form={dataForm} onGoBack={form => this.handleBack('dataForm', form)} onSubmit={form => this.handleNext('dataForm', form)} />;
+			case 4: return <FormsNewSubmit forms={{contactForm, incidentForm, impactForm, dataForm}} onSuccess={this.onSubmitSuccess} />
 		}
 	}
 
@@ -168,4 +188,4 @@ class FormsNew extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FormsNew);
+export default connect()(withStyles(styles, { withTheme: true })(FormsNew));
