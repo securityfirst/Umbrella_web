@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 
 import Layout from '../../components/layout';
 
-import { contentStyles, paperStyles } from '../../utils/view';
+import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view';
 
 import { getFormTypes, getForms } from '../../store/actions/forms';
 
@@ -24,9 +24,7 @@ const styles = theme => ({
 		...paperStyles(theme),
 	},
 	formPanelButtonsWrapper: {
-		display: 'flex',
-		justifyContent: 'flex-end',
-		flexDirection: 'row',
+		...buttonWrapperStyles(theme),
 	},
 });
 

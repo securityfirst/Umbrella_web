@@ -90,6 +90,8 @@ class Login extends React.Component {
 								error={error}
 								errorMessage={errorMessage}
 								onChange={(e,v) => this.setState({password: v})}
+								required
+								autoFocus
 							/>
 
 							<FormControl className={classes.loginButtonFormControl} fullWidth>

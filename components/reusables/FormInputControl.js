@@ -31,7 +31,7 @@ const styles = theme => ({
 });
 
 const FormInput = (props) => {
-	const { classes, className, id, label, value, type, error, errorMessage, onChange } = props;
+	const { classes, className, id, label, value, type, error, errorMessage, onChange, autoFocus, required } = props;
 
 	let wrapperClass = {};
 
@@ -50,8 +50,8 @@ const FormInput = (props) => {
 				{label}
 			</InputLabel>
 			<Input
-				required 
-				autoFocus
+				required={required}
+				autoFocus={autoFocus}
 				fullWidth
 				error={error}
 				id={id}

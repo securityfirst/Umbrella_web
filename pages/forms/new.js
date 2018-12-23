@@ -52,9 +52,13 @@ class FormsNew extends React.Component {
 		activeStep: 0,
 		skipped: new Set(),
 		progress: 0,
+		contactForm: null,
+		incidentForm: null,
+		impactForm: null,
+		dataForm: null,
 	}
 
-	handleNext = () => {
+	handleNext = (formName, form) => {
 		const { activeStep } = this.state;
 		let { skipped, progress } = this.state;
 		let newProgress = (progress);
@@ -70,6 +74,7 @@ class FormsNew extends React.Component {
 			activeStep: activeStep + 1,
 			progress: newProgress,
 			skipped,
+			[formName]: form
 		});
 	}
 
@@ -104,10 +109,10 @@ class FormsNew extends React.Component {
 		const { activeStep } = this.state;
 
 		switch (activeStep) {
-			case 0: return <FormsNewContact />;
-			case 1: return <FormsNewContact />;
-			case 2: return <FormsNewContact />;
-			case 3: return <FormsNewContact />;
+			case 0: return <FormsNewContact onSubmit={(form) => this.handleNext('contactForm', form)} />;
+			case 1: return <FormsNewContact onSubmit={(form) => this.handleNext('incidentForm', form)} />;
+			case 2: return <FormsNewContact onSubmit={(form) => this.handleNext('impactForm', form)} />;
+			case 3: return <FormsNewContact onSubmit={(form) => this.handleNext('dataForm', form)} />;
 		}
 	}
 

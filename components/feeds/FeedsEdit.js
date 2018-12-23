@@ -11,7 +11,7 @@ import FeedsEditInterval from './FeedsEditInterval';
 import FeedsEditLocation from './FeedsEditLocation';
 import FeedsEditSources from './FeedsEditSources';
 
-import { paperStyles } from '../../utils/view';
+import { paperStyles, buttonWrapperStyles } from '../../utils/view';
 
 const styles = theme => ({
 	panel: {
@@ -25,8 +25,7 @@ const styles = theme => ({
 		fontSize: '.875rem',
 	},
 	changeButtonWrapper: {
-		display: 'flex',
-		justifyContent: 'flex-end',
+		...buttonWrapperStyles(theme),
 	},
 	cancelButton: {
 		// backgroundColor: theme.palette.

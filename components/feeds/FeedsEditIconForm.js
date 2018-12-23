@@ -8,16 +8,14 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import FormInputControl from '../../components/reusables/FormInputControl';
 
-import { paperStyles } from '../../utils/view';
+import { paperStyles, buttonWrapperStyles } from '../../utils/view';
 
 const styles = theme => ({
 	formInputControl: {
 		margin: '2rem 0 4rem',
 	},
 	buttonsWrapper: {
-		display: 'flex',
-		justifyContent: 'flex-end',
-		flexDirection: 'row',
+		...buttonWrapperStyles(theme),
 		...paperStyles(theme),
 	},
 });
@@ -37,6 +35,8 @@ class FeedsEditIconForm extends React.Component {
 					error={error}
 					errorMessage={errorMessage}
 					onChange={onChange}
+					required
+					autoFocus
 				/>
 
 				<FormControl className={classes.buttonsWrapper} fullWidth>

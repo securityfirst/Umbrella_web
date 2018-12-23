@@ -15,7 +15,7 @@ import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
 
 import teal from '@material-ui/core/colors/teal';
 
-import { paperStyles } from '../../utils/view';
+import { paperStyles, buttonWrapperStyles } from '../../utils/view';
 
 const styles = theme => ({
 	container: {
@@ -31,9 +31,7 @@ const styles = theme => ({
 	},
 	checkboxChecked: {},
 	buttonsWrapper: {
-		display: 'flex',
-		justifyContent: 'flex-end',
-		flexDirection: 'row',
+		...buttonWrapperStyles(theme),
 	},
 });
 
