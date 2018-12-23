@@ -71,7 +71,7 @@ class FeedsEditSources extends React.Component {
 		const { sourcesSelected, error, errorMessage } = this.state;
 
 		return (
-			<Paper className={classes.container}>
+			<Paper className={classes.container} square>
 				<form>
 					<Typography variant="h6">Select the feed sources</Typography>
 					<FormControl required error={error} component="fieldset" className={classes.checkboxControl}>

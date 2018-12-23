@@ -72,7 +72,7 @@ class FeedsEdit extends React.Component {
 		return (
 			<div>
 				{panels.map((panel, i) => (
-					<Paper key={i} className={classes.panel}>
+					<Paper key={i} className={classes.panel} square>
 						<Typography className={classes.panelTitle} variant="h6">{panel.title}</Typography>
 						<Typography className={classes.panelContent} paragraph>{panel.content}</Typography>
 						<div className={classes.changeButtonWrapper}>
