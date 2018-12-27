@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
 import Layout from '../../components/layout';
+import AddButton from '../../components/reusables/AddButton';
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view';
 
@@ -82,6 +83,8 @@ class Forms extends React.Component {
 
 					{(!!sorted.completed && !!sorted.completed.length) && sorted.completed.map((form, i) => this.renderPanel(form, i))}
 				</div>
+
+				<AddButton href="/forms/new" />
 			</Layout>
 		);
 	}

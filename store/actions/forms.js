@@ -41,17 +41,30 @@ export function postForm(data) {
 	return (dispatch, getState) => {
 		dispatch(pending(formsTypes.POST_FORM));
 
-		/* TODO: Replace with API */
-		fetch('https://jsonplaceholder.typicode.com/users', {
-			method: 'post',
-			// body: data,
-		})
-			.then(res => {
-				dispatch(fulfilled(formsTypes.POST_FORM));
+		try {
+			/* TODO: Replace with API */
+			/* TODO: Fix extra webpack calls */
+			fetch('https://jsonplaceholder.typicode.com/users', {
+				method: 'post',
+				body: JSON.stringify({test: 1}), 
+				headers: {'Content-Type': 'application/json'},
 			})
-			.catch(err => {
-				dispatch(rejected(formsTypes.POST_FORM, formatError(err)));
-			});
+				.then(res => {
+					console.log("res: ", res);
+					if (res.ok) {
+						dispatch(fulfilled(formsTypes.POST_FORM));
+						return res;
+					} else {
+						console.error("res not ok");
+					}
+				})
+				.catch(err => {
+					console.error("action postForm error: ", err);
+					dispatch(rejected(formsTypes.POST_FORM, formatError(err)));
+				});
+		} catch (e) {
+			console.error("exception: ", e);
+		}
 	}
 }
 
