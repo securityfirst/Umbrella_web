@@ -6,7 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
+
+import Loading from '../../components/reusables/Loading';
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view';
 
@@ -18,9 +19,6 @@ const styles = theme => ({
 	},
 	hint: {
 		color: theme.palette.grey[500],
-	},
-	loading: {
-		margin: '3rem auto',
 	},
 	copy: {
 		margin: '2rem 0',
@@ -41,18 +39,6 @@ class FormsNewSubmit extends React.Component {
 	onGoBack = () => this.props.onGoBack({data: this.state.data})
 
 	onSubmit = () => this.props.dispatch(postForm(this.props.forms))
-
-	renderLoading = () => {
-		const { classes } = this.props;
-
-		return (
-			<div>
-				<Typography paragraph>Submitting...</Typography>
-
-				<CircularProgress className={classes.loading} color="secondary" />
-			</div>
-		);
-	}
 
 	renderError = () => {
 		const { classes, postFormError } = this.props;
@@ -93,7 +79,7 @@ class FormsNewSubmit extends React.Component {
 				<Typography className={classes.hint}>Placeholder</Typography>
 
 				{postFormLoading
-					? this.renderLoading()
+					? <Loading />
 					: postFormSuccess
 						? this.renderError()
 						: this.renderSuccess()

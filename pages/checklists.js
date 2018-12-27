@@ -9,6 +9,8 @@ import Tab from '@material-ui/core/Tab';
 
 import Layout from '../components/layout';
 import ChecklistsCustom from '../components/checklists/ChecklistsCustom';
+import ChecklistsPanel from '../components/checklists/ChecklistsPanel';
+import Loading from '../components/reusables/Loading';
 
 import { contentStyles } from '../utils/view';
 
@@ -19,6 +21,13 @@ const styles = theme => ({
 	tabs: {
 		backgroundColor: theme.palette.background.paper,
 	},
+	loading: {
+
+	},
+	label: {
+		color: theme.palette.grey[500],
+		fontSize: '.875rem',
+	},
 });
 
 class Checklists extends React.Component {
@@ -28,32 +37,50 @@ class Checklists extends React.Component {
 		return isServer;
 	}
 
+	componentWillMount() {
+		this.props.dispatch(getSystemChecklists());
+	}
+
 	state = {
 		tabIndex: 0
 	};
 
 	handleTabSelect = (e, v) => this.setState({tabIndex: v});
 
-	renderOverview = () => (
-		<Typography paragraph>
-			<strong>OVERVIEW</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-			incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-			elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-			hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-			velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-			Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-			viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-			Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-			at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-			ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-		</Typography>
-	);
+	renderOverview = () => {
+		const { classes, getSystemChecklistsLoading, getSystemChecklistsError, systemChecklists } = this.props;
+
+		if (getSystemChecklistsLoading) return <Loading />;
+		else if (getSystemChecklistsError) return <Typography variant="error">{JSON.stringify(getSystemChecklistsError)}</Typography>;
+
+		return (
+			<div className={classes.content}>
+				<Typography className={classes.label} variant="subtitle1">Checklists Total</Typography>
+
+				<ChecklistsPanel name="Total done" percentage={systemChecklists.total} />
+
+				{(systemChecklists.favorites && systemChecklists.favorites.length) && 
+					<Typography className={classes.label} variant="subtitle1">Favourites</Typography>
+				}
+
+				{(systemChecklists.favorites && systemChecklists.favorites.length) && 
+					systemChecklists.favorites.map((checklist, i) => <ChecklistsPanel key={i} name={checklist.name} percentage={checklist.percentage} />)
+				}
+
+				{(systemChecklists.checklists && systemChecklists.checklists.length) && 
+					<Typography className={classes.label} variant="subtitle1">My Checklists</Typography>
+				}
+
+				{(systemChecklists.checklists && systemChecklists.checklists.length) && 
+					systemChecklists.checklists.map((checklist, i) => <ChecklistsPanel key={i} name={checklist.name} percentage={checklist.percentage} />)
+				}
+			</div>
+		);
+	}
 
 	render() {
-		const { classes, systemChecklists } = this.props;
+		const { classes } = this.props;
 		const { tabIndex } = this.state;
-
-		console.log("systemChecklists: ", systemChecklists);
 
 		return (
 			<Layout title="Umbrella | Checklists" description="Umbrella web application">
@@ -66,12 +93,10 @@ class Checklists extends React.Component {
 					<Tab label="CUSTOM" />
 				</Tabs>
 
-				<div className={classes.content}>
-					{tabIndex === 1
-						? <ChecklistsCustom />
-						: this.renderOverview()
-					}
-				</div>
+				{tabIndex === 1
+					? <ChecklistsCustom />
+					: this.renderOverview()
+				}
 			</Layout>
 		);
 	}
