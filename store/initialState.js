@@ -32,10 +32,13 @@ const lessons = {
 };
 
 const checklists = {
-	loading: true,
-	erorr: null,
-	data: [],
-	current: null,
+	getSystemChecklistsLoading: true,
+	getSystemChecklistsError: null,
+	systemChecklists: {},
+	getCustomChecklistsLoading: true,
+	getCustomChecklistsError: null,
+	getCustomChecklistsSuccess: false,
+	customChecklists: [],
 };
 
 const view = {

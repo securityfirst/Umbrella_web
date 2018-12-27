@@ -23,9 +23,8 @@ export const lessonsTypes = {
 };
 
 export const checklistsTypes = {
-	SET_CHECKLISTS: 'SET_CHECKLISTS',
-	POST_CHECKLIST: 'POST_CHECKLIST',
-	UPDATE_CHECKLIST: 'UPDATE_CHECKLIST',
+	GET_SYSTEM_CHECKLISTS: 'GET_SYSTEM_CHECKLISTS',
+	GET_CUSTOM_CHECKLISTS: 'GET_CUSTOM_CHECKLISTS',
 };
 
 export const viewTypes = {
