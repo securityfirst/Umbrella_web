@@ -3,26 +3,18 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
 
-import { contentStyles } from '../../utils/view';
+import AddButton from '../../components/reusables/AddButton';
 
 const styles = theme => ({
-	addButton: {
-		position: 'fixed',
-		top: '85vh',
-		right: '10vw',
-		[theme.breakpoints.up('sm')]: {
-			top: '25vh',
-		},
-	},
-	addIcon: {
-		color: theme.palette.common.white,
-	},
+
 });
 
 class FeedsRss extends React.Component {
+	handleAddRss = () => {
+
+	}
+
 	render() {
 		const { classes } = this.props;
 
@@ -41,9 +33,7 @@ class FeedsRss extends React.Component {
 					ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
 				</Typography>
 				
-				<Fab className={classes.addButton} color="secondary" aria-label="Add">
-					<AddIcon className={classes.addIcon} />
-				</Fab>
+				<AddButton onClick={this.handleAddRss} />
 			</div>
 		);
 	}

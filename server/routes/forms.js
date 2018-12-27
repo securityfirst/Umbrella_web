@@ -11,7 +11,7 @@ exports.index = (app) => (req, res) => {
 	return renderAndCache(app, ssrCache, req, res, actualPage);
 }
 
-exports.edit = (app) => (req, res) => {
-	const actualPage = '/forms/edit';
+exports.new = (app) => (req, res) => {
+	const actualPage = '/forms/new';
 	return renderAndCache(app, ssrCache, req, res, actualPage);
 }

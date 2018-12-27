@@ -12,10 +12,16 @@ const feeds = {
 };
 
 const forms = {
-	loading: true,
-	erorr: null,
-	data: [],
-	current: null,
+	getFormTypesLoading: true,
+	getFormTypesError: null,
+	formTypes: [],
+	getFormsLoading: true,
+	getFormsError: null,
+	getFormsSuccess: false,
+	forms: [],
+	postFormLoading: false,
+	postFormError: null,
+	postFormSuccess: false,
 };
 
 const lessons = {

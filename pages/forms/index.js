@@ -1,43 +1,97 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import { withStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 
 import Layout from '../../components/layout';
+import AddButton from '../../components/reusables/AddButton';
 
-import { contentStyles } from '../../utils/view';
+import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view';
 
-const styles = theme => contentStyles(theme);
+import { getFormTypes, getForms } from '../../store/actions/forms';
+
+const styles = theme => ({
+	...contentStyles(theme),
+	label: {
+		color: theme.palette.grey[500],
+		fontSize: '.875rem',
+	},
+	formPanel: {
+		margin: '.75rem 0',
+		...paperStyles(theme),
+	},
+	formPanelButtonsWrapper: {
+		...buttonWrapperStyles(theme),
+	},
+});
 
 class Forms extends React.Component {
+	static async getInitialProps({reduxStore, isServer}) {
+		// TODO: Doesn't render serverside
+		await reduxStore.dispatch(getFormTypes());
+		await reduxStore.dispatch(getForms());
+		return isServer;
+	}
+
+	handleEdit = (form) => () => {
+		alert("Edit " + form.typeId);
+	}
+
+	handleShare = (form) => () => {
+		alert("Sharing " + form.typeId);
+	}
+
+	renderPanel = (form, i, isActive) => {
+		const { classes, formTypes } = this.props;
+
+		const formType = formTypes.find(type => type.id === form.typeId);
+
+		return (
+			<Paper key={i} className={classes.formPanel} square>
+				<Typography variant="h6">{formType.title}</Typography>
+				<Typography paragraph>{formType.description}</Typography>
+
+				{!!isActive && <div className={classes.formPanelButtonsWrapper}>
+					<Button component="button" onClick={this.handleEdit(form)}>Edit</Button>
+					<Button color="primary" onClick={this.handleShare(form)}>Share</Button>
+				</div>}
+			</Paper>
+		);
+	}
+
 	render() {
-		const { classes } = this.props;
+		const { classes, formTypes, forms } = this.props;
+
+		let sorted = forms.reduce((set, form) => {
+			if (!set[form.status]) set[form.status] = [];
+			set[form.status].push(form);
+			return set;
+		}, {});
 
 		return (
 			<Layout title="Umbrella | Forms" description="Umbrella web application">
 				<div className={classes.content}>
-					<Typography variant="h6">Forms</Typography>
+					{(!!sorted.active && !!sorted.active.length) && <Typography className={classes.label} variant="subtitle1">Active</Typography>}
 
-					<Divider />
+					{(!!sorted.active && !!sorted.active.length) && sorted.active.map((form, i) => this.renderPanel(form, i, true))}
 
-					<Typography paragraph>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-						incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-						elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-						hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-						velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-						Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-						viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-						Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-						at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-						ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-					</Typography>
+					{(!!sorted.completed && !!sorted.completed.length) && <Typography className={classes.label} variant="subtitle1">All</Typography>}
+
+					{(!!sorted.completed && !!sorted.completed.length) && sorted.completed.map((form, i) => this.renderPanel(form, i))}
 				</div>
+
+				<AddButton href="/forms/new" />
 			</Layout>
 		);
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(Forms);
+const mapStateToProps = state => ({
+	...state.forms,
+});
+
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Forms));

@@ -13,12 +13,12 @@ import Layout from '../components/layout';
 import { contentStyles } from '../utils/view';
 
 const styles = theme => ({
+	...contentStyles(theme),
 	heading: {
 		fontSize: theme.typography.pxToRem(15),
 		flexBasis: '33.33%',
 		flexShrink: 0,
 	},
-	...contentStyles(theme)
 });
 
 class Account extends React.Component {

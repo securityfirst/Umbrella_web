@@ -11,12 +11,12 @@ import FeedsEditInterval from './FeedsEditInterval';
 import FeedsEditLocation from './FeedsEditLocation';
 import FeedsEditSources from './FeedsEditSources';
 
+import { paperStyles, buttonWrapperStyles } from '../../utils/view';
+
 const styles = theme => ({
 	panel: {
-		...theme.mixins.gutters(),
 		margin: '.75rem 0',
-		paddingTop: theme.spacing.unit * 2,
-		paddingBottom: theme.spacing.unit * 2,
+		...paperStyles(theme),
 	},
 	panelTitle: {
 		fontSize: '1.5rem',
@@ -25,8 +25,7 @@ const styles = theme => ({
 		fontSize: '.875rem',
 	},
 	changeButtonWrapper: {
-		display: 'flex',
-		justifyContent: 'flex-end',
+		...buttonWrapperStyles(theme),
 	},
 	cancelButton: {
 		// backgroundColor: theme.palette.
@@ -73,7 +72,7 @@ class FeedsEdit extends React.Component {
 		return (
 			<div>
 				{panels.map((panel, i) => (
-					<Paper key={i} className={classes.panel}>
+					<Paper key={i} className={classes.panel} square>
 						<Typography className={classes.panelTitle} variant="h6">{panel.title}</Typography>
 						<Typography className={classes.panelContent} paragraph>{panel.content}</Typography>
 						<div className={classes.changeButtonWrapper}>

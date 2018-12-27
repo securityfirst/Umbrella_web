@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-// import Button from '@material-ui/core/Button';
 
 import yellow from '@material-ui/core/colors/yellow';
+
+import { paperStyles } from '../../utils/view';
 
 const styles = theme => ({
 	wrapper: {
@@ -25,9 +26,7 @@ const styles = theme => ({
 		backgroundColor: yellow[700],
 	},
 	contentWrapper: {
-		...theme.mixins.gutters(),
-		paddingTop: theme.spacing.unit * 2,
-		paddingBottom: theme.spacing.unit * 2,
+		...paperStyles(theme),
 		color: theme.palette.primary.main,
 	},
 });
