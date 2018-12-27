@@ -3,11 +3,31 @@ import { connect } from 'react-redux';
 
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import cyan from '@material-ui/core/colors/cyan';
+
+import { paperStyles } from '../../utils/view';
 
 import { getCustomChecklists } from '../../store/actions/checklists';
 
 const styles = theme => ({
-
+	formPanel: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		margin: '.75rem 0',
+		...paperStyles(theme),
+	},
+	formPanelTitle: {
+		display: 'inline-block',
+		fontWeight: 'normal',
+	},
+	formPanelPercentage: {
+		display: 'inline-block',
+		fontWeight: 'normal',
+		color: cyan[500],
+	},
 });
 
 class ChecklistsCustom extends React.Component {
@@ -15,23 +35,27 @@ class ChecklistsCustom extends React.Component {
 		this.props.dispatch(getCustomChecklists());
 	}
 
-	render() {
-		const { classes, customChecklists } = this.props;
-		console.log("customChecklists: ", customChecklists);
+	renderPanel = (checklist, i) => {
+		const { classes } = this.props;
 
 		return (
-			<Typography paragraph>
-				<strong>CUSTOM</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-				incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-				elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-				hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-				velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-				Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-				viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-				Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-				at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-				ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-			</Typography>
+			<Paper key={i} className={classes.formPanel} square>
+				<Typography className={classes.formPanelTitle} variant="h6">{checklist.name}</Typography>
+				<Typography className={classes.formPanelPercentage} variant="h6">{checklist.percentage}%</Typography>
+			</Paper>
+		);
+	}
+
+	render() {
+		const { classes, customChecklistsLoading, customChecklistsError, customChecklists } = this.props;
+
+		if (customChecklistsLoading) return <CircularProgress className={classes.loading} color="secondary" />;
+		else if (customChecklistsError) return <Typography variant="error">{JSON.stringify(customChecklistsError)}</Typography>;
+
+		return (
+			<div>
+				{customChecklists.map(this.renderPanel)}
+			</div>
 		);
 	}
 }
