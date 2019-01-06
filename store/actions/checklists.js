@@ -11,7 +11,8 @@ export function getSystemChecklists() {
 
 		/* TODO: Replace with API */
 		await fetch('https://jsonplaceholder.typicode.com/users')
-			.then(res => dispatch(fulfilled(checklistsTypes.GET_SYSTEM_CHECKLISTS, systemChecklists)))
+			.then(res => res.json())
+			.then(data => dispatch(fulfilled(checklistsTypes.GET_SYSTEM_CHECKLISTS, systemChecklists)))
 			.catch(err => dispatch(rejected(checklistsTypes.GET_SYSTEM_CHECKLISTS, err)));
 	}
 }
@@ -22,7 +23,8 @@ export function getCustomChecklists() {
 
 		/* TODO: Replace with API */
 		fetch('https://jsonplaceholder.typicode.com/users')
-			.then(res => dispatch(fulfilled(checklistsTypes.GET_CUSTOM_CHECKLISTS, customChecklists)))
+			.then(res => res.json())
+			.then(data => dispatch(fulfilled(checklistsTypes.GET_CUSTOM_CHECKLISTS, customChecklists)))
 			.catch(err => dispatch(rejected(checklistsTypes.GET_CUSTOM_CHECKLISTS, err)));
 	}
 }

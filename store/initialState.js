@@ -6,7 +6,7 @@ const account = {
 
 const feeds = {
 	loading: true,
-	erorr: null,
+	error: null,
 	data: [],
 	current: null,
 };
@@ -25,10 +25,12 @@ const forms = {
 };
 
 const lessons = {
-	loading: true,
-	erorr: null,
-	categories: [],
-	current: null,
+	getLessonCategoriesLoading: true,
+	getLessonCategoriesError: null,
+	lessonCategories: [],
+	getLessonCardsLoading: true,
+	getLessonCardsError: null,
+	lessonCards: [],
 };
 
 const checklists = {

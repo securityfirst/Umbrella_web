@@ -29,9 +29,7 @@ import Layout from '../components/layout';
 
 import { contentStyles } from '../utils/view';
 
-import { setLessonCategories } from '../store/actions/lessons';
-
-import { categories } from '../mock/lessons';
+import { getLessonCategories, getLessonCards } from '../store/actions/lessons';
 
 const menuWidth = 300;
 
@@ -84,18 +82,10 @@ const menuSet = {
 };
 
 class Lessons extends React.Component {
-	static async getInitialProps({reduxStore}) {
-		let results;
-		// let categories;
-
-		try {
-			const categoriesReq = await fetch('https://api.secfirst.org/v1/categories', {mode: "cors"});
-			results = await categoriesReq.json();
-			// categories = await categoriesReq.json();
-			reduxStore.dispatch(setLessonCategories({categories}));
-		} catch (e) {
-			console.error(`Error fetching categories: `, e);
-		}
+	static async getInitialProps({isServer, reduxStore}) {
+		await reduxStore.dispatch(getLessonCategories());
+		// await reduxStore.dispatch(getLessonCards());
+		return isServer;
 	}
 
 	state = {
@@ -109,8 +99,8 @@ class Lessons extends React.Component {
 	}
 
 	renderMenuList = () => {
-		const { classes, lessonsMenuOpened, categories } = this.props;
-		const categoriesSet = categories.reduce((set, cat) => {
+		const { classes, lessonsMenuOpened, lessonCategories } = this.props;
+		const categoriesSet = lessonCategories.reduce((set, cat) => {
 			if (cat.parent === 0) {
 				if (!set[cat.category]) set.set(cat.category, []);
 			} else {

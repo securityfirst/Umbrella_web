@@ -3,8 +3,17 @@ import 'isomorphic-unfetch';
 import { lessonsTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
-export function setLessonCategories({categories}) {
-	return {type: lessonsTypes.SET_LESSON_CATEGORIES, payload: categories};
+import { categories } from '../../mock/lessons';
+
+export function getLessonCategories() {
+	return async (dispatch, getState) => {
+		dispatch(pending(lessonsTypes.GET_LESSON_CATEGORIES));
+
+		await fetch('https://api.secfirst.org/v1/categories', {mode: "cors"})
+			.then(res => res.json)
+			.then(data => dispatch(fulfilled(lessonsTypes.GET_LESSON_CATEGORIES, categories)))
+			.catch(err => dispatch(rejected(lessonsTypes.GET_LESSON_CATEGORIES, err)));
+	}
 }
 
 export function getLessonCards({category, subcategory}) {
@@ -15,7 +24,8 @@ export function getLessonCards({category, subcategory}) {
 		await fetch('http://example.com/movies.json', {
 			mode: "no-cors", // no-cors, cors, *same-origi
 		})
-			.then(res => dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS, true)))
+			.then(res => res.json)
+			.then(data => dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS, true)))
 			.catch(err => dispatch(rejected(lessonsTypes.GET_LESSON_CARDS, err)));
 	}
 }

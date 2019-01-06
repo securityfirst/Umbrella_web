@@ -11,7 +11,8 @@ export function getFeeds() {
 
 		/* TODO: Replace with API */
 		await fetch('https://jsonplaceholder.typicode.com/users')
-			.then(res => dispatch(fulfilled(feedsTypes.GET_FEEDS, feeds)))
+			.then(res => res.json())
+			.then(data => dispatch(fulfilled(feedsTypes.GET_FEEDS, feeds)))
 			.catch(err => dispatch(rejected(feedsTypes.GET_FEEDS, err)));
 	}
 }

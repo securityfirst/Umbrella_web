@@ -13,7 +13,8 @@ export function login(credentials) {
 			},
 			body: JSON.stringify(credentials), // body data type must match "Content-Type" header
 		})
-			.then(res => dispatch(fulfilled(accountTypes.LOGIN, true)))
+			.then(res => res.json())
+			.then(data => dispatch(fulfilled(accountTypes.LOGIN, data)))
 			.catch(err => dispatch(rejected(accountTypes.LOGIN, err)));
 	}
 }
@@ -29,7 +30,8 @@ export function logout() {
 				"Content-Type": "application/json; charset=utf-8",
 			},
 		})
-			.then(res => dispatch(fulfilled(accountTypes.LOGOUT, true)))
+			.then(res => res.json())
+			.then(data => dispatch(fulfilled(accountTypes.LOGOUT, data)))
 			.catch(err => dispatch(rejected(accountTypes.LOGOUT, err)));
 	}
 }

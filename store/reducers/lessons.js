@@ -4,34 +4,44 @@ import initialState from '../initialState.js';
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
-		/* SET_LESSON_CATEGORIES */
-		case (lessonsTypes.SET_LESSON_CATEGORIES):
+		/* GET_LESSON_CATEGORIES */
+		case pending(lessonsTypes.GET_LESSON_CATEGORIES):
 			return {
-				...state.lessons,
-				categories: action.payload
+				...state,
+				getLessonCategoriesLoading: true,
+			};
+		case rejected(lessonsTypes.GET_LESSON_CATEGORIES):
+			return {
+				...state,
+				getLessonCategoriesLoading: false,
+				getLessonCategoriesError: action.payload,
+			};
+		case fulfilled(lessonsTypes.GET_LESSON_CATEGORIES):
+			return {
+				...state,
+				getLessonCategoriesLoading: false,
+				getLessonCategoriesError: null,
+				lessonCategories: action.payload,
 			};
 
 		/* GET_LESSON_CARDS */
 		case pending(lessonsTypes.GET_LESSON_CARDS):
 			return {
 				...state,
-				loading: true,
+				getLessonCardsLoading: true,
 			};
 		case rejected(lessonsTypes.GET_LESSON_CARDS):
 			return {
 				...state,
-				loading: false,
-				error: action.payload,
+				getLessonCardsLoading: false,
+				getLessonCardsError: action.payload,
 			};
 		case fulfilled(lessonsTypes.GET_LESSON_CARDS):
 			return {
 				...state,
-				loading: false,
-				error: null,
-				// lessons: {
-				// 	...state.lessons,
-				// 	[`${action.category}.${action.subcategory}`]: action.payload,
-				// },
+				getLessonCardsLoading: false,
+				getLessonCardsError: null,
+				lessonCards: action.payload,
 			};
 	}
 
