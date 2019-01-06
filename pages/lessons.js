@@ -109,9 +109,48 @@ class Lessons extends React.Component {
 		else this.setState({menuItemSelected: menuItemIndex});
 	}
 
+	renderMenuSubcategory = (subcategory, i) => {
+		const { classes } = this.props;
+
+		return (
+			<ListItem button className={classes.menuListSubItem} key={i} onClick={this.handleSubcategorySelect}>
+				<ListItemText className={classes.menuListItemText} inset primary={subcategory.replace(/-/g, ' ')} />
+			</ListItem>
+		);
+	}
+
+	renderMenuCategory = (category, i) => {
+		const { classes, lessons, locale } = this.props;
+		const { menuItemSelected } = this.state;
+
+		if (category == "content" || category == "forms") return null;
+
+		const isSelected = menuItemSelected == i;
+		const subcategories = Object.keys(lessons[locale][category]).filter(subcategory => subcategory != "content");
+
+		return (
+			<div key={i} className={isSelected ? classes.menuListItemSelected : ''}>
+				<ListItem button onClick={() => this.handleMenuItemSelect(i)}>
+					<ListItemIcon className={classes.menuListItemIcon}>
+						<img className={classes.menuListItemIconImg} src={`/static/assets/content/${locale}/${category}/${category}.png`} />
+					</ListItemIcon>
+					<ListItemText className={classes.menuListItemText} inset primary={category.replace(/-/g, ' ')} />
+					{!!subcategories.length
+						? isSelected ? <ExpandLess /> : <ExpandMore />
+						: null
+					}
+				</ListItem>
+				{!!subcategories.length && <Collapse in={isSelected} timeout="auto" unmountOnExit>
+					<List component="div" disablePadding>
+						{subcategories.map(this.renderMenuSubcategory)}
+					</List>
+				</Collapse>}
+			</div>
+		);
+	}
+
 	renderMenuList = () => {
 		const { classes, lessonsMenuOpened, getLessonsLoading, getLessonsError, lessons, locale } = this.props;
-		const { menuItemSelected } = this.state;
 
 		if (getLessonsLoading) return <Loading />;
 		else if (getLessonsError) return <Typography variant="error">{JSON.stringify(getLessonsError)}</Typography>;
@@ -124,39 +163,7 @@ class Lessons extends React.Component {
 					[classes.menuListOpened]: lessonsMenuOpened,
 				})}
 			>
-				{Object.keys(lessons[locale]).map((category, i) => {
-					if (category == "content" || category == "forms") return null;
-
-					const isSelected = menuItemSelected == i;
-
-					const subcategories = Object.keys(lessons[locale][category]).filter(subcategory => subcategory != "content");
-
-					return (
-						<div key={i} className={isSelected ? classes.menuListItemSelected : ''}>
-							<ListItem button onClick={() => this.handleMenuItemSelect(i)}>
-								<ListItemIcon className={classes.menuListItemIcon}>
-									<img className={classes.menuListItemIconImg} src={`/static/assets/content/${locale}/${category}/${category}.png`} />
-								</ListItemIcon>
-								<ListItemText className={classes.menuListItemText} inset primary={category.replace(/-/g, ' ')} />
-								{!!subcategories.length
-									? isSelected ? <ExpandLess /> : <ExpandMore />
-									: null
-								}
-							</ListItem>
-							{!!subcategories.length && <Collapse in={isSelected} timeout="auto" unmountOnExit>
-								<List component="div" disablePadding>
-									{subcategories.map((subcategory, i) => {
-										return (
-											<ListItem button className={classes.menuListSubItem} key={i}>
-												<ListItemText className={classes.menuListItemText} inset primary={subcategory.replace(/-/g, ' ')} />
-											</ListItem>
-										);
-									})}
-								</List>
-							</Collapse>}
-						</div>
-					);
-				})}
+				{Object.keys(lessons[locale]).map(this.renderMenuCategory)}
 			</List>
 		);
 	}
