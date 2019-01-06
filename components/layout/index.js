@@ -39,6 +39,7 @@ class Layout extends React.Component {
 					<meta charSet='utf-8' />
 					<meta name='viewport' content='initial-scale=1.0, width=device-width' />
 					<meta name='description' content={this.props.description} />
+					<link rel="shortcut icon" href="/static/favicon.png" />
 					<link href="/static/styles/global.css" rel="stylesheet" />
 				</Head>
 
