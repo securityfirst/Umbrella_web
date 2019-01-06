@@ -3,7 +3,7 @@ function getCacheKey (req) {
 	return `${req.url}`;
 }
 
-exports.renderAndCache = async function(app, ssrCache, req, res, pagePath, queryParams) {
+exports.renderAndCache = async (app, ssrCache, req, res, pagePath, queryParams) => {
 	const key = getCacheKey(req);
 
 	// If we have a page in the cache, let's serve it

@@ -5,7 +5,7 @@ import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js
 
 import { systemChecklists, customChecklists } from '../../mock/checklists';
 
-export function getSystemChecklists() {
+export const getSystemChecklists = () => {
 	return async (dispatch, getState) => {
 		dispatch(pending(checklistsTypes.GET_SYSTEM_CHECKLISTS));
 
@@ -17,7 +17,7 @@ export function getSystemChecklists() {
 	}
 }
 
-export function getCustomChecklists() {
+export const getCustomChecklists = () => {
 	return (dispatch, getState) => {
 		dispatch(pending(checklistsTypes.GET_CUSTOM_CHECKLISTS));
 

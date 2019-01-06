@@ -5,7 +5,7 @@ import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js
 
 import { formTypes, forms } from '../../mock/forms';
 
-export function getFormTypes() {
+export const getFormTypes = () => {
 	return async (dispatch, getState) => {
 		dispatch(pending(formsTypes.GET_FORM_TYPES));
 
@@ -17,7 +17,7 @@ export function getFormTypes() {
 	}
 }
 
-export function getForms() {
+export const getForms = () => {
 	return async (dispatch, getState) => {
 		dispatch(pending(formsTypes.GET_FORMS));
 
@@ -29,7 +29,7 @@ export function getForms() {
 	}
 }
 
-export function postForm(data) {
+export const postForm = (data) => {
 	return (dispatch, getState) => {
 		dispatch(pending(formsTypes.POST_FORM));
 
@@ -52,7 +52,7 @@ export function postForm(data) {
 				})
 				.catch(err => {
 					console.error("action postForm error: ", err);
-					dispatch(rejected(formsTypes.POST_FORM, formatError(err)));
+					dispatch(rejected(formsTypes.POST_FORM, err));
 				});
 		} catch (e) {
 			console.error("exception: ", e);
@@ -60,6 +60,6 @@ export function postForm(data) {
 	}
 }
 
-export function resetPostForm() {
+export const resetPostForm = () => {
 	return {type: formsTypes.RESET_POST_FORM};
 }

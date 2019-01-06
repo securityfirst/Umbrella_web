@@ -1,7 +1,7 @@
 import { accountTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
-export function login(credentials) {
+export const login = (credentials) => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.LOGIN));
 
@@ -19,7 +19,7 @@ export function login(credentials) {
 	}
 }
 
-export function logout() {
+export const logout = () => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.LOGOUT));
 

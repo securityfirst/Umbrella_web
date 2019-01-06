@@ -5,7 +5,7 @@ import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js
 
 import { feeds } from '../../mock/feeds';
 
-export function getFeeds() {
+export const getFeeds = () => {
 	return async (dispatch, getState) => {
 		dispatch(pending(feedsTypes.GET_FEEDS));
 
