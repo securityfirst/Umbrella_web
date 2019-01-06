@@ -3,45 +3,47 @@ import { pending, rejected, fulfilled } from '../helpers/asyncStatusGenerator.js
 import initialState from '../initialState.js';
 
 export default function reducer(state = initialState, action) {
+	let lessonFilesCache = {};
+
 	switch (action.type) {
-		/* GET_LESSON_CATEGORIES */
-		case pending(lessonsTypes.GET_LESSON_CATEGORIES):
+		/* GET_LESSONS */
+		case pending(lessonsTypes.GET_LESSONS):
 			return {
 				...state,
-				getLessonCategoriesLoading: true,
+				getLessonsLoading: true,
 			};
-		case rejected(lessonsTypes.GET_LESSON_CATEGORIES):
+		case rejected(lessonsTypes.GET_LESSONS):
 			return {
 				...state,
-				getLessonCategoriesLoading: false,
-				getLessonCategoriesError: action.payload,
+				getLessonsLoading: false,
+				getLessonsError: action.payload,
 			};
-		case fulfilled(lessonsTypes.GET_LESSON_CATEGORIES):
+		case fulfilled(lessonsTypes.GET_LESSONS):
 			return {
 				...state,
-				getLessonCategoriesLoading: false,
-				getLessonCategoriesError: null,
-				lessonCategories: action.payload,
+				getLessonsLoading: false,
+				getLessonsError: null,
+				lessons: action.payload,
 			};
 
-		/* GET_LESSON_CARDS */
-		case pending(lessonsTypes.GET_LESSON_CARDS):
+		/* GET_LESSON_FILE */
+		case pending(lessonsTypes.GET_LESSON_FILE):
 			return {
 				...state,
-				getLessonCardsLoading: true,
+				getLessonFileLoading: true,
 			};
-		case rejected(lessonsTypes.GET_LESSON_CARDS):
+		case rejected(lessonsTypes.GET_LESSON_FILE):
 			return {
 				...state,
-				getLessonCardsLoading: false,
-				getLessonCardsError: action.payload,
+				getLessonFileLoading: false,
+				getLessonFileError: action.payload,
 			};
-		case fulfilled(lessonsTypes.GET_LESSON_CARDS):
+		case fulfilled(lessonsTypes.GET_LESSON_FILE):
 			return {
 				...state,
-				getLessonCardsLoading: false,
-				getLessonCardsError: null,
-				lessonCards: action.payload,
+				getLessonFileLoading: false,
+				getLessonFileError: null,
+				lessonFiles: state.lessons.lessonFiles.concat([action.payload]),
 			};
 	}
 

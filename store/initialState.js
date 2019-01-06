@@ -27,7 +27,7 @@ const forms = {
 const lessons = {
 	getLessonsLoading: true,
 	getLessonsError: null,
-	lessons: [],
+	lessons: null,
 	getLessonCardsLoading: true,
 	getLessonCardsError: null,
 	lessonCards: [],
