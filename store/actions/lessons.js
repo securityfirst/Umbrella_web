@@ -19,10 +19,10 @@ export const getLessons = () => {
 		}
 
 		try {
-			const repoReq = await fetch(`https://api.github.com/repos/klaidliadon/umbrella-content/branches/master?access_token=${GITHUB_ACCESS_TOKEN}`);
+			const repoReq = await fetch(`https://api.github.com/repos/klaidliadon/umbrella-content/branches/master`);
 			const repo = await repoReq.json();
 
-			const masterTreeReq = await fetch(`https://api.github.com/repos/klaidliadon/umbrella-content/git/trees/${repo.commit.sha}?access_token=${GITHUB_ACCESS_TOKEN}&recursive=1`);
+			const masterTreeReq = await fetch(`https://api.github.com/repos/klaidliadon/umbrella-content/git/trees/${repo.commit.sha}?recursive=1`);
 			let lessons = await masterTreeReq.json();
 
 			lessons = lessons.tree.reduce((lessonsSet, node) => {
