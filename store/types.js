@@ -16,8 +16,8 @@ export const formsTypes = {
 };
 
 export const lessonsTypes = {
-	SET_LESSON_CATEGORIES: 'SET_LESSON_CATEGORIES',
-	GET_LESSON_CARDS: 'GET_LESSON_CARDS',
+	GET_LESSONS: 'GET_LESSONS',
+	GET_LESSON_FILE: 'GET_LESSON_FILE',
 };
 
 export const checklistsTypes = {
@@ -29,4 +29,5 @@ export const viewTypes = {
 	TOGGLE_MAIN_MENU: 'TOGGLE_MAIN_MENU',
 	SET_APPBAR_TITLE: 'SET_APPBAR_TITLE',
 	TOGGLE_LESSONS_MENU: 'TOGGLE_LESSONS_MENU',
+	SET_LOCALE: 'SET_LOCALE',
 };

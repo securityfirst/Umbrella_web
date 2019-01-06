@@ -1,7 +1,7 @@
 import { viewTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
-export function toggleMainMenu(isOpen) {
+export const toggleMainMenu = (isOpen) => {
 	return (dispatch, getState) => {
 		dispatch({
 			type: viewTypes.TOGGLE_MAIN_MENU, 
@@ -10,10 +10,14 @@ export function toggleMainMenu(isOpen) {
 	}
 }
 
-export function setAppbarTitle(title) {
+export const setAppbarTitle = (title) => {
 	return {type: viewTypes.SET_APPBAR_TITLE, payload: title};
 }
 
-export function toggleLessonsMenu(opened) {
+export const toggleLessonsMenu = (opened) => {
 	return {type: viewTypes.TOGGLE_LESSONS_MENU, payload: opened};
+}
+
+export const setLocale = (localeCode) => {
+	return {type: viewTypes.SET_LOCALE, payload: localeCode};
 }

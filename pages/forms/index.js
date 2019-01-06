@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 
 import Layout from '../../components/layout';
+import Loading from '../../components/reusables/Loading';
 import AddButton from '../../components/reusables/AddButton';
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view';
@@ -63,8 +64,11 @@ class Forms extends React.Component {
 		);
 	}
 
-	render() {
-		const { classes, formTypes, forms } = this.props;
+	renderContent = () => {
+		const { classes, getFormTypesLoading, getFormTypesError, formTypes, getFormsLoading, getFormsError, forms } = this.props;
+
+		if (getFormTypesLoading || getFormsLoading) return <Loading />;
+		else if (getFormTypesError || getFormsError) return <Typography variant="error">{JSON.stringify(getFormTypesError || getFormsError)}</Typography>;
 
 		let sorted = forms.reduce((set, form) => {
 			if (!set[form.status]) set[form.status] = [];
@@ -73,16 +77,24 @@ class Forms extends React.Component {
 		}, {});
 
 		return (
+			<div className={classes.content}>
+				{(!!sorted.active && !!sorted.active.length) && <Typography className={classes.label} variant="subtitle1">Active</Typography>}
+
+				{(!!sorted.active && !!sorted.active.length) && sorted.active.map((form, i) => this.renderPanel(form, i, true))}
+
+				{(!!sorted.completed && !!sorted.completed.length) && <Typography className={classes.label} variant="subtitle1">All</Typography>}
+
+				{(!!sorted.completed && !!sorted.completed.length) && sorted.completed.map((form, i) => this.renderPanel(form, i))}
+			</div>
+		);
+	}
+
+	render() {
+		const { classes } = this.props;
+
+		return (
 			<Layout title="Umbrella | Forms" description="Umbrella web application">
-				<div className={classes.content}>
-					{(!!sorted.active && !!sorted.active.length) && <Typography className={classes.label} variant="subtitle1">Active</Typography>}
-
-					{(!!sorted.active && !!sorted.active.length) && sorted.active.map((form, i) => this.renderPanel(form, i, true))}
-
-					{(!!sorted.completed && !!sorted.completed.length) && <Typography className={classes.label} variant="subtitle1">All</Typography>}
-
-					{(!!sorted.completed && !!sorted.completed.length) && sorted.completed.map((form, i) => this.renderPanel(form, i))}
-				</div>
+				{this.renderContent()}
 
 				<AddButton href="/forms/new" />
 			</Layout>

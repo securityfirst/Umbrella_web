@@ -26,12 +26,11 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import Layout from '../components/layout';
+import Loading from '../components/reusables/Loading';
 
 import { contentStyles } from '../utils/view';
 
-import { setLessonCategories } from '../store/actions/lessons';
-
-import { categories } from '../mock/lessons';
+import { getLessons, getLessonCards } from '../store/actions/lessons';
 
 const menuWidth = 300;
 
@@ -65,6 +64,16 @@ const styles = theme => ({
 		borderTop: '1px solid ' + theme.palette.grey[300],
 		borderBottom: '1px solid ' + theme.palette.grey[300],
 	},
+	menuListItemIcon: {
+		display: 'block',
+	},
+	menuListItemIconImg: {
+		width: '1.5rem',
+		opacity: '.825',
+	},
+	menuListItemText: {
+		textTransform: 'capitalize',
+	},
 	menuListSubItem: {
 		paddingLeft: theme.spacing.unit * 3,
 	},
@@ -84,18 +93,10 @@ const menuSet = {
 };
 
 class Lessons extends React.Component {
-	static async getInitialProps({reduxStore}) {
-		let results;
-		// let categories;
-
-		try {
-			const categoriesReq = await fetch('https://api.secfirst.org/v1/categories', {mode: "cors"});
-			results = await categoriesReq.json();
-			// categories = await categoriesReq.json();
-			reduxStore.dispatch(setLessonCategories({categories}));
-		} catch (e) {
-			console.error(`Error fetching categories: `, e);
-		}
+	static async getInitialProps({isServer, reduxStore}) {
+		await reduxStore.dispatch(getLessons());
+		// await reduxStore.dispatch(getLessonCards());
+		return isServer;
 	}
 
 	state = {
@@ -108,17 +109,51 @@ class Lessons extends React.Component {
 		else this.setState({menuItemSelected: menuItemIndex});
 	}
 
-	renderMenuList = () => {
-		const { classes, lessonsMenuOpened, categories } = this.props;
-		const categoriesSet = categories.reduce((set, cat) => {
-			if (cat.parent === 0) {
-				if (!set[cat.category]) set.set(cat.category, []);
-			} else {
-				set.get(cat.parentName).push(cat);
-			}
+	renderMenuSubcategory = (subcategory, i) => {
+		const { classes } = this.props;
 
-			return set;
-		}, new Map());
+		return (
+			<ListItem button className={classes.menuListSubItem} key={i} onClick={this.handleSubcategorySelect}>
+				<ListItemText className={classes.menuListItemText} inset primary={subcategory.replace(/-/g, ' ')} />
+			</ListItem>
+		);
+	}
+
+	renderMenuCategory = (category, i) => {
+		const { classes, lessons, locale } = this.props;
+		const { menuItemSelected } = this.state;
+
+		if (category == "content" || category == "forms") return null;
+
+		const isSelected = menuItemSelected == i;
+		const subcategories = Object.keys(lessons[locale][category]).filter(subcategory => subcategory != "content");
+
+		return (
+			<div key={i} className={isSelected ? classes.menuListItemSelected : ''}>
+				<ListItem button onClick={() => this.handleMenuItemSelect(i)}>
+					<ListItemIcon className={classes.menuListItemIcon}>
+						<img className={classes.menuListItemIconImg} src={`/static/assets/content/${locale}/${category}/${category}.png`} />
+					</ListItemIcon>
+					<ListItemText className={classes.menuListItemText} inset primary={category.replace(/-/g, ' ')} />
+					{!!subcategories.length
+						? isSelected ? <ExpandLess /> : <ExpandMore />
+						: null
+					}
+				</ListItem>
+				{!!subcategories.length && <Collapse in={isSelected} timeout="auto" unmountOnExit>
+					<List component="div" disablePadding>
+						{subcategories.map(this.renderMenuSubcategory)}
+					</List>
+				</Collapse>}
+			</div>
+		);
+	}
+
+	renderMenuList = () => {
+		const { classes, lessonsMenuOpened, getLessonsLoading, getLessonsError, lessons, locale } = this.props;
+
+		if (getLessonsLoading) return <Loading />;
+		else if (getLessonsError) return <Typography variant="error">{JSON.stringify(getLessonsError)}</Typography>;
 
 		return (
 			<List
@@ -128,34 +163,7 @@ class Lessons extends React.Component {
 					[classes.menuListOpened]: lessonsMenuOpened,
 				})}
 			>
-				{[...categoriesSet].map((item, i) => {
-					const isSelected = this.state.menuItemSelected == i;
-					const subList = categoriesSet.get(item[0]);
-					const menuItem = menuSet[item[0]];
-
-					if (subList.length) return (
-						<div key={i} className={isSelected ? classes.menuListItemSelected : ''}>
-							<ListItem button onClick={() => this.handleMenuItemSelect(i)}>
-								{!!menuItem && <ListItemIcon>
-									{menuItem.icon(isSelected ? 'primary' : 'inherit')}
-								</ListItemIcon>}
-								<ListItemText inset primary={item[0]} />
-								{isSelected ? <ExpandLess /> : <ExpandMore />}
-							</ListItem>
-							<Collapse in={isSelected} timeout="auto" unmountOnExit>
-								<List component="div" disablePadding>
-									{subList.map((subItem, i) => {
-										return (
-											<ListItem button className={classes.menuListSubItem} key={i}>
-												<ListItemText inset primary={subItem.category} />
-											</ListItem>
-										);
-									})}
-								</List>
-							</Collapse>
-						</div>
-					);
-				})}
+				{Object.keys(lessons[locale]).map(this.renderMenuCategory)}
 			</List>
 		);
 	}

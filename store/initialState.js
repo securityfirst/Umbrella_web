@@ -6,7 +6,7 @@ const account = {
 
 const feeds = {
 	loading: true,
-	erorr: null,
+	error: null,
 	data: [],
 	current: null,
 };
@@ -25,10 +25,12 @@ const forms = {
 };
 
 const lessons = {
-	loading: true,
-	erorr: null,
-	categories: [],
-	current: null,
+	getLessonsLoading: true,
+	getLessonsError: null,
+	lessons: null,
+	getLessonCardsLoading: true,
+	getLessonCardsError: null,
+	lessonCards: [],
 };
 
 const checklists = {
@@ -42,8 +44,10 @@ const checklists = {
 };
 
 const view = {
+	mainMenuOpened: false,
 	appbarTitle: null,
 	lessonsMenuOpened: 0,
+	locale: 'en',
 };
 
 export default {

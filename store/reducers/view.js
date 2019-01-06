@@ -24,6 +24,13 @@ export default function reducer(state = initialState, action) {
 				...state,
 				lessonsMenuOpened: action.payload,
 			};
+
+		/* SET_LOCALE */
+		case viewTypes.SET_LOCALE:
+			return {
+				...state,
+				locale: action.payload,
+			};
 	}
 
 	return state;

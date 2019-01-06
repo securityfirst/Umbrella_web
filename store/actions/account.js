@@ -1,7 +1,7 @@
 import { accountTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
-export function login(credentials) {
+export const login = (credentials) => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.LOGIN));
 
@@ -13,12 +13,13 @@ export function login(credentials) {
 			},
 			body: JSON.stringify(credentials), // body data type must match "Content-Type" header
 		})
-			.then(res => dispatch(fulfilled(accountTypes.LOGIN, true)))
+			.then(res => res.json())
+			.then(data => dispatch(fulfilled(accountTypes.LOGIN, data)))
 			.catch(err => dispatch(rejected(accountTypes.LOGIN, err)));
 	}
 }
 
-export function logout() {
+export const logout = () => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.LOGOUT));
 
@@ -29,7 +30,8 @@ export function logout() {
 				"Content-Type": "application/json; charset=utf-8",
 			},
 		})
-			.then(res => dispatch(fulfilled(accountTypes.LOGOUT, true)))
+			.then(res => res.json())
+			.then(data => dispatch(fulfilled(accountTypes.LOGOUT, data)))
 			.catch(err => dispatch(rejected(accountTypes.LOGOUT, err)));
 	}
 }
