@@ -69,6 +69,7 @@ const styles = theme => ({
 	},
 	menuListItemIconImg: {
 		width: '1.5rem',
+		opacity: '.825',
 	},
 	menuListItemText: {
 		textTransform: 'capitalize',
