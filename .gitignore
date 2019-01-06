@@ -18,5 +18,8 @@ coverage
 
 # test output
 test/**/out
+
+# misc
 .DS_Store
 .env
+static/assets/content/

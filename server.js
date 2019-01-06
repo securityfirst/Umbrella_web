@@ -1,14 +1,19 @@
 // Environment variable config see README.env for example
 require('dotenv').config();
-// server setup
+// Server setup
 const cluster = require('cluster');
 const debug = require('debug')('quiddity:server');
 const http = require('http');
 const numCPUs = require('os').cpus().length;
 const port = process.env.PORT || '3000';
-// express/next setup
-const express = require('express');
 const path = require('path');
+global.appRoot = path.resolve(__dirname);
+
+// Background job setup
+require('./server/cron')();
+
+// Express/Next setup
+const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const next = require('next');
@@ -20,10 +25,11 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
 	const server = express();
 	
-	// server routes
+	// Server routes
 	const api = require('./server/routes/api');
 	const auth = require('./server/routes/auth');
-	// pages
+
+	// Pages
 	const index = require('./server/routes/index');
 	const login = require('./server/routes/login');
 	const account = require('./server/routes/account');
@@ -32,10 +38,10 @@ app.prepare().then(() => {
 	const checklists = require('./server/routes/checklists');
 	const lessons = require('./server/routes/lessons');
 
-	// security - like to not display the backend is built on express ;)
+	// Security - like to not display the backend is built on express ;)
 	server.disable('x-powered-by');
 
-	// server auth - if you want to password protect a staging site here's a nice easy way to do it
+	// Server auth - if you want to password protect a staging site here's a nice easy way to do it
 	if (process.env.BASIC_AUTH_ENABLED === 'true') {
 		const basicAuth = require('express-basic-auth');
 		let users = {};
@@ -48,18 +54,18 @@ app.prepare().then(() => {
 		}));
 	}
 
-	// logs
+	// Logs
 	server.use(logger('dev'));
 
-	// configs
+	// Configs
 	server.use(bodyParser.urlencoded({ extended: false }));
 	server.use(bodyParser.json());
 
-	// setup server routes
+	// Server routes
 	server.use('/api', api);
 	server.use('/auth', auth);
 
-	// pages
+	// Pages
 	server.get('/', index.index(app));
 	server.get('/login', login.index(app));
 	server.get('/account', account.index(app));
@@ -69,22 +75,22 @@ app.prepare().then(() => {
 	server.get('/checklists', checklists.index(app));
 	server.get('/lessons', lessons.index(app));
 	
-	// next/js routes that don't require backend routes
+	// Next.js routes that don't require backend routes
 	server.get('*', (req, res) => {
 		return handle(req, res);
 	});
 
 	if (dev) {
-		// if in development don't use cluster api since this causes webpack hot reload to behave erratically
+		// If in development don't use cluster api since this causes webpack hot reload to behave erratically
 		server.listen(port, (err) => {
 			if (err) throw err;
 			console.log('> Development server ready on ' + process.env.ROOT);
 		});
 	} else {
-		// cluster api for production only
+		// Cluster api for production only
 		server.set('port', port);
 
-		// setup workers for concurrency
+		// Setup workers for concurrency
 		if (cluster.isMaster) {
 			// Fork workers.
 			for (let i = 0; i < numCPUs; i++) {
@@ -104,7 +110,7 @@ app.prepare().then(() => {
 			
 		} 
 		else {
-			//Create HTTP server.
+			// Create HTTP server.
 			let ns = http.createServer(server);
 
 			// Listen on provided port, on all network interfaces.    
@@ -119,7 +125,7 @@ app.prepare().then(() => {
 					? 'Pipe ' + port
 					: 'Port ' + port;
 		
-				// handle specific listen errors with friendly messages
+				// Handle specific listen errors with friendly messages
 				switch (error.code) {
 					case 'EACCES':
 						console.error(bind + ' requires elevated privileges');
