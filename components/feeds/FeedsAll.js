@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Link from 'next/link';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -13,8 +14,6 @@ import Paper from '@material-ui/core/Paper';
 import red from '@material-ui/core/colors/red';
 
 import { paperStyles } from '../../utils/view';
-
-import { feeds } from '../../mock/feeds';
 
 const styles = theme => ({
 	heading: {
@@ -72,7 +71,7 @@ class FeedsAll extends React.Component {
 	renderLocation = () => <span className={this.props.classes.headingLocation}>Ireland</span>
 
 	render() {
-		const { classes, toggleEdit } = this.props;
+		const { classes, toggleEdit, feeds } = this.props;
 		const { expanded } = this.state;
 
 		return (
@@ -106,4 +105,8 @@ class FeedsAll extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsAll);
+const mapStateToProps = state => ({
+	...state.feeds,
+});
+
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(FeedsAll));

@@ -19,7 +19,7 @@ export function getFormTypes() {
 
 export function getForms() {
 	return async (dispatch, getState) => {
-		await dispatch(pending(formsTypes.GET_FORMS));
+		dispatch(pending(formsTypes.GET_FORMS));
 
 		/* TODO: Replace with API */
 		await fetch('https://jsonplaceholder.typicode.com/users')

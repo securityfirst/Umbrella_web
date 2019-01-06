@@ -13,6 +13,8 @@ import FeedsRss from '../components/feeds/FeedsRss';
 
 import { contentStyles } from '../utils/view';
 
+import { getFeeds } from '../store/actions/feeds';
+
 const styles = theme => ({
 	...contentStyles(theme),
 	tabs: {
@@ -21,6 +23,12 @@ const styles = theme => ({
 });
 
 class Feeds extends React.Component {
+	static async getInitialProps({reduxStore, isServer}) {
+		// TODO: Doesn't render serverside
+		await reduxStore.dispatch(getFeeds());
+		return isServer;
+	}
+
 	state = {
 		isEdit: false,
 		tabIndex: 0,

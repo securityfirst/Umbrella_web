@@ -4,9 +4,7 @@ export const accountTypes = {
 };
 
 export const feedsTypes = {
-	SET_FEEDS: 'SET_FEEDS',
-	POST_FEED: 'POST_FEED',
-	UPDATE_FEED: 'UPDATE_FEED',
+	GET_FEEDS: 'GET_FEEDS',
 };
 
 export const formsTypes = {
