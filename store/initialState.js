@@ -25,9 +25,9 @@ const forms = {
 };
 
 const lessons = {
-	getLessonCategoriesLoading: true,
-	getLessonCategoriesError: null,
-	lessonCategories: [],
+	getLessonsLoading: true,
+	getLessonsError: null,
+	lessons: [],
 	getLessonCardsLoading: true,
 	getLessonCardsError: null,
 	lessonCards: [],
@@ -44,8 +44,10 @@ const checklists = {
 };
 
 const view = {
+	mainMenuOpened: false,
 	appbarTitle: null,
 	lessonsMenuOpened: 0,
+	locale: 'en',
 };
 
 export default {

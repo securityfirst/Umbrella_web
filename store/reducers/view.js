@@ -7,22 +7,29 @@ export default function reducer(state = initialState, action) {
 		/* TOGGLE_MAIN_MENU */
 		case viewTypes.TOGGLE_MAIN_MENU:
 			return {
-				// ...state,
+				...state,
 				mainMenuOpened: action.payload,
 			};
 
 		/* SET_APPBAR_TITLE */
 		case viewTypes.SET_APPBAR_TITLE:
 			return {
-				// ...state,
+				...state,
 				appbarTitle: action.payload,
 			};
 
 		/* TOGGLE_LESSONS_MENU */
 		case viewTypes.TOGGLE_LESSONS_MENU:
 			return {
-				// ...state,
+				...state,
 				lessonsMenuOpened: action.payload,
+			};
+
+		/* SET_LOCALE */
+		case viewTypes.SET_LOCALE:
+			return {
+				...state,
+				locale: action.payload,
 			};
 	}
 
