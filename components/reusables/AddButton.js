@@ -46,7 +46,8 @@ class AddButton extends React.Component {
 }
 
 AddButton.propTypes = {
-	onClick: PropTypes.func.isRequired,
+	onClick: PropTypes.func,
+	href: PropTypes.string,
 };
 
 export default withStyles(styles, {withTheme: true})(AddButton);
