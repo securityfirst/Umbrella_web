@@ -28,9 +28,6 @@ const lessons = {
 	getLessonsLoading: true,
 	getLessonsError: null,
 	lessons: null,
-	getLessonCardsLoading: true,
-	getLessonCardsError: null,
-	lessonCards: [],
 };
 
 const checklists = {
@@ -47,6 +44,8 @@ const view = {
 	mainMenuOpened: false,
 	appbarTitle: null,
 	lessonsMenuOpened: 0,
+	lessonsContentType: null,
+	lessonsContentPath: null,
 	locale: 'en',
 };
 

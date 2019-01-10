@@ -59,18 +59,3 @@ export const getLessons = () => {
 		}
 	}
 }
-
-export const getLessonFile = ({sha, url}) => {
-	return async (dispatch, getState) => {
-		dispatch(pending(lessonsTypes.GET_LESSON_FILE));
-
-		const state = getState();
-
-		if (state.lessons.lessonFiles[sha]) dispatch(fulfilled(lessonsTypes.GET_LESSON_FILE, state.lessons.lessonfiles[sha]));
-
-		await fetch(url)
-			.then(res => res.blob())
-			.then(data => dispatch(fulfilled(lessonsTypes.GET_LESSON_FILE, data)))
-			.catch(err => dispatch(rejected(lessonsTypes.GET_LESSON_FILE, err)));
-	}
-}

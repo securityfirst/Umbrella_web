@@ -27,15 +27,19 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import Layout from '../components/layout';
 import Loading from '../components/reusables/Loading';
+import LessonsContent from '../components/lessons/LessonsContent';
 
 import { contentStyles } from '../utils/view';
 
-import { getLessons, getLessonCards } from '../store/actions/lessons';
+import { getLessons } from '../store/actions/lessons';
+import { setLessonsContentType, setLessonsContentPath } from '../store/actions/view';
 
 const menuWidth = 300;
 
 const styles = theme => ({
-	...contentStyles(theme),
+	...contentStyles(theme, {
+		width: '100%',
+	}),
 	wrapper: {
 		display: 'flex',
 		flex: 1,
@@ -95,25 +99,38 @@ const menuSet = {
 class Lessons extends React.Component {
 	static async getInitialProps({isServer, reduxStore}) {
 		await reduxStore.dispatch(getLessons());
-		// await reduxStore.dispatch(getLessonCards());
 		return isServer;
 	}
 
 	state = {
-		menuItemSelected: null,
+		categorySelected: null,
+		subcategorySelected: null,
 		lessonSelected: null,
 	};
 
-	handleMenuItemSelect = menuItemIndex => {
-		if (menuItemIndex == this.state.menuItemSelected) this.setState({menuItemSelected: null});
-		else this.setState({menuItemSelected: menuItemIndex});
+	handleCategorySelect = category => e => {
+		if (category == this.state.categorySelected) this.setState({categorySelected: null});
+		else this.setState({categorySelected: category});
+	}
+
+	handleSubcategorySelect = subcategory => e => {
+		const { dispatch, lessons } = this.props;
+		const { categorySelected } = this.state;
+
+		this.setState(
+			{subcategorySelected: subcategory}, 
+			() => {
+				dispatch(setLessonsContentType('levels'));
+				dispatch(setLessonsContentPath(`${categorySelected}.${subcategory}`));
+			}
+		);
 	}
 
 	renderMenuSubcategory = (subcategory, i) => {
 		const { classes } = this.props;
 
 		return (
-			<ListItem button className={classes.menuListSubItem} key={i} onClick={this.handleSubcategorySelect}>
+			<ListItem button className={classes.menuListSubItem} key={i} onClick={this.handleSubcategorySelect(subcategory)}>
 				<ListItemText className={classes.menuListItemText} inset primary={subcategory.replace(/-/g, ' ')} />
 			</ListItem>
 		);
@@ -121,16 +138,16 @@ class Lessons extends React.Component {
 
 	renderMenuCategory = (category, i) => {
 		const { classes, lessons, locale } = this.props;
-		const { menuItemSelected } = this.state;
+		const { categorySelected } = this.state;
 
 		if (category == "content" || category == "forms") return null;
 
-		const isSelected = menuItemSelected == i;
+		const isSelected = categorySelected == category;
 		const subcategories = Object.keys(lessons[locale][category]).filter(subcategory => subcategory != "content");
 
 		return (
 			<div key={i} className={isSelected ? classes.menuListItemSelected : ''}>
-				<ListItem button onClick={() => this.handleMenuItemSelect(i)}>
+				<ListItem button onClick={this.handleCategorySelect(category)}>
 					<ListItemIcon className={classes.menuListItemIcon}>
 						<img className={classes.menuListItemIconImg} src={`/static/assets/content/${locale}/${category}/${category}.png`} />
 					</ListItemIcon>
@@ -169,7 +186,7 @@ class Lessons extends React.Component {
 	}
 
 	render() {
-		const { classes } = this.props;
+		const { classes, lessonsContentType } = this.props;
 
 		return (
 			<Layout title="Umbrella | Lessons" description="Umbrella web application">
@@ -177,19 +194,7 @@ class Lessons extends React.Component {
 					{this.renderMenuList()}
 
 					<div className={classes.content}>
-
-						<Typography paragraph>
-							<strong>LESSON</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-							incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-							elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-							hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-							velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-							Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-							viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-							Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-							at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-							ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-						</Typography>
+						<LessonsContent />
 					</div>
 				</div>
 			</Layout>
