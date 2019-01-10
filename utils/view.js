@@ -5,9 +5,9 @@ export const contentStyles = (theme, options = {}) => ({
 		padding: '1rem',
 		[theme.breakpoints.up('sm')]: {
 			padding: '2rem',
-		}
+		},
+		...options
 	},
-	...options
 });
 
 export const paperStyles = (theme) => ({

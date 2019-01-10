@@ -25,6 +25,20 @@ export default function reducer(state = initialState, action) {
 				lessonsMenuOpened: action.payload,
 			};
 
+		/* SET_LESSONS_CONTENT_TYPE */
+		case viewTypes.SET_LESSONS_CONTENT_TYPE:
+			return {
+				...state,
+				lessonsContentType: action.payload,
+			};
+
+		/* SET_LESSONS_CONTENT_PATH */
+		case viewTypes.SET_LESSONS_CONTENT_PATH:
+			return {
+				...state,
+				lessonsContentPath: action.payload,
+			};
+
 		/* SET_LOCALE */
 		case viewTypes.SET_LOCALE:
 			return {

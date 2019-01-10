@@ -25,26 +25,6 @@ export default function reducer(state = initialState, action) {
 				getLessonsError: null,
 				lessons: action.payload,
 			};
-
-		/* GET_LESSON_FILE */
-		case pending(lessonsTypes.GET_LESSON_FILE):
-			return {
-				...state,
-				getLessonFileLoading: true,
-			};
-		case rejected(lessonsTypes.GET_LESSON_FILE):
-			return {
-				...state,
-				getLessonFileLoading: false,
-				getLessonFileError: action.payload,
-			};
-		case fulfilled(lessonsTypes.GET_LESSON_FILE):
-			return {
-				...state,
-				getLessonFileLoading: false,
-				getLessonFileError: null,
-				lessonFiles: state.lessons.lessonFiles.concat([action.payload]),
-			};
 	}
 
 	return state;

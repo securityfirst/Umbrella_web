@@ -18,6 +18,14 @@ export const toggleLessonsMenu = (opened) => {
 	return {type: viewTypes.TOGGLE_LESSONS_MENU, payload: opened};
 }
 
+export const setLessonsContentType = (type) => {
+	return {type: viewTypes.SET_LESSONS_CONTENT_TYPE, payload: type};
+}
+
+export const setLessonsContentPath = (type) => {
+	return {type: viewTypes.SET_LESSONS_CONTENT_PATH, payload: type};
+}
+
 export const setLocale = (localeCode) => {
 	return {type: viewTypes.SET_LOCALE, payload: localeCode};
 }
