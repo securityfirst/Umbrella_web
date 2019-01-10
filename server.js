@@ -10,7 +10,7 @@ const path = require('path');
 global.appRoot = path.resolve(__dirname);
 
 // Background job setup
-require('./server/cron')();
+const cron = require('./server/cron');
 
 // Express/Next setup
 const express = require('express');
@@ -81,6 +81,9 @@ app.prepare().then(() => {
 	});
 
 	if (dev) {
+		// Init cron
+		cron.run();
+
 		// If in development don't use cluster api since this causes webpack hot reload to behave erratically
 		server.listen(port, (err) => {
 			if (err) throw err;
@@ -95,11 +98,15 @@ app.prepare().then(() => {
 			// Fork workers.
 			for (let i = 0; i < numCPUs; i++) {
 				cluster.fork();
+
+				if (i === 0) cron.run();
 			}
 		
 			// If a worker dies, log it to the console and start another worker.
 			cluster.on('exit', (worker, code, signal) => {
 				console.log('Worker ' + worker.process.pid + ' died.');
+				cron.stop();
+				cron.run();
 				cluster.fork();
 			});
 		
@@ -107,7 +114,6 @@ app.prepare().then(() => {
 			cluster.on('listening', (worker, address) => {
 				console.log('Worker started with PID ' + worker.process.pid + '.');
 			});
-			
 		} 
 		else {
 			// Create HTTP server.
