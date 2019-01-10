@@ -82,7 +82,7 @@ app.prepare().then(() => {
 
 	if (dev) {
 		// Init cron
-		cron.run();
+		cron.start();
 
 		// If in development don't use cluster api since this causes webpack hot reload to behave erratically
 		server.listen(port, (err) => {
@@ -99,14 +99,14 @@ app.prepare().then(() => {
 			for (let i = 0; i < numCPUs; i++) {
 				cluster.fork();
 
-				if (i === 0) cron.run();
+				if (i === 0) cron.start();
 			}
 		
 			// If a worker dies, log it to the console and start another worker.
 			cluster.on('exit', (worker, code, signal) => {
 				console.log('Worker ' + worker.process.pid + ' died.');
 				cron.stop();
-				cron.run();
+				cron.start();
 				cluster.fork();
 			});
 		
