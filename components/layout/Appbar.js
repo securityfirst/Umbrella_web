@@ -51,6 +51,9 @@ const styles = theme => ({
 	title: {
 		flexGrow: 1,
 	},
+	login: {
+	    padding: '8px 16px',
+	},
 });
 
 class Appbar extends React.Component {
@@ -58,7 +61,7 @@ class Appbar extends React.Component {
 		if (!this.props.loggedIn) {
 			return (
 				<Link href="/login">
-					<Button component="button" color="inherit">Login</Button>
+					<Button classes={{root: this.props.classes.login}} component="button" color="inherit">Login</Button>
 				</Link>
 			);
 		}

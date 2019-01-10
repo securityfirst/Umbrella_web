@@ -4,7 +4,8 @@ const git = require('simple-git');
 const contentDir = appRoot + '/static/assets/content';
 
 function initGithubContent() {
-	const job = new CronJob('0 0 0/1 1/1 * * *', async function() {
+	// Every hour = 0 0 0/1 1/1 * * *
+	const job = new CronJob('*/10 * * * *', async function() {
 		const d = new Date();
 		console.log('[CRON] INITIALIZE_CONTENT: Starting job at', d);
 

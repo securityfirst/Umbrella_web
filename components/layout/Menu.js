@@ -67,6 +67,12 @@ const styles = theme => ({
 			width: theme.spacing.unit * 9 + 1,
 		},
 	},
+	drawerItem: {
+		[theme.breakpoints.up('sm')]: {
+			paddingLeft: 24,
+			paddingRight: 24,
+		},
+	},
 	toolbar: {
 		display: 'flex',
 		alignItems: 'center',
@@ -80,24 +86,28 @@ const styles = theme => ({
 class Menu extends React.Component {
 	handleDrawerClose = () => this.props.dispatch(toggleMainMenu(false))
 
-	renderContent = () => (
-		<List>
-			{links.map((link, i) => (
-				<Link href={link.path} key={i}>
-					<ListItem button onClick={() => {
-						this.props.dispatch(setAppbarTitle(link.name));
+	renderContent = () => {
+		const { classes } = this.props;
 
-						switch (link.name) {
-							case 'Lessons': this.props.dispatch(toggleLessonsMenu(true)); break;
-						}
-					}}>
-						<ListItemIcon>{link.icon(this.props.router.pathname == link.path ? "secondary" : "inherit")}</ListItemIcon>
-						<ListItemText primary={link.name} />
-					</ListItem>
-				</Link>
-			))}
-		</List>
-	)
+		return (
+			<List>
+				{links.map((link, i) => (
+					<Link href={link.path} key={i}>
+						<ListItem className={classes.drawerItem} button onClick={() => {
+							this.props.dispatch(setAppbarTitle(link.name));
+
+							switch (link.name) {
+								case 'Lessons': this.props.dispatch(toggleLessonsMenu(true)); break;
+							}
+						}}>
+							<ListItemIcon>{link.icon(this.props.router.pathname == link.path ? "secondary" : "inherit")}</ListItemIcon>
+							<ListItemText primary={link.name} />
+						</ListItem>
+					</Link>
+				))}
+			</List>
+		);
+	}
 
 	render() {
 		const { classes, theme, mainMenuOpened } = this.props;
