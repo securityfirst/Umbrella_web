@@ -13,6 +13,11 @@ import yellow from '@material-ui/core/colors/yellow';
 import { paperStyles, buttonWrapperStyles } from '../../utils/view';
 
 const styles = theme => ({
+	breadcrumb: {
+		color: theme.palette.grey[500],
+		fontSize: '.875rem',
+		textTransform: 'capitalize',
+	},
 	panel: {
 		width: '100%',
 		margin: '.75rem 0',
@@ -70,6 +75,8 @@ class FeedsEdit extends React.Component {
 
 		return (
 			<div>
+				<Typography className={classes.breadcrumb} variant="subtitle1">{lessonsContentPath.split(".").join(" > ").replace(/-/g, ' ')}</Typography>
+
 				{levels.map((level, i) => {
 					if (level === "content") return null;
 
