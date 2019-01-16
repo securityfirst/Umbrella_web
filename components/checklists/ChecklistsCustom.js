@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 import ChecklistsPanel from './ChecklistsPanel';
 import Loading from '../reusables/Loading';
+import ErrorMessage from '../reusables/ErrorMessage';
 
 import { contentStyles } from '../../utils/view';
 
@@ -24,7 +25,7 @@ class ChecklistsCustom extends React.Component {
 		const { classes, getCustomChecklistsLoading, getCustomChecklistsError, customChecklists } = this.props;
 
 		if (getCustomChecklistsLoading) return <Loading />;
-		else if (getCustomChecklistsError) return <Typography variant="error">{JSON.stringify(getCustomChecklistsError)}</Typography>;
+		else if (getCustomChecklistsError) return <ErrorMessage error={getCustomChecklistsError} />;
 
 		return (
 			<div className={classes.content}>

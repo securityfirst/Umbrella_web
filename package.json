@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "nodemon": "^1.18.4",
+    "raw-loader": "^1.0.0",
     "url-loader": "^1.1.2"
   }
 }

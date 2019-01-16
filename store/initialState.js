@@ -28,6 +28,9 @@ const lessons = {
 	getLessonsLoading: true,
 	getLessonsError: null,
 	lessons: null,
+	setLessonLoading: true,
+	setLessonError: null,
+	currentLesson: null,
 };
 
 const checklists = {

@@ -11,6 +11,7 @@ import Layout from '../components/layout';
 import ChecklistsCustom from '../components/checklists/ChecklistsCustom';
 import ChecklistsPanel from '../components/checklists/ChecklistsPanel';
 import Loading from '../components/reusables/Loading';
+import ErrorMessage from '../components/reusables/ErrorMessage';
 
 import { contentStyles } from '../utils/view';
 
@@ -51,7 +52,7 @@ class Checklists extends React.Component {
 		const { classes, getSystemChecklistsLoading, getSystemChecklistsError, systemChecklists } = this.props;
 
 		if (getSystemChecklistsLoading) return <Loading />;
-		else if (getSystemChecklistsError) return <Typography variant="error">{JSON.stringify(getSystemChecklistsError)}</Typography>;
+		else if (getSystemChecklistsError) return <ErrorMessage error={getSystemChecklistsError} />;
 
 		return (
 			<div className={classes.content}>

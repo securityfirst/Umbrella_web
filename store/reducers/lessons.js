@@ -25,6 +25,27 @@ export default function reducer(state = initialState, action) {
 				getLessonsError: null,
 				lessons: action.payload,
 			};
+
+		/* SET_LESSON */
+		case pending(lessonsTypes.SET_LESSON):
+			return {
+				...state,
+				setLessonLoading: true,
+				setLessonError: null,
+			};
+		case rejected(lessonsTypes.SET_LESSON):
+			return {
+				...state,
+				setLessonLoading: false,
+				setLessonError: action.payload,
+			};
+		case fulfilled(lessonsTypes.SET_LESSON):
+			return {
+				...state,
+				setLessonLoading: false,
+				setLessonError: null,
+				currentLesson: action.payload,
+			};
 	}
 
 	return state;

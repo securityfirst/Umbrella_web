@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 
 import Layout from '../../components/layout';
 import Loading from '../../components/reusables/Loading';
+import ErrorMessage from '../../components/reusables/ErrorMessage';
 import AddButton from '../../components/reusables/AddButton';
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view';
@@ -68,7 +69,7 @@ class Forms extends React.Component {
 		const { classes, getFormTypesLoading, getFormTypesError, formTypes, getFormsLoading, getFormsError, forms } = this.props;
 
 		if (getFormTypesLoading || getFormsLoading) return <Loading />;
-		else if (getFormTypesError || getFormsError) return <Typography variant="error">{JSON.stringify(getFormTypesError || getFormsError)}</Typography>;
+		else if (getFormTypesError || getFormsError) return <ErrorMessage error={getFormTypesError || getFormsError} />;
 
 		let sorted = forms.reduce((set, form) => {
 			if (!set[form.status]) set[form.status] = [];
