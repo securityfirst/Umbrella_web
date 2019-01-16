@@ -10,3 +10,9 @@ exports.index = (app) => (req, res) => {
 	const actualPage = '/lessons';
 	return renderAndCache(app, ssrCache, req, res, actualPage);
 }
+
+exports.get = (app) => (req, res) => {
+	const actualPage = '/lessons/get';
+	const queryParams = { level: req.params.level, id: req.params.id } ;
+	return app.render(req, res, actualPage, queryParams);
+}

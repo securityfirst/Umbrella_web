@@ -17,6 +17,7 @@ export const formsTypes = {
 
 export const lessonsTypes = {
 	GET_LESSONS: 'GET_LESSONS',
+	SET_LESSON: 'SET_LESSON',
 };
 
 export const checklistsTypes = {

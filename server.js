@@ -74,6 +74,7 @@ app.prepare().then(() => {
 	server.get('/forms/new', forms.new(app));
 	server.get('/checklists', checklists.index(app));
 	server.get('/lessons', lessons.index(app));
+	server.get('/lessons/*', lessons.get(app));
 	
 	// Next.js routes that don't require backend routes
 	server.get('*', (req, res) => {

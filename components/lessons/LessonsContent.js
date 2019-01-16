@@ -86,6 +86,7 @@ class FeedsEdit extends React.Component {
 							className={classNames(classes.panel, classes[level])}
 							classes={{label: classes.panelTitle}}
 							variant="raised"
+							href={`/lessons/${lessonsContentPath.replace(/\./g, '/')}/${level}`}
 						>
 							{level}
 						</Button>

@@ -25,14 +25,15 @@ import InfoIcon from '@material-ui/icons/Info';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
-import Layout from '../components/layout';
-import Loading from '../components/reusables/Loading';
-import LessonsContent from '../components/lessons/LessonsContent';
+import Layout from '../../components/layout';
+import Loading from '../../components/reusables/Loading';
+import ErrorMessage from '../../components/reusables/ErrorMessage';
+import LessonsContent from '../../components/lessons/LessonsContent';
 
-import { contentStyles } from '../utils/view';
+import { contentStyles } from '../../utils/view';
 
-import { getLessons } from '../store/actions/lessons';
-import { setLessonsContentType, setLessonsContentPath } from '../store/actions/view';
+import { getLessons } from '../../store/actions/lessons';
+import { setLessonsContentType, setLessonsContentPath } from '../../store/actions/view';
 
 const menuWidth = 300;
 
@@ -170,7 +171,7 @@ class Lessons extends React.Component {
 		const { classes, lessonsMenuOpened, getLessonsLoading, getLessonsError, lessons, locale } = this.props;
 
 		if (getLessonsLoading) return <Loading />;
-		else if (getLessonsError) return <Typography variant="error">{JSON.stringify(getLessonsError)}</Typography>;
+		else if (getLessonsError) return <ErrorMessage error={getLessonsError} />;
 
 		return (
 			<List
