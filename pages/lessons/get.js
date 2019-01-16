@@ -6,7 +6,14 @@ import classNames from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
+import ShareIcon from '@material-ui/icons/Share';
+import CloseIcon from '@material-ui/icons/Close';
 
 import Layout from '../../components/layout';
 import Loading from '../../components/reusables/Loading';
@@ -57,6 +64,7 @@ const styles = theme => ({
 	},
 	paper: {
 		...paperStyles(theme),
+		position: 'relative',
 	},
 	cardsWrapper: {
 		[theme.breakpoints.up('sm')]: {
@@ -66,23 +74,42 @@ const styles = theme => ({
 		},
 	},
 	card: {
+		margin: '1rem 0',
 		[theme.breakpoints.up('sm')]: {
-			width: '24%',
+			width: '22%',
 			margin: '.5rem',
 		},
 	},
 	cardHead: {
 		padding: '1rem',
 		backgroundColor: theme.palette.primary.main,
+		[theme.breakpoints.up('sm')]: {
+			minHeight: '10rem',
+		},
 	},
 	cardTitle: {
 		display: 'block',
 		color: 'white',
+		fontSize: '1.25rem',
 		lineHeight: 1,
 		textTransform: 'capitalize',
 		[theme.breakpoints.up('sm')]: {
 			fontSize: '1.5rem',
 		},
+	},
+	cardActions: {
+		[theme.breakpoints.up('sm')]: {
+			display: 'flex',
+			justifyContent: 'space-between',
+		},
+	},
+	cardActionIcon: {
+		color: theme.palette.grey[600],
+	},
+	lessonClose: {
+		position: 'absolute',
+		top: '1rem',
+		right: '1rem',
 	},
 });
 
@@ -102,8 +129,13 @@ class Lesson extends React.Component {
 		const { classes, currentLesson } = this.props;
 		const { fileSelected } = this.state;
 
+		console.log("currentLesson.path + fileSelected: ", currentLesson.path + "/" + fileSelected);
+
 		return (
 			<Paper className={classes.paper}>
+				<Button className={classes.lessonClose} size="small" onClick={() => this.setState({fileSelected: null})}>
+					<CloseIcon />
+				</Button>
 				<Marked file={currentLesson.path + fileSelected} />
 			</Paper>
 		);
@@ -115,10 +147,16 @@ class Lesson extends React.Component {
 
 		return (
 			<Card key={i} className={classes.card} onClick={() => this.setState({fileSelected: file})}>
-				<div className={classes.cardHead}>
-					<Typography className={classes.cardTitle}>{i+1}</Typography>
-					<Typography className={classes.cardTitle}>{title}</Typography>
-				</div>
+				<CardActionArea>
+					<CardContent className={classes.cardHead}>
+						<Typography className={classes.cardTitle}>{i+1}</Typography>
+						<Typography className={classes.cardTitle}>{title}</Typography>
+					</CardContent>
+				</CardActionArea>
+				<CardActions classes={{root: classes.cardActions}}>
+					<Button size="small" className={classes.cardActionIcon}><BookmarkIcon /></Button>
+					<Button size="small" className={classes.cardActionIcon}><ShareIcon /></Button>
+				</CardActions>
 			</Card>
 		);
 	}

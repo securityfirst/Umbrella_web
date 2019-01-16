@@ -10,7 +10,7 @@ module.exports = {
 module.exports = {
 	webpack: (config, {}) => {
 		config.module.rules.push({
-			test: /\.md/,
+			test: /\.md$/,
 			use: 'raw-loader'
 		});
 

@@ -5,8 +5,6 @@ import get from 'lodash/get';
 import { lessonsTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
-const GITHUB_ACCESS_TOKEN = 'fa4d9091276a5532bb2a23fe0ecdebf2552682fe';
-
 export const getLessons = () => {
 	return async (dispatch, getState) => {
 		dispatch(pending(lessonsTypes.GET_LESSONS));
@@ -82,7 +80,7 @@ export const setLesson = paths => {
 			content = [...content.content];
 			content = {
 				level: paths[paths.length - 1],
-				path: `/assets/content/${locale}/${paths.join('/')}`,
+				path: `../../static/assets/content/${locale}/${paths.join('/')}`,
 				files: content.reduce((list, c) => {
 					if (c.filename.indexOf('s_') === 0) list.push(c.filename);
 					return list;

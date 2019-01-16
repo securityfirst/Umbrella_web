@@ -1,11 +1,32 @@
+import 'isomorphic-unfetch';
+import React from 'react';
 import marked from 'marked';
 
-const Marked = (props) => {
-	if (!(props || {}).content) return <div></div>;
+class Marked extends React.Component {
+	state = {
+		content: null,
+	}
 
-	content = props.file ? require(props.file) : props.content;
+	componentWillMount() {
+		let content = this.props.content;
 
-	return <div dangerouslySetInnerHTML={{__html: marked(content, {...props})}} />;
+		if (this.props.file) {
+			fetch(this.props.file)
+				.then(res => res.text())
+				.then(text => this.setState({content: text}))
+				.catch(err => console.error(err))
+		}
+	}
+
+	render() {
+		const { content } = this.state;
+
+
+		if (!content) return <div></div>;
+		console.log("content: ", content);
+
+		return <div dangerouslySetInnerHTML={{__html: marked(content, {...this.props})}} />;
+	}
 }
 
 export default Marked;
