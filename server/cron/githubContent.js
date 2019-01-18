@@ -2,9 +2,9 @@ const CronJob = require('cron').CronJob;
 const fs = require('fs');
 const git = require('simple-git');
 
-class Github {
+class GithubContent {
 	constructor() {
-		this.contentDir = appRoot + '/static/assets/content';
+		this.directory = appRoot + '/static/assets/content';
 		this.exists = fs.existsSync(appRoot + '/static/assets/content');
 	}
 
@@ -13,7 +13,7 @@ class Github {
 
 		git(appRoot).clone(
 			'https://github.com/klaidliadon/umbrella-content.git', 
-			this.contentDir, 
+			this.directory, 
 			() => console.log('[CRON] GITHUB_CONTENT: Finished.'
 		));
 	}
@@ -21,7 +21,7 @@ class Github {
 	pull() {
 		console.log('[CRON] GITHUB_CONTENT: Pulling from master...');
 
-		git(this.contentDir).pull(
+		git(this.directory).pull(
 			'origin', 
 			'master', 
 			null, 
@@ -34,7 +34,7 @@ class Github {
 		if (!this.exists) this.clone();
 
 		// Every hour = 0 0 0/1 1/1 * * *
-		const job = new CronJob('0 0 0/1 1/1 * * *', async function() {
+		const job = new CronJob('0 0 0/1 1/1 * * *', () => {
 			console.log('[CRON] GITHUB_CONTENT: Starting job at', new Date());
 
 			if (!exists) this.clone();
@@ -50,4 +50,4 @@ class Github {
 	}
 }
 
-module.exports = new Github();
+module.exports = new GithubContent();

@@ -22,4 +22,7 @@ test/**/out
 # misc
 .DS_Store
 .env
+
+# content directories
 static/assets/content/
+data
