@@ -1,14 +1,17 @@
 import { lessonsTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
-import lessons from '../../data/github_tree.json';
-
 export const getLessons = () => {
 	return async (dispatch, getState) => {
 		dispatch(pending(lessonsTypes.GET_LESSONS));
 
-		if (lessons) dispatch(fulfilled(lessonsTypes.GET_LESSONS, lessons));
-		else dispatch(rejected(lessonsTypes.GET_LESSONS, {status: 404, message: 'Lessons not found.'}));
+		try {
+			const lessons = require('../../data/github_tree.json');
+			dispatch(fulfilled(lessonsTypes.GET_LESSONS, lessons));
+		} catch (e) {
+			console.error("Lessons doesn't exist: ", e);
+			dispatch(rejected(lessonsTypes.GET_LESSONS, {status: 404, message: 'Lessons not found.'}));
+		}
 	}
 }
 
