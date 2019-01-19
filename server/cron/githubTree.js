@@ -10,15 +10,24 @@ class GithubTree {
 	constructor() {
 		this.filename = 'github_tree.json'
 		this.directory = appRoot + '/data';
-		this.exists = fs.existsSync(this.directory);
+	}
+
+	exists() {
+		return fs.existsSync(this.directory);
 	}
 
 	async sync() {
+		console.log("this.directory: ", this.directory);
 		let lessons;
 
 		try {
+			console.log("this.exists(): ", this.exists());
+			
 			// Prepare directory first
-			if (!this.exists) fs.mkdirSync(this.directory);
+			if (!this.exists()) {
+				fs.mkdirSync(this.directory);
+				console.log("Made directory. Exists: ", this.exists())
+			}
 		} catch (e) {
 			console.error('[CRON] GITHUB_TREE: Prepare directory exception: ', e);
 			return;
