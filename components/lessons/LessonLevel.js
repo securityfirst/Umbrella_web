@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import YAML from 'yaml'
 
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
@@ -11,6 +12,10 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ShareIcon from '@material-ui/icons/Share';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import Layout from '../../components/layout';
 import Loading from '../../components/reusables/Loading';
@@ -18,7 +23,7 @@ import ErrorMessage from '../../components/reusables/ErrorMessage';
 
 import { contentStyles } from '../../utils/view';
 
-import { getLessonFile } from '../../store/actions/lessons';
+import { getLessonChecklist, getLessonFile } from '../../store/actions/lessons';
 import { setLessonFileView } from '../../store/actions/view';
 
 const styles = theme => ({
@@ -33,15 +38,15 @@ const styles = theme => ({
 	card: {
 		margin: '1rem 0',
 		[theme.breakpoints.up('sm')]: {
-			width: '22%',
-			margin: '.5rem',
+			width: '23%',
+			margin: '1%',
 		},
 	},
 	cardHead: {
 		padding: '1rem',
 		backgroundColor: theme.palette.primary.main,
 		[theme.breakpoints.up('sm')]: {
-			minHeight: '10rem',
+			minHeight: '8rem',
 		},
 	},
 	cardTitle: {
@@ -50,9 +55,6 @@ const styles = theme => ({
 		fontSize: '1.25rem',
 		lineHeight: 1,
 		textTransform: 'capitalize',
-		[theme.breakpoints.up('sm')]: {
-			fontSize: '1.5rem',
-		},
 	},
 	cardActions: {
 		[theme.breakpoints.up('sm')]: {
@@ -63,6 +65,22 @@ const styles = theme => ({
 	cardActionIcon: {
 		color: theme.palette.grey[600],
 	},
+	checklistCard: {
+		margin: '1rem 0',
+		[theme.breakpoints.up('sm')]: {
+			margin: '.5rem',
+		},
+	},
+	checklistCardHead: {
+		padding: '1rem',
+		backgroundColor: theme.palette.primary.main,
+	},
+	checklistCardContent: {
+		padding: '1rem',
+	},
+	checklistCheckbox: {
+		padding: '6px 15px',
+	},
 	lessonClose: {
 		position: 'absolute',
 		top: '1rem',
@@ -71,13 +89,48 @@ const styles = theme => ({
 });
 
 class LessonLevel extends React.Component {
-	state = {
-		fileSelected: null,
-	}
+	componentWillMount() {
+		const { dispatch, currentLesson } = this.props;
 
+		if (currentLesson.checklist) {
+			dispatch(getLessonChecklist(currentLesson.checklist.sha))
+		}
+	}
+	
 	getLessonFile = sha => () => {
 		this.props.dispatch(setLessonFileView());
 		this.props.dispatch(getLessonFile(sha));
+	}
+
+	renderChecklist = () => {
+		const { classes, getLessonChecklistLoading, getLessonChecklistError, currentLessonChecklist } = this.props;
+
+		if (getLessonChecklistLoading) return <Loading />;
+		else if (getLessonChecklistError) return <ErrorMessage error={getLessonChecklistError} />;
+		else if (!currentLessonChecklist) return null;
+
+		const checklist = YAML.parse(atob(currentLessonChecklist));
+
+		return (
+			<Card className={classes.checklistCard}>
+				<CardContent className={classes.checklistCardHead}>
+					<Typography className={classes.cardTitle}>Checklist</Typography>
+				</CardContent>
+				<CardContent className={classes.checklistCardContent}>
+					<FormControl component="fieldset" className={classes.formControl}>
+						<FormGroup>
+						{!!checklist.list && checklist.list.map((item, i) => (
+							<FormControlLabel
+								key={i}
+								control={<Checkbox className={classes.checklistCheckbox} checked={false} onChange={() => {}} value={false} />}
+								label={item.check}
+							/>
+						))}
+						</FormGroup>
+					</FormControl>
+				</CardContent>
+			</Card>
+		);
 	}
 
 	renderCard = (file, i) => {
@@ -101,7 +154,7 @@ class LessonLevel extends React.Component {
 	}
 
 	render() {
-		const { classes, currentLesson } = this.props;
+		const { classes, currentLesson, currentLessonChecklist } = this.props;
 
 		return (
 			<React.Fragment>
@@ -109,10 +162,7 @@ class LessonLevel extends React.Component {
 					{currentLesson.files.map(this.renderCard)}
 				</div>
 
-				{currentLesson.checklist
-					? <div>Yes checklist</div>
-					: <div>No checklist</div>
-				}
+				{this.renderChecklist()}
 			</React.Fragment>
 		);
 	}

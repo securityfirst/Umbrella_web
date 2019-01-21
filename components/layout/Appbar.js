@@ -72,12 +72,17 @@ class Appbar extends React.Component {
 	renderLeftContent() {
 		const { router, classes, appbarTitle } = this.props;
 
-		const title = appbarTitle || (
+		let title = appbarTitle || (
 			router.pathname == '/'
 				? 'Umbrella'
 				// Split all subroutes and print capitalized divided by hyphens
-				: router.pathname.split("/").slice(1).map(path => path.charAt(0).toUpperCase() + path.slice(1, path.length)).join(" / ")
+				: router.pathname.split("/").slice(1)/*.map(path => path.charAt(0).toUpperCase() + path.slice(1, path.length))*/.join(" / ")
 		);
+
+		title = title
+				.split(" ")
+				.map(path => path.charAt(0).toUpperCase() + path.slice(1, path.length))
+				.join(" ");
 
 		return <Typography className={classes.title} variant="h6" color="inherit" noWrap>{title}</Typography>;
 	}

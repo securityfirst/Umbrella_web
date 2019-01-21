@@ -1,6 +1,6 @@
 import 'isomorphic-unfetch';
 
-import { lessonsTypes } from '../types.js';
+import { lessonsTypes, viewTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
 export const getLessons = () => {
@@ -49,10 +49,21 @@ export const setLesson = paths => {
 
 				return list;
 			}, []),
-			checklist: !!content.find(c => c.filename.indexOf('c_') > -1)
+			checklist: content.find(c => c.filename.indexOf('c_') > -1)
 		};
 
 		dispatch({type: lessonsTypes.SET_LESSON, payload: content});
+	}
+}
+
+export const getLessonChecklist = sha => {
+	return async (dispatch, getState) => {
+		dispatch(pending(lessonsTypes.GET_LESSON_CHECKLIST));
+
+		await fetch(`${process.env.ROOT}/api/github/content/${sha}`)
+			.then(res => res.text())
+			.then(content => dispatch(fulfilled(lessonsTypes.GET_LESSON_CHECKLIST, content)))
+			.catch(err => dispatch(rejected(lessonsTypes.GET_LESSON_CHECKLIST, err)));
 	}
 }
 
@@ -69,4 +80,11 @@ export const getLessonFile = sha => {
 
 export const closeLessonFile = () => {
 	return {type: lessonsTypes.CLOSE_LESSON_FILE};
+}
+
+export const resetLessons = () => {
+	return (dispatch, getState) => {
+		dispatch({type: lessonsTypes.RESET_LESSONS});
+		dispatch({type: viewTypes.RESET_LESSONS});
+	}
 }

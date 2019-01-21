@@ -25,6 +25,7 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 import { setAppbarTitle } from '../../store/actions/view';
 import { toggleMainMenu, toggleLessonsMenu } from '../../store/actions/view';
+import { resetLessons } from '../../store/actions/lessons';
 
 import { viewConstants } from '../../utils/view';
 
@@ -97,7 +98,10 @@ class Menu extends React.Component {
 							this.props.dispatch(setAppbarTitle(link.name));
 
 							switch (link.name) {
-								case 'Lessons': this.props.dispatch(toggleLessonsMenu(true)); break;
+								case 'Lessons': 
+									this.props.dispatch(toggleLessonsMenu(true)); 
+									this.props.dispatch(resetLessons()); 
+									break;
 							}
 						}}>
 							<ListItemIcon>{link.icon(this.props.router.pathname == link.path ? "secondary" : "inherit")}</ListItemIcon>

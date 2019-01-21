@@ -53,6 +53,15 @@ export default function reducer(state = initialState, action) {
 				lessonFileView: false,
 			};
 
+		/* RESET_LESSONS */
+		case viewTypes.RESET_LESSONS:
+			return {
+				...state,
+				lessonsContentType: null,
+				lessonsContentPath: null,
+				lessonFileView: false,
+			};
+
 		/* SET_LOCALE */
 		case viewTypes.SET_LOCALE:
 			return {
