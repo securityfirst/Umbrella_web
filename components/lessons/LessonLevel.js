@@ -16,6 +16,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 
+import CloseIcon from '@material-ui/icons/Close';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ShareIcon from '@material-ui/icons/Share';
 
@@ -25,8 +26,8 @@ import ErrorMessage from '../../components/reusables/ErrorMessage';
 
 import { contentStyles } from '../../utils/view';
 
-import { getLessonChecklist, getLessonFile } from '../../store/actions/lessons';
-import { setLessonFileView } from '../../store/actions/view';
+import { getLessonChecklist, getLessonFilem, closeLesson } from '../../store/actions/lessons';
+import { setLessonFileView, setAppbarTitle } from '../../store/actions/view';
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -107,6 +108,11 @@ class LessonLevel extends React.Component {
 		this.props.dispatch(getLessonFile(sha));
 	}
 
+	closeLevel = () => {
+		this.props.dispatch(closeLesson());
+		this.props.dispatch(setAppbarTitle('Lessons'));
+	}
+
 	renderChecklist = () => {
 		const { classes, getLessonChecklistLoading, getLessonChecklistError, currentLessonChecklist } = this.props;
 
@@ -115,7 +121,6 @@ class LessonLevel extends React.Component {
 		else if (!currentLessonChecklist) return null;
 
 		const checklist = YAML.parse(atob(currentLessonChecklist));
-		console.log("checklist: ", checklist);
 
 		return (
 			<Card className={classes.checklistCard}>
@@ -170,6 +175,10 @@ class LessonLevel extends React.Component {
 
 		return (
 			<React.Fragment>
+				<Button className={classes.lessonClose} size="small" onClick={this.closeLevel}>
+					<CloseIcon />
+				</Button>
+
 				<div className={classes.cardsWrapper}>
 					{currentLesson.files.map(this.renderCard)}
 				</div>
