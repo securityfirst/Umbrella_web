@@ -1,3 +1,5 @@
+import 'isomorphic-unfetch';
+
 import { lessonsTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
@@ -5,50 +7,66 @@ export const getLessons = () => {
 	return async (dispatch, getState) => {
 		dispatch(pending(lessonsTypes.GET_LESSONS));
 
-		try {
-			const lessons = require('../../data/github_tree.json');
-			dispatch(fulfilled(lessonsTypes.GET_LESSONS, lessons));
-		} catch (e) {
-			console.error("Lessons doesn't exist: ", e);
-			dispatch(rejected(lessonsTypes.GET_LESSONS, {status: 404, message: 'Lessons not found.'}));
+		const state = getState();
+
+		if (state.lessons.lessons) {
+			dispatch(fulfilled(lessonsTypes.GET_LESSONS, state.lessons.lessons));
+			return;
 		}
+
+		await fetch(`${process.env.ROOT}/api/github/tree`)
+			.then(res => res.json())
+			.then(content => dispatch(fulfilled(lessonsTypes.GET_LESSONS, content)))
+			.catch(err => dispatch(rejected(lessonsTypes.GET_LESSONS, err)));
 	}
 }
 
 export const setLesson = paths => {
-	return async (dispatch, getState) => {
-		dispatch(pending(lessonsTypes.SET_LESSON));
-
+	return (dispatch, getState) => {
 		const state = getState();
 		const { lessons } = state.lessons;
 		const { locale } = state.view;
 
-		try {
-			let index = 0;
-			let content = {...lessons}[locale];
+		let index = 0;
+		let content = {...lessons}[locale];
 
-			while (index < paths.length) {
-				content = content[paths[index]];
-				index++;
-			}
-
-			if (!content) throw new Error({status: 404, message: 'Lesson not found'});
-
-			content = [...content.content];
-			content = {
-				level: paths[paths.length - 1],
-				path: `../../static/assets/content/${locale}/${paths.join('/')}`,
-				files: content.reduce((list, c) => {
-					if (c.filename.indexOf('s_') === 0) list.push(c.filename);
-					return list;
-				}, []),
-				checklist: !!content.find(c => c.filename.indexOf('c_') > -1)
-			};
-
-			dispatch(fulfilled(lessonsTypes.SET_LESSON, content));
-		} catch (err) {
-			console.error(err);
-			dispatch(rejected(lessonsTypes.SET_LESSON, err));
+		while (index < paths.length) {
+			content = content[paths[index]];
+			index++;
 		}
+
+		content = [...content.content];
+		content = {
+			level: paths[paths.length - 1],
+			path: `../../static/assets/content/${locale}/${paths.join('/')}`,
+			files: content.reduce((list, c) => {
+				if (c.filename.indexOf('s_') === 0) {
+					list.push({
+						name: c.filename,
+						sha: c.sha,
+					});
+				}
+
+				return list;
+			}, []),
+			checklist: !!content.find(c => c.filename.indexOf('c_') > -1)
+		};
+
+		dispatch({type: lessonsTypes.SET_LESSON, payload: content});
 	}
+}
+
+export const getLessonFile = sha => {
+	return async (dispatch, getState) => {
+		dispatch(pending(lessonsTypes.GET_LESSON_FILE));
+
+		await fetch(`${process.env.ROOT}/api/github/content/${sha}`)
+			.then(res => res.text())
+			.then(content => dispatch(fulfilled(lessonsTypes.GET_LESSON_FILE, content)))
+			.catch(err => dispatch(rejected(lessonsTypes.GET_LESSON_FILE, err)));
+	}
+}
+
+export const closeLessonFile = () => {
+	return {type: lessonsTypes.CLOSE_LESSON_FILE};
 }

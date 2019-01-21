@@ -39,6 +39,20 @@ export default function reducer(state = initialState, action) {
 				lessonsContentPath: action.payload,
 			};
 
+		/* SET_LESSON_FILE_VIEW */
+		case viewTypes.SET_LESSON_FILE_VIEW:
+			return {
+				...state,
+				lessonFileView: true,
+			};
+
+		/* CLOSE_LESSON_FILE_VIEW */
+		case viewTypes.CLOSE_LESSON_FILE_VIEW:
+			return {
+				...state,
+				lessonFileView: false,
+			};
+
 		/* SET_LOCALE */
 		case viewTypes.SET_LOCALE:
 			return {

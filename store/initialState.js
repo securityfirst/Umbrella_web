@@ -28,9 +28,10 @@ const lessons = {
 	getLessonsLoading: true,
 	getLessonsError: null,
 	lessons: null,
-	setLessonLoading: true,
-	setLessonError: null,
 	currentLesson: null,
+	getLessonFileLoading: true,
+	getLessonFileError: null,
+	currentLessonFile: null,
 };
 
 const checklists = {
@@ -49,6 +50,7 @@ const view = {
 	lessonsMenuOpened: 0,
 	lessonsContentType: null,
 	lessonsContentPath: null,
+	lessonFileView: false,
 	locale: 'en',
 };
 

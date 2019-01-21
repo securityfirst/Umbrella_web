@@ -1,5 +1,4 @@
 const githubContentJob = require('./githubContent');
-const githubTreeJob = require('./githubTree');
 
 class Cron {
 	constructor() {
@@ -8,7 +7,6 @@ class Cron {
 
 	start() {
 		this.jobsRunning.set('github_content', githubContentJob.start());
-		this.jobsRunning.set('github_true', githubTreeJob.start());
 	}
 
 	stop() {

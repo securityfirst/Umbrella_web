@@ -46,7 +46,6 @@ class GithubContent {
 		console.log('[CRON] Initialized GitHub content job');
 
 		return job;
-
 	}
 }
 

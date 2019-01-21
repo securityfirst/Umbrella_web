@@ -12,6 +12,8 @@ import yellow from '@material-ui/core/colors/yellow';
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view';
 
+import { setLesson } from '../../store/actions/lessons';
+
 const styles = theme => ({
 	breadcrumb: {
 		color: theme.palette.grey[500],
@@ -57,10 +59,12 @@ const styles = theme => ({
 
 const levelsOrder = ['beginner', 'advanced', 'expert'];
 
-class FeedsEdit extends React.Component {
-	state = {
-		
-	};
+class LessonsContent extends React.Component {
+	setLesson = (level) => () => {
+		const { dispatch, lessonsContentPath } = this.props;
+
+		dispatch(setLesson(lessonsContentPath.split('.').concat([level])));
+	}
 
 	renderLevels = () => {
 		const { classes, lessons, lessonsContentPath, locale } = this.props;
@@ -85,8 +89,8 @@ class FeedsEdit extends React.Component {
 							key={i}
 							className={classNames(classes.panel, classes[level])}
 							classes={{label: classes.panelTitle}}
-							variant="raised"
-							href={`/lessons/${lessonsContentPath.replace(/\./g, '/')}/${level}`}
+							variant="contained"
+							onClick={this.setLesson(level)}
 						>
 							{level}
 						</Button>
@@ -128,4 +132,4 @@ const mapStateToProps = state => ({
 	...state.lessons,
 });
 
-export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(FeedsEdit));
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(LessonsContent));

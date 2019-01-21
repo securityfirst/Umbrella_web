@@ -12,16 +12,11 @@ class MyDocument extends Document {
 				<Head>
 					<meta charSet="utf-8" />
 					{/* Use minimum-scale=1 to enable GPU rasterization */}
-					<meta
-						name="viewport"
-						content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
-					/>
+					<meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no" />
 					{/* PWA primary color */}
 					<meta name="theme-color" content={pageContext.theme.palette.primary.main} />
-					<link
-						rel="stylesheet"
-						href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-					/>
+					<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
+					<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.css" />
 				</Head>
 				<body>
 					<Main />

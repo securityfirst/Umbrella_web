@@ -7,6 +7,7 @@ const http = require('http');
 const numCPUs = require('os').cpus().length;
 const port = process.env.PORT || '3000';
 const path = require('path');
+const { parse } = require('url');
 global.appRoot = path.resolve(__dirname);
 
 // Background job setup
@@ -25,9 +26,11 @@ const handle = app.getRequestHandler();
 app.prepare().then(() => {
 	const server = express();
 	
+	// security
+	server.disable('x-powered-by');
+
 	// Server routes
 	const api = require('./server/routes/api');
-	const auth = require('./server/routes/auth');
 
 	// Pages
 	const index = require('./server/routes/index');
@@ -37,9 +40,6 @@ app.prepare().then(() => {
 	const forms = require('./server/routes/forms');
 	const checklists = require('./server/routes/checklists');
 	const lessons = require('./server/routes/lessons');
-
-	// Security - like to not display the backend is built on express ;)
-	server.disable('x-powered-by');
 
 	// Server auth - if you want to password protect a staging site here's a nice easy way to do it
 	if (process.env.BASIC_AUTH_ENABLED === 'true') {
@@ -63,7 +63,6 @@ app.prepare().then(() => {
 
 	// Server routes
 	server.use('/api', api);
-	server.use('/auth', auth);
 
 	// Pages
 	server.get('/', index.index(app));
@@ -74,11 +73,25 @@ app.prepare().then(() => {
 	server.get('/forms/new', forms.new(app));
 	server.get('/checklists', checklists.index(app));
 	server.get('/lessons', lessons.index(app));
-	server.get('/lessons/*', lessons.get(app));
+	// server.get('/lessons/card', lessons.card(app));
 	
 	// Next.js routes that don't require backend routes
 	server.get('*', (req, res) => {
-		return handle(req, res);
+		// setup static files from root like sitemap.xml || robots.txt || favicon.ico
+		const parsedUrl = parse(req.url, true);
+		const rootStaticFiles = [
+			'/robots.txt',
+			'/sitemap.xml', 
+			'/favicon.ico'
+		];
+
+		if (rootStaticFiles.indexOf(parsedUrl.pathname) > -1) {
+			const path = join(__dirname, 'static', parsedUrl.pathname);
+			return app.serveStatic(req, res, path);
+		}
+
+		// else serve page if not required by server
+		return handle(req, res)
 	});
 
 	if (dev) {

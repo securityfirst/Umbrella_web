@@ -11,6 +11,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
+import Fab from '@material-ui/core/Fab';
 
 import SecurityIcon from '@material-ui/icons/Security';
 import DevicesOtherIcon from '@material-ui/icons/DevicesOther';
@@ -28,7 +29,11 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import Layout from '../../components/layout';
 import Loading from '../../components/reusables/Loading';
 import ErrorMessage from '../../components/reusables/ErrorMessage';
+import LessonLevel from '../../components/lessons/LessonLevel';
 import LessonsContent from '../../components/lessons/LessonsContent';
+import LessonCard from '../../components/lessons/LessonCard';
+
+import yellow from '@material-ui/core/colors/yellow';
 
 import { contentStyles } from '../../utils/view';
 
@@ -42,6 +47,7 @@ const styles = theme => ({
 		width: '100%',
 	}),
 	wrapper: {
+		position: 'relative',
 		display: 'flex',
 		flex: 1,
 		height: '100%',
@@ -81,6 +87,37 @@ const styles = theme => ({
 	},
 	menuListSubItem: {
 		paddingLeft: theme.spacing.unit * 3,
+	},
+	level: {
+		color: 'white',
+		cursor: 'initial',
+		[theme.breakpoints.up('sm')]: {
+			marginLeft: '.5rem',
+			marginBottom: '1rem',
+		},
+		[theme.breakpoints.up('md')]: {
+			position: 'absolute',
+			top: '2rem',
+			left: '2rem',
+		},
+	},
+	beginner: {
+		backgroundColor: theme.palette.secondary.main,
+		'&.hover': {
+			backgroundColor: theme.palette.secondary.main,
+		},
+	},
+	advanced: {
+		backgroundColor: yellow[700],
+		'&.hover': {
+			backgroundColor: yellow[700],
+		},
+	},
+	expert: {
+		backgroundColor: theme.palette.primary.main,
+		'&.hover': {
+			backgroundColor: theme.palette.primary.main,
+		},
 	},
 });
 
@@ -127,13 +164,17 @@ class Lessons extends React.Component {
 		);
 	}
 
-	renderMenuSubcategory = (subcategory, i) => {
-		const { classes } = this.props;
+	renderLevel = () => {
+		const { classes, currentLesson } = this.props;
 
 		return (
-			<ListItem button className={classes.menuListSubItem} key={i} onClick={this.handleSubcategorySelect(subcategory)}>
-				<ListItemText className={classes.menuListItemText} inset primary={subcategory.replace(/-/g, ' ')} />
-			</ListItem>
+			<Fab 
+				className={classNames(classes.level, classes[currentLesson.level])} 
+				component="div"
+				variant="extended"
+				disableFocusRipple
+				disableRipple
+			>{currentLesson.level}</Fab>
 		);
 	}
 
@@ -153,14 +194,20 @@ class Lessons extends React.Component {
 						<img className={classes.menuListItemIconImg} src={`/static/assets/content/${locale}/${category}/${category}.png`} />
 					</ListItemIcon>
 					<ListItemText className={classes.menuListItemText} inset primary={category.replace(/-/g, ' ')} />
+
 					{!!subcategories.length
 						? isSelected ? <ExpandLess /> : <ExpandMore />
 						: null
 					}
 				</ListItem>
+
 				{!!subcategories.length && <Collapse in={isSelected} timeout="auto" unmountOnExit>
 					<List component="div" disablePadding>
-						{subcategories.map(this.renderMenuSubcategory)}
+						{subcategories.map((subcategory, i) => (
+							<ListItem button className={classes.menuListSubItem} key={i} onClick={this.handleSubcategorySelect(subcategory)}>
+								<ListItemText className={classes.menuListItemText} inset primary={subcategory.replace(/-/g, ' ')} />
+							</ListItem>
+						))}
 					</List>
 				</Collapse>}
 			</div>
@@ -168,10 +215,11 @@ class Lessons extends React.Component {
 	}
 
 	renderMenuList = () => {
-		const { classes, lessonsMenuOpened, getLessonsLoading, getLessonsError, lessons, locale } = this.props;
+		const { classes, lessonsMenuOpened, getLessonsLoading, getLessonsError, lessons, currentLesson, locale } = this.props;
 
 		if (getLessonsLoading) return <Loading />;
 		else if (getLessonsError) return <ErrorMessage error={getLessonsError} />;
+		else if (currentLesson) return null;
 
 		return (
 			<List
@@ -186,16 +234,26 @@ class Lessons extends React.Component {
 		);
 	}
 
+	renderContent = () => {
+		const { currentLesson, lessonFileView } = this.props;
+
+		if (lessonFileView) return <LessonCard />;
+		else if (currentLesson) return <LessonLevel />;
+		else return <LessonsContent />;
+	}
+
 	render() {
-		const { classes, lessonsContentType } = this.props;
+		const { classes, lessonsContentType, currentLesson } = this.props;
 
 		return (
 			<Layout title="Umbrella | Lessons" description="Umbrella web application">
 				<div className={classes.wrapper}>
-					{this.renderMenuList()}
+					{!currentLesson && this.renderMenuList()}
 
 					<div className={classes.content}>
-						<LessonsContent />
+						{!!currentLesson && this.renderLevel()}
+
+						{this.renderContent()}
 					</div>
 				</div>
 			</Layout>

@@ -27,25 +27,40 @@ export default function reducer(state = initialState, action) {
 			};
 
 		/* SET_LESSON */
-		case pending(lessonsTypes.SET_LESSON):
+		case lessonsTypes.SET_LESSON:
 			return {
 				...state,
-				setLessonLoading: true,
-				setLessonError: null,
-			};
-		case rejected(lessonsTypes.SET_LESSON):
-			return {
-				...state,
-				setLessonLoading: false,
-				setLessonError: action.payload,
-			};
-		case fulfilled(lessonsTypes.SET_LESSON):
-			return {
-				...state,
-				setLessonLoading: false,
-				setLessonError: null,
 				currentLesson: action.payload,
 			};
+
+		/* GET_LESSON_FILE */
+		case pending(lessonsTypes.GET_LESSON_FILE):
+			return {
+				...state,
+				getLessonFileLoading: true,
+			};
+		case rejected(lessonsTypes.GET_LESSON_FILE):
+			return {
+				...state,
+				getLessonFileLoading: false,
+				getLessonFileError: action.payload,
+			};
+		case fulfilled(lessonsTypes.GET_LESSON_FILE):
+			return {
+				...state,
+				getLessonFileLoading: false,
+				getLessonFileError: null,
+				currentLessonFile: action.payload,
+			};
+
+		/* CLOSE_LESSON_FILE */
+		case lessonsTypes.CLOSE_LESSON_FILE:
+			return {
+				...state,
+				getLessonFileLoading: false,
+				getLessonFileError: null,
+				currentLessonFile: null,
+			}
 	}
 
 	return state;
