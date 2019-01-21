@@ -37,8 +37,9 @@ import yellow from '@material-ui/core/colors/yellow';
 
 import { contentStyles } from '../../utils/view';
 
-import { getLessons } from '../../store/actions/lessons';
-import { setLessonsContentType, setLessonsContentPath } from '../../store/actions/view';
+import { getLessons, getLessonFile } from '../../store/actions/lessons';
+import { setLessonsContentType, setLessonsContentPath, setLessonFileView } from '../../store/actions/view';
+
 
 const menuWidth = 300;
 
@@ -147,7 +148,17 @@ class Lessons extends React.Component {
 	};
 
 	handleCategorySelect = category => e => {
-		if (category == this.state.categorySelected) this.setState({categorySelected: null});
+		const { dispatch, lessons, locale } = this.props;
+		const keys = Object.keys(lessons[locale][category]);
+
+		if (keys.length === 1 && keys[0] === "content") {
+			const file = lessons[locale][category].content.find(file => file.filename.indexOf('.md') > -1);
+
+			this.props.dispatch(setLessonFileView());
+			this.props.dispatch(getLessonFile(file.sha));
+		}
+
+		else if (category == this.state.categorySelected) this.setState({categorySelected: null});
 		else this.setState({categorySelected: category});
 	}
 

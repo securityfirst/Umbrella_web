@@ -26,7 +26,7 @@ import ErrorMessage from '../../components/reusables/ErrorMessage';
 
 import { contentStyles } from '../../utils/view';
 
-import { getLessonChecklist, getLessonFilem, closeLesson } from '../../store/actions/lessons';
+import { getLessonChecklist, getLessonFile, closeLesson } from '../../store/actions/lessons';
 import { setLessonFileView, setAppbarTitle } from '../../store/actions/view';
 
 const styles = theme => ({
