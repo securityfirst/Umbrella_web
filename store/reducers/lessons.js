@@ -33,6 +33,26 @@ export default function reducer(state = initialState, action) {
 				currentLesson: action.payload,
 			};
 
+		/* GET_LESSON_CHECKLIST */
+		case pending(lessonsTypes.GET_LESSON_CHECKLIST):
+			return {
+				...state,
+				getLessonChecklistLoading: true,
+			};
+		case rejected(lessonsTypes.GET_LESSON_CHECKLIST):
+			return {
+				...state,
+				getLessonChecklistLoading: false,
+				getLessonChecklistError: action.payload,
+			};
+		case fulfilled(lessonsTypes.GET_LESSON_CHECKLIST):
+			return {
+				...state,
+				getLessonChecklistLoading: false,
+				getLessonChecklistError: null,
+				currentLessonChecklist: action.payload,
+			};
+
 		/* GET_LESSON_FILE */
 		case pending(lessonsTypes.GET_LESSON_FILE):
 			return {
@@ -60,7 +80,15 @@ export default function reducer(state = initialState, action) {
 				getLessonFileLoading: false,
 				getLessonFileError: null,
 				currentLessonFile: null,
-			}
+			};
+
+		/* RESET_LESSONS */
+		case lessonsTypes.RESET_LESSONS:
+			return {
+				...state,
+				currentLesson: null,
+				currentLessonFile: null,
+			};
 	}
 
 	return state;
