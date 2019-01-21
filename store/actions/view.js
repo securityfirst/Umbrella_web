@@ -26,6 +26,14 @@ export const setLessonsContentPath = (type) => {
 	return {type: viewTypes.SET_LESSONS_CONTENT_PATH, payload: type};
 }
 
+export const setLessonFileView = () => {
+	return {type: viewTypes.SET_LESSON_FILE_VIEW};
+}
+
+export const closeLessonFileView = () => {
+	return {type: viewTypes.CLOSE_LESSON_FILE_VIEW};
+}
+
 export const setLocale = (localeCode) => {
 	return {type: viewTypes.SET_LOCALE, payload: localeCode};
 }

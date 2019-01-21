@@ -3,29 +3,12 @@ import React from 'react';
 import marked from 'marked';
 
 class Marked extends React.Component {
-	state = {
-		content: null,
-	}
-
-	componentWillMount() {
-		let content = this.props.content;
-
-		if (this.props.file) {
-			fetch(this.props.file)
-				.then(res => res.text())
-				.then(text => this.setState({content: text}))
-				.catch(err => console.error(err))
-		}
-	}
-
 	render() {
-		const { content } = this.state;
-
+		const { content } = this.props;
 
 		if (!content) return <div></div>;
-		console.log("content: ", content);
 
-		return <div dangerouslySetInnerHTML={{__html: marked(content, {...this.props})}} />;
+		return <div className="markdown-body" dangerouslySetInnerHTML={{__html: marked(content, {...this.props})}} />;
 	}
 }
 
