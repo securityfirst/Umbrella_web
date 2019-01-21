@@ -10,12 +10,14 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
-import ShareIcon from '@material-ui/icons/Share';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormLabel from '@material-ui/core/FormLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+
+import BookmarkIcon from '@material-ui/icons/Bookmark';
+import ShareIcon from '@material-ui/icons/Share';
 
 import Layout from '../../components/layout';
 import Loading from '../../components/reusables/Loading';
@@ -78,6 +80,9 @@ const styles = theme => ({
 	checklistCardContent: {
 		padding: '1rem',
 	},
+	checklistLabel: {
+		margin: '1rem 0 .5rem .25rem',
+	},
 	checklistCheckbox: {
 		padding: '6px 15px',
 	},
@@ -110,6 +115,7 @@ class LessonLevel extends React.Component {
 		else if (!currentLessonChecklist) return null;
 
 		const checklist = YAML.parse(atob(currentLessonChecklist));
+		console.log("checklist: ", checklist);
 
 		return (
 			<Card className={classes.checklistCard}>
@@ -119,13 +125,19 @@ class LessonLevel extends React.Component {
 				<CardContent className={classes.checklistCardContent}>
 					<FormControl component="fieldset" className={classes.formControl}>
 						<FormGroup>
-						{!!checklist.list && checklist.list.map((item, i) => (
-							<FormControlLabel
-								key={i}
-								control={<Checkbox className={classes.checklistCheckbox} checked={false} onChange={() => {}} value={false} />}
-								label={item.check}
-							/>
-						))}
+						{!!checklist.list && checklist.list.map((item, i) => {
+							if (item.label) {
+								return <FormLabel key={i} className={classes.checklistLabel} component="legend">{item.label}</FormLabel>;
+							}
+
+							return (
+								<FormControlLabel
+									key={i}
+									control={<Checkbox className={classes.checklistCheckbox} checked={false} onChange={() => {}} value={false} />}
+									label={item.check}
+								/>
+							);
+						})}
 						</FormGroup>
 					</FormControl>
 				</CardContent>
