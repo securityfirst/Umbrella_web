@@ -73,6 +73,13 @@ export default function reducer(state = initialState, action) {
 				currentLessonFile: action.payload,
 			};
 
+		/* CLOSE_LESSON */
+		case lessonsTypes.CLOSE_LESSON:
+			return {
+				...state,
+				currentLesson: null,
+			};
+
 		/* CLOSE_LESSON_FILE */
 		case lessonsTypes.CLOSE_LESSON_FILE:
 			return {

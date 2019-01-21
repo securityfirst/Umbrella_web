@@ -78,6 +78,10 @@ export const getLessonFile = sha => {
 	}
 }
 
+export const closeLesson = () => {
+	return {type: lessonsTypes.CLOSE_LESSON};
+}
+
 export const closeLessonFile = () => {
 	return {type: lessonsTypes.CLOSE_LESSON_FILE};
 }

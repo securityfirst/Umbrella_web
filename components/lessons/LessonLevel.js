@@ -10,12 +10,15 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
-import ShareIcon from '@material-ui/icons/Share';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormLabel from '@material-ui/core/FormLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+
+import CloseIcon from '@material-ui/icons/Close';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
+import ShareIcon from '@material-ui/icons/Share';
 
 import Layout from '../../components/layout';
 import Loading from '../../components/reusables/Loading';
@@ -23,8 +26,8 @@ import ErrorMessage from '../../components/reusables/ErrorMessage';
 
 import { contentStyles } from '../../utils/view';
 
-import { getLessonChecklist, getLessonFile } from '../../store/actions/lessons';
-import { setLessonFileView } from '../../store/actions/view';
+import { getLessonChecklist, getLessonFile, closeLesson } from '../../store/actions/lessons';
+import { setLessonFileView, setAppbarTitle } from '../../store/actions/view';
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -78,6 +81,9 @@ const styles = theme => ({
 	checklistCardContent: {
 		padding: '1rem',
 	},
+	checklistLabel: {
+		margin: '1rem 0 .5rem .25rem',
+	},
 	checklistCheckbox: {
 		padding: '6px 15px',
 	},
@@ -102,6 +108,11 @@ class LessonLevel extends React.Component {
 		this.props.dispatch(getLessonFile(sha));
 	}
 
+	closeLevel = () => {
+		this.props.dispatch(closeLesson());
+		this.props.dispatch(setAppbarTitle('Lessons'));
+	}
+
 	renderChecklist = () => {
 		const { classes, getLessonChecklistLoading, getLessonChecklistError, currentLessonChecklist } = this.props;
 
@@ -119,13 +130,19 @@ class LessonLevel extends React.Component {
 				<CardContent className={classes.checklistCardContent}>
 					<FormControl component="fieldset" className={classes.formControl}>
 						<FormGroup>
-						{!!checklist.list && checklist.list.map((item, i) => (
-							<FormControlLabel
-								key={i}
-								control={<Checkbox className={classes.checklistCheckbox} checked={false} onChange={() => {}} value={false} />}
-								label={item.check}
-							/>
-						))}
+						{!!checklist.list && checklist.list.map((item, i) => {
+							if (item.label) {
+								return <FormLabel key={i} className={classes.checklistLabel} component="legend">{item.label}</FormLabel>;
+							}
+
+							return (
+								<FormControlLabel
+									key={i}
+									control={<Checkbox className={classes.checklistCheckbox} checked={false} onChange={() => {}} value={false} />}
+									label={item.check}
+								/>
+							);
+						})}
 						</FormGroup>
 					</FormControl>
 				</CardContent>
@@ -158,6 +175,10 @@ class LessonLevel extends React.Component {
 
 		return (
 			<React.Fragment>
+				<Button className={classes.lessonClose} size="small" onClick={this.closeLevel}>
+					<CloseIcon />
+				</Button>
+
 				<div className={classes.cardsWrapper}>
 					{currentLesson.files.map(this.renderCard)}
 				</div>
