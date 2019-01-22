@@ -38,7 +38,7 @@ import yellow from '@material-ui/core/colors/yellow';
 import { contentStyles } from '../../utils/view';
 
 import { getLessons, getLessonFile } from '../../store/actions/lessons';
-import { setLessonsContentType, setLessonsContentPath, setLessonFileView } from '../../store/actions/view';
+import { setLessonsContentType, setLessonsContentPath, setLessonFileView, closeLessonFileView } from '../../store/actions/view';
 
 
 const menuWidth = 300;
@@ -156,15 +156,17 @@ class Lessons extends React.Component {
 
 			this.props.dispatch(setLessonFileView());
 			this.props.dispatch(getLessonFile(file.sha));
+		} else {
+			if (category == this.state.categorySelected) this.setState({categorySelected: null});
+			else this.setState({categorySelected: category});
 		}
-
-		else if (category == this.state.categorySelected) this.setState({categorySelected: null});
-		else this.setState({categorySelected: category});
 	}
 
 	handleSubcategorySelect = subcategory => e => {
 		const { dispatch, lessons } = this.props;
 		const { categorySelected } = this.state;
+
+		this.props.dispatch(closeLessonFileView());
 
 		this.setState(
 			{subcategorySelected: subcategory}, 
