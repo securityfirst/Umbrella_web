@@ -33,6 +33,13 @@ export default function reducer(state = initialState, action) {
 				currentLesson: action.payload,
 			};
 
+		/* SET_LESSONS_GLOSSARY_INDEX */
+		case lessonsTypes.SET_LESSONS_GLOSSARY_INDEX:
+			return {
+				...state,
+				lessonsGlossaryIndex: action.payload,
+			};
+
 		/* GET_LESSON_CHECKLIST */
 		case pending(lessonsTypes.GET_LESSON_CHECKLIST):
 			return {

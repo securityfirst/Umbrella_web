@@ -26,12 +26,12 @@ export const setLessonsContentPath = (type) => {
 	return {type: viewTypes.SET_LESSONS_CONTENT_PATH, payload: type};
 }
 
-export const setLessonFileView = () => {
-	return {type: viewTypes.SET_LESSON_FILE_VIEW};
+export const toggleLessonsFavoritesView = (isToggled) => {
+	return {type: viewTypes.TOGGLE_LESSONS_FAVORITES_VIEW, payload: isToggled};
 }
 
-export const closeLessonFileView = () => {
-	return {type: viewTypes.CLOSE_LESSON_FILE_VIEW};
+export const toggleLessonFileView = (isToggled) => {
+	return {type: viewTypes.TOGGLE_LESSON_FILE_VIEW, payload: isToggled};
 }
 
 export const setLocale = (localeCode) => {

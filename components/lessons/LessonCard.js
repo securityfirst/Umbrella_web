@@ -17,7 +17,7 @@ import Marked from '../../components/reusables/Marked';
 import { contentStyles, paperStyles } from '../../utils/view';
 
 import { closeLessonFile } from '../../store/actions/lessons';
-import { closeLessonFileView } from '../../store/actions/view';
+import { toggleLessonFileView } from '../../store/actions/view';
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -34,7 +34,7 @@ const styles = theme => ({
 class LessonCard extends React.Component {
 	closeLesson = () => {
 		this.props.dispatch(closeLessonFile());
-		this.props.dispatch(closeLessonFileView());
+		this.props.dispatch(toggleLessonFileView(false));
 	}
 
 	renderContent = () => {

@@ -56,6 +56,43 @@ export const setLesson = paths => {
 	}
 }
 
+export const getLessonsFavorites = () => {
+	// TODO: Get favorites from client data store
+}
+
+export const setLessonsGlossaryIndex = index => {
+	return (dispatch, getState) => {
+		const state = getState();
+		const { lessons } = state.lessons;
+		const { locale } = state.view;
+		const range = index.toLowerCase().split("-");
+
+		let content = [...lessons[locale].glossary.content];
+
+		content = {
+			path: `../../static/assets/content/${locale}/glossary`,
+			files: content.reduce((list, c) => {
+
+				if (
+					c.filename.indexOf('s_') === 0 && // if it's a file
+					c.filename[2] >= range[0] && // if it's within glossary range
+					c.filename[2] <= range[1] // if it's within glossary range
+				) {
+					list.push({
+						name: c.filename,
+						sha: c.sha,
+					});
+				}
+
+				return list;
+			}, []),
+			checklist: null
+		};
+
+		dispatch({type: lessonsTypes.SET_LESSON, payload: content});
+	}
+}
+
 export const getLessonChecklist = sha => {
 	return async (dispatch, getState) => {
 		dispatch(pending(lessonsTypes.GET_LESSON_CHECKLIST));

@@ -39,18 +39,18 @@ export default function reducer(state = initialState, action) {
 				lessonsContentPath: action.payload,
 			};
 
-		/* SET_LESSON_FILE_VIEW */
-		case viewTypes.SET_LESSON_FILE_VIEW:
+		/* TOGGLE_LESSONS_FAVORITES_VIEW */
+		case viewTypes.TOGGLE_LESSONS_FAVORITES_VIEW:
 			return {
 				...state,
-				lessonFileView: true,
+				lessonsFavoritesView: action.payload,
 			};
 
-		/* CLOSE_LESSON_FILE_VIEW */
-		case viewTypes.CLOSE_LESSON_FILE_VIEW:
+		/* TOGGLE_LESSON_FILE_VIEW */
+		case viewTypes.TOGGLE_LESSON_FILE_VIEW:
 			return {
 				...state,
-				lessonFileView: false,
+				lessonFileView: action.payload,
 			};
 
 		/* RESET_LESSONS */
