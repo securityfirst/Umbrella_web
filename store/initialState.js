@@ -53,6 +53,7 @@ const view = {
 	lessonsMenuOpened: 0,
 	lessonsContentType: null,
 	lessonsContentPath: null,
+	lessonsFavoritesView: false,
 	lessonFileView: false,
 	locale: 'en',
 };

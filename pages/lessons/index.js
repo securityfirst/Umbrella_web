@@ -13,22 +13,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import Fab from '@material-ui/core/Fab';
 
-import SecurityIcon from '@material-ui/icons/Security';
-import DevicesOtherIcon from '@material-ui/icons/DevicesOther';
-import SettingsPhoneIcon from '@material-ui/icons/SettingsPhone';
-import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
-import PeopleIcon from '@material-ui/icons/People';
-import AccessibilityIcon from '@material-ui/icons/Accessibility';
-import BusinessIcon from '@material-ui/icons/Business';
-import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
-import LanguageIcon from '@material-ui/icons/Language';
-import InfoIcon from '@material-ui/icons/Info';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import Layout from '../../components/layout';
 import Loading from '../../components/reusables/Loading';
 import ErrorMessage from '../../components/reusables/ErrorMessage';
+import LessonsFavorites from '../../components/lessons/LessonsFavorites';
 import LessonLevel from '../../components/lessons/LessonLevel';
 import LessonsContent from '../../components/lessons/LessonsContent';
 import LessonCard from '../../components/lessons/LessonCard';
@@ -37,8 +29,13 @@ import yellow from '@material-ui/core/colors/yellow';
 
 import { contentStyles } from '../../utils/view';
 
-import { getLessons, getLessonFile } from '../../store/actions/lessons';
-import { setLessonsContentType, setLessonsContentPath, setLessonFileView, closeLessonFileView } from '../../store/actions/view';
+import { getLessons, getLessonFile, getLessonsFavorites } from '../../store/actions/lessons';
+import { 
+	setLessonsContentType, 
+	setLessonsContentPath, 
+	toggleLessonFileView, 
+	toggleLessonsFavoritesView 
+} from '../../store/actions/view';
 
 
 const menuWidth = 300;
@@ -83,6 +80,10 @@ const styles = theme => ({
 		width: '1.5rem',
 		opacity: '.825',
 	},
+	menuListItemMUIIcon: {
+		fill: '#000',
+		opacity: '.825',
+	},
 	menuListItemText: {
 		textTransform: 'capitalize',
 	},
@@ -122,19 +123,6 @@ const styles = theme => ({
 	},
 });
 
-const menuSet = {
-	'My Security': { icon: (color) => <SecurityIcon color={color} /> },
-	'Information': { icon: (color) => <DevicesOtherIcon color={color} /> },
-	'Communications': { icon: (color) => <SettingsPhoneIcon color={color} /> },
-	'Travel': { icon: (color) => <BusinessCenterIcon color={color} /> },
-	'Operations': { icon: (color) => <PeopleIcon color={color} /> },
-	'Personal': { icon: (color) => <AccessibilityIcon color={color} /> },
-	'Emergency Support': { icon: (color) => <BusinessIcon color={color} /> },
-	'Tools': { icon: (color) => <LocalHospitalIcon color={color} /> },
-	'Index / Glossary': { icon: (color) => <LanguageIcon color={color} /> },
-	'About': { icon: (color) => <InfoIcon color={color} /> },
-};
-
 class Lessons extends React.Component {
 	static async getInitialProps({isServer, reduxStore}) {
 		await reduxStore.dispatch(getLessons());
@@ -145,7 +133,16 @@ class Lessons extends React.Component {
 		categorySelected: null,
 		subcategorySelected: null,
 		lessonSelected: null,
-	};
+	}
+
+	handleFavoritesSelect = () => {
+		const { dispatch, lessonsFavoritesView } = this.props;
+
+		if (!lessonsFavoritesView) {
+			// dispatch(getLessonsFavorites());
+			dispatch(toggleLessonsFavoritesView(true));
+		}
+	}
 
 	handleCategorySelect = category => e => {
 		const { dispatch, lessons, locale } = this.props;
@@ -154,8 +151,9 @@ class Lessons extends React.Component {
 		if (keys.length === 1 && keys[0] === "content") {
 			const file = lessons[locale][category].content.find(file => file.filename.indexOf('.md') > -1);
 
-			this.props.dispatch(setLessonFileView());
-			this.props.dispatch(getLessonFile(file.sha));
+			dispatch(toggleLessonsFavoritesView(false));
+			dispatch(toggleLessonFileView(true));
+			dispatch(getLessonFile(file.sha));
 		} else {
 			if (category == this.state.categorySelected) this.setState({categorySelected: null});
 			else this.setState({categorySelected: category});
@@ -166,7 +164,8 @@ class Lessons extends React.Component {
 		const { dispatch, lessons } = this.props;
 		const { categorySelected } = this.state;
 
-		this.props.dispatch(closeLessonFileView());
+		dispatch(toggleLessonsFavoritesView(false));
+		dispatch(toggleLessonFileView(false));
 
 		this.setState(
 			{subcategorySelected: subcategory}, 
@@ -229,6 +228,7 @@ class Lessons extends React.Component {
 
 	renderMenuList = () => {
 		const { classes, lessonsMenuOpened, getLessonsLoading, getLessonsError, lessons, currentLesson, locale } = this.props;
+		const { categorySelected } = this.state;
 
 		if (getLessonsLoading) return <Loading />;
 		else if (getLessonsError) return <ErrorMessage error={getLessonsError} />;
@@ -242,15 +242,26 @@ class Lessons extends React.Component {
 					[classes.menuListOpened]: lessonsMenuOpened,
 				})}
 			>
+				{/* Favorites menu item */}
+				<div className={categorySelected == "favorites" ? classes.menuListItemSelected : ''}>
+					<ListItem button onClick={this.handleFavoritesSelect}>
+						<ListItemIcon className={classes.menuListItemIcon}>
+							<BookmarkIcon className={classes.menuListItemMUIIcon} />
+						</ListItemIcon>
+						<ListItemText className={classes.menuListItemText} inset primary="Favorites" />
+					</ListItem>
+				</div>
+
 				{Object.keys(lessons[locale]).map(this.renderMenuCategory)}
 			</List>
 		);
 	}
 
 	renderContent = () => {
-		const { currentLesson, lessonFileView } = this.props;
+		const { currentLesson, lessonsFavoritesView, lessonFileView } = this.props;
 
-		if (lessonFileView) return <LessonCard />;
+		if (lessonsFavoritesView) return <LessonsFavorites />;
+		else if (lessonFileView) return <LessonCard />;
 		else if (currentLesson) return <LessonLevel />;
 		else return <LessonsContent />;
 	}

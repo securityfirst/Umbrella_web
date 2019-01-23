@@ -56,6 +56,10 @@ export const setLesson = paths => {
 	}
 }
 
+export const getLessonsFavorites = () => {
+	// TODO: Get favorites from client data store
+}
+
 export const getLessonChecklist = sha => {
 	return async (dispatch, getState) => {
 		dispatch(pending(lessonsTypes.GET_LESSON_CHECKLIST));
