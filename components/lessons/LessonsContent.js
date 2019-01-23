@@ -82,10 +82,10 @@ class LessonsContent extends React.Component {
 		dispatch(setAppbarTitle('Lessons > ' + lessonsContentPath.replace(/-/g, " ").replace(/\./g, " > ")));
 	}
 
-	renderLevels = () => {
-		const { classes, lessons, lessonsContentPath, locale } = this.props;
+	renderLevels = levels => {
+		const { classes, lessonsContentPath } = this.props;
 
-		const levels = Object.keys(get(lessons, `${locale}.${lessonsContentPath}`));
+		levels = Object.keys(levels);
 
 		levels.sort(function(x, y) {
 			if (levelsOrder.indexOf(x) < levelsOrder.indexOf(y)) return -1;
@@ -128,12 +128,12 @@ class LessonsContent extends React.Component {
 	}
 
 	render() {
-		const { classes, lessonsContentType } = this.props;
+		const { classes, lessons, lessonsContentPath, locale } = this.props;
 
-		switch (lessonsContentType) {
-			case 'levels': return this.renderLevels();
-			default: return this.renderDefault();
-		}
+		let levels = get(lessons, `${locale}.${lessonsContentPath}`);
+
+		if (!levels) return this.renderDefault();
+		else return this.renderLevels(levels);
 	}
 }
 

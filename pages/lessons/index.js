@@ -29,7 +29,13 @@ import yellow from '@material-ui/core/colors/yellow';
 
 import { contentStyles } from '../../utils/view';
 
-import { getLessons, getLessonFile, getLessonsFavorites } from '../../store/actions/lessons';
+import { 
+	getLessons, 
+	getLessonFile, 
+	getLessonsFavorites, 
+	setLessonsGlossaryIndex 
+} from '../../store/actions/lessons';
+
 import { 
 	setLessonsContentType, 
 	setLessonsContentPath, 
@@ -39,6 +45,8 @@ import {
 
 
 const menuWidth = 300;
+
+const glossaryIndex = ['A-D', 'E-H', 'I-L', 'M-P', 'Q-T', 'U-Z'];
 
 const styles = theme => ({
 	...contentStyles(theme, {
@@ -138,8 +146,9 @@ class Lessons extends React.Component {
 	handleFavoritesSelect = () => {
 		const { dispatch, lessonsFavoritesView } = this.props;
 
+		// dispatch(getLessonsFavorites());
+
 		if (!lessonsFavoritesView) {
-			// dispatch(getLessonsFavorites());
 			dispatch(toggleLessonsFavoritesView(true));
 		}
 	}
@@ -148,7 +157,7 @@ class Lessons extends React.Component {
 		const { dispatch, lessons, locale } = this.props;
 		const keys = Object.keys(lessons[locale][category]);
 
-		if (keys.length === 1 && keys[0] === "content") {
+		if (category !== 'glossary' && keys.length === 1 && keys[0] === "content") {
 			const file = lessons[locale][category].content.find(file => file.filename.indexOf('.md') > -1);
 
 			dispatch(toggleLessonsFavoritesView(false));
@@ -176,6 +185,17 @@ class Lessons extends React.Component {
 		);
 	}
 
+	handleGlossarySelect = index => () => {
+		const { dispatch } = this.props;
+		
+		dispatch(toggleLessonsFavoritesView(false));
+		dispatch(setLessonsGlossaryIndex(index));
+		dispatch(setLessonsContentType('levels'));
+		dispatch(setLessonsContentPath(`glossary.${index}`));
+
+		this.setState({subcategorySelected: 'glossary'});
+	}
+
 	renderLevel = () => {
 		const { classes, currentLesson } = this.props;
 
@@ -190,6 +210,45 @@ class Lessons extends React.Component {
 		);
 	}
 
+	renderMenuGlossary = isSelected => {
+		const { classes } = this.props;
+
+		return (
+			<Collapse in={isSelected} timeout="auto" unmountOnExit>
+				<List component="div" disablePadding>
+					{glossaryIndex.map((index, i) => (
+						<ListItem button className={classes.menuListSubItem} key={i} onClick={this.handleGlossarySelect(index)}>
+							<ListItemText className={classes.menuListItemText} inset primary={index} />
+						</ListItem>
+					))}
+				</List>
+			</Collapse>
+		);
+	}
+
+	renderMenuSubcategories = (subcategories, isSelected) => {
+		const { classes } = this.props;
+		const { subcategorySelected } = this.state;
+
+		return (
+			<Collapse in={isSelected} timeout="auto" unmountOnExit>
+				<List component="div" disablePadding>
+					{subcategories.map((subcategory, i) => (
+						<ListItem 
+							key={i} 
+							className={classes.menuListSubItem} 
+							onClick={this.handleSubcategorySelect(subcategory)} 
+							isSelected={subcategorySelected === subcategory}
+							button 
+						>
+							<ListItemText className={classes.menuListItemText} inset primary={subcategory.replace(/-/g, ' ')} />
+						</ListItem>
+					))}
+				</List>
+			</Collapse>
+		);
+	}
+
 	renderMenuCategory = (category, i) => {
 		const { classes, lessons, locale } = this.props;
 		const { categorySelected } = this.state;
@@ -197,6 +256,7 @@ class Lessons extends React.Component {
 		if (category == "content" || category == "forms") return null;
 
 		const isSelected = categorySelected == category;
+		const isGlossary = category === 'glossary';
 		const subcategories = Object.keys(lessons[locale][category]).filter(subcategory => subcategory != "content");
 
 		return (
@@ -207,21 +267,18 @@ class Lessons extends React.Component {
 					</ListItemIcon>
 					<ListItemText className={classes.menuListItemText} inset primary={category.replace(/-/g, ' ')} />
 
-					{!!subcategories.length
+					{(isGlossary || !!subcategories.length)
 						? isSelected ? <ExpandLess /> : <ExpandMore />
 						: null
 					}
 				</ListItem>
 
-				{!!subcategories.length && <Collapse in={isSelected} timeout="auto" unmountOnExit>
-					<List component="div" disablePadding>
-						{subcategories.map((subcategory, i) => (
-							<ListItem button className={classes.menuListSubItem} key={i} onClick={this.handleSubcategorySelect(subcategory)}>
-								<ListItemText className={classes.menuListItemText} inset primary={subcategory.replace(/-/g, ' ')} />
-							</ListItem>
-						))}
-					</List>
-				</Collapse>}
+				{isGlossary 
+					? this.renderMenuGlossary(isSelected)
+					: !!subcategories.length
+						? this.renderMenuSubcategories(subcategories, isSelected)
+						: null
+				}
 			</div>
 		);
 	}
@@ -275,7 +332,7 @@ class Lessons extends React.Component {
 					{!currentLesson && this.renderMenuList()}
 
 					<div className={classes.content}>
-						{!!currentLesson && this.renderLevel()}
+						{(!!currentLesson && !!currentLesson.level) && this.renderLevel()}
 
 						{this.renderContent()}
 					</div>

@@ -29,6 +29,7 @@ const lessons = {
 	getLessonsError: null,
 	lessons: null,
 	currentLesson: null,
+	lessonsGlossaryIndex: null,
 	getLessonChecklistLoading: false,
 	getLessonChecklistError: null,
 	currentLessonChecklist: null,
