@@ -1,17 +1,11 @@
-const LRUCache = require('lru-cache');
-const { renderAndCache } = require('../cache');
-
-const ssrCache = new LRUCache({
-	max: 100,
-	maxAge: 1000 * 60 * 60 // 1hour
-});
+const { renderAndCache } = require('../ssr');
 
 exports.index = (app) => (req, res) => {
 	const actualPage = '/forms';
-	return renderAndCache(app, ssrCache, req, res, actualPage);
+	return renderAndCache(app, req, res, actualPage);
 }
 
 exports.new = (app) => (req, res) => {
 	const actualPage = '/forms/new';
-	return renderAndCache(app, ssrCache, req, res, actualPage);
+	return renderAndCache(app, req, res, actualPage);
 }

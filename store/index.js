@@ -7,7 +7,10 @@ import reducer from './reducers';
 
 const middlewares = [thunk];
 
-if (process.env.NODE_ENV !== 'production') {
+if (
+	process.env.NODE_ENV !== 'production' && // is not production
+	typeof window !== 'undefined' // is not server
+) {
     const logger = createLogger();
     middlewares.push(logger);
 }
