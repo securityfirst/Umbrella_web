@@ -6,9 +6,10 @@ const debug = require('debug')('quiddity:server');
 const http = require('http');
 const numCPUs = require('os').cpus().length;
 const port = process.env.PORT || '3000';
-const path = require('path');
 const { parse } = require('url');
-global.appRoot = path.resolve(__dirname);
+const { join, resolve } = require('path');
+
+global.appRoot = resolve(__dirname);
 
 // Background job setup
 const cron = require('./server/cron');
@@ -79,19 +80,26 @@ app.prepare().then(() => {
 	server.get('*', (req, res) => {
 		// setup static files from root like sitemap.xml || robots.txt || favicon.ico
 		const parsedUrl = parse(req.url, true);
+		const { pathname } = parsedUrl;
+
 		const rootStaticFiles = [
 			'/robots.txt',
 			'/sitemap.xml', 
 			'/favicon.ico'
 		];
 
-		if (rootStaticFiles.indexOf(parsedUrl.pathname) > -1) {
-			const path = join(__dirname, 'static', parsedUrl.pathname);
+		if (rootStaticFiles.indexOf(pathname) > -1) {
+			const path = join(__dirname, 'static', pathname);
+			return app.serveStatic(req, res, path);
+		}
+
+		if (pathname === "/sw.js") {
+			const path = join(__dirname, ".next", pathname);
 			return app.serveStatic(req, res, path);
 		}
 
 		// else serve page if not required by server
-		return handle(req, res)
+		handle(req, res);
 	});
 
 	if (dev) {
