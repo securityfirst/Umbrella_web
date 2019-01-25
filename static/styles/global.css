@@ -13,3 +13,16 @@
 body {
 	background-color: #ececec !important;
 }
+
+/* Hide extraneous markdown on lesson cards */
+.lessons-card .markdown-body>hr:nth-child(1) {
+	display: none;
+}
+
+.lessons-card .markdown-body>p:nth-child(2) {
+	display: none;
+}
+
+.lessons-card .markdown-body>h2:nth-child(3) {
+	display: none;
+}
