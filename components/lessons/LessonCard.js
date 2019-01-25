@@ -50,7 +50,7 @@ class LessonCard extends React.Component {
 
 
 		return (
-			<Paper className={classes.paper}>
+			<Paper className={'lessons-card ' + classes.paper}>
 				<Button className={classes.lessonClose} size="small" onClick={this.closeLesson}>
 					<CloseIcon />
 				</Button>
