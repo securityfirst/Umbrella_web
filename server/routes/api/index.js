@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const cors = require("cors");
+const apicache = require("apicache");
 
 const github = require('./github');
 
@@ -15,6 +16,7 @@ const corsOptions = {
 };
 
 router.use(cors(corsOptions));
+router.use(apicache.middleware('60 minutes'));
 router.use('/github', github);
 
 module.exports = router;
