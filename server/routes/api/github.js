@@ -47,8 +47,6 @@ router.get('/tree', async (req, res) => {
 
 			return lessonsSet;
 		}, {});
-
-		console.log('[API] /github/tree - Prepared lessons.');
 	} catch (e) {
 		console.error('[API] /github/tree - Create lesson JSON exception: ', e);
 		return res.status(500).send('Failed to retrieve lessons.');
@@ -58,8 +56,6 @@ router.get('/tree', async (req, res) => {
 		console.error('[API] /github/tree - Failed to create lessons object.');
 		return res.status(500).send('Failed to retrieve lessons.');
 	}
-
-	console.log("lessons: ", lessons);
 
 	return res.status(200).send(lessons);
 });

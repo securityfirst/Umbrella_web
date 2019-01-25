@@ -138,7 +138,7 @@ class LessonLevel extends React.Component {
 							return (
 								<FormControlLabel
 									key={i}
-									control={<Checkbox className={classes.checklistCheckbox} checked={false} onChange={() => {}} value={false} />}
+									control={<Checkbox className={classes.checklistCheckbox} checked={false} onChange={() => {}} value="TODO" />}
 									label={item.check}
 								/>
 							);

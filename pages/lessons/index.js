@@ -238,7 +238,6 @@ class Lessons extends React.Component {
 							key={i} 
 							className={classes.menuListSubItem} 
 							onClick={this.handleSubcategorySelect(subcategory)} 
-							isSelected={subcategorySelected === subcategory}
 							button 
 						>
 							<ListItemText className={classes.menuListItemText} inset primary={subcategory.replace(/-/g, ' ')} />
