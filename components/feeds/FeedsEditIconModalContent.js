@@ -1,12 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
 
-import yellow from '@material-ui/core/colors/yellow';
+import yellow from '@material-ui/core/colors/yellow'
 
-import { paperStyles } from '../../utils/view';
+import { paperStyles } from '../../utils/view'
 
 const styles = theme => ({
 	wrapper: {
@@ -29,11 +29,11 @@ const styles = theme => ({
 		...paperStyles(theme),
 		color: theme.palette.primary.main,
 	},
-});
+})
 
 class FeedsEditIconModalContent extends React.Component {
 	render() {
-		const { classes, cancel, confirm, icon, content } = this.props;
+		const { classes, cancel, confirm, icon, content } = this.props
 
 		return (
 			<Paper className={classes.wrapper} square>
@@ -44,8 +44,8 @@ class FeedsEditIconModalContent extends React.Component {
 					{content}
 				</div>
 			</Paper>
-		);
+		)
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEditIconModalContent);
+export default withStyles(styles, {withTheme: true})(FeedsEditIconModalContent)

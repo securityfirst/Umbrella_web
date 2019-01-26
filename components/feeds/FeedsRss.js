@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 
-import AddButton from '../../components/reusables/AddButton';
+import AddButton from '../../components/reusables/AddButton'
 
 const styles = theme => ({
 
-});
+})
 
 class FeedsRss extends React.Component {
 	handleAddRss = () => {
@@ -16,7 +16,7 @@ class FeedsRss extends React.Component {
 	}
 
 	render() {
-		const { classes } = this.props;
+		const { classes } = this.props
 
 		return (
 			<div>
@@ -35,8 +35,8 @@ class FeedsRss extends React.Component {
 				
 				<AddButton onClick={this.handleAddRss} />
 			</div>
-		);
+		)
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsRss);
+export default withStyles(styles, {withTheme: true})(FeedsRss)

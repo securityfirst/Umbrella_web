@@ -1,8 +1,8 @@
-import { withStyles } from '@material-ui/core/styles';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import { withStyles } from '@material-ui/core/styles'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
 
-import teal from '@material-ui/core/colors/teal';
+import teal from '@material-ui/core/colors/teal'
 
 const styles = theme => ({
 	label: {
@@ -15,10 +15,10 @@ const styles = theme => ({
 		},
 	},
 	checkboxChecked: {},
-});
+})
 
 const FormControlCheckbox = (props) => {
-	const { classes, name, value, checked, onChange } = props;
+	const { classes, name, value, checked, onChange } = props
 
 	return (
 		<FormControlLabel
@@ -36,7 +36,7 @@ const FormControlCheckbox = (props) => {
 			}
 			label={name}
 		/>
-	);
+	)
 }
 
-export default withStyles(styles, {withTheme: true})(FormControlCheckbox);
+export default withStyles(styles, {withTheme: true})(FormControlCheckbox)

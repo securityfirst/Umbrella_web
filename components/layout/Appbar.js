@@ -1,22 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withRouter } from 'next/router';
-import Link from 'next/link';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { withRouter } from 'next/router'
+import Link from 'next/link'
 
-import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
+import classNames from 'classnames'
+import { withStyles } from '@material-ui/core/styles'
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 
-import { toggleMainMenu } from '../../store/actions/view';
+import { toggleMainMenu } from '../../store/actions/view'
 
-import { viewConstants } from '../../utils/view';
+import { viewConstants } from '../../utils/view'
 
 const styles = theme => ({
 	appBar: {
@@ -54,7 +54,7 @@ const styles = theme => ({
 	login: {
 	    padding: '8px 16px',
 	},
-});
+})
 
 class Appbar extends React.Component {
 	renderRightContent() {
@@ -63,32 +63,32 @@ class Appbar extends React.Component {
 				<Link href="/login">
 					<Button classes={{root: this.props.classes.login}} component="button" color="inherit">Login</Button>
 				</Link>
-			);
+			)
 		}
 
-		return null;
+		return null
 	}
 
 	renderLeftContent() {
-		const { router, classes, appbarTitle } = this.props;
+		const { router, classes, appbarTitle } = this.props
 
 		let title = appbarTitle || (
 			router.pathname == '/'
 				? 'Umbrella'
 				// Split all subroutes and print capitalized divided by hyphens
 				: router.pathname.split("/").slice(1)/*.map(path => path.charAt(0).toUpperCase() + path.slice(1, path.length))*/.join(" / ")
-		);
+		)
 
 		title = title
 				.split(" ")
 				.map(path => path.charAt(0).toUpperCase() + path.slice(1, path.length))
-				.join(" ");
+				.join(" ")
 
-		return <Typography className={classes.title} variant="h6" color="inherit" noWrap>{title}</Typography>;
+		return <Typography className={classes.title} variant="h6" color="inherit" noWrap>{title}</Typography>
 	}
 
 	render() {
-		const { classes, mainMenuOpened } = this.props;
+		const { classes, mainMenuOpened } = this.props
 
 		return (
 			<AppBar 
@@ -112,17 +112,17 @@ class Appbar extends React.Component {
 					{this.renderRightContent()}
 				</Toolbar>
 			</AppBar>
-		);
+		)
 	}
 }
 
 Appbar.propTypes = {
 	router: PropTypes.object.isRequired,
-};
+}
 
 const mapStateToProps = state => ({
 	...state.view,
 	...state.account,
-});
+})
 
-export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Appbar)));
+export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Appbar)))

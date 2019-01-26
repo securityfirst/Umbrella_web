@@ -1,12 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Head from 'next/head';
-import { withRouter } from 'next/router';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Head from 'next/head'
+import { withRouter } from 'next/router'
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles'
 
-import Appbar from './Appbar';
-import Menu from './Menu';
+import Appbar from './Appbar'
+import Menu from './Menu'
 
 const styles = theme => ({
 	root: {
@@ -21,15 +21,15 @@ const styles = theme => ({
 			minWidth: 'calc(100vw - 73px)',
 		},
 	},
-});
+})
 
 class Layout extends React.Component {
 	state = {
 		drawerToggled: false,
-	};
+	}
 
 	render() {
-		const { router, classes, theme } = this.props;
+		const { router, classes, theme } = this.props
 
 		return (
 		
@@ -51,7 +51,7 @@ class Layout extends React.Component {
 					{this.props.children}
 				</main>
 			</div>
-		);
+		)
 	}
 }
 
@@ -59,6 +59,6 @@ Layout.propTypes = {
 	router: PropTypes.object.isRequired,
 	classes: PropTypes.object.isRequired,
 	theme: PropTypes.object.isRequired,
-};
+}
 
-export default withRouter(withStyles(styles, { withTheme: true })(Layout));
+export default withRouter(withStyles(styles, { withTheme: true })(Layout))

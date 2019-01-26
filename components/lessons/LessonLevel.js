@@ -1,33 +1,33 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from 'react'
+import { connect } from 'react-redux'
 import YAML from 'yaml'
 
-import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
-import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import { withStyles } from '@material-ui/core/styles'
+import classNames from 'classnames'
+import Typography from '@material-ui/core/Typography'
+import Card from '@material-ui/core/Card'
+import CardActionArea from '@material-ui/core/CardActionArea'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import Button from '@material-ui/core/Button'
+import FormControl from '@material-ui/core/FormControl'
+import FormGroup from '@material-ui/core/FormGroup'
+import FormLabel from '@material-ui/core/FormLabel'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
 
-import CloseIcon from '@material-ui/icons/Close';
-import BookmarkIcon from '@material-ui/icons/Bookmark';
-import ShareIcon from '@material-ui/icons/Share';
+import CloseIcon from '@material-ui/icons/Close'
+import BookmarkIcon from '@material-ui/icons/Bookmark'
+import ShareIcon from '@material-ui/icons/Share'
 
-import Layout from '../../components/layout';
-import Loading from '../../components/reusables/Loading';
-import ErrorMessage from '../../components/reusables/ErrorMessage';
+import Layout from '../../components/layout'
+import Loading from '../../components/reusables/Loading'
+import ErrorMessage from '../../components/reusables/ErrorMessage'
 
-import { contentStyles } from '../../utils/view';
+import { contentStyles } from '../../utils/view'
 
-import { getLessonChecklist, getLessonFile, closeLesson } from '../../store/actions/lessons';
-import { toggleLessonFileView, setAppbarTitle } from '../../store/actions/view';
+import { getLessonChecklist, getLessonFile, closeLesson } from '../../store/actions/lessons'
+import { toggleLessonFileView, setAppbarTitle } from '../../store/actions/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -92,11 +92,11 @@ const styles = theme => ({
 		top: '1rem',
 		right: '1rem',
 	},
-});
+})
 
 class LessonLevel extends React.Component {
 	componentWillMount() {
-		const { dispatch, currentLesson } = this.props;
+		const { dispatch, currentLesson } = this.props
 
 		if (currentLesson.checklist) {
 			dispatch(getLessonChecklist(currentLesson.checklist.sha))
@@ -104,23 +104,23 @@ class LessonLevel extends React.Component {
 	}
 	
 	getLessonFile = sha => () => {
-		this.props.dispatch(toggleLessonFileView(true));
-		this.props.dispatch(getLessonFile(sha));
+		this.props.dispatch(toggleLessonFileView(true))
+		this.props.dispatch(getLessonFile(sha))
 	}
 
 	closeLevel = () => {
-		this.props.dispatch(closeLesson());
-		this.props.dispatch(setAppbarTitle('Lessons'));
+		this.props.dispatch(closeLesson())
+		this.props.dispatch(setAppbarTitle('Lessons'))
 	}
 
 	renderChecklist = () => {
-		const { classes, getLessonChecklistLoading, getLessonChecklistError, currentLessonChecklist } = this.props;
+		const { classes, getLessonChecklistLoading, getLessonChecklistError, currentLessonChecklist } = this.props
 
-		if (getLessonChecklistLoading) return <Loading />;
-		else if (getLessonChecklistError) return <ErrorMessage error={getLessonChecklistError} />;
-		else if (!currentLessonChecklist) return null;
+		if (getLessonChecklistLoading) return <Loading />
+		else if (getLessonChecklistError) return <ErrorMessage error={getLessonChecklistError} />
+		else if (!currentLessonChecklist) return null
 
-		const checklist = YAML.parse(atob(currentLessonChecklist));
+		const checklist = YAML.parse(atob(currentLessonChecklist))
 
 		return (
 			<Card className={classes.checklistCard}>
@@ -132,7 +132,7 @@ class LessonLevel extends React.Component {
 						<FormGroup>
 						{!!checklist.list && checklist.list.map((item, i) => {
 							if (item.label) {
-								return <FormLabel key={i} className={classes.checklistLabel} component="legend">{item.label}</FormLabel>;
+								return <FormLabel key={i} className={classes.checklistLabel} component="legend">{item.label}</FormLabel>
 							}
 
 							return (
@@ -141,18 +141,18 @@ class LessonLevel extends React.Component {
 									control={<Checkbox className={classes.checklistCheckbox} checked={false} onChange={() => {}} value="TODO" />}
 									label={item.check}
 								/>
-							);
+							)
 						})}
 						</FormGroup>
 					</FormControl>
 				</CardContent>
 			</Card>
-		);
+		)
 	}
 
 	renderCard = (file, i) => {
-		const { classes } = this.props;
-		const title = file.name.slice(2).replace(/\.md/, '').replace(/-/g, ' ');
+		const { classes } = this.props
+		const title = file.name.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
 
 		return (
 			<Card key={i} className={classes.card}>
@@ -167,11 +167,11 @@ class LessonLevel extends React.Component {
 					<Button size="small" className={classes.cardActionIcon}><ShareIcon /></Button>
 				</CardActions>
 			</Card>
-		);
+		)
 	}
 
 	render() {
-		const { classes, currentLesson, currentLessonChecklist } = this.props;
+		const { classes, currentLesson, currentLessonChecklist } = this.props
 
 		return (
 			<React.Fragment>
@@ -185,12 +185,12 @@ class LessonLevel extends React.Component {
 
 				{this.renderChecklist()}
 			</React.Fragment>
-		);
+		)
 	}
 }
 
 const mapStateToProps = state => ({
 	...state.lessons,
-});
+})
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true})(LessonLevel));
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true})(LessonLevel))

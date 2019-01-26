@@ -1,16 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
+import FormControl from '@material-ui/core/FormControl'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
-import FormControlCheckbox from '../../components/reusables/FormControlCheckbox';
+import FormControlCheckbox from '../../components/reusables/FormControlCheckbox'
 
-import { paperStyles, buttonWrapperStyles } from '../../utils/view';
+import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
 const styles = theme => ({
 	wrapper: {
@@ -29,7 +29,7 @@ const styles = theme => ({
 		margin: '1rem 0 0',
 		...buttonWrapperStyles(theme),
 	},
-});
+})
 
 const options = [
 	{name: 'Outside access to data', value: 'outside_access'},
@@ -38,7 +38,7 @@ const options = [
 	{name: 'Loss / Compromise of Data', value: 'loss_of_data'},
 	{name: 'Damage to Systems', value: 'system_damage'},
 	{name: 'Website down', value: 'website_down'},
-];
+]
 
 class FormsNewImpact extends React.Component {
 	state = {
@@ -48,10 +48,10 @@ class FormsNewImpact extends React.Component {
 	}
 
 	handleSelect = (sourceValue) => () => {
-		const { optionsSelected } = this.state;
+		const { optionsSelected } = this.state
 
-		if (optionsSelected.includes(sourceValue)) this.setState({optionsSelected: optionsSelected.filter(value => value !== sourceValue)});
-		else this.setState({optionsSelected: optionsSelected.concat([sourceValue])});
+		if (optionsSelected.includes(sourceValue)) this.setState({optionsSelected: optionsSelected.filter(value => value !== sourceValue)})
+		else this.setState({optionsSelected: optionsSelected.concat([sourceValue])})
 	}
 
 	removeError = () => this.setState({error: null, errorMessage: null})
@@ -61,8 +61,8 @@ class FormsNewImpact extends React.Component {
 	onSubmit = () => this.props.onSubmit({options: this.state.optionsSelected})
 
 	render() {
-		const { classes, goBack } = this.props;
-		const { optionsSelected, error, errorMessage } = this.state;
+		const { classes, goBack } = this.props
+		const { optionsSelected, error, errorMessage } = this.state
 
 		return (
 			<Paper className={classes.wrapper} square>
@@ -80,7 +80,7 @@ class FormsNewImpact extends React.Component {
 									checked={optionsSelected.includes(option.value)} 
 									onChange={this.handleSelect(option.value)} 
 								/>
-							);
+							)
 						})}
 					</div>
 
@@ -92,8 +92,8 @@ class FormsNewImpact extends React.Component {
 					</FormControl>
 				</form>
 			</Paper>
-		);
+		)
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FormsNewImpact);
+export default withStyles(styles, {withTheme: true})(FormsNewImpact)

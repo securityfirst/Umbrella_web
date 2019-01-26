@@ -1,12 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
+import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import Fab from '@material-ui/core/Fab'
+import AddIcon from '@material-ui/icons/Add'
 
-import { addButtonStyles } from '../../utils/view';
+import { addButtonStyles } from '../../utils/view'
 
 const styles = theme => ({
 	button: {
@@ -26,28 +26,28 @@ const styles = theme => ({
 	icon: {
 		color: theme.palette.common.white,
 	},
-});
+})
 
 class AddButton extends React.Component {
 	render() {
-		const { classes, onClick, href } = this.props;
+		const { classes, onClick, href } = this.props
 
-		let fabProps = {};
+		let fabProps = {}
 
-		if (href) fabProps.href = href;
-		else fabProps.onClick = onClick;
+		if (href) fabProps.href = href
+		else fabProps.onClick = onClick
 
 		return (
 			<Fab className={classes.button} color="secondary" aria-label="Add" {...fabProps}>
 				<AddIcon className={classes.icon} />
 			</Fab>
-		);
+		)
 	}
 }
 
 AddButton.propTypes = {
 	onClick: PropTypes.func,
 	href: PropTypes.string,
-};
+}
 
-export default withStyles(styles, {withTheme: true})(AddButton);
+export default withStyles(styles, {withTheme: true})(AddButton)
