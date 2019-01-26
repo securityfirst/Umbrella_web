@@ -7,9 +7,9 @@ export const systemChecklists = {
 		{name: "Sending a message", percentage: 75},
 		{name: "Stress", percentage: 100},
 	],
-};
+}
 
 export const customChecklists = [
 	{name: "Angola", percentage: 86},
 	{name: "Secure Call", percentage: 30},
-];
+]

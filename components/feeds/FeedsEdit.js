@@ -1,17 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Modal from '@material-ui/core/Modal';
+import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
+import Modal from '@material-ui/core/Modal'
 
-import FeedsEditInterval from './FeedsEditInterval';
-import FeedsEditLocation from './FeedsEditLocation';
-import FeedsEditSources from './FeedsEditSources';
+import FeedsEditInterval from './FeedsEditInterval'
+import FeedsEditLocation from './FeedsEditLocation'
+import FeedsEditSources from './FeedsEditSources'
 
-import { paperStyles, buttonWrapperStyles } from '../../utils/view';
+import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
 const styles = theme => ({
 	panel: {
@@ -35,39 +35,39 @@ const styles = theme => ({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-});
+})
 
 const panels = [
 	{title: 'Set your feed', content: 'You haven’t set the country and the sources for the feed yet. You have to do it in order for the feed to start displaying, and you can change it any time later in the settings.'},
 	{title: 'Interval', content: 'Set how often shall we check for news'},
 	{title: 'Location', content: 'Enter location'},
 	{title: 'Feed sources', content: 'Set sources'},
-];
+]
 
 class FeedsEdit extends React.Component {
 	state = {
 		modalOpen: false,
 		modalContent: null,
-	};
+	}
 
 	handleFormOpen = (i) => () => {
-		let state = {modalOpen: true};
+		let state = {modalOpen: true}
 
 		// set modal inner content
 		switch (i) {
-			case 0: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />; break;
-			case 1: state.modalContent = <FeedsEditInterval closeModal={this.handleModalClose} />; break;
-			case 2: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />; break;
-			case 3: state.modalContent = <FeedsEditSources closeModal={this.handleModalClose} />; break;
+			case 0: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />; break
+			case 1: state.modalContent = <FeedsEditInterval closeModal={this.handleModalClose} />; break
+			case 2: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />; break
+			case 3: state.modalContent = <FeedsEditSources closeModal={this.handleModalClose} />; break
 		}
 
-		this.setState(state);
+		this.setState(state)
 	}
 
 	handleModalClose = () => this.setState({modalOpen: false})
 
 	render() {
-		const { classes, toggleEdit } = this.props;
+		const { classes, toggleEdit } = this.props
 
 		return (
 			<div>
@@ -94,8 +94,8 @@ class FeedsEdit extends React.Component {
 					{this.state.modalContent}
 				</Modal>
 			</div>
-		);
+		)
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEdit);
+export default withStyles(styles, {withTheme: true})(FeedsEdit)

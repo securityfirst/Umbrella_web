@@ -1,10 +1,10 @@
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import Paper from '@material-ui/core/Paper'
 
-import cyan from '@material-ui/core/colors/cyan';
+import cyan from '@material-ui/core/colors/cyan'
 
-import { paperStyles } from '../../utils/view';
+import { paperStyles } from '../../utils/view'
 
 const styles = theme => ({
 	formPanel: {
@@ -22,7 +22,7 @@ const styles = theme => ({
 		fontWeight: 'normal',
 		color: cyan[500],
 	},
-});
+})
 
 const ChecklistsPanel = (props) => {
 	return (
@@ -30,7 +30,7 @@ const ChecklistsPanel = (props) => {
 			<Typography className={props.classes.formPanelTitle} variant="h6">{props.name}</Typography>
 			<Typography className={props.classes.formPanelPercentage} variant="h6">{props.percentage}%</Typography>
 		</Paper>
-	);
+	)
 }
 
-export default withStyles(styles, { withTheme: true })(ChecklistsPanel);
+export default withStyles(styles, { withTheme: true })(ChecklistsPanel)

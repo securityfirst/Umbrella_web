@@ -25,4 +25,3 @@ test/**/out
 
 # content directories
 static/assets/content/
-data

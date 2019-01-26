@@ -1,44 +1,44 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
-import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
+import { withStyles } from '@material-ui/core/styles'
+import AccessAlarmIcon from '@material-ui/icons/AccessAlarm'
 
-import FeedsEditIconModalContent from './FeedsEditIconModalContent';
-import FeedsEditIconForm from './FeedsEditIconForm';
+import FeedsEditIconModalContent from './FeedsEditIconModalContent'
+import FeedsEditIconForm from './FeedsEditIconForm'
 
 const styles = theme => ({
 	iconFontSize: {
 		fontSize: '4rem',
 	},
-});
+})
 
 class FeedsEditInterval extends React.Component {
 	state = {
 		interval: null,
 		error: null,
 		errorMessage: null,
-	};
+	}
 
 	handleSubmit = () => {
-		const { interval } = this.state;
+		const { interval } = this.state
 
 		// TODO: Handle submit here, then close on callback
 
-		this.props.closeModal();
+		this.props.closeModal()
 	}
 
 	handleCancel = () => {
-		this.handleRemoveError();
-		this.setState({interval: null});
-		this.props.closeModal();
+		this.handleRemoveError()
+		this.setState({interval: null})
+		this.props.closeModal()
 	}
 
 	handleRemoveError = () => this.setState({error: null, errorMessage: null})
 
 	render() {
-		const { theme, classes, closeModal, confirm } = this.props;
-		const { interval, error, errorMessage } = this.state;
+		const { theme, classes, closeModal, confirm } = this.props
+		const { interval, error, errorMessage } = this.state
 
 		return (
 			<FeedsEditIconModalContent 
@@ -57,8 +57,8 @@ class FeedsEditInterval extends React.Component {
 					/>
 				} 
 			/>
-		);
+		)
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEditInterval);
+export default withStyles(styles, {withTheme: true})(FeedsEditInterval)

@@ -1,20 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
 
-import Layout from '../../components/layout';
-import Loading from '../../components/reusables/Loading';
-import ErrorMessage from '../../components/reusables/ErrorMessage';
-import AddButton from '../../components/reusables/AddButton';
+import Layout from '../../components/layout'
+import Loading from '../../components/reusables/Loading'
+import ErrorMessage from '../../components/reusables/ErrorMessage'
+import AddButton from '../../components/reusables/AddButton'
 
-import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view';
+import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 
-import { getFormTypes, getForms } from '../../store/actions/forms';
+import { getFormTypes, getForms } from '../../store/actions/forms'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -29,28 +29,26 @@ const styles = theme => ({
 	formPanelButtonsWrapper: {
 		...buttonWrapperStyles(theme),
 	},
-});
+})
 
 class Forms extends React.Component {
-	static async getInitialProps({reduxStore, isServer}) {
-		// TODO: Doesn't render serverside
-		await reduxStore.dispatch(getFormTypes());
-		await reduxStore.dispatch(getForms());
-		return isServer;
+	static async getInitialProps({reduxStore}) {
+		await reduxStore.dispatch(getFormTypes())
+		await reduxStore.dispatch(getForms())
 	}
 
 	handleEdit = (form) => () => {
-		alert("Edit " + form.typeId);
+		alert("Edit " + form.typeId)
 	}
 
 	handleShare = (form) => () => {
-		alert("Sharing " + form.typeId);
+		alert("Sharing " + form.typeId)
 	}
 
 	renderPanel = (form, i, isActive) => {
-		const { classes, formTypes } = this.props;
+		const { classes, formTypes } = this.props
 
-		const formType = formTypes.find(type => type.id === form.typeId);
+		const formType = formTypes.find(type => type.id === form.typeId)
 
 		return (
 			<Paper key={i} className={classes.formPanel} square>
@@ -62,20 +60,20 @@ class Forms extends React.Component {
 					<Button color="primary" onClick={this.handleShare(form)}>Share</Button>
 				</div>}
 			</Paper>
-		);
+		)
 	}
 
 	renderContent = () => {
-		const { classes, getFormTypesLoading, getFormTypesError, formTypes, getFormsLoading, getFormsError, forms } = this.props;
+		const { classes, getFormTypesLoading, getFormTypesError, formTypes, getFormsLoading, getFormsError, forms } = this.props
 
-		if (getFormTypesLoading || getFormsLoading) return <Loading />;
-		else if (getFormTypesError || getFormsError) return <ErrorMessage error={getFormTypesError || getFormsError} />;
+		if (getFormTypesLoading || getFormsLoading) return <Loading />
+		else if (getFormTypesError || getFormsError) return <ErrorMessage error={getFormTypesError || getFormsError} />
 
 		let sorted = forms.reduce((set, form) => {
-			if (!set[form.status]) set[form.status] = [];
-			set[form.status].push(form);
-			return set;
-		}, {});
+			if (!set[form.status]) set[form.status] = []
+			set[form.status].push(form)
+			return set
+		}, {})
 
 		return (
 			<div className={classes.content}>
@@ -87,11 +85,11 @@ class Forms extends React.Component {
 
 				{(!!sorted.completed && !!sorted.completed.length) && sorted.completed.map((form, i) => this.renderPanel(form, i))}
 			</div>
-		);
+		)
 	}
 
 	render() {
-		const { classes } = this.props;
+		const { classes } = this.props
 
 		return (
 			<Layout title="Umbrella | Forms" description="Umbrella web application">
@@ -99,12 +97,12 @@ class Forms extends React.Component {
 
 				<AddButton href="/forms/new" />
 			</Layout>
-		);
+		)
 	}
 }
 
 const mapStateToProps = state => ({
 	...state.forms,
-});
+})
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Forms));
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Forms))

@@ -1,15 +1,15 @@
-import 'isomorphic-unfetch';
-import React from 'react';
-import marked from 'marked';
+import 'isomorphic-unfetch'
+import React from 'react'
+import marked from 'marked'
 
 class Marked extends React.Component {
 	render() {
-		const { content } = this.props;
+		const { content } = this.props
 
-		if (!content) return <div></div>;
+		if (!content) return <div></div>
 
-		return <div className="markdown-body" dangerouslySetInnerHTML={{__html: marked(content, {...this.props})}} />;
+		return <div className="markdown-body" dangerouslySetInnerHTML={{__html: marked(content, {...this.props})}} />
 	}
 }
 
-export default Marked;
+export default Marked

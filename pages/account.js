@@ -1,16 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { withStyles } from '@material-ui/core/styles'
+import ExpansionPanel from '@material-ui/core/ExpansionPanel'
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
+import Typography from '@material-ui/core/Typography'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
-import Layout from '../components/layout';
+import Layout from '../components/layout'
 
-import { contentStyles } from '../utils/view';
+import { contentStyles } from '../utils/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -19,19 +19,19 @@ const styles = theme => ({
 		flexBasis: '33.33%',
 		flexShrink: 0,
 	},
-});
+})
 
 class Account extends React.Component {
 	state = {
 		expanded: false,
-	};
+	}
 
 	handleChange = i => (e, expanded) => {
-		this.setState({expanded: expanded ? i : false});
-	};
+		this.setState({expanded: expanded ? i : false})
+	}
 
 	render() {
-		const { classes } = this.props;
+		const { classes } = this.props
 
 		return (
 			<Layout title="Umbrella | Account" description="Umbrella web application">
@@ -76,8 +76,8 @@ class Account extends React.Component {
 					</ExpansionPanel>
 				</div>
 			</Layout>
-		);
+		)
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(Account);
+export default withStyles(styles, {withTheme: true})(Account)

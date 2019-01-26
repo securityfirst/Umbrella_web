@@ -1,33 +1,33 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withRouter } from 'next/router';
-import Link from 'next/link';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { withRouter } from 'next/router'
+import Link from 'next/link'
 
-import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
+import classNames from 'classnames'
+import { withStyles } from '@material-ui/core/styles'
 
-import Drawer from '@material-ui/core/Drawer';
-import Divider from '@material-ui/core/Divider';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import Drawer from '@material-ui/core/Drawer'
+import Divider from '@material-ui/core/Divider'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import IconButton from '@material-ui/core/IconButton'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
 
-import CalendarViewDayIcon from '@material-ui/icons/CalendarViewDay';
-import MapIcon from '@material-ui/icons/Map';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
-import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import CalendarViewDayIcon from '@material-ui/icons/CalendarViewDay'
+import MapIcon from '@material-ui/icons/Map'
+import DoneAllIcon from '@material-ui/icons/DoneAll'
+import LocalLibraryIcon from '@material-ui/icons/LocalLibrary'
+import AccountBoxIcon from '@material-ui/icons/AccountBox'
 
-import { setAppbarTitle } from '../../store/actions/view';
-import { toggleMainMenu, toggleLessonsMenu } from '../../store/actions/view';
-import { resetLessons } from '../../store/actions/lessons';
+import { setAppbarTitle } from '../../store/actions/view'
+import { toggleMainMenu, toggleLessonsMenu } from '../../store/actions/view'
+import { resetLessons } from '../../store/actions/lessons'
 
-import { viewConstants } from '../../utils/view';
+import { viewConstants } from '../../utils/view'
 
 const links = [
 	{name: 'Feeds', path: '/feeds', icon: (color) => <CalendarViewDayIcon color={color} />},
@@ -35,7 +35,7 @@ const links = [
 	{name: 'Checklists', path: '/checklists', icon: (color) => <DoneAllIcon color={color} />},
 	{name: 'Lessons', path: '/lessons', icon: (color) => <LocalLibraryIcon color={color} />},
 	{name: 'Account', path: '/account', icon: (color) => <AccountBoxIcon color={color} />},
-];
+]
 
 const styles = theme => ({
 	drawer: {
@@ -82,26 +82,26 @@ const styles = theme => ({
 		backgroundColor: theme.palette.background.paper,
 		...theme.mixins.toolbar,
 	},
-});
+})
 
 class Menu extends React.Component {
 	handleDrawerClose = () => this.props.dispatch(toggleMainMenu(false))
 
 	renderContent = () => {
-		const { classes } = this.props;
+		const { classes } = this.props
 
 		return (
 			<List>
 				{links.map((link, i) => (
 					<Link href={link.path} key={i}>
 						<ListItem className={classes.drawerItem} button onClick={() => {
-							this.props.dispatch(setAppbarTitle(link.name));
+							this.props.dispatch(setAppbarTitle(link.name))
 
 							switch (link.name) {
 								case 'Lessons': 
-									this.props.dispatch(toggleLessonsMenu(true)); 
-									this.props.dispatch(resetLessons()); 
-									break;
+									this.props.dispatch(toggleLessonsMenu(true)) 
+									this.props.dispatch(resetLessons()) 
+									break
 							}
 						}}>
 							<ListItemIcon>{link.icon(this.props.router.pathname == link.path ? "secondary" : "inherit")}</ListItemIcon>
@@ -110,11 +110,11 @@ class Menu extends React.Component {
 					</Link>
 				))}
 			</List>
-		);
+		)
 	}
 
 	render() {
-		const { classes, theme, mainMenuOpened } = this.props;
+		const { classes, theme, mainMenuOpened } = this.props
 
 		return (
 			<Drawer
@@ -141,10 +141,10 @@ class Menu extends React.Component {
 
 				{this.renderContent()}
 			</Drawer>
-		);
+		)
 	}
 }
 
-const mapStateToProps = state => ({...state.view});
+const mapStateToProps = state => ({...state.view})
 
-export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Menu)));
+export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Menu)))

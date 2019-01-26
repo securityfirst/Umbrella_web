@@ -1,39 +1,45 @@
-import React from 'react';
-import App, { Container } from 'next/app';
-import NProgress from 'next-nprogress/component';
-import { Provider } from 'react-redux';
-import { withReduxStore } from '../lib/redux.js';
-import JssProvider from 'react-jss/lib/JssProvider';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { MuiThemeProvider } from '@material-ui/core/styles';
-import { getPageContext } from '../lib/mui';
+import React from 'react'
+import App, { Container } from 'next/app'
+import NProgress from 'next-nprogress/component'
+import { Provider } from 'react-redux'
+import { withReduxStore } from '../lib/redux.js'
+import JssProvider from 'react-jss/lib/JssProvider'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import { MuiThemeProvider } from '@material-ui/core/styles'
+import { getPageContext } from '../lib/mui'
+
+import { getContent } from '../store/actions/content'
 
 class MyApp extends App {
 	constructor(props) {
-		super(props);
-		this.pageContext = getPageContext();
+		super(props)
+		this.pageContext = getPageContext()
 	}
 
 	static async getInitialProps({Component, router, ctx}) {
-		let pageProps = {};
+		// global data
+		await ctx.reduxStore.dispatch(getContent())
+
+		let pageProps = {}
 
 		if (Component.getInitialProps) {
-			pageProps = await Component.getInitialProps(ctx);
+			pageProps = await Component.getInitialProps(ctx)
 		}
 
-		return {pageProps};
+		return {pageProps}
 	}
 
 	componentDidMount() {
 		// Remove the server-side injected CSS.
-		const jssStyles = document.querySelector('#jss-server-side');
+		const jssStyles = document.querySelector('#jss-server-side')
 		
 		if (jssStyles && jssStyles.parentNode) {
-			jssStyles.parentNode.removeChild(jssStyles);
+			jssStyles.parentNode.removeChild(jssStyles)
 		}
 	}
+
 	render () {
-		const {Component, pageProps, reduxStore} = this.props;
+		const {Component, pageProps, reduxStore} = this.props
 
 		return (
 			<JssProvider
@@ -60,8 +66,8 @@ class MyApp extends App {
 					</Container>
 				</MuiThemeProvider>
 			</JssProvider>
-		);
+		)
 	}
 }
 
-export default withReduxStore(MyApp);
+export default withReduxStore(MyApp)

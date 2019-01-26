@@ -1,16 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
+import FormControl from '@material-ui/core/FormControl'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
-import FormControlInput from '../../components/reusables/FormControlInput';
+import FormControlInput from '../../components/reusables/FormControlInput'
 
-import { paperStyles, buttonWrapperStyles } from '../../utils/view';
+import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
 const styles = theme => ({
 	wrapper: {
@@ -26,7 +26,7 @@ const styles = theme => ({
 		margin: '1rem 0 0',
 		...buttonWrapperStyles(theme),
 	},
-});
+})
 
 class FormsNewIncident extends React.Component {
 	state = {
@@ -38,20 +38,16 @@ class FormsNewIncident extends React.Component {
 	removeError = () => this.setState({error: null, errorMessage: null})
 
 	onGoBack = () => {
-		this.props.onGoBack({
-			incident: this.state.incident,
-		});
+		this.props.onGoBack({incident: this.state.incident})
 	}
 
 	onSubmit = () => {
-		this.props.onSubmit({
-			incident: this.state.incident,
-		});
+		this.props.onSubmit({incident: this.state.incident})
 	}
 
 	render() {
-		const { classes, goBack } = this.props;
-		const { incident, error, errorMessage } = this.state;
+		const { classes, goBack } = this.props
+		const { incident, error, errorMessage } = this.state
 
 		return (
 			<Paper className={classes.wrapper} square>
@@ -80,8 +76,8 @@ class FormsNewIncident extends React.Component {
 					</FormControl>
 				</form>
 			</Paper>
-		);
+		)
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FormsNewIncident);
+export default withStyles(styles, {withTheme: true})(FormsNewIncident)

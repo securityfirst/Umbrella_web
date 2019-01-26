@@ -1,21 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Button from '@material-ui/core/Button';
-import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
+import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import FormControl from '@material-ui/core/FormControl'
+import FormGroup from '@material-ui/core/FormGroup'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Button from '@material-ui/core/Button'
+import AccessAlarmIcon from '@material-ui/icons/AccessAlarm'
 
-import teal from '@material-ui/core/colors/teal';
+import teal from '@material-ui/core/colors/teal'
 
-import FormControlCheckbox from '../../components/reusables/FormControlCheckbox';
+import FormControlCheckbox from '../../components/reusables/FormControlCheckbox'
 
-import { paperStyles, buttonWrapperStyles } from '../../utils/view';
+import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
 const styles = theme => ({
 	checkboxControl: {
@@ -27,48 +27,51 @@ const styles = theme => ({
 	buttonsWrapper: {
 		...buttonWrapperStyles(theme),
 	},
-});
+})
 
 const sources = [
 	{name: 'UN / ReliefWeb', value: 'un'},
 	{name: 'CDC', value: 'cdc'},
 	{name: 'Global Disaster and Alert Coordination System', value: 'global_disaster'},
 	{name: 'US State Department Country Warnings', value: 'us_state_department'},
-];
+]
 
 class FeedsEditSources extends React.Component {
 	state = {
 		sourcesSelected: [],
 		error: null,
 		errorMessage: null,
-	};
+	}
 
 	handleSelect = (sourceValue) => () => {
-		const { sourcesSelected } = this.state;
+		const { sourcesSelected } = this.state
 
-		if (sourcesSelected.includes(sourceValue)) this.setState({sourcesSelected: sourcesSelected.filter(value => value !== sourceValue)});
-		else this.setState({sourcesSelected: sourcesSelected.concat([sourceValue])});
+		if (sourcesSelected.includes(sourceValue)) {
+			this.setState({sourcesSelected: sourcesSelected.filter(value => value !== sourceValue)})
+		}
+		
+		else this.setState({sourcesSelected: sourcesSelected.concat([sourceValue])})
 	}
 
 	handleSubmit = () => {
-		const { sourcesSelected } = this.state;
+		const { sourcesSelected } = this.state
 
 		// TODO: Handle submit here, then close on callback
 
-		this.props.closeModal();
+		this.props.closeModal()
 	}
 
 	handleCancel = () => {
-		this.handleRemoveError();
-		this.setState({sourcesSelected: []});
-		this.props.closeModal();
+		this.handleRemoveError()
+		this.setState({sourcesSelected: []})
+		this.props.closeModal()
 	}
 
 	handleRemoveError = () => this.setState({error: null, errorMessage: null})
 
 	render() {
-		const { classes } = this.props;
-		const { sourcesSelected, error, errorMessage } = this.state;
+		const { classes } = this.props
+		const { sourcesSelected, error, errorMessage } = this.state
 
 		return (
 			<Paper className={classes.container} square>
@@ -97,8 +100,8 @@ class FeedsEditSources extends React.Component {
 					</FormControl>
 				</form>
 			</Paper>
-		);
+		)
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEditSources);
+export default withStyles(styles, {withTheme: true})(FeedsEditSources)

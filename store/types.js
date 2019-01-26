@@ -1,11 +1,15 @@
+export const contentTypes = {
+	GET_CONTENT: 'GET_CONTENT',
+}
+
 export const accountTypes = {
 	LOGIN: 'LOGIN',
 	LOGOUT: 'LOGOUT',
-};
+}
 
 export const feedsTypes = {
 	GET_FEEDS: 'GET_FEEDS',
-};
+}
 
 export const formsTypes = {
 	GET_FORM_TYPES: 'GET_FORM_TYPES',
@@ -13,22 +17,21 @@ export const formsTypes = {
 	POST_FORM: 'POST_FORM',
 	RESET_POST_FORM: 'RESET_POST_FORM',
 	UPDATE_FORM: 'UPDATE_FORM',
-};
+}
 
 export const lessonsTypes = {
-	GET_LESSONS: 'GET_LESSONS',
 	SET_LESSON: 'SET_LESSON',
 	GET_LESSON_CHECKLIST: 'GET_LESSON_CHECKLIST',
 	GET_LESSON_FILE: 'GET_LESSON_FILE',
 	CLOSE_LESSON: 'CLOSE_LESSON',
 	CLOSE_LESSON_FILE: 'CLOSE_LESSON_FILE',
 	RESET_LESSONS: 'RESET_LESSONS',
-};
+}
 
 export const checklistsTypes = {
 	GET_SYSTEM_CHECKLISTS: 'GET_SYSTEM_CHECKLISTS',
 	GET_CUSTOM_CHECKLISTS: 'GET_CUSTOM_CHECKLISTS',
-};
+}
 
 export const viewTypes = {
 	TOGGLE_MAIN_MENU: 'TOGGLE_MAIN_MENU',
@@ -41,4 +44,4 @@ export const viewTypes = {
 	CLOSE_LESSON_FILE_VIEW: 'CLOSE_LESSON_FILE_VIEW',
 	RESET_LESSONS: 'RESET_LESSONS',
 	SET_LOCALE: 'SET_LOCALE',
-};
+}

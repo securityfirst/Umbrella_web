@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import Button from '@material-ui/core/Button';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { withStyles } from '@material-ui/core/styles'
+import FormControl from '@material-ui/core/FormControl'
+import Button from '@material-ui/core/Button'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
-import FormControlInput from '../../components/reusables/FormControlInput';
+import FormControlInput from '../../components/reusables/FormControlInput'
 
-import { paperStyles, buttonWrapperStyles } from '../../utils/view';
+import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
 const styles = theme => ({
 	formControlInput: {
@@ -18,11 +18,11 @@ const styles = theme => ({
 		...buttonWrapperStyles(theme),
 		...paperStyles(theme),
 	},
-});
+})
 
 class FeedsEditIconForm extends React.Component {
 	render() {
-		const { classes, id, label, value, error, errorMessage, onChange, onSubmit, removeError, cancel } = this.props;
+		const { classes, id, label, value, error, errorMessage, onChange, onSubmit, removeError, cancel } = this.props
 
 		return (
 			<form>
@@ -46,8 +46,8 @@ class FeedsEditIconForm extends React.Component {
 					</ClickAwayListener>
 				</FormControl>
 			</form>
-		);
+		)
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEditIconForm);
+export default withStyles(styles, {withTheme: true})(FeedsEditIconForm)

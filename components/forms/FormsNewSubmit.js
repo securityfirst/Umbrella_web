@@ -1,17 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 
-import Loading from '../../components/reusables/Loading';
+import Loading from '../../components/reusables/Loading'
 
-import { paperStyles, buttonWrapperStyles } from '../../utils/view';
+import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
-import { postForm } from '../../store/actions/forms';
+import { postForm } from '../../store/actions/forms'
 
 const styles = theme => ({
 	wrapper: {
@@ -27,11 +27,11 @@ const styles = theme => ({
 		margin: '1rem 0 0',
 		...buttonWrapperStyles(theme),
 	},
-});
+})
 
 class FormsNewSubmit extends React.Component {
 	componentWillMount() {
-		this.props.dispatch(postForm(this.props.forms));
+		this.props.dispatch(postForm(this.props.forms))
 	}
 
 	removeError = () => this.setState({error: null, errorMessage: null})
@@ -41,7 +41,7 @@ class FormsNewSubmit extends React.Component {
 	onSubmit = () => this.props.dispatch(postForm(this.props.forms))
 
 	renderError = () => {
-		const { classes, postFormError } = this.props;
+		const { classes, postFormError } = this.props
 
 		return (
 			<div>
@@ -52,11 +52,11 @@ class FormsNewSubmit extends React.Component {
 					<Button color="secondary" onClick={this.onSubmit}>Try Again</Button>
 				</div>
 			</div>
-		);
+		)
 	}
 
 	renderSuccess = () => {
-		const { classes } = this.props;
+		const { classes } = this.props
 
 		return (
 			<div>
@@ -67,11 +67,11 @@ class FormsNewSubmit extends React.Component {
 					<Button href="/forms" color="secondary">Finish</Button>
 				</div>
 			</div>
-		);
+		)
 	}
 
 	render() {
-		const { classes, postFormLoading, postFormError, postFormSuccess } = this.props;
+		const { classes, postFormLoading, postFormError, postFormSuccess } = this.props
 
 		return (
 			<Paper className={classes.wrapper} square>
@@ -85,12 +85,12 @@ class FormsNewSubmit extends React.Component {
 						: this.renderSuccess()
 				}
 			</Paper>
-		);
+		)
 	}
 }
 
 const mapStateToProps = state => ({
 	...state.forms,
-});
+})
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(FormsNewSubmit));
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(FormsNewSubmit))

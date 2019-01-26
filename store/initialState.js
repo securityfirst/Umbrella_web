@@ -1,15 +1,21 @@
+const content = {
+	getContentLoading: true,
+	getContentError: null,
+	content: null,
+}
+
 const account = {
 	loading: false,
 	error: null,
 	loggedIn: false,
-};
+}
 
 const feeds = {
 	loading: true,
 	error: null,
 	data: [],
 	current: null,
-};
+}
 
 const forms = {
 	getFormTypesLoading: true,
@@ -22,12 +28,9 @@ const forms = {
 	postFormLoading: false,
 	postFormError: null,
 	postFormSuccess: false,
-};
+}
 
 const lessons = {
-	getLessonsLoading: true,
-	getLessonsError: null,
-	lessons: null,
 	currentLesson: null,
 	lessonsGlossaryIndex: null,
 	getLessonChecklistLoading: false,
@@ -36,7 +39,7 @@ const lessons = {
 	getLessonFileLoading: true,
 	getLessonFileError: null,
 	currentLessonFile: null,
-};
+}
 
 const checklists = {
 	getSystemChecklistsLoading: true,
@@ -46,7 +49,7 @@ const checklists = {
 	getCustomChecklistsError: null,
 	getCustomChecklistsSuccess: false,
 	customChecklists: [],
-};
+}
 
 const view = {
 	mainMenuOpened: false,
@@ -57,13 +60,14 @@ const view = {
 	lessonsFavoritesView: false,
 	lessonFileView: false,
 	locale: 'en',
-};
+}
 
 export default {
+	content,
 	account,
 	feeds,
 	forms,
 	lessons,
 	checklists,
 	view,
-};
+}

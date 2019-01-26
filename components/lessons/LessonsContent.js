@@ -1,20 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import get from 'lodash/get';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import get from 'lodash/get'
 
-import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import classNames from 'classnames'
+import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 
-import yellow from '@material-ui/core/colors/yellow';
+import yellow from '@material-ui/core/colors/yellow'
 
-import { paperStyles, buttonWrapperStyles } from '../../utils/view';
+import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
-import { setLesson } from '../../store/actions/lessons';
-import { setAppbarTitle } from '../../store/actions/view';
+import { setLesson } from '../../store/actions/lessons'
+import { setAppbarTitle } from '../../store/actions/view'
 
 const styles = theme => ({
 	intro: {
@@ -70,35 +70,35 @@ const styles = theme => ({
 			backgroundColor: theme.palette.primary.main,
 		}
 	},
-});
+})
 
-const levelsOrder = ['beginner', 'advanced', 'expert'];
+const levelsOrder = ['beginner', 'advanced', 'expert']
 
 class LessonsContent extends React.Component {
 	setLesson = (level) => () => {
-		const { dispatch, lessonsContentPath } = this.props;
+		const { dispatch, lessonsContentPath } = this.props
 
-		dispatch(setLesson(lessonsContentPath.split('.').concat([level])));
-		dispatch(setAppbarTitle('Lessons > ' + lessonsContentPath.replace(/-/g, " ").replace(/\./g, " > ")));
+		dispatch(setLesson(lessonsContentPath.split('.').concat([level])))
+		dispatch(setAppbarTitle('Lessons > ' + lessonsContentPath.replace(/-/g, " ").replace(/\./g, " > ")))
 	}
 
 	renderLevels = levels => {
-		const { classes, lessonsContentPath } = this.props;
+		const { classes, lessonsContentPath } = this.props
 
-		levels = Object.keys(levels);
+		levels = Object.keys(levels)
 
 		levels.sort(function(x, y) {
-			if (levelsOrder.indexOf(x) < levelsOrder.indexOf(y)) return -1;
-			if (levelsOrder.indexOf(x) > levelsOrder.indexOf(y)) return 1;
-			return 0;
-		});
+			if (levelsOrder.indexOf(x) < levelsOrder.indexOf(y)) return -1
+			if (levelsOrder.indexOf(x) > levelsOrder.indexOf(y)) return 1
+			return 0
+		})
 
 		return (
 			<div>
 				<Typography className={classes.breadcrumb} variant="subtitle1">{lessonsContentPath.split(".").join(" > ").replace(/-/g, ' ')}</Typography>
 
 				{levels.map((level, i) => {
-					if (level === "content") return null;
+					if (level === "content") return null
 
 					return (
 						<Button
@@ -110,36 +110,37 @@ class LessonsContent extends React.Component {
 						>
 							{level}
 						</Button>
-					);
+					)
 				})}
 			</div>
-		);
+		)
 	}
 
 	renderDefault = () => {
-		const { classes } = this.props;
+		const { classes } = this.props
 
 		return (
 			<Paper className={classes.intro}>
 				<Typography className={classes.introTitle} variant="h2">Lessons</Typography>
 				<Typography paragraph>Use the menu panel on the left to navigate lesson categories.</Typography>
 			</Paper>
-		);
+		)
 	}
 
 	render() {
-		const { classes, lessons, lessonsContentPath, locale } = this.props;
+		const { classes, content, lessonsContentPath, locale } = this.props
 
-		let levels = get(lessons, `${locale}.${lessonsContentPath}`);
+		let levels = get(content, `${locale}.${lessonsContentPath}`)
 
-		if (!levels) return this.renderDefault();
-		else return this.renderLevels(levels);
+		if (!levels) return this.renderDefault()
+		else return this.renderLevels(levels)
 	}
 }
 
 const mapStateToProps = state => ({
 	...state.view,
+	...state.content,
 	...state.lessons,
-});
+})
 
-export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(LessonsContent));
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(LessonsContent))
