@@ -1,3 +1,9 @@
+const content = {
+	getContentLoading: true,
+	getContentError: null,
+	content: null,
+};
+
 const account = {
 	loading: false,
 	error: null,
@@ -60,6 +66,7 @@ const view = {
 };
 
 export default {
+	content,
 	account,
 	feeds,
 	forms,

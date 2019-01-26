@@ -32,11 +32,9 @@ const styles = theme => ({
 });
 
 class Forms extends React.Component {
-	static async getInitialProps({reduxStore, isServer}) {
-		// TODO: Doesn't render serverside
+	static async getInitialProps({reduxStore}) {
 		await reduxStore.dispatch(getFormTypes());
 		await reduxStore.dispatch(getForms());
-		return isServer;
 	}
 
 	handleEdit = (form) => () => {

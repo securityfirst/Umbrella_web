@@ -10,8 +10,7 @@ export const getLessons = () => {
 		const state = getState();
 
 		if (state.lessons.lessons) {
-			dispatch(fulfilled(lessonsTypes.GET_LESSONS, state.lessons.lessons));
-			return;
+			return dispatch(fulfilled(lessonsTypes.GET_LESSONS, state.lessons.lessons));
 		}
 
 		await fetch(`${process.env.ROOT}/api/github/tree`)

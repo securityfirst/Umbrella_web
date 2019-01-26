@@ -33,20 +33,14 @@ const styles = theme => ({
 
 class Checklists extends React.Component {
 	static async getInitialProps({reduxStore, isServer}) {
-		// TODO: Doesn't render serverside
 		await reduxStore.dispatch(getSystemChecklists());
-		return isServer;
-	}
-
-	componentWillMount() {
-		this.props.dispatch(getSystemChecklists());
 	}
 
 	state = {
 		tabIndex: 0
-	};
+	}
 
-	handleTabSelect = (e, v) => this.setState({tabIndex: v});
+	handleTabSelect = (e, v) => this.setState({tabIndex: v})
 
 	renderOverview = () => {
 		const { classes, getSystemChecklistsLoading, getSystemChecklistsError, systemChecklists } = this.props;

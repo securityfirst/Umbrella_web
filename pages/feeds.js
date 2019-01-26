@@ -24,21 +24,19 @@ const styles = theme => ({
 
 class Feeds extends React.Component {
 	static async getInitialProps({reduxStore, isServer}) {
-		// TODO: Doesn't render serverside
-		await reduxStore.dispatch(getFeeds());
-		return isServer;
+		await reduxStore.dispatch(getFeeds())
 	}
 
 	state = {
 		isEdit: false,
 		tabIndex: 0,
-	};
+	}
 
 	handleTabSelect = (e, v) => {
 		let state = {tabIndex: v};
 		if (v !== 0) state['isEdit'] = false;
 		this.setState(state);
-	};
+	}
 
 	renderContent = () => {
 		const { isEdit, tabIndex } = this.state;

@@ -1,3 +1,7 @@
+export const contentTypes = {
+	GET_CONTENT: 'GET_CONTENT',
+};
+
 export const accountTypes = {
 	LOGIN: 'LOGIN',
 	LOGOUT: 'LOGOUT',

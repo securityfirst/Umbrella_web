@@ -8,6 +8,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { getPageContext } from '../lib/mui';
 
+import { getContent } from '../store/actions/content';
+
 class MyApp extends App {
 	constructor(props) {
 		super(props);
@@ -15,6 +17,9 @@ class MyApp extends App {
 	}
 
 	static async getInitialProps({Component, router, ctx}) {
+		// global data
+		await ctx.reduxStore.dispatch(getContent());
+
 		let pageProps = {};
 
 		if (Component.getInitialProps) {
@@ -32,6 +37,7 @@ class MyApp extends App {
 			jssStyles.parentNode.removeChild(jssStyles);
 		}
 	}
+
 	render () {
 		const {Component, pageProps, reduxStore} = this.props;
 

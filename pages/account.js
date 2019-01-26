@@ -24,11 +24,11 @@ const styles = theme => ({
 class Account extends React.Component {
 	state = {
 		expanded: false,
-	};
+	}
 
 	handleChange = i => (e, expanded) => {
 		this.setState({expanded: expanded ? i : false});
-	};
+	}
 
 	render() {
 		const { classes } = this.props;

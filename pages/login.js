@@ -52,7 +52,7 @@ class Login extends React.Component {
 		password: '',
 		error: false,
 		errorMessage: null,
-	};
+	}
 
 	handleLoginSubmit = () => {
 		const { password } = this.state;
