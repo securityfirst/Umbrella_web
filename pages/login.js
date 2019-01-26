@@ -1,18 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import FormControl from '@material-ui/core/FormControl';
-import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import FormControl from '@material-ui/core/FormControl'
+import Button from '@material-ui/core/Button'
 
-import Layout from '../components/layout';
-import FormControlInput from '../components/reusables/FormControlInput';
+import Layout from '../components/layout'
+import FormControlInput from '../components/reusables/FormControlInput'
 
-import { contentStyles } from '../utils/view';
+import { contentStyles } from '../utils/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -45,7 +45,7 @@ const styles = theme => ({
 	loginButtonText: {
 		color: theme.palette.common.white,
 	},
-});
+})
 
 class Login extends React.Component {
 	state = {
@@ -55,23 +55,23 @@ class Login extends React.Component {
 	}
 
 	handleLoginSubmit = () => {
-		const { password } = this.state;
+		const { password } = this.state
 
 		if (!password || !password.length) {
 			this.setState({
 				error: true,
 				errorMessage: 'Password is required',
-			});
+			})
 
-			return;
+			return
 		}
 	}
 
-	removeError = () => this.setState({error: false, errorMessage: null});
+	removeError = () => this.setState({error: false, errorMessage: null})
 
 	render() {
-		const { classes } = this.props;
-		const { password, error, errorMessage } = this.state;
+		const { classes } = this.props
+		const { password, error, errorMessage } = this.state
 
 		return (
 			<Layout title="Umbrella | Login" description="Umbrella web application">
@@ -112,10 +112,10 @@ class Login extends React.Component {
 					</Paper>
 				</div>
 			</Layout>
-		);
+		)
 	}
 }
 
-const mapStateToProps = state => ({...state.account});
+const mapStateToProps = state => ({...state.account})
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Login));
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Login))

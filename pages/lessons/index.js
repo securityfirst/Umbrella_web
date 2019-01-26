@@ -1,41 +1,41 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import 'isomorphic-unfetch';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import 'isomorphic-unfetch'
 
-import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
-import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import Fab from '@material-ui/core/Fab';
+import { withStyles } from '@material-ui/core/styles'
+import classNames from 'classnames'
+import Typography from '@material-ui/core/Typography'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import Collapse from '@material-ui/core/Collapse'
+import Fab from '@material-ui/core/Fab'
 
-import BookmarkIcon from '@material-ui/icons/Bookmark';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import BookmarkIcon from '@material-ui/icons/Bookmark'
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
 
-import Layout from '../../components/layout';
-import Loading from '../../components/reusables/Loading';
-import ErrorMessage from '../../components/reusables/ErrorMessage';
-import LessonsFavorites from '../../components/lessons/LessonsFavorites';
-import LessonLevel from '../../components/lessons/LessonLevel';
-import LessonsContent from '../../components/lessons/LessonsContent';
-import LessonCard from '../../components/lessons/LessonCard';
+import Layout from '../../components/layout'
+import Loading from '../../components/reusables/Loading'
+import ErrorMessage from '../../components/reusables/ErrorMessage'
+import LessonsFavorites from '../../components/lessons/LessonsFavorites'
+import LessonLevel from '../../components/lessons/LessonLevel'
+import LessonsContent from '../../components/lessons/LessonsContent'
+import LessonCard from '../../components/lessons/LessonCard'
 
-import yellow from '@material-ui/core/colors/yellow';
+import yellow from '@material-ui/core/colors/yellow'
 
-import { contentStyles } from '../../utils/view';
+import { contentStyles } from '../../utils/view'
 
-import { getLessonFile, getLessonsFavorites, setLessonsGlossaryIndex } from '../../store/actions/lessons';
-import { setLessonsContentType, setLessonsContentPath, toggleLessonFileView, toggleLessonsFavoritesView } from '../../store/actions/view';
+import { getLessonFile, getLessonsFavorites, setLessonsGlossaryIndex } from '../../store/actions/lessons'
+import { setLessonsContentType, setLessonsContentPath, toggleLessonFileView, toggleLessonsFavoritesView } from '../../store/actions/view'
 
 
-const menuWidth = 300;
+const menuWidth = 300
 
-const glossaryIndex = ['A-D', 'E-H', 'I-L', 'M-P', 'Q-T', 'U-Z'];
+const glossaryIndex = ['A-D', 'E-H', 'I-L', 'M-P', 'Q-T', 'U-Z']
 
 const styles = theme => ({
 	...contentStyles(theme, {
@@ -118,7 +118,7 @@ const styles = theme => ({
 			backgroundColor: theme.palette.primary.main,
 		},
 	},
-});
+})
 
 class Lessons extends React.Component {
 	state = {
@@ -128,60 +128,60 @@ class Lessons extends React.Component {
 	}
 
 	handleFavoritesSelect = () => {
-		const { dispatch, lessonsFavoritesView } = this.props;
+		const { dispatch, lessonsFavoritesView } = this.props
 
-		// dispatch(getLessonsFavorites());
+		// dispatch(getLessonsFavorites())
 
 		if (!lessonsFavoritesView) {
-			dispatch(toggleLessonsFavoritesView(true));
+			dispatch(toggleLessonsFavoritesView(true))
 		}
 	}
 
 	handleCategorySelect = category => e => {
-		const { dispatch, content, locale } = this.props;
-		const keys = Object.keys(content[locale][category]);
+		const { dispatch, content, locale } = this.props
+		const keys = Object.keys(content[locale][category])
 
 		if (category !== 'glossary' && keys.length === 1 && keys[0] === "content") {
-			const file = content[locale][category].content.find(file => file.filename.indexOf('.md') > -1);
+			const file = content[locale][category].content.find(file => file.filename.indexOf('.md') > -1)
 
-			dispatch(toggleLessonsFavoritesView(false));
-			dispatch(toggleLessonFileView(true));
-			dispatch(getLessonFile(file.sha));
+			dispatch(toggleLessonsFavoritesView(false))
+			dispatch(toggleLessonFileView(true))
+			dispatch(getLessonFile(file.sha))
 		} else {
-			if (category == this.state.categorySelected) this.setState({categorySelected: null});
-			else this.setState({categorySelected: category});
+			if (category == this.state.categorySelected) this.setState({categorySelected: null})
+			else this.setState({categorySelected: category})
 		}
 	}
 
 	handleSubcategorySelect = subcategory => e => {
-		const { dispatch } = this.props;
-		const { categorySelected } = this.state;
+		const { dispatch } = this.props
+		const { categorySelected } = this.state
 
-		dispatch(toggleLessonsFavoritesView(false));
-		dispatch(toggleLessonFileView(false));
+		dispatch(toggleLessonsFavoritesView(false))
+		dispatch(toggleLessonFileView(false))
 
 		this.setState(
 			{subcategorySelected: subcategory}, 
 			() => {
-				dispatch(setLessonsContentType('levels'));
-				dispatch(setLessonsContentPath(`${categorySelected}.${subcategory}`));
+				dispatch(setLessonsContentType('levels'))
+				dispatch(setLessonsContentPath(`${categorySelected}.${subcategory}`))
 			}
-		);
+		)
 	}
 
 	handleGlossarySelect = index => () => {
-		const { dispatch } = this.props;
+		const { dispatch } = this.props
 		
-		dispatch(toggleLessonsFavoritesView(false));
-		dispatch(setLessonsGlossaryIndex(index));
-		dispatch(setLessonsContentType('levels'));
-		dispatch(setLessonsContentPath(`glossary.${index}`));
+		dispatch(toggleLessonsFavoritesView(false))
+		dispatch(setLessonsGlossaryIndex(index))
+		dispatch(setLessonsContentType('levels'))
+		dispatch(setLessonsContentPath(`glossary.${index}`))
 
-		this.setState({subcategorySelected: 'glossary'});
+		this.setState({subcategorySelected: 'glossary'})
 	}
 
 	renderLevel = () => {
-		const { classes, currentLesson } = this.props;
+		const { classes, currentLesson } = this.props
 
 		return (
 			<Fab 
@@ -191,11 +191,11 @@ class Lessons extends React.Component {
 				disableFocusRipple
 				disableRipple
 			>{currentLesson.level}</Fab>
-		);
+		)
 	}
 
 	renderMenuGlossary = isSelected => {
-		const { classes } = this.props;
+		const { classes } = this.props
 
 		return (
 			<Collapse in={isSelected} timeout="auto" unmountOnExit>
@@ -207,12 +207,12 @@ class Lessons extends React.Component {
 					))}
 				</List>
 			</Collapse>
-		);
+		)
 	}
 
 	renderMenuSubcategories = (subcategories, isSelected) => {
-		const { classes } = this.props;
-		const { subcategorySelected } = this.state;
+		const { classes } = this.props
+		const { subcategorySelected } = this.state
 
 		return (
 			<Collapse in={isSelected} timeout="auto" unmountOnExit>
@@ -229,18 +229,18 @@ class Lessons extends React.Component {
 					))}
 				</List>
 			</Collapse>
-		);
+		)
 	}
 
 	renderMenuCategory = (category, i) => {
-		const { classes, content, locale } = this.props;
-		const { categorySelected } = this.state;
+		const { classes, content, locale } = this.props
+		const { categorySelected } = this.state
 
-		if (category == "content" || category == "forms") return null;
+		if (category == "content" || category == "forms") return null
 
-		const isSelected = categorySelected == category;
-		const isGlossary = category === 'glossary';
-		const subcategories = Object.keys(content[locale][category]).filter(subcategory => subcategory != "content");
+		const isSelected = categorySelected == category
+		const isGlossary = category === 'glossary'
+		const subcategories = Object.keys(content[locale][category]).filter(subcategory => subcategory != "content")
 
 		return (
 			<div key={i} className={isSelected ? classes.menuListItemSelected : ''}>
@@ -263,16 +263,16 @@ class Lessons extends React.Component {
 						: null
 				}
 			</div>
-		);
+		)
 	}
 
 	renderMenuList = () => {
-		const { classes, locale, content, getContentLoading, getContentError, lessonsMenuOpened, currentLesson } = this.props;
-		const { categorySelected } = this.state;
+		const { classes, locale, content, getContentLoading, getContentError, lessonsMenuOpened, currentLesson } = this.props
+		const { categorySelected } = this.state
 
-		if (getContentLoading) return <Loading />;
-		else if (getContentError) return <ErrorMessage error={getContentError} />;
-		else if (currentLesson) return null;
+		if (getContentLoading) return <Loading />
+		else if (getContentError) return <ErrorMessage error={getContentError} />
+		else if (currentLesson) return null
 
 		return (
 			<List
@@ -294,20 +294,20 @@ class Lessons extends React.Component {
 
 				{Object.keys(content[locale]).map(this.renderMenuCategory)}
 			</List>
-		);
+		)
 	}
 
 	renderContent = () => {
-		const { currentLesson, lessonsFavoritesView, lessonFileView } = this.props;
+		const { currentLesson, lessonsFavoritesView, lessonFileView } = this.props
 
-		if (lessonsFavoritesView) return <LessonsFavorites />;
-		else if (lessonFileView) return <LessonCard />;
-		else if (currentLesson) return <LessonLevel />;
-		else return <LessonsContent />;
+		if (lessonsFavoritesView) return <LessonsFavorites />
+		else if (lessonFileView) return <LessonCard />
+		else if (currentLesson) return <LessonLevel />
+		else return <LessonsContent />
 	}
 
 	render() {
-		const { classes, lessonsContentType, currentLesson } = this.props;
+		const { classes, lessonsContentType, currentLesson } = this.props
 
 		return (
 			<Layout title="Umbrella | Lessons" description="Umbrella web application">
@@ -321,7 +321,7 @@ class Lessons extends React.Component {
 					</div>
 				</div>
 			</Layout>
-		);
+		)
 	}
 }
 
@@ -329,6 +329,6 @@ const mapStateToProps = state => ({
 	...state.view,
 	...state.content,
 	...state.lessons,
-});
+})
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Lessons));
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Lessons))

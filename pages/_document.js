@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Document, { Head, Main, NextScript } from 'next/document';
-import flush from 'styled-jsx/server';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Document, { Head, Main, NextScript } from 'next/document'
+import flush from 'styled-jsx/server'
 
 class MyDocument extends Document {
 	render() {
-		const { pageContext } = this.props;
+		const { pageContext } = this.props
 
 		return (
 			<html lang="en" dir="ltr">
@@ -23,7 +23,7 @@ class MyDocument extends Document {
 					<NextScript />
 				</body>
 			</html>
-		);
+		)
 	}
 }
 
@@ -51,20 +51,20 @@ MyDocument.getInitialProps = ({renderPage}) => {
 	// 4. page.render
 
 	// Render app and page and get the context of the page with collected side effects.
-	let pageContext;
+	let pageContext
 
 	const page = renderPage(Component => {
 		const WrappedComponent = props => {
-			pageContext = props.pageContext;
-			return <Component {...props} />;
-		};
+			pageContext = props.pageContext
+			return <Component {...props} />
+		}
 
 		WrappedComponent.propTypes = {
 			pageContext: PropTypes.object.isRequired,
-		};
+		}
 
-		return WrappedComponent;
-	});
+		return WrappedComponent
+	})
 
 	return {
 		...page,
@@ -80,7 +80,7 @@ MyDocument.getInitialProps = ({renderPage}) => {
 				{flush() || null}
 			</React.Fragment>
 		),
-	};
-};
+	}
+}
 
-export default MyDocument;
+export default MyDocument

@@ -1,25 +1,25 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
-import { withStyles } from '@material-ui/core/styles';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles'
+import Stepper from '@material-ui/core/Stepper'
+import Step from '@material-ui/core/Step'
+import StepLabel from '@material-ui/core/StepLabel'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 
-import Layout from '../../components/layout';
-import FormsNewContact from '../../components/forms/FormsNewContact';
-import FormsNewIncident from '../../components/forms/FormsNewIncident';
-import FormsNewImpact from '../../components/forms/FormsNewImpact';
-import FormsNewData from '../../components/forms/FormsNewData';
-import FormsNewSubmit from '../../components/forms/FormsNewSubmit';
+import Layout from '../../components/layout'
+import FormsNewContact from '../../components/forms/FormsNewContact'
+import FormsNewIncident from '../../components/forms/FormsNewIncident'
+import FormsNewImpact from '../../components/forms/FormsNewImpact'
+import FormsNewData from '../../components/forms/FormsNewData'
+import FormsNewSubmit from '../../components/forms/FormsNewSubmit'
 
-import { contentStyles } from '../../utils/view';
+import { contentStyles } from '../../utils/view'
 
-import { resetPostForm } from '../../store/actions/forms';
+import { resetPostForm } from '../../store/actions/forms'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -50,9 +50,9 @@ const styles = theme => ({
 		marginTop: theme.spacing.unit,
 		marginBottom: theme.spacing.unit,
 	},
-});
+})
 
-const steps = ['Contact', 'Incident', 'Impact', 'Data'];
+const steps = ['Contact', 'Incident', 'Impact', 'Data']
 
 class FormsNew extends React.Component {
 	state = {
@@ -66,15 +66,15 @@ class FormsNew extends React.Component {
 	}
 
 	handleNext = (formName, form) => {
-		const { activeStep } = this.state;
-		let { skipped, progress } = this.state;
-		let newProgress = (progress);
+		const { activeStep } = this.state
+		let { skipped, progress } = this.state
+		let newProgress = (progress)
 
 		if (this.isStepSkipped(activeStep)) {
-			skipped = new Set(skipped.values());
-			skipped.delete(activeStep);
+			skipped = new Set(skipped.values())
+			skipped.delete(activeStep)
 		} else {
-			newProgress += 25;
+			newProgress += 25
 		}
 
 		this.setState({
@@ -82,7 +82,7 @@ class FormsNew extends React.Component {
 			progress: newProgress,
 			skipped,
 			[formName]: form
-		});
+		})
 	}
 
 	handleBack = (formName, form) => {
@@ -90,28 +90,28 @@ class FormsNew extends React.Component {
 			activeStep: state.activeStep - 1, 
 			progress: state.progress - 25,
 			[formName]: form,
-		}));
+		}))
 	}
 
 	handleSkip = () => {
-		const { activeStep } = this.state;
+		const { activeStep } = this.state
 		
 		if (!this.isStepOptional(activeStep)) {
 			// You probably want to guard against something like this,
 			// it should never occur unless someone's actively trying to break something.
-			throw new Error("You can't skip a step that isn't optional.");
+			throw new Error("You can't skip a step that isn't optional.")
 		}
 
 		this.setState(state => {
-			const skipped = new Set(state.skipped.values());
+			const skipped = new Set(state.skipped.values())
 			
-			skipped.add(activeStep);
+			skipped.add(activeStep)
 			
 			return {
 				activeStep: state.activeStep + 1,
 				skipped,
-			};
-		});
+			}
+		})
 	}
 
 	handleReset = () => this.setState({activeStep: 0})
@@ -127,41 +127,41 @@ class FormsNew extends React.Component {
 			incidentForm: null,
 			impactForm: null,
 			dataForm: null,
-		});
+		})
 
-		this.props.dispatch(resetPostForm());
+		this.props.dispatch(resetPostForm())
 	}
 
 	renderStage = () => {
-		const { activeStep, contactForm, incidentForm, impactForm, dataForm } = this.state;
+		const { activeStep, contactForm, incidentForm, impactForm, dataForm } = this.state
 
 		switch (activeStep) {
-			case 0: return <FormsNewContact form={contactForm} onSubmit={form => this.handleNext('contactForm', form)} />;
-			case 1: return <FormsNewIncident form={incidentForm} onGoBack={form => this.handleBack('incidentForm', form)} onSubmit={form => this.handleNext('incidentForm', form)} />;
-			case 2: return <FormsNewImpact form={impactForm} onGoBack={form => this.handleBack('impactForm', form)} onSubmit={form => this.handleNext('impactForm', form)} />;
-			case 3: return <FormsNewData form={dataForm} onGoBack={form => this.handleBack('dataForm', form)} onSubmit={form => this.handleNext('dataForm', form)} />;
+			case 0: return <FormsNewContact form={contactForm} onSubmit={form => this.handleNext('contactForm', form)} />
+			case 1: return <FormsNewIncident form={incidentForm} onGoBack={form => this.handleBack('incidentForm', form)} onSubmit={form => this.handleNext('incidentForm', form)} />
+			case 2: return <FormsNewImpact form={impactForm} onGoBack={form => this.handleBack('impactForm', form)} onSubmit={form => this.handleNext('impactForm', form)} />
+			case 3: return <FormsNewData form={dataForm} onGoBack={form => this.handleBack('dataForm', form)} onSubmit={form => this.handleNext('dataForm', form)} />
 			case 4: return <FormsNewSubmit forms={{contactForm, incidentForm, impactForm, dataForm}} onSuccess={this.onSubmitSuccess} />
 		}
 	}
 
 	render() {
-		const { classes } = this.props;
-		const { activeStep, progress } = this.state;
+		const { classes } = this.props
+		const { activeStep, progress } = this.state
 
 		return (
 			<Layout title="Umbrella | Forms - New" description="Umbrella web application">
 				<div className={classes.stepperWrapper}>
 					<Stepper className={classes.stepper} activeStep={activeStep}>
 						{steps.map((label, index) => {
-							let props = {};
+							let props = {}
 
-							if (this.isStepSkipped(index)) props.completed = false;
+							if (this.isStepSkipped(index)) props.completed = false
 
 							return (
 								<Step key={label} {...props}>
 									<StepLabel>{label}</StepLabel>
 								</Step>
-							);
+							)
 						})}
 					</Stepper>
 				</div>
@@ -184,8 +184,8 @@ class FormsNew extends React.Component {
 					{this.renderStage()}
 				</div>
 			</Layout>
-		);
+		)
 	}
 }
 
-export default connect()(withStyles(styles, { withTheme: true })(FormsNew));
+export default connect()(withStyles(styles, { withTheme: true })(FormsNew))
