@@ -3,42 +3,25 @@ import 'isomorphic-unfetch';
 import { lessonsTypes, viewTypes } from '../types.js';
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
 
-export const getLessons = () => {
-	return async (dispatch, getState) => {
-		dispatch(pending(lessonsTypes.GET_LESSONS));
-
-		const state = getState();
-
-		if (state.lessons.lessons) {
-			return dispatch(fulfilled(lessonsTypes.GET_LESSONS, state.lessons.lessons));
-		}
-
-		await fetch(`${process.env.ROOT}/api/github/tree`)
-			.then(res => res.json())
-			.then(content => dispatch(fulfilled(lessonsTypes.GET_LESSONS, content)))
-			.catch(err => dispatch(rejected(lessonsTypes.GET_LESSONS, err)));
-	}
-}
-
 export const setLesson = paths => {
 	return (dispatch, getState) => {
 		const state = getState();
-		const { lessons } = state.lessons;
+		const { content } = state.content;
 		const { locale } = state.view;
 
 		let index = 0;
-		let content = {...lessons}[locale];
+		let lesson = {...content}[locale];
 
 		while (index < paths.length) {
-			content = content[paths[index]];
+			lesson = lesson[paths[index]];
 			index++;
 		}
 
-		content = [...content.content];
-		content = {
+		lesson = [...lesson.content];
+		lesson = {
 			level: paths[paths.length - 1],
 			path: `../../static/assets/content/${locale}/${paths.join('/')}`,
-			files: content.reduce((list, c) => {
+			files: lesson.reduce((list, c) => {
 				if (c.filename.indexOf('s_') === 0) {
 					list.push({
 						name: c.filename,
@@ -48,10 +31,10 @@ export const setLesson = paths => {
 
 				return list;
 			}, []),
-			checklist: content.find(c => c.filename.indexOf('c_') > -1)
+			checklist: lesson.find(c => c.filename.indexOf('c_') > -1)
 		};
 
-		dispatch({type: lessonsTypes.SET_LESSON, payload: content});
+		dispatch({type: lessonsTypes.SET_LESSON, payload: lesson});
 	}
 }
 
@@ -62,15 +45,15 @@ export const getLessonsFavorites = () => {
 export const setLessonsGlossaryIndex = index => {
 	return (dispatch, getState) => {
 		const state = getState();
-		const { lessons } = state.lessons;
+		const { content } = state.content;
 		const { locale } = state.view;
 		const range = index.toLowerCase().split("-");
 
-		let content = [...lessons[locale].glossary.content];
+		let glossary = [...content[locale].glossary.content];
 
-		content = {
+		glossary = {
 			path: `../../static/assets/content/${locale}/glossary`,
-			files: content.reduce((list, c) => {
+			files: glossary.reduce((list, c) => {
 
 				if (
 					c.filename.indexOf('s_') === 0 && // if it's a file
@@ -88,7 +71,7 @@ export const setLessonsGlossaryIndex = index => {
 			checklist: null
 		};
 
-		dispatch({type: lessonsTypes.SET_LESSON, payload: content});
+		dispatch({type: lessonsTypes.SET_LESSON, payload: glossary});
 	}
 }
 

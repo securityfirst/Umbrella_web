@@ -29,19 +29,8 @@ import yellow from '@material-ui/core/colors/yellow';
 
 import { contentStyles } from '../../utils/view';
 
-import { 
-	getLessons, 
-	getLessonFile, 
-	getLessonsFavorites, 
-	setLessonsGlossaryIndex 
-} from '../../store/actions/lessons';
-
-import { 
-	setLessonsContentType, 
-	setLessonsContentPath, 
-	toggleLessonFileView, 
-	toggleLessonsFavoritesView 
-} from '../../store/actions/view';
+import { getLessonFile, getLessonsFavorites, setLessonsGlossaryIndex } from '../../store/actions/lessons';
+import { setLessonsContentType, setLessonsContentPath, toggleLessonFileView, toggleLessonsFavoritesView } from '../../store/actions/view';
 
 
 const menuWidth = 300;
@@ -132,11 +121,6 @@ const styles = theme => ({
 });
 
 class Lessons extends React.Component {
-	static async getInitialProps({isServer, reduxStore}) {
-		await reduxStore.dispatch(getLessons());
-		return isServer;
-	}
-
 	state = {
 		categorySelected: null,
 		subcategorySelected: null,
@@ -154,11 +138,11 @@ class Lessons extends React.Component {
 	}
 
 	handleCategorySelect = category => e => {
-		const { dispatch, lessons, locale } = this.props;
-		const keys = Object.keys(lessons[locale][category]);
+		const { dispatch, content, locale } = this.props;
+		const keys = Object.keys(content[locale][category]);
 
 		if (category !== 'glossary' && keys.length === 1 && keys[0] === "content") {
-			const file = lessons[locale][category].content.find(file => file.filename.indexOf('.md') > -1);
+			const file = content[locale][category].content.find(file => file.filename.indexOf('.md') > -1);
 
 			dispatch(toggleLessonsFavoritesView(false));
 			dispatch(toggleLessonFileView(true));
@@ -170,7 +154,7 @@ class Lessons extends React.Component {
 	}
 
 	handleSubcategorySelect = subcategory => e => {
-		const { dispatch, lessons } = this.props;
+		const { dispatch } = this.props;
 		const { categorySelected } = this.state;
 
 		dispatch(toggleLessonsFavoritesView(false));
@@ -249,14 +233,14 @@ class Lessons extends React.Component {
 	}
 
 	renderMenuCategory = (category, i) => {
-		const { classes, lessons, locale } = this.props;
+		const { classes, content, locale } = this.props;
 		const { categorySelected } = this.state;
 
 		if (category == "content" || category == "forms") return null;
 
 		const isSelected = categorySelected == category;
 		const isGlossary = category === 'glossary';
-		const subcategories = Object.keys(lessons[locale][category]).filter(subcategory => subcategory != "content");
+		const subcategories = Object.keys(content[locale][category]).filter(subcategory => subcategory != "content");
 
 		return (
 			<div key={i} className={isSelected ? classes.menuListItemSelected : ''}>
@@ -283,11 +267,11 @@ class Lessons extends React.Component {
 	}
 
 	renderMenuList = () => {
-		const { classes, lessonsMenuOpened, getLessonsLoading, getLessonsError, lessons, currentLesson, locale } = this.props;
+		const { classes, locale, content, getContentLoading, getContentError, lessonsMenuOpened, currentLesson } = this.props;
 		const { categorySelected } = this.state;
 
-		if (getLessonsLoading) return <Loading />;
-		else if (getLessonsError) return <ErrorMessage error={getLessonsError} />;
+		if (getContentLoading) return <Loading />;
+		else if (getContentError) return <ErrorMessage error={getContentError} />;
 		else if (currentLesson) return null;
 
 		return (
@@ -308,7 +292,7 @@ class Lessons extends React.Component {
 					</ListItem>
 				</div>
 
-				{Object.keys(lessons[locale]).map(this.renderMenuCategory)}
+				{Object.keys(content[locale]).map(this.renderMenuCategory)}
 			</List>
 		);
 	}
@@ -343,6 +327,7 @@ class Lessons extends React.Component {
 
 const mapStateToProps = state => ({
 	...state.view,
+	...state.content,
 	...state.lessons,
 });
 

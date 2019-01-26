@@ -128,9 +128,9 @@ class LessonsContent extends React.Component {
 	}
 
 	render() {
-		const { classes, lessons, lessonsContentPath, locale } = this.props;
+		const { classes, content, lessonsContentPath, locale } = this.props;
 
-		let levels = get(lessons, `${locale}.${lessonsContentPath}`);
+		let levels = get(content, `${locale}.${lessonsContentPath}`);
 
 		if (!levels) return this.renderDefault();
 		else return this.renderLevels(levels);
@@ -139,6 +139,7 @@ class LessonsContent extends React.Component {
 
 const mapStateToProps = state => ({
 	...state.view,
+	...state.content,
 	...state.lessons,
 });
 

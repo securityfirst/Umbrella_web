@@ -31,9 +31,6 @@ const forms = {
 };
 
 const lessons = {
-	getLessonsLoading: true,
-	getLessonsError: null,
-	lessons: null,
 	currentLesson: null,
 	lessonsGlossaryIndex: null,
 	getLessonChecklistLoading: false,

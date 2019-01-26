@@ -20,7 +20,6 @@ export const formsTypes = {
 };
 
 export const lessonsTypes = {
-	GET_LESSONS: 'GET_LESSONS',
 	SET_LESSON: 'SET_LESSON',
 	GET_LESSON_CHECKLIST: 'GET_LESSON_CHECKLIST',
 	GET_LESSON_FILE: 'GET_LESSON_FILE',
