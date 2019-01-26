@@ -3,10 +3,10 @@ export const formTypes = [
 	{id: 'physical_security', title: 'Physical Security Incident Reporting Form'},
 	{id: 'proof_of_life', title: 'Proof of Life Form'},
 	{id: 'travel_security', title: 'Travel Security Memo'},
-];
+]
 
 export const forms = [
 	{typeId: 'digital_security', status: 'active', form: {}},
 	{typeId: 'digital_security', status: 'active', form: {}},
 	{typeId: 'travel_security', status: 'completed', form: {}},
-];
+]
