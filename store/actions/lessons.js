@@ -1,23 +1,23 @@
-import 'isomorphic-unfetch';
+import 'isomorphic-unfetch'
 
-import { lessonsTypes, viewTypes } from '../types.js';
-import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js';
+import { lessonsTypes, viewTypes } from '../types.js'
+import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
 export const setLesson = paths => {
 	return (dispatch, getState) => {
-		const state = getState();
-		const { content } = state.content;
-		const { locale } = state.view;
+		const state = getState()
+		const { content } = state.content
+		const { locale } = state.view
 
-		let index = 0;
-		let lesson = {...content}[locale];
+		let index = 0
+		let lesson = {...content}[locale]
 
 		while (index < paths.length) {
-			lesson = lesson[paths[index]];
-			index++;
+			lesson = lesson[paths[index]]
+			index++
 		}
 
-		lesson = [...lesson.content];
+		lesson = [...lesson.content]
 		lesson = {
 			level: paths[paths.length - 1],
 			path: `../../static/assets/content/${locale}/${paths.join('/')}`,
@@ -26,15 +26,15 @@ export const setLesson = paths => {
 					list.push({
 						name: c.filename,
 						sha: c.sha,
-					});
+					})
 				}
 
-				return list;
+				return list
 			}, []),
 			checklist: lesson.find(c => c.filename.indexOf('c_') > -1)
-		};
+		}
 
-		dispatch({type: lessonsTypes.SET_LESSON, payload: lesson});
+		dispatch({type: lessonsTypes.SET_LESSON, payload: lesson})
 	}
 }
 
@@ -44,12 +44,12 @@ export const getLessonsFavorites = () => {
 
 export const setLessonsGlossaryIndex = index => {
 	return (dispatch, getState) => {
-		const state = getState();
-		const { content } = state.content;
-		const { locale } = state.view;
-		const range = index.toLowerCase().split("-");
+		const state = getState()
+		const { content } = state.content
+		const { locale } = state.view
+		const range = index.toLowerCase().split("-")
 
-		let glossary = [...content[locale].glossary.content];
+		let glossary = [...content[locale].glossary.content]
 
 		glossary = {
 			path: `../../static/assets/content/${locale}/glossary`,
@@ -63,51 +63,51 @@ export const setLessonsGlossaryIndex = index => {
 					list.push({
 						name: c.filename,
 						sha: c.sha,
-					});
+					})
 				}
 
-				return list;
+				return list
 			}, []),
 			checklist: null
-		};
+		}
 
-		dispatch({type: lessonsTypes.SET_LESSON, payload: glossary});
+		dispatch({type: lessonsTypes.SET_LESSON, payload: glossary})
 	}
 }
 
 export const getLessonChecklist = sha => {
 	return async (dispatch, getState) => {
-		dispatch(pending(lessonsTypes.GET_LESSON_CHECKLIST));
+		dispatch(pending(lessonsTypes.GET_LESSON_CHECKLIST))
 
 		await fetch(`${process.env.ROOT}/api/github/content/${sha}`)
 			.then(res => res.text())
 			.then(content => dispatch(fulfilled(lessonsTypes.GET_LESSON_CHECKLIST, content)))
-			.catch(err => dispatch(rejected(lessonsTypes.GET_LESSON_CHECKLIST, err)));
+			.catch(err => dispatch(rejected(lessonsTypes.GET_LESSON_CHECKLIST, err)))
 	}
 }
 
 export const getLessonFile = sha => {
 	return async (dispatch, getState) => {
-		dispatch(pending(lessonsTypes.GET_LESSON_FILE));
+		dispatch(pending(lessonsTypes.GET_LESSON_FILE))
 
 		await fetch(`${process.env.ROOT}/api/github/content/${sha}`)
 			.then(res => res.text())
 			.then(content => dispatch(fulfilled(lessonsTypes.GET_LESSON_FILE, content)))
-			.catch(err => dispatch(rejected(lessonsTypes.GET_LESSON_FILE, err)));
+			.catch(err => dispatch(rejected(lessonsTypes.GET_LESSON_FILE, err)))
 	}
 }
 
 export const closeLesson = () => {
-	return {type: lessonsTypes.CLOSE_LESSON};
+	return {type: lessonsTypes.CLOSE_LESSON}
 }
 
 export const closeLessonFile = () => {
-	return {type: lessonsTypes.CLOSE_LESSON_FILE};
+	return {type: lessonsTypes.CLOSE_LESSON_FILE}
 }
 
 export const resetLessons = () => {
 	return (dispatch, getState) => {
-		dispatch({type: lessonsTypes.RESET_LESSONS});
-		dispatch({type: viewTypes.RESET_LESSONS});
+		dispatch({type: lessonsTypes.RESET_LESSONS})
+		dispatch({type: viewTypes.RESET_LESSONS})
 	}
 }
