@@ -12,11 +12,9 @@ export const feedsTypes = {
 }
 
 export const formsTypes = {
-	GET_FORM_TYPES: 'GET_FORM_TYPES',
-	GET_FORMS: 'GET_FORMS',
+	GET_FORM: 'GET_FORM',
 	POST_FORM: 'POST_FORM',
 	RESET_POST_FORM: 'RESET_POST_FORM',
-	UPDATE_FORM: 'UPDATE_FORM',
 }
 
 export const lessonsTypes = {

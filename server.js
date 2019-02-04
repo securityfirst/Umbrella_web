@@ -71,7 +71,7 @@ app.prepare().then(() => {
 	server.get('/account', account.index(app))
 	server.get('/feeds', feeds.index(app))
 	server.get('/forms', forms.index(app))
-	server.get('/forms/new', forms.new(app))
+	server.get('/forms/:sha', forms.new(app))
 	server.get('/checklists', checklists.index(app))
 	server.get('/lessons', lessons.index(app))
 	// server.get('/lessons/card', lessons.card(app))

@@ -14,8 +14,6 @@ import AddButton from '../../components/reusables/AddButton'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 
-import { getFormTypes, getForms } from '../../store/actions/forms'
-
 const styles = theme => ({
 	...contentStyles(theme),
 	label: {
@@ -26,64 +24,64 @@ const styles = theme => ({
 		margin: '.75rem 0',
 		...paperStyles(theme),
 	},
+	formPanelTitle: {
+		textTransform: "capitalize",
+	},
 	formPanelButtonsWrapper: {
 		...buttonWrapperStyles(theme),
 	},
 })
 
 class Forms extends React.Component {
-	static async getInitialProps({reduxStore}) {
-		await reduxStore.dispatch(getFormTypes())
-		await reduxStore.dispatch(getForms())
-	}
-
-	handleEdit = (form) => () => {
+	handleEdit = form => () => {
 		alert("Edit " + form.typeId)
 	}
 
-	handleShare = (form) => () => {
+	handleShare = form => () => {
 		alert("Sharing " + form.typeId)
 	}
 
-	renderPanel = (form, i, isActive) => {
-		const { classes, formTypes } = this.props
+	renderPanel = (isActive) => (form, i) => {
+		const { classes } = this.props
 
-		const formType = formTypes.find(type => type.id === form.typeId)
+		if (form.filename.indexOf("f_") === 0) {
+			return (
+				<Paper key={i} className={classes.formPanel} square>
+					<Typography className={classes.formPanelTitle} variant="h6">
+						{form.filename.slice(2, form.filename.length - 4).replace(/-/g, " ")}
+					</Typography>
+					{/*<Typography paragraph>{formType.description}</Typography>*/}
 
-		return (
-			<Paper key={i} className={classes.formPanel} square>
-				<Typography variant="h6">{formType.title}</Typography>
-				<Typography paragraph>{formType.description}</Typography>
-
-				{!!isActive && <div className={classes.formPanelButtonsWrapper}>
-					<Button component="button" onClick={this.handleEdit(form)}>Edit</Button>
-					<Button color="primary" onClick={this.handleShare(form)}>Share</Button>
-				</div>}
-			</Paper>
-		)
+					{isActive 
+						? <div className={classes.formPanelButtonsWrapper}>
+							<Button component="button" onClick={this.handleEdit(form)}>Edit</Button>
+							<Button color="primary" onClick={this.handleShare(form)}>Share</Button>
+						</div>
+						: <div className={classes.formPanelButtonsWrapper}>
+							<Button color="primary" href={`/forms/${form.sha}`}>New</Button>
+						</div>
+					}
+				</Paper>
+			)
+		}
 	}
 
 	renderContent = () => {
-		const { classes, getFormTypesLoading, getFormTypesError, formTypes, getFormsLoading, getFormsError, forms } = this.props
+		const { classes, locale, content, getContentLoading, getContentError } = this.props
 
-		if (getFormTypesLoading || getFormsLoading) return <Loading />
-		else if (getFormTypesError || getFormsError) return <ErrorMessage error={getFormTypesError || getFormsError} />
-
-		let sorted = forms.reduce((set, form) => {
-			if (!set[form.status]) set[form.status] = []
-			set[form.status].push(form)
-			return set
-		}, {})
+		if (getContentLoading) return <Loading />
+		else if (getContentError) return <ErrorMessage error={getContentError} />
 
 		return (
 			<div className={classes.content}>
-				{(!!sorted.active && !!sorted.active.length) && <Typography className={classes.label} variant="subtitle1">Active</Typography>}
+				{/* TODO: Set up active form */}
+				{/*<Typography className={classes.label} variant="subtitle1">Active</Typography>*/}
 
-				{(!!sorted.active && !!sorted.active.length) && sorted.active.map((form, i) => this.renderPanel(form, i, true))}
+				{/*this.renderPanel(form, null, true)*/}
 
-				{(!!sorted.completed && !!sorted.completed.length) && <Typography className={classes.label} variant="subtitle1">All</Typography>}
+				<Typography className={classes.label} variant="subtitle1">All</Typography>
 
-				{(!!sorted.completed && !!sorted.completed.length) && sorted.completed.map((form, i) => this.renderPanel(form, i))}
+				{content[locale].forms.content.map(this.renderPanel(false))}
 			</div>
 		)
 	}
@@ -102,7 +100,8 @@ class Forms extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	...state.forms,
+	...state.view,
+	...state.content,
 })
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Forms))

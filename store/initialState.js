@@ -18,13 +18,9 @@ const feeds = {
 }
 
 const forms = {
-	getFormTypesLoading: true,
-	getFormTypesError: null,
-	formTypes: [],
-	getFormsLoading: true,
-	getFormsError: null,
-	getFormsSuccess: false,
-	forms: [],
+	getFormLoading: true,
+	getFormError: null,
+	form: null,
 	postFormLoading: false,
 	postFormError: null,
 	postFormSuccess: false,

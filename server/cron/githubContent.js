@@ -37,7 +37,7 @@ class GithubContent {
 		const job = new CronJob('0 0 0/1 1/1 * * *', () => {
 			console.log('[CRON] GITHUB_CONTENT: Starting job at', new Date())
 
-			if (!exists) this.clone()
+			if (!this.exists) this.clone()
 			else this.pull()
 		})
 

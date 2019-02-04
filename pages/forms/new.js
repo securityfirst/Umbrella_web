@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -7,19 +6,22 @@ import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import FormControl from '@material-ui/core/FormControl'
+import Button from '@material-ui/core/Button'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 import Layout from '../../components/layout'
-import FormsNewContact from '../../components/forms/FormsNewContact'
-import FormsNewIncident from '../../components/forms/FormsNewIncident'
-import FormsNewImpact from '../../components/forms/FormsNewImpact'
-import FormsNewData from '../../components/forms/FormsNewData'
-import FormsNewSubmit from '../../components/forms/FormsNewSubmit'
+import Loading from '../../components/reusables/Loading'
+import ErrorMessage from '../../components/reusables/ErrorMessage'
+import FormControlInput from '../../components/reusables/FormControlInput'
+import FormControlCheckboxes from '../../components/reusables/FormControlCheckboxes'
 
-import { contentStyles } from '../../utils/view'
+import teal from '@material-ui/core/colors/teal'
 
-import { resetPostForm } from '../../store/actions/forms'
+import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
+import { getForm, resetPostForm } from '../../store/actions/forms'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -43,126 +45,178 @@ const styles = theme => ({
 	percentage: {
 		marginTop: '1rem',
 	},
-	button: {
-		marginRight: theme.spacing.unit,
+	formWrapper: {
+		...paperStyles(theme),
 	},
-	instructions: {
-		marginTop: theme.spacing.unit,
-		marginBottom: theme.spacing.unit,
+	formControlInput: {
+		margin: '.5rem 0',
+	},
+	buttonsWrapper: {
+		margin: '1rem 0 0',
+		...buttonWrapperStyles(theme),
 	},
 })
 
-const steps = ['Contact', 'Incident', 'Impact', 'Data']
-
 class FormsNew extends React.Component {
-	state = {
-		activeStep: 0,
-		skipped: new Set(),
-		progress: 0,
-		contactForm: null,
-		incidentForm: null,
-		impactForm: null,
-		dataForm: null,
+	static async getInitialProps({reduxStore, query}) {
+		await reduxStore.dispatch(getForm(query.sha))
 	}
 
-	handleNext = (formName, form) => {
-		const { activeStep } = this.state
-		let { skipped, progress } = this.state
-		let newProgress = (progress)
+	state = {
+		activeStep: 0,
+		progress: 0,
+		formState: {},
+		error: null, 
+		errorMessage: null,
+	}
 
-		if (this.isStepSkipped(activeStep)) {
-			skipped = new Set(skipped.values())
-			skipped.delete(activeStep)
-		} else {
-			newProgress += 25
-		}
+	onNext = () => {
+		const { form } = this.props
+		const { activeStep, progress } = this.state
+
+		const stepCount = 100 / form.screens.length
 
 		this.setState({
 			activeStep: activeStep + 1,
-			progress: newProgress,
-			skipped,
-			[formName]: form
+			progress: progress + stepCount,
 		})
 	}
 
-	handleBack = (formName, form) => {
+	onBack = () => {
+		const { form } = this.props
+		const { activeStep, progress } = this.state
+
+		const stepCount = 100 / form.screens.length
+
 		this.setState(state => ({
-			activeStep: state.activeStep - 1, 
-			progress: state.progress - 25,
-			[formName]: form,
+			activeStep: activeStep - 1, 
+			progress: progress - stepCount,
 		}))
 	}
 
-	handleSkip = () => {
-		const { activeStep } = this.state
-		
-		if (!this.isStepOptional(activeStep)) {
-			// You probably want to guard against something like this,
-			// it should never occur unless someone's actively trying to break something.
-			throw new Error("You can't skip a step that isn't optional.")
+	onChange = (field, value) => {
+		const { formState } = this.state
+
+		let newValue;
+
+		switch (field.type) {
+			case 'text_input': 
+				newValue = value
+				break;
+			case 'multiple_choice':
+				let oldValue = formState[field.name] || []
+
+				if (oldValue.includes(value)) newValue = oldValue.filter(v => v !== value)
+				else newValue = oldValue.concat([value])
+
+				break;
 		}
 
-		this.setState(state => {
-			const skipped = new Set(state.skipped.values())
-			
-			skipped.add(activeStep)
-			
-			return {
-				activeStep: state.activeStep + 1,
-				skipped,
+		this.setState({
+			formState: {
+				...this.state.formState,
+				[field.name]: newValue
 			}
 		})
 	}
 
-	handleReset = () => this.setState({activeStep: 0})
-
-	isStepSkipped = (step) => this.state.skipped.has(step)
-
 	onSubmitSuccess = () => {
 		this.setState({
 			activeStep: 0,
-			skipped: new Set(),
 			progress: 0,
-			contactForm: null,
-			incidentForm: null,
-			impactForm: null,
-			dataForm: null,
 		})
 
 		this.props.dispatch(resetPostForm())
 	}
 
-	renderStage = () => {
-		const { activeStep, contactForm, incidentForm, impactForm, dataForm } = this.state
+	removeError = () => this.setState({error: null, errorMessage: null})
 
-		switch (activeStep) {
-			case 0: return <FormsNewContact form={contactForm} onSubmit={form => this.handleNext('contactForm', form)} />
-			case 1: return <FormsNewIncident form={incidentForm} onGoBack={form => this.handleBack('incidentForm', form)} onSubmit={form => this.handleNext('incidentForm', form)} />
-			case 2: return <FormsNewImpact form={impactForm} onGoBack={form => this.handleBack('impactForm', form)} onSubmit={form => this.handleNext('impactForm', form)} />
-			case 3: return <FormsNewData form={dataForm} onGoBack={form => this.handleBack('dataForm', form)} onSubmit={form => this.handleNext('dataForm', form)} />
-			case 4: return <FormsNewSubmit forms={{contactForm, incidentForm, impactForm, dataForm}} onSuccess={this.onSubmitSuccess} />
+	renderInput = (field, i) => {
+		const { classes } = this.props
+		const { formState, error, errorMessage } = this.state
+
+		switch (field.type) {
+			case 'text_input': 
+				return (
+					<FormControlInput 
+						className={classes.formControlInput}
+						id={`form-input-${field.label}`}
+						label={field.label}
+						value={formState[field.name]}
+						error={error}
+						errorMessage={errorMessage}
+						onChange={e => onChange(field, e.target.value)}
+						required
+					/>
+				)
+			case 'multiple_choice':
+				return (
+					<FormControlCheckboxes 
+						label={field.label}
+						options={field.options}
+						state={formState[field.name]}
+						error={error}
+						onChange={this.onChange}
+					/>
+				)
+			case 'text_area':
+				return (
+					<FormControlInput 
+						className={classes.formControlInput}
+						id={`form-input-${field.label}`}
+						label={field.label}
+						value={formState[field.name]}
+						error={error}
+						errorMessage={errorMessage}
+						onChange={e => onChange(field, e.target.value)}
+						required
+						multiline
+						rows={3}
+					/>
+				)
 		}
 	}
 
-	render() {
-		const { classes } = this.props
-		const { activeStep, progress } = this.state
+	renderForm = screen => {
+		const { classes, title } = this.props
 
 		return (
-			<Layout title="Umbrella | Forms - New" description="Umbrella web application">
+			<Paper className={classes.formWrapper} square>
+				<Typography variant="h6" color="primary">{screen.title}</Typography>
+
+				<form>
+					{screen.items.map(this.renderInput)}
+				</form>
+
+				<FormControl className={classes.buttonsWrapper} fullWidth>
+					<Button onClick={this.onBack}>Go Back</Button>
+
+					<ClickAwayListener onClickAway={this.removeError}>
+						<Button color="secondary" onClick={this.onNext}>Next</Button>
+					</ClickAwayListener>
+				</FormControl>
+			</Paper>
+		)
+	}
+
+	render() {
+		const { classes, getFormLoading, getFormError, form } = this.props
+		const { activeStep, progress } = this.state
+
+		if (getFormLoading) return <Loading />
+		else if (getFormError) return <ErrorMessage error={getFormError} />
+
+		const screen = form.screens[activeStep]
+
+		return (
+			<Layout title="Umbrella | New Form" description="Umbrella web application">
 				<div className={classes.stepperWrapper}>
 					<Stepper className={classes.stepper} activeStep={activeStep}>
-						{steps.map((label, index) => {
-							let props = {}
-
-							if (this.isStepSkipped(index)) props.completed = false
-
-							return (
-								<Step key={label} {...props}>
-									<StepLabel>{label}</StepLabel>
-								</Step>
-							)
-						})}
+						{form.screens.map((screen, i) => (
+							<Step key={i}>
+								<StepLabel>{form.screens.length <= 6 && screen.title}</StepLabel>
+							</Step>
+						))}
 					</Stepper>
 				</div>
 
@@ -181,11 +235,15 @@ class FormsNew extends React.Component {
 				<Typography className={classes.percentage} align="center" color="secondary">{progress}%</Typography>
 
 				<div className={classes.content}>
-					{this.renderStage()}
+					{this.renderForm(screen)}
 				</div>
 			</Layout>
 		)
 	}
 }
 
-export default connect()(withStyles(styles, { withTheme: true })(FormsNew))
+const mapStateToProps = state => ({
+	...state.forms
+})
+
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(FormsNew))

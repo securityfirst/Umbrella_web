@@ -7,5 +7,5 @@ exports.index = (app) => (req, res) => {
 
 exports.new = (app) => (req, res) => {
 	const actualPage = '/forms/new'
-	return renderAndCache(app, req, res, actualPage)
+	return renderAndCache(app, req, res, actualPage, {sha: req.params.sha})
 }

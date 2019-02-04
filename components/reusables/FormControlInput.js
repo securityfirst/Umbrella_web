@@ -7,21 +7,21 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import teal from '@material-ui/core/colors/teal'
 
 const styles = theme => ({
-	loginInput: {
+	input: {
 		height: 'initial',
 	},
-	loginLabel: {
-		'&$loginFocused': {
+	label: {
+		'&$focused': {
 			color: teal[500],
 		},
 	},
-	loginFocused: {},
-	loginUnderline: {
+	focused: {},
+	underline: {
 		'&:after': {
 			borderBottomColor: teal[500],
 		},
 	},
-	loginHelperText: {
+	helperText: {
 		height: 0,
 		minHeight: 0,
 		marginTop: 0,
@@ -45,8 +45,8 @@ const FormControlInput = (props) => {
 				htmlFor={id}
 				error={props.error}
 				classes={{
-					root: classes.loginLabel,
-					focused: classes.loginFocused,
+					root: classes.label,
+					focused: classes.focused,
 				}}
 			>
 				{label}
@@ -57,10 +57,10 @@ const FormControlInput = (props) => {
 				value={value} 
 				type={type || 'string'}
 				classes={{
-					underline: classes.loginUnderline,
+					underline: classes.underline,
 				}}
 				inputProps={{
-					className: classes.loginInput,
+					className: classes.input,
 					required: true,
 				}}
 				onChange={onChange}
@@ -70,7 +70,7 @@ const FormControlInput = (props) => {
 				multiline
 				{...inputProps}
 			/>
-			{!!error && <FormHelperText className={classes.loginHelperText}>{errorMessage}</FormHelperText>}
+			{!!error && <FormHelperText className={classes.helperText}>{errorMessage}</FormHelperText>}
 		</FormControl>
 	)
 }
