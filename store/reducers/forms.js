@@ -4,44 +4,25 @@ import initialState from '../initialState.js'
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
-		/* GET_FORM_TYPES */
-		case pending(formsTypes.GET_FORM_TYPES):
-			return {
-				...state,
-				getFormTypesLoading: true,
-			}
-		case rejected(formsTypes.GET_FORM_TYPES):
-			return {
-				...state,
-				getFormTypesLoading: false,
-				getFormTypesError: action.payload,
-			}
-		case fulfilled(formsTypes.GET_FORM_TYPES):
-			return {
-				...state,
-				getFormTypesLoading: false,
-				getFormTypesError: null,
-				formTypes: action.payload,
-			}
 
-		/* GET_FORMS */
-		case pending(formsTypes.GET_FORMS):
+		/* GET_FORM */
+		case pending(formsTypes.GET_FORM):
 			return {
 				...state,
-				getFormsLoading: true,
+				getFormLoading: true,
 			}
-		case rejected(formsTypes.GET_FORMS):
+		case rejected(formsTypes.GET_FORM):
 			return {
 				...state,
-				getFormsLoading: false,
-				getFormsError: action.payload,
+				getFormLoading: false,
+				getFormError: action.payload,
 			}
-		case fulfilled(formsTypes.GET_FORMS):
+		case fulfilled(formsTypes.GET_FORM):
 			return {
 				...state,
-				getFormsLoading: false,
-				getFormsError: null,
-				forms: action.payload,
+				getFormLoading: false,
+				getFormError: null,
+				form: action.payload,
 			}
 
 		/* POST_FORM */

@@ -1,31 +1,24 @@
 import 'isomorphic-unfetch'
+import YAML from 'yaml'
+import atob from 'atob'
 
 import { formsTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
-import { formTypes, forms } from '../../mock/forms'
+import { setAppbarTitle } from './view'
 
-export const getFormTypes = () => {
+export const getForm = sha => {
 	return async (dispatch, getState) => {
-		dispatch(pending(formsTypes.GET_FORM_TYPES))
+		dispatch(pending(formsTypes.GET_FORM))
 
-		/* TODO: Replace with API */
-		await fetch('https://jsonplaceholder.typicode.com/users')
-			.then(res => res.json())
-			.then(data => dispatch(fulfilled(formsTypes.GET_FORM_TYPES, formTypes)))
-			.catch(err => dispatch(rejected(formsTypes.GET_FORM_TYPES, err)))
-	}
-}
-
-export const getForms = () => {
-	return async (dispatch, getState) => {
-		dispatch(pending(formsTypes.GET_FORMS))
-
-		/* TODO: Replace with API */
-		await fetch('https://jsonplaceholder.typicode.com/users')
-			.then(res => res.json())
-			.then(data => dispatch(fulfilled(formsTypes.GET_FORMS, forms)))
-			.catch(err => dispatch(rejected(formsTypes.GET_FORMS, err)))
+		await fetch(`${process.env.ROOT}/api/github/content/${sha}`)
+			.then(res => res.text())
+			.then(content => {
+				const form = YAML.parse(atob(content))
+				dispatch(fulfilled(formsTypes.GET_FORM, form))
+				dispatch(setAppbarTitle(form.title))
+			})
+			.catch(err => dispatch(rejected(formsTypes.GET_FORM, err)))
 	}
 }
 
