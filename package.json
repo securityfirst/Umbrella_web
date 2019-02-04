@@ -44,14 +44,12 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "simple-git": "^1.107.0",
+    "terser": "^3.14.1",
     "yaml": "^1.2.1"
   },
   "devDependencies": {
     "nodemon": "^1.18.4",
     "raw-loader": "^1.0.0",
     "url-loader": "^1.1.2"
-  },
-  "resolutions": {
-    "terser": "3.14.1"
-  },
+  }
 }
