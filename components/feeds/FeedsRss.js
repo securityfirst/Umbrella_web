@@ -1,22 +1,30 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
 import AddButton from '../../components/reusables/AddButton'
 
+import { getRss } from '../../store/actions/feeds'
+
 const styles = theme => ({
 
 })
 
 class FeedsRss extends React.Component {
+	componentWillMount() {
+		this.props.dispatch(getRss())
+	}
+
 	handleAddRss = () => {
 
 	}
 
 	render() {
-		const { classes } = this.props
+		const { classes, rss } = this.props
+
+		console.log("rss: ", rss);
 
 		return (
 			<div>
@@ -39,4 +47,8 @@ class FeedsRss extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsRss)
+const mapStateToProps = state => ({
+	...state.feeds
+})
+
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(FeedsRss))

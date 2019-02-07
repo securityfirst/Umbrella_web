@@ -13,8 +13,16 @@ const account = {
 const feeds = {
 	loading: true,
 	error: null,
-	data: [],
-	current: null,
+	feeds: [],
+	getRssLoading: true,
+	getRssError: null,
+	rss: [],
+	rssSources: [
+		'https://threatpost.com/feed/',
+		'https://krebsonsecurity.com/feed/',
+		'https://www.aljazeera.com/xml/rss/all.xml',
+		'https://www.theguardian.com/world/rss',
+	],
 }
 
 const forms = {

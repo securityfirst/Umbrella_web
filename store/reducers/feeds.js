@@ -23,6 +23,34 @@ export default function reducer(state = initialState, action) {
 				getFeedsError: null,
 				feeds: action.payload,
 			}
+
+		/* GET_RSS */
+		case pending(feedsTypes.GET_RSS):
+			return {
+				...state,
+				getRssLoading: true,
+			}
+		case rejected(feedsTypes.GET_RSS):
+			return {
+				...state,
+				getRssLoading: false,
+				getRssError: action.payload,
+			}
+		case fulfilled(feedsTypes.GET_RSS):
+			return {
+				...state,
+				getRssLoading: false,
+				getRssError: null,
+				rss: action.payload,
+			}
+
+		/* SYNC_RSS_SOURCES */
+		case feedsTypes.SYNC_RSS_SOURCES:
+			return {
+				...state,
+				rssSources: state.feeds.rssSources.concat(action.payload),
+			}
+
 	}
 
 	return state

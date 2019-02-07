@@ -31,7 +31,7 @@ app.prepare().then(() => {
 	server.disable('x-powered-by')
 
 	// Server routes
-	const api = require('./server/routes/api')
+	const api = require('./server/api')
 
 	// Pages
 	const index = require('./server/routes/index')
