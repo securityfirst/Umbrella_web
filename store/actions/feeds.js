@@ -41,7 +41,6 @@ export const getRss = () => {
 				return res.json()
 			})
 			.then(data => {
-				console.log("data: ", data);
 				dispatch(fulfilled(feedsTypes.GET_RSS, data))
 			})
 			.catch(err => {

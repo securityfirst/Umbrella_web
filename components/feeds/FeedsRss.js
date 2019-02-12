@@ -2,17 +2,46 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
+import CardActionArea from '@material-ui/core/CardActionArea'
+import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
+import Paper from '@material-ui/core/Paper'
 
+import Loading from '../../components/reusables/Loading'
+import ErrorMessage from '../../components/reusables/ErrorMessage'
+import Marked from '../../components/reusables/Marked'
 import AddButton from '../../components/reusables/AddButton'
+
+import { contentStyles, paperStyles } from '../../utils/view'
 
 import { getRss } from '../../store/actions/feeds'
 
 const styles = theme => ({
-
+	...contentStyles(theme),
+	card: {
+		margin: '.75rem 0',
+		padding: 0,
+		// ...paperStyles(theme),
+	},
+	cardContent: {
+		padding: '1rem',
+	},
+	cardDescription: {
+		margin: '.5rem 0 0',
+		color: theme.palette.grey[600],
+	},
+	contentPanel: {
+		margin: '.75rem 0',
+		...paperStyles(theme),
+	},
 })
 
 class FeedsRss extends React.Component {
+	state = {
+		sourceSelected: null,
+	}
+
 	componentWillMount() {
 		this.props.dispatch(getRss())
 	}
@@ -21,25 +50,61 @@ class FeedsRss extends React.Component {
 
 	}
 
-	render() {
-		const { classes, rss } = this.props
+	handleSourceClick = source => () => {
+		this.setState({sourceSelected: source})
+	}
 
-		console.log("rss: ", rss);
+	handleArticleClick = article => () => {
+		const win = window.open(article.link, '_blank');
+  		win.focus();
+	}
+
+	renderSource = (source, i) => {
+		const { classes } = this.props
 
 		return (
-			<div>
-				<Typography paragraph>
-					<strong>FEEDS RSS</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-					incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-					elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-					hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-					velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-					Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-					viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-					Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-					at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-					ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-				</Typography>
+			<Card key={i} className={classes.card}>
+				<CardActionArea onClick={this.handleSourceClick(source)}>
+					<CardContent className={classes.cardContent}>
+						<Typography variant="h6">{source.title}</Typography>
+						<Typography className={classes.cardDescription} paragraph>{source.description}</Typography>
+					</CardContent>
+				</CardActionArea>
+			</Card>
+		)
+	}
+
+	renderArticle = (article, i) => {
+		const { classes } = this.props
+
+		return (
+			<Card key={i} className={classes.card}>
+				<CardActionArea onClick={this.handleArticleClick(article)}>
+					<CardContent className={classes.cardContent}>
+						<Typography variant="h6">{article.title}</Typography>
+						<Typography className={classes.cardDescription} paragraph>{article.contentSnippet}</Typography>
+					</CardContent>
+				</CardActionArea>
+			</Card>
+		)
+	}
+
+	render() {
+		const { classes, getRssLoading, getRssError, rss } = this.props
+		const { sourceSelected } = this.state
+
+		if (getRssLoading) return <div className={classes.content}><Loading /></div>
+		if (getRssError) return <div className={classes.content}><ErrorMessage error={getRssError} /></div>
+
+		if (sourceSelected) return (
+			<div className={classes.content}>
+				{sourceSelected.items.map(this.renderArticle)}
+			</div>
+		)
+
+		return (
+			<div className={classes.content}>
+				{rss.map(this.renderSource)}
 				
 				<AddButton onClick={this.handleAddRss} />
 			</div>

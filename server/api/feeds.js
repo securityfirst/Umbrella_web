@@ -5,7 +5,7 @@ const router = express.Router()
 const Parser = require('rss-parser')
 let parser = new Parser()
 
-router.post('/rss', (req, res) => {
+router.post('/rss', async (req, res) => {
 	try {
 		let { sources } = req.body
 
@@ -22,9 +22,9 @@ router.post('/rss', (req, res) => {
 		let data = []
 
 		// TODO: Async/await not working with parser.parseURL
-		sources.forEach(async (source, i) => {
+		for (let i = 0; i < sources.length; i++) {
 			try {
-				const rss = await parser.parseURL(source)
+				const rss = await parser.parseURL(sources[i])
 				data.push(rss)
 			} catch (e) {
 				console.error('[API] /feeds/rss parser exception: ', e)
@@ -33,7 +33,7 @@ router.post('/rss', (req, res) => {
 			if (i === sources.length - 1) {
 				res.status(200).send(data)
 			}
-		})
+		}
 	} catch (e) {
 		console.error("[API] /feeds/rss exception: ", e)
 		res.statusMessage = 'Failed to retrieve RSS feeds'

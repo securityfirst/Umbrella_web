@@ -39,12 +39,13 @@ class Feeds extends React.Component {
 	}
 
 	renderContent = () => {
+		const { classes } = this.props
 		const { isEdit, tabIndex } = this.state
 
 		if (isEdit) return <FeedsEdit toggleEdit={() => this.setState({isEdit: false})} />
 
 		switch (tabIndex) {
-			case 0: return <FeedsAll toggleEdit={() => this.setState({isEdit: true})} />
+			case 0: return <div className={classes.content}><FeedsAll toggleEdit={() => this.setState({isEdit: true})} /></div>
 			case 1: return <FeedsRss />
 		}
 	}
@@ -64,9 +65,9 @@ class Feeds extends React.Component {
 					<Tab label="RSS" />
 				</Tabs>
 
-				<div className={classes.content}>
+				{/*<div className={classes.content}>*/}
 					{this.renderContent()}
-				</div>
+				{/*</div>*/}
 			</Layout>
 		)
 	}
