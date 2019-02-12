@@ -50,7 +50,7 @@ class FeedsEditLocation extends React.Component {
 						value={location}
 						error={error}
 						errorMessage={errorMessage}
-						onChange={(e,v) => this.setState({location: v})}
+						onChange={e => this.setState({location: e.target.value})}
 						onSubmit={this.handleSubmit}
 						removeError={this.handleRemoveError}
 						cancel={this.handleCancel}

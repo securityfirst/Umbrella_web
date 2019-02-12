@@ -24,8 +24,9 @@ class RssSourceAdd extends React.Component {
 	handleSubmit = () => {
 		const { source } = this.state
 
+		console.log("source: ", source);
 		if (!isUrl(source)) return alert('Input is not a valid URL.')
-			
+
 		// TODO: Handle submit here, then close on callback
 
 		this.props.closeModal()
@@ -42,6 +43,7 @@ class RssSourceAdd extends React.Component {
 	render() {
 		const { theme, classes, closeModal, confirm } = this.props
 		const { source, error, errorMessage } = this.state
+		console.log("source: ", source);
 
 		return (
 			<IconModalContent 
@@ -53,7 +55,7 @@ class RssSourceAdd extends React.Component {
 						value={source}
 						error={error}
 						errorMessage={errorMessage}
-						onChange={(e,v) => this.setState({source: v})}
+						onChange={e => this.setState({source: e.target.value})}
 						onSubmit={this.handleSubmit}
 						removeError={this.handleRemoveError}
 						cancel={this.handleCancel}

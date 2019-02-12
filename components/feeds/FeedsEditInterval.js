@@ -50,7 +50,7 @@ class FeedsEditInterval extends React.Component {
 						value={interval}
 						error={error}
 						errorMessage={errorMessage}
-						onChange={(e,v) => this.setState({interval: v})}
+						onChange={e => this.setState({interval: e.target.value})}
 						onSubmit={this.handleSubmit}
 						removeError={this.handleRemoveError}
 						cancel={this.handleCancel}
