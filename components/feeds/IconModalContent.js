@@ -31,7 +31,7 @@ const styles = theme => ({
 	},
 })
 
-class FeedsEditIconModalContent extends React.Component {
+class IconModalContent extends React.Component {
 	render() {
 		const { classes, cancel, confirm, icon, content } = this.props
 
@@ -48,4 +48,4 @@ class FeedsEditIconModalContent extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEditIconModalContent)
+export default withStyles(styles, {withTheme: true})(IconModalContent)

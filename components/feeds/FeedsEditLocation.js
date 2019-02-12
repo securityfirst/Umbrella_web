@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle'
 
-import FeedsEditIconModalContent from './FeedsEditIconModalContent'
-import FeedsEditIconForm from './FeedsEditIconForm'
+import IconModalContent from './IconModalContent'
+import IconForm from './IconForm'
 
 const styles = theme => ({
 	iconFontSize: {
@@ -41,10 +41,10 @@ class FeedsEditLocation extends React.Component {
 		const { location, error, errorMessage } = this.state
 
 		return (
-			<FeedsEditIconModalContent 
+			<IconModalContent 
 				icon={<PersonPinCircleIcon classes={{fontSizeLarge: classes.iconFontSize}} fontSize="large" color="primary" />} 
 				content={
-					<FeedsEditIconForm 
+					<IconForm 
 						id="feed-location-form"
 						label="Enter location"
 						value={location}
