@@ -20,7 +20,7 @@ const styles = theme => ({
 	},
 })
 
-class FeedsEditIconForm extends React.Component {
+class IconForm extends React.Component {
 	render() {
 		const { classes, id, label, value, error, errorMessage, onChange, onSubmit, removeError, cancel } = this.props
 
@@ -50,4 +50,4 @@ class FeedsEditIconForm extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEditIconForm)
+export default withStyles(styles, {withTheme: true})(IconForm)

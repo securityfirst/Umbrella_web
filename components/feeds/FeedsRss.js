@@ -7,7 +7,10 @@ import CardActionArea from '@material-ui/core/CardActionArea'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
+import Modal from '@material-ui/core/Modal'
 
+import RssSourceAdd from './RssSourceAdd'
 import Loading from '../../components/reusables/Loading'
 import ErrorMessage from '../../components/reusables/ErrorMessage'
 import Marked from '../../components/reusables/Marked'
@@ -22,7 +25,6 @@ const styles = theme => ({
 	card: {
 		margin: '.75rem 0',
 		padding: 0,
-		// ...paperStyles(theme),
 	},
 	cardContent: {
 		padding: '1rem',
@@ -35,11 +37,17 @@ const styles = theme => ({
 		margin: '.75rem 0',
 		...paperStyles(theme),
 	},
+	modal: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 })
 
 class FeedsRss extends React.Component {
 	state = {
 		sourceSelected: null,
+		modalOpen: false,
 	}
 
 	componentWillMount() {
@@ -47,7 +55,11 @@ class FeedsRss extends React.Component {
 	}
 
 	handleAddRss = () => {
+		this.setState({modalOpen: true})
+	}
 
+	handleModalClose = () => {
+		this.setState({modalOpen: false})
 	}
 
 	handleSourceClick = source => () => {
@@ -57,6 +69,10 @@ class FeedsRss extends React.Component {
 	handleArticleClick = article => () => {
 		const win = window.open(article.link, '_blank');
   		win.focus();
+	}
+
+	goBack = () => {
+		this.setState({sourceSelected: null})
 	}
 
 	renderSource = (source, i) => {
@@ -89,24 +105,44 @@ class FeedsRss extends React.Component {
 		)
 	}
 
-	render() {
-		const { classes, getRssLoading, getRssError, rss } = this.props
+	renderContent = () => {
+		const { getRssLoading, getRssError, rss } = this.props
 		const { sourceSelected } = this.state
 
-		if (getRssLoading) return <div className={classes.content}><Loading /></div>
-		if (getRssError) return <div className={classes.content}><ErrorMessage error={getRssError} /></div>
+		if (getRssLoading) return <Loading />
+		if (getRssError) return <ErrorMessage error={getRssError} />
 
 		if (sourceSelected) return (
-			<div className={classes.content}>
+			<React.Fragment>
+				<Button onClick={this.goBack}>Go Back</Button>
+
 				{sourceSelected.items.map(this.renderArticle)}
-			</div>
+			</React.Fragment>
 		)
+
+		return <React.Fragment>{rss.map(this.renderSource)}</React.Fragment>
+	}
+
+	render() {
+		const { classes } = this.props
+		const { modalOpen } = this.state
 
 		return (
 			<div className={classes.content}>
-				{rss.map(this.renderSource)}
+				{this.renderContent()}
 				
 				<AddButton onClick={this.handleAddRss} />
+
+				<Modal
+					className={classes.modal}
+					aria-labelledby="simple-modal-title"
+					aria-describedby="simple-modal-description"
+					open={modalOpen}
+					onClose={this.handleModalClose}
+					disableAutoFocus
+				>
+					<RssSourceAdd closeModal={this.handleModalClose} />
+				</Modal>
 			</div>
 		)
 	}

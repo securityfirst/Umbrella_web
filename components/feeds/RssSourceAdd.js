@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import isUrl from 'is-url'
 
 import { withStyles } from '@material-ui/core/styles'
-import AccessAlarmIcon from '@material-ui/icons/AccessAlarm'
+import RssFeedIcon from '@material-ui/icons/RssFeed'
 
 import IconModalContent from './IconModalContent'
 import IconForm from './IconForm'
@@ -13,16 +14,18 @@ const styles = theme => ({
 	},
 })
 
-class FeedsEditInterval extends React.Component {
+class RssSourceAdd extends React.Component {
 	state = {
-		interval: null,
+		source: null,
 		error: null,
 		errorMessage: null,
 	}
 
 	handleSubmit = () => {
-		const { interval } = this.state
+		const { source } = this.state
 
+		if (!isUrl(source)) return alert('Input is not a valid URL.')
+			
 		// TODO: Handle submit here, then close on callback
 
 		this.props.closeModal()
@@ -30,7 +33,7 @@ class FeedsEditInterval extends React.Component {
 
 	handleCancel = () => {
 		this.handleRemoveError()
-		this.setState({interval: null})
+		this.setState({source: null})
 		this.props.closeModal()
 	}
 
@@ -38,19 +41,19 @@ class FeedsEditInterval extends React.Component {
 
 	render() {
 		const { theme, classes, closeModal, confirm } = this.props
-		const { interval, error, errorMessage } = this.state
+		const { source, error, errorMessage } = this.state
 
 		return (
 			<IconModalContent 
-				icon={<AccessAlarmIcon classes={{fontSizeLarge: classes.iconFontSize}} fontSize="large" color="primary" />} 
+				icon={<RssFeedIcon classes={{fontSizeLarge: classes.iconFontSize}} fontSize="large" color="primary" />} 
 				content={
 					<IconForm 
-						id="feed-interval-form"
-						label="Enter interval"
-						value={interval}
+						id="rss-source-form"
+						label="RSS source"
+						value={source}
 						error={error}
 						errorMessage={errorMessage}
-						onChange={(e,v) => this.setState({interval: v})}
+						onChange={(e,v) => this.setState({source: v})}
 						onSubmit={this.handleSubmit}
 						removeError={this.handleRemoveError}
 						cancel={this.handleCancel}
@@ -61,4 +64,4 @@ class FeedsEditInterval extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEditInterval)
+export default withStyles(styles, {withTheme: true})(RssSourceAdd)
