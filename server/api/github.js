@@ -17,7 +17,8 @@ router.get('/tree', async (req, res) => {
 		lessons = await masterTreeReq.json()
 	} catch (err) {
 		console.error('[API] /github/tree - Tree fetch error: ', err)
-		return res.status(500).send('Failed to retrieve lessons.')
+		res.statusMessage = 'Failed to retrieve lessons'
+		return res.status(500).end()
 	}
 
 	try {
@@ -49,12 +50,14 @@ router.get('/tree', async (req, res) => {
 		}, {})
 	} catch (e) {
 		console.error('[API] /github/tree - Create lesson JSON exception: ', e)
-		return res.status(500).send('Failed to retrieve lessons.')
+		res.statusMessage = 'Failed to retrieve lessons'
+		return res.status(500).end()
 	}
 
 	if (!lessons) {
 		console.error('[API] /github/tree - Failed to create lessons object.')
-		return res.status(500).send('Failed to retrieve lessons.')
+		res.statusMessage = 'Failed to retrieve lessons'
+		return res.status(500).end()
 	}
 
 	return res.status(200).send(lessons)
@@ -68,12 +71,14 @@ router.get('/content/:sha', async (req, res) => {
 		content = await contentReq.json()
 	} catch (err) {
 		console.error('[API] /github/content/:sha - Content fetch error: ', err)
-		return res.status(500).send('Failed to retrieve content.')
+		res.statusMessage = 'Failed to retrieve content'
+		return res.status(500).end()
 	}
 
 	if (!content) {
 		console.error('[API] /github/content/:sha - Failed to create content object.')
-		return res.status(500).send('Failed to retrieve content.')
+		res.statusMessage = 'Failed to retrieve content'
+		return res.status(500).end()
 	}
 
 	return res.status(200).send(content.content)

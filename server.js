@@ -2,7 +2,7 @@
 require('dotenv').config()
 // Server setup
 const cluster = require('cluster')
-const debug = require('debug')('quiddity:server')
+const debug = require('debug')('umbrella:server')
 const http = require('http')
 const numCPUs = require('os').cpus().length
 const port = process.env.PORT || '3000'
@@ -31,7 +31,7 @@ app.prepare().then(() => {
 	server.disable('x-powered-by')
 
 	// Server routes
-	const api = require('./server/routes/api')
+	const api = require('./server/api')
 
 	// Pages
 	const index = require('./server/routes/index')
