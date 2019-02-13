@@ -93,8 +93,8 @@ class Menu extends React.Component {
 		return (
 			<List>
 				{links.map((link, i) => (
-					<Link href={link.path} key={i}>
-						<ListItem className={classes.drawerItem} button onClick={() => {
+					<Link key={i} href={link.path}>
+						<ListItem className={classes.drawerItem} title={link.name} button onClick={() => {
 							this.props.dispatch(setAppbarTitle(link.name))
 
 							switch (link.name) {
