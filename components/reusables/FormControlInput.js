@@ -67,7 +67,7 @@ const FormControlInput = (props) => {
 				required={required}
 				autoFocus={autoFocus}
 				fullWidth
-				multiline
+				multiline={multiline || false}
 				{...inputProps}
 			/>
 			{!!error && <FormHelperText className={classes.helperText}>{errorMessage}</FormHelperText>}

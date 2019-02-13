@@ -27,9 +27,6 @@ const styles = theme => ({
 	changeButtonWrapper: {
 		...buttonWrapperStyles(theme),
 	},
-	cancelButton: {
-		// backgroundColor: theme.palette.
-	},
 	modal: {
 		display: 'flex',
 		justifyContent: 'center',
@@ -37,51 +34,76 @@ const styles = theme => ({
 	},
 })
 
-const panels = [
-	{title: 'Set your feed', content: 'You haven’t set the country and the sources for the feed yet. You have to do it in order for the feed to start displaying, and you can change it any time later in the settings.'},
-	{title: 'Interval', content: 'Set how often shall we check for news'},
-	{title: 'Location', content: 'Enter location'},
-	{title: 'Feed sources', content: 'Set sources'},
-]
-
 class FeedsEdit extends React.Component {
 	state = {
 		modalOpen: false,
 		modalContent: null,
+		location: null,
+		sources: [],
 	}
 
-	handleFormOpen = (i) => () => {
+	setLocation = location => this.setState({location})
+	setSources = sources => this.setState({sources})
+
+	handleModalClose = () => this.setState({modalOpen: false})
+
+	handleFormOpen = type => () => {
 		let state = {modalOpen: true}
 
 		// set modal inner content
-		switch (i) {
-			case 0: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />; break
-			case 1: state.modalContent = <FeedsEditInterval closeModal={this.handleModalClose} />; break
-			case 2: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />; break
-			case 3: state.modalContent = <FeedsEditSources closeModal={this.handleModalClose} />; break
+		switch (type) {
+			case 'location': 
+				state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} onSubmit={this.setLocation} />
+				break
+			case 'sources': 
+				state.modalContent = <FeedsEditSources closeModal={this.handleModalClose} onSubmit={this.setSources} />
+				break
 		}
 
 		this.setState(state)
 	}
 
-	handleModalClose = () => this.setState({modalOpen: false})
+	handleSubmit = () => {
+		const { toggleEdit } = this.props
+		const { location, sources } = this.state
+
+		if (!location || !sources.length) return alert('Location and sources are required.')
+
+		// Set location and sources here
+		toggleEdit()
+	}
 
 	render() {
-		const { classes, toggleEdit } = this.props
+		const { classes } = this.props
+		const { location, sources } = this.state
 
 		return (
 			<div>
-				{panels.map((panel, i) => (
-					<Paper key={i} className={classes.panel} square>
-						<Typography className={classes.panelTitle} variant="h6">{panel.title}</Typography>
-						<Typography className={classes.panelContent} paragraph>{panel.content}</Typography>
-						<div className={classes.changeButtonWrapper}>
-							<Button className={classes.cancelButton} color="secondary" onClick={this.handleFormOpen(i)}>Set</Button>
-						</div>
-					</Paper>
-				))}
+				{/* Info panel */}
+				<Paper className={classes.panel} square>
+					<Typography className={classes.panelTitle} variant="h6">Set your feed</Typography>
+					<Typography className={classes.panelContent} paragraph>You haven’t set the country and the sources for the feed yet. You have to do it in order for the feed to start displaying, and you can change it any time later in the settings.</Typography>
+				</Paper>
 
-				<Button className={classes.cancelButton} variant="contained" onClick={toggleEdit}>Done</Button>
+				{/* Location panel */}
+				<Paper className={classes.panel} square>
+					<Typography className={classes.panelTitle} variant="h6">Location</Typography>
+					<Typography className={classes.panelContent} paragraph>{location || 'Set location'}</Typography>
+					<div className={classes.changeButtonWrapper}>
+						<Button color="secondary" onClick={this.handleFormOpen('location')}>Set</Button>
+					</div>
+				</Paper>
+
+				{/* Sources panel */}
+				<Paper className={classes.panel} square>
+					<Typography className={classes.panelTitle} variant="h6">Set your feed</Typography>
+					<Typography className={classes.panelContent} paragraph>{sources.length ? `${sources.length} sources` : 'Set sources'}</Typography>
+					<div className={classes.changeButtonWrapper}>
+						<Button color="secondary" onClick={this.handleFormOpen('sources')}>Set</Button>
+					</div>
+				</Paper>
+
+				<Button variant="contained" onClick={this.handleSubmit}>Done</Button>
 
 				<Modal
 					className={classes.modal}

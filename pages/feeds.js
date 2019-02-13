@@ -28,7 +28,7 @@ class Feeds extends React.Component {
 	}
 
 	state = {
-		isEdit: false,
+		isEdit: true, // Set to false if db has location set
 		tabIndex: 0,
 	}
 
@@ -38,14 +38,20 @@ class Feeds extends React.Component {
 		this.setState(state)
 	}
 
-	renderContent = () => {
-		const { classes } = this.props
+	renderFeedsView = () => {
 		const { isEdit, tabIndex } = this.state
 
 		if (isEdit) return <FeedsEdit toggleEdit={() => this.setState({isEdit: false})} />
 
+		return <FeedsAll toggleEdit={() => this.setState({isEdit: true})} />
+	}
+
+	renderContent = () => {
+		const { classes } = this.props
+		const { tabIndex } = this.state
+
 		switch (tabIndex) {
-			case 0: return <div className={classes.content}><FeedsAll toggleEdit={() => this.setState({isEdit: true})} /></div>
+			case 0: return this.renderFeedsView()
 			case 1: return <FeedsRss />
 		}
 	}
@@ -65,9 +71,9 @@ class Feeds extends React.Component {
 					<Tab label="RSS" />
 				</Tabs>
 
-				{/*<div className={classes.content}>*/}
+				<div className={classes.content}>
 					{this.renderContent()}
-				{/*</div>*/}
+				</div>
 			</Layout>
 		)
 	}

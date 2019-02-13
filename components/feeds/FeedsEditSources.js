@@ -30,7 +30,9 @@ const styles = theme => ({
 })
 
 const sources = [
-	{name: 'UN / ReliefWeb', value: 'un'},
+	{name: 'ReliefWeb', value: 'relief_web'},
+	{name: 'UN', value: 'un'},
+	{name: 'FCO', value: 'fco'},
 	{name: 'CDC', value: 'cdc'},
 	{name: 'Global Disaster and Alert Coordination System', value: 'global_disaster'},
 	{name: 'US State Department Country Warnings', value: 'us_state_department'},
@@ -57,7 +59,7 @@ class FeedsEditSources extends React.Component {
 		const { sourcesSelected } = this.state
 
 		// TODO: Handle submit here, then close on callback
-
+		this.props.onSubmit(sourcesSelected)
 		this.props.closeModal()
 	}
 

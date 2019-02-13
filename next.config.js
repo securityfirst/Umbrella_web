@@ -18,6 +18,7 @@ module.exports = {
 		config.plugins.push(
 			new webpack.DefinePlugin({
 				'process.env.ROOT': JSON.stringify(process.env.ROOT),
+				'process.env.MAPBOX_ACCESS_TOKEN': JSON.stringify(process.env.MAPBOX_ACCESS_TOKEN),
 			})
 		);
 

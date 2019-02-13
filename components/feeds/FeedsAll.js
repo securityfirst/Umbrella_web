@@ -68,14 +68,12 @@ class FeedsAll extends React.Component {
 
 	handleChange = () => this.setState({expanded: !this.state.expanded})
 
-	renderLocation = () => <span className={this.props.classes.headingLocation}>Ireland</span>
-
 	render() {
 		const { classes, toggleEdit, feeds } = this.props
 		const { expanded } = this.state
 
 		return (
-			<div className={classes.wrapper}>
+			<React.Fragment>
 				<ExpansionPanel expanded={expanded === true} onChange={this.handleChange}>
 					<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 						<Typography className={classes.heading}>Location: 
@@ -90,7 +88,7 @@ class FeedsAll extends React.Component {
 
 				{feeds.map((feed, i) => {
 					return (
-						<Paper key={i} className={classes.feed}>
+						<Paper key={i} className={classes.feed} square>
 							<Typography className={classes.feedTitle} variant="h6">{feed.title}</Typography>
 							<Typography paragraph>
 								<span className={classes.feedSite}>Via {(feed.site || "").toUpperCase()}</span>
@@ -100,7 +98,7 @@ class FeedsAll extends React.Component {
 						</Paper>
 					)
 				})}
-			</div>
+			</React.Fragment>
 		)
 	}
 }
