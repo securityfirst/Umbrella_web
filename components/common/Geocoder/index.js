@@ -71,10 +71,6 @@ class Geocoder extends React.Component {
 				callback(err, res, body, searchTime)
 			}
 		)
-		// fetch(uri)
-		// 	.then(res => res.json())
-		// 	.then(data => callback(null, ))
-		// 	.catch(err => )
 	}
 
 	onInput = e => {
@@ -129,6 +125,7 @@ class Geocoder extends React.Component {
 		this.setState({
 			focus: focus,
 			inputValue: inputValue,
+			typedInput: inputValue,
 			showList: true
 		})
 
@@ -139,7 +136,11 @@ class Geocoder extends React.Component {
 		if (this.state.focus !== null && this.state.focus !== -1) {
 			let inputValue = this.state.results[this.state.focus].place_name
 
-			this.setState({ showList: false, inputValue: inputValue })
+			this.setState({ 
+				showList: false, 
+				inputValue: inputValue,
+				typedInput: inputValue
+			})
 			this.props.onInputChange(inputValue)
 			this.props.onSelect(this.state.results[this.state.focus])
 		}
@@ -167,7 +168,7 @@ class Geocoder extends React.Component {
 				break
 			// accept
 			case 13:
-				if (this.state.results.length > 0 && this.state.focus == null) {
+				if (this.state.results.length > 0) {
 					this.clickOption(this.state.results[0], 0)
 				}
 				this.acceptFocus()
@@ -194,20 +195,20 @@ class Geocoder extends React.Component {
 		}
 	}
 
-	clickOption = (place, listLocation, e) => {
+	clickOption = (place, listLocation) => {
+		console.log("place: ", place);
 		// debugger
 		this.props.onInputChange(place.place_name)
 		this.props.onSelect(place)
 		this.setState({
 			focus: listLocation,
 			showList: false,
-			inputValue: place.place_name
+			inputValue: place.place_name,
+			typedInput: place.place_name,
 		})
 
 		// focus on the input after click to maintain key traversal
 		this.input.focus()
-		
-		if (e) e.preventDefault()
 	}
 
 	handleBlur = e => {
@@ -226,7 +227,7 @@ class Geocoder extends React.Component {
 		let input = <Input
 			error={this.state.error}
 			id={this.props.id}
-			value={this.state.inputValue}
+			value={this.state.inputValue || this.state.typedInput}
 			type='string'
 			classes={{underline: this.props.classes.underline}}
 			inputProps={{
@@ -253,7 +254,8 @@ class Geocoder extends React.Component {
 					duration: 200,
 					enterAnimation: 'accordionVertical',
 					leaveAnimation: 'accordionVertical',
-					maintainContainerHeight: true
+					maintainContainerHeight: true,
+					className: ''
 				},
 				this.state.results.length > 0 &&
 					this.state.showList &&
@@ -277,9 +279,15 @@ class Geocoder extends React.Component {
 											? 'geocoder__result--focus'
 											: ''),
 									tabIndex: '-1',
-									onClick: this.clickOption,
+									onClick: () => this.clickOption(result, i),
 								},
-								result.place_name
+								React.createElement(
+									'span',
+									{
+										onClick: () => this.clickOption(result, i),
+									},
+									result.place_name
+								)
 							)
 						})
 					)

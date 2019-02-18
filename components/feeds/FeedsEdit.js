@@ -23,6 +23,7 @@ const styles = theme => ({
 	},
 	panelContent: {
 		fontSize: '.875rem',
+		color: theme.palette.grey[600]
 	},
 	changeButtonWrapper: {
 		...buttonWrapperStyles(theme),
@@ -88,7 +89,7 @@ class FeedsEdit extends React.Component {
 				{/* Location panel */}
 				<Paper className={classes.panel} square>
 					<Typography className={classes.panelTitle} variant="h6">Location</Typography>
-					<Typography className={classes.panelContent} paragraph>{location || 'Set location'}</Typography>
+					<Typography className={classes.panelContent} paragraph>{location ? location.place_name : 'Set location'}</Typography>
 					<div className={classes.changeButtonWrapper}>
 						<Button color="secondary" onClick={this.handleFormOpen('location')}>Set</Button>
 					</div>
