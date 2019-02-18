@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle'
 
-import FormControlInput from '../../components/reusables/FormControlInput'
+import FormControlLocation from '../../components/common/FormControlLocation'
 import IconModalContent from './IconModalContent'
 import IconForm from './IconForm'
 
@@ -33,8 +33,8 @@ class FeedsEditLocation extends React.Component {
 		errorMessage: null,
 	}
 
-	handleChange = e => {
-		this.setState({location: e.target.value})
+	handleSelect = location => {
+		this.setState({location})
 	}
 
 	handleSubmit = () => {
@@ -62,16 +62,13 @@ class FeedsEditLocation extends React.Component {
 				icon={<PersonPinCircleIcon classes={{fontSizeLarge: classes.iconFontSize}} fontSize="large" color="primary" />} 
 			>
 				<form>
-					<FormControlInput 
+					<FormControlLocation 
 						className={classes.formControlInput}
-						id="feeds-edit-location"
 						label="Set location"
-						value={location}
-						type="string"
+						types={'country'}
 						error={error}
 						errorMessage={errorMessage}
-						onChange={this.handleChange}
-						required
+						onSelect={this.handleSelect}
 						autoFocus
 					/>
 

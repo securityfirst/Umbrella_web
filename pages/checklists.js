@@ -10,8 +10,8 @@ import Tab from '@material-ui/core/Tab'
 import Layout from '../components/layout'
 import ChecklistsCustom from '../components/checklists/ChecklistsCustom'
 import ChecklistsPanel from '../components/checklists/ChecklistsPanel'
-import Loading from '../components/reusables/Loading'
-import ErrorMessage from '../components/reusables/ErrorMessage'
+import Loading from '../components/common/Loading'
+import ErrorMessage from '../components/common/ErrorMessage'
 
 import { contentStyles } from '../utils/view'
 

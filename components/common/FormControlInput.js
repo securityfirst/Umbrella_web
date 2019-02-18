@@ -61,7 +61,7 @@ const FormControlInput = (props) => {
 				}}
 				inputProps={{
 					className: classes.input,
-					required: true,
+					required: required || false,
 				}}
 				onChange={onChange}
 				required={required}

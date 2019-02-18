@@ -13,10 +13,10 @@ import Button from '@material-ui/core/Button'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 import Layout from '../../components/layout'
-import Loading from '../../components/reusables/Loading'
-import ErrorMessage from '../../components/reusables/ErrorMessage'
-import FormControlInput from '../../components/reusables/FormControlInput'
-import FormControlCheckboxes from '../../components/reusables/FormControlCheckboxes'
+import Loading from '../../components/common/Loading'
+import ErrorMessage from '../../components/common/ErrorMessage'
+import FormControlInput from '../../components/common/FormControlInput'
+import FormControlCheckboxes from '../../components/common/FormControlCheckboxes'
 
 import teal from '@material-ui/core/colors/teal'
 

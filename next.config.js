@@ -2,13 +2,8 @@ const webpack = require('webpack');
 const withCSS = require('@zeit/next-css');
 
 /* With CSS Modules */
-module.exports = withCSS();
-
-module.exports = {
- 	useFileSystemPublicRoutes: false,
-};
-
-module.exports = {
+module.exports = withCSS({
+	useFileSystemPublicRoutes: false,
 	webpack: (config, {}) => {
 		config.module.rules.push({
 			test: /\.md$/,
@@ -24,4 +19,4 @@ module.exports = {
 
 		return config;
 	},
-};
+})
