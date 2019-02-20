@@ -1,6 +1,6 @@
 import React from 'react'
-import FlipMove from 'react-flip-move'
 import PropTypes from 'prop-types'
+import FlipMove from 'react-flip-move'
 import xhr from 'xhr'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -65,27 +65,31 @@ class FormControlLocation extends React.Component {
 
 	search = (proximity, bbox, types, query, callback) => {
 		let searchTime = new Date()
-		let uri =
-			'https://api.tiles.mapbox.com' +
-			'/geocoding/v5/' +
-			'mapbox.places' +
-			'/' +
-			encodeURIComponent(query) +
-			'.json' +
-			'?access_token=' +
-			process.env.MAPBOX_ACCESS_TOKEN +
-			(proximity ? '&proximity=' + proximity : '') +
-			(bbox ? '&bbox=' + bbox : '') +
-			(types ? '&types=' + encodeURIComponent(types) : '')
-		xhr(
-			{
-				uri: uri,
-				json: true
-			},
-			function(err, res, body) {
-				callback(err, res, body, searchTime)
+		let uri = `
+			https://api.tiles.mapbox.com/geocoding/v5/mapbox.places/
+			${encodeURIComponent(query)}
+			.json
+			?access_token=
+			${process.env.MAPBOX_ACCESS_TOKEN}
+			${(proximity ? '&proximity=' + proximity : '')}
+			${(bbox ? '&bbox=' + bbox : '')}
+			${(types ? '&types=' + encodeURIComponent(types) : '')}
+		`
+
+		xhr({uri, json: true}, (err, res, body) => {
+			// searchTime is compared with the last search to set the state
+			// to ensure that a slow xhr response does not scramble the
+			// sequence of autocomplete display.
+			if (err) this.setState({error: err})
+			if (!err && body && body.features && this.state.searchTime <= searchTime) {
+				this.setState({
+					searchTime: searchTime,
+					loading: false,
+					results: body.features,
+					focus: 0
+				})
 			}
-		)
+		})
 	}
 
 	onInput = e => {
@@ -97,8 +101,6 @@ class FormControlLocation extends React.Component {
 			inputValue: value,
 			typedInput: value
 		})
-
-		this.props.onInputChange(value)
 
 		if (value === '') {
 			this.setState({
@@ -112,8 +114,7 @@ class FormControlLocation extends React.Component {
 				this.props.proximity,
 				this.props.bbox,
 				this.props.types,
-				value,
-				this.onResult
+				value
 			)
 		}
 	}
@@ -121,18 +122,16 @@ class FormControlLocation extends React.Component {
 	moveFocus = dir => {
 		if (this.state.loading) return
 
-		var focus =
-			this.state.focus === null
-				? 0
-				: Math.max(
-						-1,
-						Math.min(this.state.results.length - 1, this.state.focus + dir)
-					)
+		var focus = this.state.focus === null
+			? 0
+			: Math.max(
+					-1,
+					Math.min(this.state.results.length - 1, this.state.focus + dir)
+				)
 
-		var inputValue =
-			focus === -1
-				? this.state.typedInput
-				: this.state.results[focus].place_name
+		var inputValue = focus === -1
+			? this.state.typedInput
+			: this.state.results[focus].place_name
 
 		this.setState({
 			focus: focus,
@@ -140,8 +139,6 @@ class FormControlLocation extends React.Component {
 			typedInput: inputValue,
 			showList: true
 		})
-
-		this.props.onInputChange(inputValue)
 	}
 
 	acceptFocus = () => {
@@ -153,7 +150,7 @@ class FormControlLocation extends React.Component {
 				inputValue: inputValue,
 				typedInput: inputValue
 			})
-			this.props.onInputChange(inputValue)
+
 			this.props.onSelect(this.state.results[this.state.focus])
 		}
 	}
@@ -161,59 +158,27 @@ class FormControlLocation extends React.Component {
 	onKeyDown = e => {
 		switch (e.which) {
 			// up
-			case 38:
-				e.preventDefault()
-				this.moveFocus(-1)
-				break
+			case 38: e.preventDefault(); this.moveFocus(-1); break
 			// down
-			case 40:
-				e.preventDefault()
-				this.moveFocus(1)
-				break
+			case 40: e.preventDefault(); this.moveFocus(1); break
 			// tab
-			case 9:
-				this.acceptFocus()
-				break
+			case 9: this.acceptFocus(); break
 			// esc
-			case 27:
-				this.setState({ showList: false, results: [] })
-				break
+			case 27: this.setState({ showList: false, results: [] }); break
 			// accept
 			case 13:
-				if (this.state.results.length > 0) {
-					this.clickOption(this.state.results[0], 0)
-				}
-				this.acceptFocus()
-				e.preventDefault()
-				break
-			default:
-				break
+				if (this.state.results.length > 0) this.selectOption(this.state.results[0], 0)
+				this.acceptFocus(); e.preventDefault(); break
+			default: break
 		}
 	}
 
-	onResult = (err, res, body, searchTime) => {
-		// searchTime is compared with the last search to set the state
-		// to ensure that a slow xhr response does not scramble the
-		// sequence of autocomplete display.
-		if (err) this.setState({error: err})
-		if (!err && body && body.features && this.state.searchTime <= searchTime) {
-			this.setState({
-				searchTime: searchTime,
-				loading: false,
-				results: body.features,
-				focus: 0
-			})
-			this.props.onSuggest(this.state.results)
-		}
-	}
-
-	clickOption = (place, listLocation, e) => {
+	selectOption = (place, listLocation, e) => {
 		if (e) {
 			e.preventDefault()
 			e.stopPropagation()
 		}
 
-		this.props.onInputChange(place.place_name)
 		this.props.onSelect(place)
 		this.setState({
 			focus: listLocation,
@@ -259,6 +224,7 @@ class FormControlLocation extends React.Component {
 				>
 					{label}
 				</InputLabel>
+
 				<Input
 					id={id}
 					classes={{underline: classes.underline}}
@@ -277,6 +243,7 @@ class FormControlLocation extends React.Component {
 					autoFocus={focusOnMount}
 					fullWidth
 				/>
+				
 				<FlipMove
 					delay={0}
 					duration={200}
@@ -298,7 +265,7 @@ class FormControlLocation extends React.Component {
 									<a 
 										href="" 
 										tabIndex="-1"
-										onClick={e => this.clickOption(result, i, e)}
+										onClick={e => this.selectOption(result, i, e)}
 									>
 										{result.place_name}
 									</a>
@@ -325,8 +292,6 @@ FormControlLocation.defaultProps = {
 	focusOnMount: true,
 	error: null,
 	required: false,
-	onSuggest: function onSuggest() {},
-	onInputChange: function onInputChange() {},
 }
 
 FormControlLocation.propTypes = {
@@ -341,8 +306,6 @@ FormControlLocation.propTypes = {
 	error: PropTypes.object,
 	required: PropTypes.bool,
 	onSelect: PropTypes.func.isRequired,
-	onSuggest: PropTypes.func,
-	onInputChange: PropTypes.func,
 }
 
 
