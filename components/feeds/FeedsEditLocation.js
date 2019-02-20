@@ -34,13 +34,15 @@ class FeedsEditLocation extends React.Component {
 	}
 
 	handleSelect = location => {
+		console.log("location: ", location);
 		this.setState({location})
 	}
 
 	handleSubmit = () => {
 		const { location } = this.state
 
-		// TODO: Handle location check here
+		if (!location) return alert('No location was selected.')
+
 		this.props.onSubmit(location)
 		this.props.closeModal()
 	}

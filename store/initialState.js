@@ -14,6 +14,8 @@ const feeds = {
 	loading: true,
 	error: null,
 	feeds: [],
+	feedLocation: null,
+	feedSources: [],
 	getRssLoading: true,
 	getRssError: null,
 	rss: [],

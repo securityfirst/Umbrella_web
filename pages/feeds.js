@@ -24,7 +24,12 @@ const styles = theme => ({
 
 class Feeds extends React.Component {
 	static async getInitialProps({reduxStore}) {
-		await reduxStore.dispatch(getFeeds())
+		const store = reduxStore.getState()
+		const { feedLocation, feedSources } = store.feeds
+
+		if (feedLocation && feedSources.length) {
+			await reduxStore.dispatch(getFeeds())
+		}
 	}
 
 	state = {
