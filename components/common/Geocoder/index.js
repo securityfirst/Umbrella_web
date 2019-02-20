@@ -196,8 +196,6 @@ class Geocoder extends React.Component {
 	}
 
 	clickOption = (place, listLocation) => {
-		console.log("place: ", place);
-		// debugger
 		this.props.onInputChange(place.place_name)
 		this.props.onSelect(place)
 		this.setState({
