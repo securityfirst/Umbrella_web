@@ -33,7 +33,11 @@ export const getFeeds = () => {
 			}),
 		})
 			.then(async res => {
-				if (!res.ok) throw new Error(res)
+				if (!res.ok) {
+					console.error('[ACTION] getFeeds fetch error: ', res)
+					throw new Error(res)
+				}
+
 				return res.json()
 			})
 			.then(data => {
@@ -75,7 +79,11 @@ export const getRss = () => {
 			body: JSON.stringify({sources: store.feeds.rssSources}),
 		})
 			.then(res => {
-				if (!res.ok) throw new Error(res)
+				if (!res.ok) {
+					console.error('[ACTION] getRss fetch error: ', res)
+					throw new Error(res)
+				}
+
 				return res.json()
 			})
 			.then(data => {

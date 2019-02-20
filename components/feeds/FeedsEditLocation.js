@@ -34,7 +34,6 @@ class FeedsEditLocation extends React.Component {
 	}
 
 	handleSelect = location => {
-		console.log("location: ", location);
 		this.setState({location})
 	}
 

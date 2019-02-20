@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -7,6 +8,8 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 
 import Layout from '../components/layout'
+import Loading from '../components/common/Loading'
+import ErrorMessage from '../components/common/ErrorMessage'
 import FeedsAll from '../components/feeds/FeedsAll'
 import FeedsEdit from '../components/feeds/FeedsEdit'
 import FeedsRss from '../components/feeds/FeedsRss'
@@ -33,7 +36,7 @@ class Feeds extends React.Component {
 	}
 
 	state = {
-		isEdit: true, // Set to false if db has location set
+		isEdit: (!this.props.feedLocation && !this.props.feedSources.length),
 		tabIndex: 0,
 	}
 
@@ -44,9 +47,12 @@ class Feeds extends React.Component {
 	}
 
 	renderFeedsView = () => {
+		const { getFeedsLoading, getFeedsError, feeds } = this.props
 		const { isEdit, tabIndex } = this.state
 
 		if (isEdit) return <FeedsEdit toggleEdit={() => this.setState({isEdit: false})} />
+		if (getFeedsLoading) return <Loading />
+		if (getFeedsError) return <ErrorMessage error={getFeedsError} />
 
 		return <FeedsAll toggleEdit={() => this.setState({isEdit: true})} />
 	}
@@ -84,4 +90,8 @@ class Feeds extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(Feeds)
+const mapStateToProps = store => ({
+	...store.feeds
+})
+
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(Feeds))

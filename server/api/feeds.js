@@ -10,6 +10,7 @@ router.post('/', (req, res) => {
 		const { location, sources } = req.body
 
 		if (
+			!location || 
 			!sources || 
 			!(sources instanceof Array) ||
 			!sources.length
@@ -21,7 +22,7 @@ router.post('/', (req, res) => {
 
 		let data = []
 
-		fetch(`${process.env.API_HOST}/v3/feeds?country=${location}&sources=0`)
+		fetch(`${process.env.API_HOST}v3/feed?country=${location}&sources=0`)
 			.then(res => {
 				if (!res.ok) {
 					console.error("[API] /feeds error: ", res)

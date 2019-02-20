@@ -14,7 +14,7 @@ import FeedsEditSources from './FeedsEditSources'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
-import { setFeedLocation, setFeedSources } from '../../store/actions/feeds'
+import { getFeeds, setFeedLocation, setFeedSources } from '../../store/actions/feeds'
 
 const styles = theme => ({
 	panel: {
@@ -71,11 +71,12 @@ class FeedsEdit extends React.Component {
 	}
 
 	handleSubmit = () => {
-		const { toggleEdit, feedLocation, feedSources } = this.props
+		const { dispatch, toggleEdit, feedLocation, feedSources } = this.props
 
 		if (!feedLocation || !feedSources.length) return alert('Location and sources are required.')
 
-		// Set location and sources here
+		dispatch(getFeeds())
+
 		toggleEdit()
 	}
 
@@ -102,7 +103,7 @@ class FeedsEdit extends React.Component {
 				{/* Sources panel */}
 				<Paper className={classes.panel} square>
 					<Typography className={classes.panelTitle} variant="h6">Set your feed</Typography>
-					<Typography className={classes.panelContent} paragraph>{feedSources.length ? `${feedSources.length} sources` : 'Set sources'}</Typography>
+					<Typography className={classes.panelContent} paragraph>{feedSources.length ? `${feedSources.length} source${feedSources.length > 1 ? 's' : ''}` : 'Set sources'}</Typography>
 					<div className={classes.changeButtonWrapper}>
 						<Button color="secondary" onClick={this.handleFormOpen('sources')}>Set</Button>
 					</div>
