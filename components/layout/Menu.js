@@ -87,6 +87,19 @@ const styles = theme => ({
 class Menu extends React.Component {
 	handleDrawerClose = () => this.props.dispatch(toggleMainMenu(false))
 
+	handleMenuClick = link => () => {
+		const { dispatch } = this.props
+
+		dispatch(setAppbarTitle(link.name))
+
+		switch (link.name) {
+			case 'Lessons': 
+				dispatch(toggleLessonsMenu(true)) 
+				dispatch(resetLessons()) 
+				break
+		}
+	}
+
 	renderContent = () => {
 		const { classes } = this.props
 
@@ -94,16 +107,7 @@ class Menu extends React.Component {
 			<List>
 				{links.map((link, i) => (
 					<Link key={i} href={link.path}>
-						<ListItem className={classes.drawerItem} title={link.name} button onClick={() => {
-							this.props.dispatch(setAppbarTitle(link.name))
-
-							switch (link.name) {
-								case 'Lessons': 
-									this.props.dispatch(toggleLessonsMenu(true)) 
-									this.props.dispatch(resetLessons()) 
-									break
-							}
-						}}>
+						<ListItem className={classes.drawerItem} title={link.name} button onClick={this.handleMenuClick(link)}>
 							<ListItemIcon>{link.icon(this.props.router.pathname == link.path ? "secondary" : "inherit")}</ListItemIcon>
 							<ListItemText primary={link.name} />
 						</ListItem>
