@@ -24,6 +24,20 @@ export default function reducer(state = initialState, action) {
 				feeds: action.payload,
 			}
 
+		/* SET_FEED_LOCATION */
+		case (feedsTypes.SET_FEED_LOCATION):
+			return {
+				...state,
+				feedLocation: action.payload
+			}
+
+		/* SET_FEED_SOURCES */
+		case (feedsTypes.SET_FEED_SOURCES):
+			return {
+				...state,
+				feedSources: action.payload || []
+			}
+
 		/* GET_RSS */
 		case pending(feedsTypes.GET_RSS):
 			return {

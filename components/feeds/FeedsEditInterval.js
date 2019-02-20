@@ -1,3 +1,5 @@
+/* DEPRECATED */
+
 import React from 'react'
 import PropTypes from 'prop-types'
 
@@ -43,20 +45,19 @@ class FeedsEditInterval extends React.Component {
 		return (
 			<IconModalContent 
 				icon={<AccessAlarmIcon classes={{fontSizeLarge: classes.iconFontSize}} fontSize="large" color="primary" />} 
-				content={
-					<IconForm 
-						id="feed-interval-form"
-						label="Enter interval"
-						value={interval}
-						error={error}
-						errorMessage={errorMessage}
-						onChange={e => this.setState({interval: e.target.value})}
-						onSubmit={this.handleSubmit}
-						removeError={this.handleRemoveError}
-						cancel={this.handleCancel}
-					/>
-				} 
-			/>
+			>
+				<IconForm 
+					id="feed-interval-form"
+					label="Enter interval"
+					value={interval}
+					error={error}
+					errorMessage={errorMessage}
+					onChange={e => this.setState({interval: e.target.value})}
+					onSubmit={this.handleSubmit}
+					removeError={this.handleRemoveError}
+					cancel={this.handleCancel}
+				/>
+			</IconModalContent>
 		)
 	}
 }

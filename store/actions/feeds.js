@@ -11,19 +11,61 @@ export const getFeeds = () => {
 	return async (dispatch, getState) => {
 		dispatch(pending(feedsTypes.GET_FEEDS))
 
-		/* TODO: Replace with API */
-		await fetch('https://jsonplaceholder.typicode.com/users')
+		const store = getState()
+
+		if (!store.feeds.feedLocation) {
+			return dispatch(rejected(feedsTypes.GET_FEEDS, 'Feed location is required'))
+		}
+		
+		if (!store.feeds.feedSources.length) {
+			return dispatch(rejected(feedsTypes.GET_FEEDS, 'Feed sources are required'))
+		}
+
+		await fetch(`${process.env.ROOT}/api/feeds`, {
+			method: 'POST',
+			headers: { 
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+			body: JSON.stringify({
+				location: store.feeds.feedLocation.properties.short_code,
+				sources: store.feeds.feedSources,
+			}),
+		})
 			.then(async res => {
-				if (!res.ok) throw new Error(res)
+				if (!res.ok) {
+					console.error('[ACTION] getFeeds fetch error: ', res)
+					throw new Error(res)
+				}
+
 				return res.json()
 			})
-			.then(data => dispatch(fulfilled(feedsTypes.GET_FEEDS, feeds)))
-			.catch(err => dispatch(rejected(feedsTypes.GET_FEEDS, err)))
+			.then(data => {
+				dispatch(fulfilled(feedsTypes.GET_FEEDS, data))
+			})
+			.catch(err => {
+				console.error('[ACTION] getFeeds fetch error: ', err)
+				dispatch(rejected(feedsTypes.GET_FEEDS, err))
+			})
+	}
+}
+
+export const setFeedLocation = location => {
+	return (dispatch, getState) => {
+		// TODO: Save location to db
+		dispatch({type: feedsTypes.SET_FEED_LOCATION, payload: location})
+	}
+}
+
+export const setFeedSources = sources => {
+	return (dispatch, getState) => {
+		// TODO: Save sources to db
+		dispatch({type: feedsTypes.SET_FEED_SOURCES, payload: sources})
 	}
 }
 
 export const getRss = () => {
-	return async (dispatch, getState) => {
+	return (dispatch, getState) => {
 		dispatch(pending(feedsTypes.GET_RSS))
 
 		const store = getState()
@@ -37,7 +79,11 @@ export const getRss = () => {
 			body: JSON.stringify({sources: store.feeds.rssSources}),
 		})
 			.then(res => {
-				if (!res.ok) throw new Error(res)
+				if (!res.ok) {
+					console.error('[ACTION] getRss fetch error: ', res)
+					throw new Error(res)
+				}
+
 				return res.json()
 			})
 			.then(data => {

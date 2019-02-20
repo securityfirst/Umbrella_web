@@ -5,8 +5,8 @@ import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
 import ChecklistsPanel from './ChecklistsPanel'
-import Loading from '../reusables/Loading'
-import ErrorMessage from '../reusables/ErrorMessage'
+import Loading from '../common/Loading'
+import ErrorMessage from '../common/ErrorMessage'
 
 import { contentStyles } from '../../utils/view'
 

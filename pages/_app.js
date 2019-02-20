@@ -10,6 +10,8 @@ import { getPageContext } from '../lib/mui'
 
 import { getContent } from '../store/actions/content'
 
+import './index.css'
+
 class MyApp extends App {
 	constructor(props) {
 		super(props)

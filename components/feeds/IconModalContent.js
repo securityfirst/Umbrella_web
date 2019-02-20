@@ -33,7 +33,7 @@ const styles = theme => ({
 
 class IconModalContent extends React.Component {
 	render() {
-		const { classes, cancel, confirm, icon, content } = this.props
+		const { classes, cancel, confirm, icon, children } = this.props
 
 		return (
 			<Paper className={classes.wrapper} square>
@@ -41,7 +41,7 @@ class IconModalContent extends React.Component {
 					{icon}
 				</div>
 				<div className={classes.contentWrapper}>
-					{content}
+					{children}
 				</div>
 			</Paper>
 		)

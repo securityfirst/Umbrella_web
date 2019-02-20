@@ -21,8 +21,8 @@ import BookmarkIcon from '@material-ui/icons/Bookmark'
 import ShareIcon from '@material-ui/icons/Share'
 
 import Layout from '../../components/layout'
-import Loading from '../../components/reusables/Loading'
-import ErrorMessage from '../../components/reusables/ErrorMessage'
+import Loading from '../../components/common/Loading'
+import ErrorMessage from '../../components/common/ErrorMessage'
 
 import { contentStyles } from '../../utils/view'
 

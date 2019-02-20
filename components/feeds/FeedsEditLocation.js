@@ -2,14 +2,27 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
+import FormControl from '@material-ui/core/FormControl'
+import Button from '@material-ui/core/Button'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle'
 
+import FormControlLocation from '../../components/common/FormControlLocation'
 import IconModalContent from './IconModalContent'
 import IconForm from './IconForm'
+
+import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
 const styles = theme => ({
 	iconFontSize: {
 		fontSize: '4rem',
+	},
+	formControlInput: {
+		margin: '2rem 0 4rem',
+	},
+	buttonsWrapper: {
+		...buttonWrapperStyles(theme),
+		...paperStyles(theme),
 	},
 })
 
@@ -20,11 +33,16 @@ class FeedsEditLocation extends React.Component {
 		errorMessage: null,
 	}
 
+	handleSelect = location => {
+		this.setState({location})
+	}
+
 	handleSubmit = () => {
 		const { location } = this.state
 
-		// TODO: Handle submit here, then close on callback
+		if (!location) return alert('No location was selected.')
 
+		this.props.onSubmit(location)
 		this.props.closeModal()
 	}
 
@@ -43,20 +61,27 @@ class FeedsEditLocation extends React.Component {
 		return (
 			<IconModalContent 
 				icon={<PersonPinCircleIcon classes={{fontSizeLarge: classes.iconFontSize}} fontSize="large" color="primary" />} 
-				content={
-					<IconForm 
-						id="feed-location-form"
-						label="Enter location"
-						value={location}
+			>
+				<form>
+					<FormControlLocation 
+						id="feeds-edit-location"
+						className={classes.formControlInput}
+						label="Set location"
+						types={'country'}
 						error={error}
 						errorMessage={errorMessage}
-						onChange={e => this.setState({location: e.target.value})}
-						onSubmit={this.handleSubmit}
-						removeError={this.handleRemoveError}
-						cancel={this.handleCancel}
+						onSelect={this.handleSelect}
+						autoFocus
 					/>
-				} 
-			/>
+
+					<FormControl className={classes.buttonsWrapper} fullWidth>
+						<Button component="button" onClick={this.handleCancel}>Cancel</Button>
+						<ClickAwayListener onClickAway={this.handleRemoveError}>
+							<Button color="secondary" onClick={this.handleSubmit}>OK</Button>
+						</ClickAwayListener>
+					</FormControl>
+				</form>
+			</IconModalContent>
 		)
 	}
 }

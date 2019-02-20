@@ -10,9 +10,9 @@ import Button from '@material-ui/core/Button'
 import CloseIcon from '@material-ui/icons/Close'
 
 import Layout from '../../components/layout'
-import Loading from '../../components/reusables/Loading'
-import ErrorMessage from '../../components/reusables/ErrorMessage'
-import Marked from '../../components/reusables/Marked'
+import Loading from '../../components/common/Loading'
+import ErrorMessage from '../../components/common/ErrorMessage'
+import Marked from '../../components/common/Marked'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 

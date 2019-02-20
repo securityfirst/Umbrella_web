@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -7,6 +8,8 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 
 import Layout from '../components/layout'
+import Loading from '../components/common/Loading'
+import ErrorMessage from '../components/common/ErrorMessage'
 import FeedsAll from '../components/feeds/FeedsAll'
 import FeedsEdit from '../components/feeds/FeedsEdit'
 import FeedsRss from '../components/feeds/FeedsRss'
@@ -23,12 +26,17 @@ const styles = theme => ({
 })
 
 class Feeds extends React.Component {
-	static async getInitialProps({reduxStore, isServer}) {
-		await reduxStore.dispatch(getFeeds())
+	static async getInitialProps({reduxStore}) {
+		const store = reduxStore.getState()
+		const { feedLocation, feedSources } = store.feeds
+
+		if (feedLocation && feedSources.length) {
+			await reduxStore.dispatch(getFeeds())
+		}
 	}
 
 	state = {
-		isEdit: false,
+		isEdit: (!this.props.feedLocation && !this.props.feedSources.length),
 		tabIndex: 0,
 	}
 
@@ -38,14 +46,23 @@ class Feeds extends React.Component {
 		this.setState(state)
 	}
 
-	renderContent = () => {
-		const { classes } = this.props
+	renderFeedsView = () => {
+		const { getFeedsLoading, getFeedsError, feeds } = this.props
 		const { isEdit, tabIndex } = this.state
 
 		if (isEdit) return <FeedsEdit toggleEdit={() => this.setState({isEdit: false})} />
+		if (getFeedsLoading) return <Loading />
+		if (getFeedsError) return <ErrorMessage error={getFeedsError} />
+
+		return <FeedsAll toggleEdit={() => this.setState({isEdit: true})} />
+	}
+
+	renderContent = () => {
+		const { classes } = this.props
+		const { tabIndex } = this.state
 
 		switch (tabIndex) {
-			case 0: return <div className={classes.content}><FeedsAll toggleEdit={() => this.setState({isEdit: true})} /></div>
+			case 0: return this.renderFeedsView()
 			case 1: return <FeedsRss />
 		}
 	}
@@ -65,12 +82,16 @@ class Feeds extends React.Component {
 					<Tab label="RSS" />
 				</Tabs>
 
-				{/*<div className={classes.content}>*/}
+				<div className={classes.content}>
 					{this.renderContent()}
-				{/*</div>*/}
+				</div>
 			</Layout>
 		)
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(Feeds)
+const mapStateToProps = store => ({
+	...store.feeds
+})
+
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(Feeds))

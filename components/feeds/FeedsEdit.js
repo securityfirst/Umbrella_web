@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -13,6 +14,8 @@ import FeedsEditSources from './FeedsEditSources'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
+import { getFeeds, setFeedLocation, setFeedSources } from '../../store/actions/feeds'
+
 const styles = theme => ({
 	panel: {
 		margin: '.75rem 0',
@@ -23,12 +26,10 @@ const styles = theme => ({
 	},
 	panelContent: {
 		fontSize: '.875rem',
+		color: theme.palette.grey[600]
 	},
 	changeButtonWrapper: {
 		...buttonWrapperStyles(theme),
-	},
-	cancelButton: {
-		// backgroundColor: theme.palette.
 	},
 	modal: {
 		display: 'flex',
@@ -37,51 +38,78 @@ const styles = theme => ({
 	},
 })
 
-const panels = [
-	{title: 'Set your feed', content: 'You haven’t set the country and the sources for the feed yet. You have to do it in order for the feed to start displaying, and you can change it any time later in the settings.'},
-	{title: 'Interval', content: 'Set how often shall we check for news'},
-	{title: 'Location', content: 'Enter location'},
-	{title: 'Feed sources', content: 'Set sources'},
-]
-
 class FeedsEdit extends React.Component {
 	state = {
 		modalOpen: false,
 		modalContent: null,
 	}
 
-	handleFormOpen = (i) => () => {
+	setLocation = location => {
+		this.props.dispatch(setFeedLocation(location))
+	}
+
+	setSources = sources => {
+		this.props.dispatch(setFeedSources(sources))
+	}
+
+	handleModalClose = () => this.setState({modalOpen: false})
+
+	handleFormOpen = type => () => {
 		let state = {modalOpen: true}
 
 		// set modal inner content
-		switch (i) {
-			case 0: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />; break
-			case 1: state.modalContent = <FeedsEditInterval closeModal={this.handleModalClose} />; break
-			case 2: state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />; break
-			case 3: state.modalContent = <FeedsEditSources closeModal={this.handleModalClose} />; break
+		switch (type) {
+			case 'location': 
+				state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} onSubmit={this.setLocation} />
+				break
+			case 'sources': 
+				state.modalContent = <FeedsEditSources closeModal={this.handleModalClose} onSubmit={this.setSources} />
+				break
 		}
 
 		this.setState(state)
 	}
 
-	handleModalClose = () => this.setState({modalOpen: false})
+	handleSubmit = () => {
+		const { dispatch, toggleEdit, feedLocation, feedSources } = this.props
+
+		if (!feedLocation || !feedSources.length) return alert('Location and sources are required.')
+
+		dispatch(getFeeds())
+
+		toggleEdit()
+	}
 
 	render() {
-		const { classes, toggleEdit } = this.props
+		const { classes, feedLocation, feedSources } = this.props
 
 		return (
 			<div>
-				{panels.map((panel, i) => (
-					<Paper key={i} className={classes.panel} square>
-						<Typography className={classes.panelTitle} variant="h6">{panel.title}</Typography>
-						<Typography className={classes.panelContent} paragraph>{panel.content}</Typography>
-						<div className={classes.changeButtonWrapper}>
-							<Button className={classes.cancelButton} color="secondary" onClick={this.handleFormOpen(i)}>Set</Button>
-						</div>
-					</Paper>
-				))}
+				{/* Info panel */}
+				<Paper className={classes.panel} square>
+					<Typography className={classes.panelTitle} variant="h6">Set your feed</Typography>
+					<Typography className={classes.panelContent} paragraph>You haven’t set the country and the sources for the feed yet. You have to do it in order for the feed to start displaying, and you can change it any time later in the settings.</Typography>
+				</Paper>
 
-				<Button className={classes.cancelButton} variant="contained" onClick={toggleEdit}>Done</Button>
+				{/* Location panel */}
+				<Paper className={classes.panel} square>
+					<Typography className={classes.panelTitle} variant="h6">Location</Typography>
+					<Typography className={classes.panelContent} paragraph>{feedLocation ? feedLocation.place_name : 'Set location'}</Typography>
+					<div className={classes.changeButtonWrapper}>
+						<Button color="secondary" onClick={this.handleFormOpen('location')}>Set</Button>
+					</div>
+				</Paper>
+
+				{/* Sources panel */}
+				<Paper className={classes.panel} square>
+					<Typography className={classes.panelTitle} variant="h6">Set your feed</Typography>
+					<Typography className={classes.panelContent} paragraph>{feedSources.length ? `${feedSources.length} source${feedSources.length > 1 ? 's' : ''}` : 'Set sources'}</Typography>
+					<div className={classes.changeButtonWrapper}>
+						<Button color="secondary" onClick={this.handleFormOpen('sources')}>Set</Button>
+					</div>
+				</Paper>
+
+				<Button variant="contained" onClick={this.handleSubmit}>Done</Button>
 
 				<Modal
 					className={classes.modal}
@@ -98,4 +126,8 @@ class FeedsEdit extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEdit)
+const mapStateToProps = store => ({
+	...store.feeds
+})
+
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(FeedsEdit))

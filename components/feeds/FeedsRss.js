@@ -11,10 +11,10 @@ import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 
 import RssSourceAdd from './RssSourceAdd'
-import Loading from '../../components/reusables/Loading'
-import ErrorMessage from '../../components/reusables/ErrorMessage'
-import Marked from '../../components/reusables/Marked'
-import AddButton from '../../components/reusables/AddButton'
+import Loading from '../../components/common/Loading'
+import ErrorMessage from '../../components/common/ErrorMessage'
+import Marked from '../../components/common/Marked'
+import AddButton from '../../components/common/AddButton'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
@@ -79,7 +79,7 @@ class FeedsRss extends React.Component {
 		const { classes } = this.props
 
 		return (
-			<Card key={i} className={classes.card}>
+			<Card key={i} className={classes.card} square>
 				<CardActionArea onClick={this.handleSourceClick(source)}>
 					<CardContent className={classes.cardContent}>
 						<Typography variant="h6">{source.title}</Typography>
@@ -94,7 +94,7 @@ class FeedsRss extends React.Component {
 		const { classes } = this.props
 
 		return (
-			<Card key={i} className={classes.card}>
+			<Card key={i} className={classes.card} square>
 				<CardActionArea onClick={this.handleArticleClick(article)}>
 					<CardContent className={classes.cardContent}>
 						<Typography variant="h6">{article.title}</Typography>
@@ -128,7 +128,7 @@ class FeedsRss extends React.Component {
 		const { modalOpen } = this.state
 
 		return (
-			<div className={classes.content}>
+			<React.Fragment>
 				{this.renderContent()}
 				
 				<AddButton onClick={this.handleAddRss} />
@@ -143,7 +143,7 @@ class FeedsRss extends React.Component {
 				>
 					<RssSourceAdd closeModal={this.handleModalClose} />
 				</Modal>
-			</div>
+			</React.Fragment>
 		)
 	}
 }

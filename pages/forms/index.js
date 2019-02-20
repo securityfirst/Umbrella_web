@@ -8,9 +8,9 @@ import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 
 import Layout from '../../components/layout'
-import Loading from '../../components/reusables/Loading'
-import ErrorMessage from '../../components/reusables/ErrorMessage'
-import AddButton from '../../components/reusables/AddButton'
+import Loading from '../../components/common/Loading'
+import ErrorMessage from '../../components/common/ErrorMessage'
+import AddButton from '../../components/common/AddButton'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 

@@ -61,13 +61,13 @@ const FormControlInput = (props) => {
 				}}
 				inputProps={{
 					className: classes.input,
-					required: true,
+					required: required || false,
 				}}
 				onChange={onChange}
 				required={required}
 				autoFocus={autoFocus}
 				fullWidth
-				multiline
+				multiline={multiline || false}
 				{...inputProps}
 			/>
 			{!!error && <FormHelperText className={classes.helperText}>{errorMessage}</FormHelperText>}

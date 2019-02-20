@@ -1,3 +1,5 @@
+/* DEPRECATED */
+
 import React from 'react'
 import PropTypes from 'prop-types'
 
@@ -6,7 +8,7 @@ import FormControl from '@material-ui/core/FormControl'
 import Button from '@material-ui/core/Button'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
-import FormControlInput from '../../components/reusables/FormControlInput'
+import FormControlInput from '../../components/common/FormControlInput'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 

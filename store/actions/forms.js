@@ -35,20 +35,21 @@ export const postForm = (data) => {
 				headers: {'Content-Type': 'application/json'},
 			})
 				.then(res => {
-					console.log("res: ", res)
-					if (res.ok) {
-						dispatch(fulfilled(formsTypes.POST_FORM))
-						return res
-					} else {
-						console.error("res not ok")
+					if (!res.ok) {
+						console.error('[ACTION] postForm error: ', res)
+						return dispatch(rejected(formsTypes.POST_FORM, res))
 					}
+						
+					return res.json()
 				})
+				.then(data => dispatch(fulfilled(formsTypes.POST_FORM)))
 				.catch(err => {
-					console.error("action postForm error: ", err)
+					console.error('[ACTION] postForm error: ', err)
 					dispatch(rejected(formsTypes.POST_FORM, err))
 				})
 		} catch (e) {
-			console.error("exception: ", e)
+			console.error('[ACTION] postForm exception: ', e)
+			dispatch(rejected(formsTypes.POST_FORM, e))
 		}
 	}
 }

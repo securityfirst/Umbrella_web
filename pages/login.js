@@ -10,7 +10,7 @@ import FormControl from '@material-ui/core/FormControl'
 import Button from '@material-ui/core/Button'
 
 import Layout from '../components/layout'
-import FormControlInput from '../components/reusables/FormControlInput'
+import FormControlInput from '../components/common/FormControlInput'
 
 import { contentStyles } from '../utils/view'
 
