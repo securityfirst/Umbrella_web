@@ -1,17 +1,25 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import FlipMove from 'react-flip-move'
 import PropTypes from 'prop-types'
 import xhr from 'xhr'
 
 import { withStyles } from '@material-ui/core/styles'
+import FormControl from '@material-ui/core/FormControl'
 import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormHelperText from '@material-ui/core/FormHelperText'
 
 import teal from '@material-ui/core/colors/teal'
 
 import './index.css'
 
 const styles = theme => ({
+	label: {
+		'&$focused': {
+			color: teal[500],
+		},
+	},
+	focused: {},
 	input: {
 		height: 'initial',
 	},
@@ -20,9 +28,16 @@ const styles = theme => ({
 			borderBottomColor: teal[500],
 		},
 	},
+	helperText: {
+		height: 0,
+		minHeight: 0,
+		marginTop: 0,
+		lineHeight: '1.5rem',
+		overflow: 'visible',
+	},
 })
 
-class Geocoder extends React.Component {
+class FormControlLocation extends React.Component {
 	state = {
 		results: [],
 		focus: null,
@@ -48,17 +63,17 @@ class Geocoder extends React.Component {
 		}
 	}
 
-	search = (endpoint, source, accessToken, proximity, bbox, types, query, callback) => {
+	search = (proximity, bbox, types, query, callback) => {
 		let searchTime = new Date()
 		let uri =
-			endpoint +
+			'https://api.tiles.mapbox.com' +
 			'/geocoding/v5/' +
-			source +
+			'mapbox.places' +
 			'/' +
 			encodeURIComponent(query) +
 			'.json' +
 			'?access_token=' +
-			accessToken +
+			process.env.MAPBOX_ACCESS_TOKEN +
 			(proximity ? '&proximity=' + proximity : '') +
 			(bbox ? '&bbox=' + bbox : '') +
 			(types ? '&types=' + encodeURIComponent(types) : '')
@@ -94,9 +109,6 @@ class Geocoder extends React.Component {
 			})
 		} else {
 			this.search(
-				this.props.endpoint,
-				this.props.source,
-				this.props.accessToken,
 				this.props.proximity,
 				this.props.bbox,
 				this.props.types,
@@ -195,7 +207,12 @@ class Geocoder extends React.Component {
 		}
 	}
 
-	clickOption = (place, listLocation) => {
+	clickOption = (place, listLocation, e) => {
+		if (e) {
+			e.preventDefault()
+			e.stopPropagation()
+		}
+
 		this.props.onInputChange(place.place_name)
 		this.props.onSelect(place)
 		this.setState({
@@ -222,111 +239,111 @@ class Geocoder extends React.Component {
 	}
 
 	render() {
-		let input = <Input
-			error={this.state.error}
-			id={this.props.id}
-			value={this.state.inputValue || this.state.typedInput}
-			type='string'
-			classes={{underline: this.props.classes.underline}}
-			inputProps={{
-				ref: el => this.input = el,
-				className: this.props.classes.input,
-				required: true,
-				onBlur: this.handleBlur,
-				onKeyDown: this.onKeyDown,
-			}}
-			onChange={this.onInput}
-			required={this.props.required}
-			autoFocus={this.props.focusOnMount}
-			fullWidth
-		/>
+		const { classes, id, className, label, showLoader, focusOnMount, required } = this.props
+		const { error, results, loading, focus, showList, inputValue, typedInput } = this.state
 
-		return React.createElement(
-			'div',
-			null,
-			this.props.inputPosition === 'top' && input,
-			React.createElement(
-				FlipMove,
-				{
-					delay: 0,
-					duration: 200,
-					enterAnimation: 'accordionVertical',
-					leaveAnimation: 'accordionVertical',
-					maintainContainerHeight: true,
-					className: ''
-				},
-				this.state.results.length > 0 &&
-					this.state.showList &&
-					React.createElement(
-						'ul',
-						{
-							key: 'needed-for-flip-move',
-							id: 'react-geo-list',
-							className:
-								(this.props.showLoader && this.state.loading ? 'loading' : '') +
-								' geocoder__results'
-						},
-						this.state.results.map((result, i) => {
-							return React.createElement(
-								'li',
-								{ 
-									key: result.id,
-									className:
-										'geocoder__result ' +
-										(i === this.state.focus
-											? 'geocoder__result--focus'
-											: ''),
-									tabIndex: '-1',
-									onClick: () => this.clickOption(result, i),
-								},
-								React.createElement(
-									'span',
-									{
-										onClick: () => this.clickOption(result, i),
-									},
-									result.place_name
-								)
-							)
-						})
-					)
-			),
-			this.props.inputPosition === 'bottom' && input
+		let wrapperProps = {}
+		let inputProps = {}
+
+		if (className) wrapperProps.className = className
+
+		return (
+			<FormControl {...wrapperProps} fullWidth>
+				<InputLabel
+					htmlFor={id}
+					error={error}
+					classes={{
+						root: classes.label,
+						focused: classes.focused,
+					}}
+				>
+					{label}
+				</InputLabel>
+				<Input
+					id={id}
+					classes={{underline: classes.underline}}
+					inputProps={{
+						ref: el => this.input = el,
+						className: classes.input,
+						required: true,
+						onBlur: this.handleBlur,
+						onKeyDown: this.onKeyDown,
+					}}
+					error={error}
+					value={inputValue || typedInput}
+					type='string'
+					onChange={this.onInput}
+					required={required}
+					autoFocus={focusOnMount}
+					fullWidth
+				/>
+				<FlipMove
+					delay={0}
+					duration={200}
+					enterAnimation="accordionVertical"
+					leaveAnimation="accordionVertical"
+					maintainContainerHeight={true}
+				>
+					{(results.length > 0 && showList) && 
+						<ul
+							key="needed-for-flip-move"
+							id="react-geo-list"
+							className={'formcontrollocation__results' + (showLoader && loading ? ' loading' : '')}
+						>
+							{results.map((result, i) => (
+								<li
+									key={result.id}
+									className={'formcontrollocation__result ' + (i === focus ? 'formcontrollocation__result--focus' : '')}
+								>
+									<a 
+										href="" 
+										tabIndex="-1"
+										onClick={e => this.clickOption(result, i, e)}
+									>
+										{result.place_name}
+									</a>
+								</li>
+							))}
+						</ul>
+					}
+				</FlipMove>
+
+				{!!error && <FormHelperText className={classes.helperText}>{errorMessage}</FormHelperText>}
+			</FormControl>
 		)
 	}
 }
 
-Geocoder.defaultProps = {
-	endpoint: 'https://api.tiles.mapbox.com',
+FormControlLocation.defaultProps = {
+	id: '',
+	className: null,
 	defaultInputValue: '',
-	inputPosition: 'top',
-	inputPlaceholder: 'Search',
 	showLoader: false,
-	source: 'mapbox.places',
 	proximity: '',
 	bbox: '',
 	types: '',
+	focusOnMount: true,
+	error: null,
+	required: false,
 	onSuggest: function onSuggest() {},
 	onInputChange: function onInputChange() {},
-	focusOnMount: true,
-	required: false,
 }
 
-Geocoder.propTypes = {
-	endpoint: PropTypes.string,
+FormControlLocation.propTypes = {
+	id: PropTypes.string,
+	className: PropTypes.string,
 	defaultInputValue: PropTypes.string,
-	source: PropTypes.string,
-	inputPosition: PropTypes.string,
-	inputPlaceholder: PropTypes.string,
-	onSelect: PropTypes.func.isRequired,
-	onSuggest: PropTypes.func,
-	onInputChange: PropTypes.func,
-	accessToken: PropTypes.string.isRequired,
 	proximity: PropTypes.string,
 	bbox: PropTypes.string,
 	showLoader: PropTypes.bool,
 	focusOnMount: PropTypes.bool,
 	types: PropTypes.string,
+	error: PropTypes.object,
 	required: PropTypes.bool,
+	onSelect: PropTypes.func.isRequired,
+	onSuggest: PropTypes.func,
+	onInputChange: PropTypes.func,
 }
 
-export default withStyles(styles, {withTheme: true})(Geocoder)
+
+export default withStyles(styles, {withTheme: true})(FormControlLocation)

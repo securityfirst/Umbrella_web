@@ -63,6 +63,7 @@ class FeedsEditLocation extends React.Component {
 			>
 				<form>
 					<FormControlLocation 
+						id="feeds-edit-location"
 						className={classes.formControlInput}
 						label="Set location"
 						types={'country'}

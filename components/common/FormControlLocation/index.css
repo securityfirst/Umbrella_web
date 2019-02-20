@@ -1,23 +1,30 @@
-.geocoder__results {
+.formcontrollocation__results {
 	position: absolute;
 	margin: 0;
 	padding: .5rem 1rem;
 	list-style-type: none;
 	background-color: white;
 	box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12);
+	z-index: 1;
 }
 
-.geocoder__result {
-	padding: .5rem;
+.formcontrollocation__result {
 	cursor: pointer;
+	z-index: 2;
+}
+
+.formcontrollocation__result a {
+	display: block;
+	padding: .5rem;
 	color: rgba(0, 0, 0, 0.87);
 	font-family: 'Roboto';
+	text-decoration: none;
 }
 
-.geocoder__result:hover {
+.formcontrollocation__result:hover {
 	opacity: .75;
 }
 
-.geocoder__result--focus {
+.formcontrollocation__result--focus {
 	background-color: #f3f3f3;
 }
