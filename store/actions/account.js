@@ -35,3 +35,11 @@ export const logout = () => {
 			.catch(err => dispatch(rejected(accountTypes.LOGOUT, err)))
 	}
 }
+
+export const savePassword = password => {
+	return (dispatch, getState) => {
+		dispatch(pending(accountTypes.SAVE_PASSWORD))
+
+		dispatch(fulfilled(accountTypes.SAVE_PASSWORD))
+	}
+}

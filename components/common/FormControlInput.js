@@ -22,8 +22,6 @@ const styles = theme => ({
 		},
 	},
 	helperText: {
-		height: 0,
-		minHeight: 0,
 		marginTop: 0,
 		lineHeight: '1.5rem',
 		overflow: 'visible',

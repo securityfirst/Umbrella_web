@@ -45,6 +45,29 @@ export default function reducer(state = initialState, action) {
 				error: null,
 				isLoggedIn: false,
 			}
+
+		/* SAVE_PASSWORD */
+		case pending(accountTypes.SAVE_PASSWORD):
+			return {
+				...state,
+				savePasswordLoading: true,
+				savePasswordError: null,
+				savePasswordSuccess: false,
+			}
+		case rejected(accountTypes.SAVE_PASSWORD):
+			return {
+				...state,
+				savePasswordLoading: false,
+				savePasswordError: action.payload,
+				savePasswordSuccess: false,
+			}
+		case fulfilled(accountTypes.SAVE_PASSWORD):
+			return {
+				...state,
+				savePasswordLoading: false,
+				savePasswordError: null,
+				savePasswordSuccess: true,
+			}
 	}
 
 	return state

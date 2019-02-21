@@ -5,6 +5,7 @@ export const contentTypes = {
 export const accountTypes = {
 	LOGIN: 'LOGIN',
 	LOGOUT: 'LOGOUT',
+	SAVE_PASSWORD: 'SAVE_PASSWORD',
 }
 
 export const feedsTypes = {
