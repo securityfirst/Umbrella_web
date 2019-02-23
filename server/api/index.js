@@ -3,6 +3,7 @@ const router = express.Router()
 const cors = require("cors")
 const apicache = require("apicache")
 
+const auth = require('./auth')
 const github = require('./github')
 const feeds = require('./feeds')
 
@@ -19,6 +20,7 @@ const corsOptions = {
 router.use(cors(corsOptions))
 router.use(apicache.middleware('60 minutes'))
 
+router.use('/auth', auth)
 router.use('/github', github)
 router.use('/feeds', feeds)
 

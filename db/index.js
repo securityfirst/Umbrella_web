@@ -55,4 +55,4 @@ class ClientDB {
 	}
 }
 
-export default ClientDB
+export default new ClientDB()

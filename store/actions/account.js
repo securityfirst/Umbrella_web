@@ -1,21 +1,40 @@
+import 'isomorphic-unfetch'
+import CryptoJS from 'crypto-js'
+
 import { accountTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
+import { syncDb } from './db'
 
-export const login = (credentials) => {
+export const login = password => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.LOGIN))
 
-		fetch('/auth/account', {
-			method: "POST",
-			credentials: "same-origin", // include, *same-origin, omit
-			headers: {
-				"Content-Type": "application/json; charset=utf-8",
-			},
-			body: JSON.stringify(credentials), // body data type must match "Content-Type" header
-		})
-			.then(res => res.json())
-			.then(data => dispatch(fulfilled(accountTypes.LOGIN, data)))
-			.catch(err => dispatch(rejected(accountTypes.LOGIN, err)))
+		const ClientDB = require('../../db')
+
+		ClientDB.default.store
+			.getItem('h')
+			.then(hash => {
+				if (!hash) return dispatch(rejected(accountTypes.LOGIN, 'Password does not exist'))
+
+				fetch(`${process.env.ROOT}/api/auth/key`)
+					.then(res => {
+						if (!res.ok) return dispatch(rejected(accountTypes.LOGIN, err))
+						return res.text()
+					})
+					.then(key => {
+						const decrypted = CryptoJS.AES.decrypt(hash, key)
+
+						if (password !== decrypted) {
+							return dispatch(rejected(accountTypes.LOGIN, 'Password is incorrect'))
+						}
+
+						dispatch(fulfilled(accountTypes.LOGIN, password))
+						dispatch(syncDb())
+					})
+					.catch(err => {
+						return dispatch(rejected(accountTypes.LOGIN, err))
+					})
+			})
 	}
 }
 
@@ -23,15 +42,11 @@ export const logout = () => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.LOGOUT))
 
-		fetch('/auth/logout', {
-			method: "POST",
-			credentials: "same-origin", // include, *same-origin, omit
-			headers: {
-				"Content-Type": "application/json; charset=utf-8",
-			},
-		})
-			.then(res => res.json())
-			.then(data => dispatch(fulfilled(accountTypes.LOGOUT, data)))
+		const ClientDB = require('../../db')
+
+		ClientDB.default.store
+			.setItem('h', false)
+			.then(() => dispatch(fulfilled(accountTypes.LOGOUT)))
 			.catch(err => dispatch(rejected(accountTypes.LOGOUT, err)))
 	}
 }
@@ -40,6 +55,26 @@ export const savePassword = password => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.SAVE_PASSWORD))
 
-		dispatch(fulfilled(accountTypes.SAVE_PASSWORD))
+		const ClientDB = require('../../db')
+
+		fetch(`${process.env.ROOT}/api/auth/key`)
+			.then(res => {
+				if (!res.ok) return dispatch(rejected(accountTypes.SAVE_PASSWORD, res))
+				return res.text()
+			})
+			.then(key => {
+				console.log("key: ", key);
+				console.log("password: ", password);
+				const hash = CryptoJS.AES.encrypt(password, key).toString()
+				console.log("hash: ", hash);
+
+				ClientDB.default.store
+					.setItem('h', hash)
+					.then(() => dispatch(fulfilled(accountTypes.SAVE_PASSWORD)))
+					.catch(err => dispatch(rejected(accountTypes.SAVE_PASSWORD, err)))
+			})
+			.catch(err => {
+				return dispatch(rejected(accountTypes.SAVE_PASSWORD, err))
+			})
 	}
 }

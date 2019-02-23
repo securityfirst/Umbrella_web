@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Link from 'next/link'
 
 import { withStyles } from '@material-ui/core/styles'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
@@ -10,9 +11,12 @@ import FormControl from '@material-ui/core/FormControl'
 import Button from '@material-ui/core/Button'
 
 import Layout from '../components/layout'
+import Loading from '../components/common/Loading'
 import FormControlInput from '../components/common/FormControlInput'
 
 import { contentStyles } from '../utils/view'
+
+import { login } from '../store/actions/account'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -34,13 +38,15 @@ const styles = theme => ({
 		},
 	},
 	loginButtonFormControl: {
+		display: 'flex',
+		justifyContent: 'center',
 		margin: '2rem 0',
 		[theme.breakpoints.up('sm')]: {
 			margin: '4rem 0 0',
 		},
 	},
 	loginButton: {
-		margin: '0 auto',
+		margin: '0 auto 1rem',
 	},
 	loginButtonText: {
 		color: theme.palette.common.white,
@@ -58,19 +64,19 @@ class Login extends React.Component {
 		const { password } = this.state
 
 		if (!password || !password.length) {
-			this.setState({
+			return this.setState({
 				error: true,
 				errorMessage: 'Password is required',
 			})
-
-			return
 		}
+
+		this.props.dispatch(login(password))
 	}
 
 	removeError = () => this.setState({error: false, errorMessage: null})
 
 	render() {
-		const { classes } = this.props
+		const { classes, loginLoading, loginError } = this.props
 		const { password, error, errorMessage } = this.state
 
 		return (
@@ -87,25 +93,40 @@ class Login extends React.Component {
 								label="Password*"
 								value={password}
 								type="password"
-								error={error}
-								errorMessage={errorMessage}
-								onChange={(e,v) => this.setState({password: v})}
+								error={error || !!loginError}
+								errorMessage={errorMessage || !!loginError ? loginError.message : null}
+								onChange={e => this.setState({password: e.target.value})}
 								required
 								autoFocus
 							/>
 
 							<FormControl className={classes.loginButtonFormControl} fullWidth>
 								<ClickAwayListener onClickAway={this.removeError}>
-									<Button 
-										className={classes.loginButton}
-										classes={{containedSecondary: classes.loginButtonText}}
-										component="button" 
-										variant="contained" 
-										color="secondary"
-										onClick={this.handleLoginSubmit}
-									>
-										Login
-									</Button>
+									{loginLoading
+										? <Loading />
+										: <Button 
+											className={classes.loginButton}
+											classes={{containedSecondary: classes.loginButtonText}}
+											component="button" 
+											variant="contained" 
+											color="secondary"
+											onClick={this.handleLoginSubmit}
+										>
+											Login
+										</Button>
+									}
+
+									{(!!loginError && loginError.message === 'Password does not exist') &&
+										<Link href={{pathname: '/account', query: {setpassword: true}}}>
+											<Button 
+												className={classes.loginButton}
+												component="button" 
+												color="primary"
+											>
+												Set Password
+											</Button>
+										</Link>
+									}
 								</ClickAwayListener>
 							</FormControl>
 						</form>

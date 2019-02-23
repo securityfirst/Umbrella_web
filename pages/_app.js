@@ -2,14 +2,15 @@ import React from 'react'
 import App, { Container } from 'next/app'
 import NProgress from 'next-nprogress/component'
 import { Provider } from 'react-redux'
-import { withReduxStore } from '../lib/redux.js'
 import JssProvider from 'react-jss/lib/JssProvider'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { MuiThemeProvider } from '@material-ui/core/styles'
+
+import { withReduxStore } from '../lib/redux.js'
 import { getPageContext } from '../lib/mui'
 
 import { getContent } from '../store/actions/content'
-import { syncDb } from '../store/actions/db'
+import { initDb } from '../store/actions/db'
 
 import './index.css'
 
@@ -22,7 +23,6 @@ class MyApp extends App {
 	static async getInitialProps({Component, router, ctx}) {
 		// global data
 		await ctx.reduxStore.dispatch(getContent())
-		await ctx.reduxStore.dispatch(syncDb())
 
 		let pageProps = {}
 
@@ -33,12 +33,17 @@ class MyApp extends App {
 		return {pageProps}
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
 		// Remove the server-side injected CSS.
 		const jssStyles = document.querySelector('#jss-server-side')
 		
 		if (jssStyles && jssStyles.parentNode) {
 			jssStyles.parentNode.removeChild(jssStyles)
+		}
+
+		if (typeof window !== 'undefined') {
+			const clientDB = require('../db')
+			clientDB.default.init()
 		}
 	}
 

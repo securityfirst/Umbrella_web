@@ -5,9 +5,14 @@ const content = {
 }
 
 const account = {
-	loading: false,
-	error: null,
-	loggedIn: false,
+	loginLoading: false,
+	loginError: null,
+	logoutLoading: false,
+	logoutError: null,
+	password: null,
+	savePasswordLoading: false,
+	savePasswordError: null,
+	savePasswordSuccess: false,
 }
 
 const feeds = {

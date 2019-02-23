@@ -8,42 +8,41 @@ export default function reducer(state = initialState, action) {
 		case pending(accountTypes.LOGIN):
 			return {
 				...state,
-				loading: true,
+				loginLoading: true,
 			}
 		case rejected(accountTypes.LOGIN):
 			return {
 				...state,
-				loading: false,
-				error: action.payload,
-				isLoggedIn: false,
+				loginLoading: false,
+				loginError: action.payload,
+				password: null,
 			}
 		case fulfilled(accountTypes.LOGIN):
 			return {
 				...state,
-				loading: false,
-				error: null,
-				isLoggedIn: true,
+				loginLoading: false,
+				loginError: null,
+				password: true,
 			}
 
 		/* LOGOUT */
 		case pending(accountTypes.LOGOUT):
 			return {
 				...state,
-				loading: true,
+				logoutLoaidng: true,
 			}
 		case rejected(accountTypes.LOGOUT):
 			return {
 				...state,
-				loading: false,
-				error: action.payload,
-				isLoggedIn: false,
+				logoutLoaidng: false,
+				logoutError: action.payload,
 			}
 		case fulfilled(accountTypes.LOGOUT):
 			return {
 				...state,
-				loading: false,
-				error: null,
-				isLoggedIn: false,
+				logoutLoaidng: false,
+				logoutError: null,
+				password: null,
 			}
 
 		/* SAVE_PASSWORD */
@@ -68,9 +67,6 @@ export default function reducer(state = initialState, action) {
 				savePasswordError: null,
 				savePasswordSuccess: true,
 			}
-
-		/* SYNC_ACCOUNT */
-		case accountTypes.SYNC_ACCOUNT: return action.payload
 	}
 
 	return state

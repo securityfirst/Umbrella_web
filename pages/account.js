@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'next/router'
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -46,6 +47,11 @@ class Account extends React.Component {
 		passwordConfirmError: null,
 		passwordConfirmErrorMessage: '',
 		passwordSuccessMessage: '',
+	}
+
+	componentDidMount() {
+		const { query } = this.props.router
+		if (query && query.setpassword) this.setState({expanded: 1})
 	}
 
 	handlePanelToggle = i => (e, expanded) => {
@@ -144,6 +150,7 @@ class Account extends React.Component {
 				<FormControlInput
 					id="account-password"
 					className={classes.input}
+					type="password"
 					label="Password"
 					value={password}
 					error={passwordError}
@@ -156,6 +163,7 @@ class Account extends React.Component {
 				<FormControlInput
 					id="account-passwordConfirm"
 					className={classes.input}
+					type="password"
 					label="Password Confirm"
 					value={passwordConfirm}
 					error={passwordConfirmError}
@@ -213,4 +221,4 @@ class Account extends React.Component {
 	}
 }
 
-export default connect()(withStyles(styles, {withTheme: true})(Account))
+export default withRouter(connect()(withStyles(styles, { withTheme: true })(Account)))
