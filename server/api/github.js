@@ -3,8 +3,8 @@ require('isomorphic-unfetch')
 const express = require('express')
 const router = express.Router()
 
-const set = require('lodash/set')
-const get = require('lodash/get')
+const set = require('lodash.set')
+const get = require('lodash.get')
 
 router.get('/tree', async (req, res) => {
 	let lessons

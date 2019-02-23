@@ -68,6 +68,11 @@ const view = {
 	locale: 'en',
 }
 
+const db = {
+	loading: true,
+	error: null,
+}
+
 export default {
 	content,
 	account,
@@ -76,4 +81,5 @@ export default {
 	lessons,
 	checklists,
 	view,
+	db,
 }

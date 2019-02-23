@@ -43,6 +43,9 @@ export default function reducer(state = initialState, action) {
 				getCustomChecklistsError: null,
 				customChecklists: action.payload,
 			}
+
+		/* SYNC_CHECKLISTS */
+		case checklistsTypes.SYNC_CHECKLISTS: return action.payload
 	}
 
 	return state

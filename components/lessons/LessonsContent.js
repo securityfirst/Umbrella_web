@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import get from 'lodash/get'
+import get from 'lodash.get'
 
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'

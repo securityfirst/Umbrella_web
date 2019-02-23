@@ -1,78 +1,52 @@
 import localforage from 'localforage'
 
-localforage.config({
-	name: 'umbrella',
-	description: 'Local data store for the Umbrella web client'
-});
-
 class ClientDB {
 	constructor() {
-		if (!window) throw new Error('[ClientDB] Cannot initialize serverside')
+		if (typeof window === 'undefined') throw new Error('[ClientDB] Cannot initialize serverside')
 
-		this.initialized = false
-
-		this.userStore = null
-
-		this.feedsStore = null
-		this.formsStore = null
-		this.checklistsStore = null
-		
-		this.contentStore = null
-
-		this.storeMap = {
-			'user': this.userStore,
-			'feeds': this.feedsStore,
-			'forms': this.formsStore,
-			'checklists': this.checklistsStore,
-			'content': this.contentStore,
-		}
+		this.store = null
 	}
 
 	init() {
-		if (this.initialized) return
+		return new Promise((resolve, reject) => {
+			if (this.store) return resolve()
 
-		this.userStore = localforage.createInstance({name: 'user'})
-		this.feedsStore = localforage.createInstance({name: 'feeds'})
-		this.formsStore = localforage.createInstance({name: 'forms'})
-		this.checklistsStore = localforage.createInstance({name: 'checklists'})
-		this.contentStore = localforage.createInstance({name: 'content'})
+			try {
+				this.store = localforage.createInstance({
+					name: 'umbrella',
+					storeName: 'store',
+					description: 'Local data store',
+				})
 
-		this.initialized = true
+				this.store
+					.getItem('enabled')
+					.then(val => {
+						if (!val) this.store.setItem('enabled', false)
+						resolve(this.store)
+					})
+			} catch (e) {
+				console.error('[ClientDB] init() exception: \n', e)
+				return reject(e)
+			}
+		})
 	}
 
-	get({store, key}) {
-		return this.storeMap[store].getItem(key)
+	clear() {
+		return this.store.clear()
 	}
 
-	set({store, key, value}) {
-		return this.storeMap[store].setItem(key, value)
+	enable() {
+		return this.store.setItem('enabled', true)
 	}
 
-	remove({store, key}) {
-		return this.storeMap[store].removeItem(key)
-	}
-
-	clear({store}) {
-		return this.storeMap[store].clear()
-	}
-
-	clearAll() {
+	disable(clear) {
 		return new Promise((resolve, reject) => {
 			try {
-				const storeKeys = Object.keys(this.storeMap)
+				this.store
+					.setItem('enabled', false)
+					.then(resolve)
 
-				for (let i=0; i < storeKeys.length; i++) {
-					try {
-						this.clear({store: storeKeys[i]})
-					} catch (e) {
-						console.error(`[ClientDB] clearAll() exception at store ${storeKeys[i]}: \n`, e)
-						reject(e)
-					}
-
-					if (i === storeKeys.length - 1) {
-						resolve()
-					}
-				}
+				if (clear) this.store.clear()
 			} catch (e) {
 				console.error('[ClientDB] clearAll() exception: \n', e)
 				reject(e)
@@ -81,4 +55,4 @@ class ClientDB {
 	}
 }
 
-export default ClientDB()
+export default ClientDB

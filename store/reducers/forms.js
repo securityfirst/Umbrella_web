@@ -53,6 +53,9 @@ export default function reducer(state = initialState, action) {
 				postFormError: null,
 				postFormSuccess: false,
 			}
+
+		/* SYNC_FORMS */
+		case formsTypes.SYNC_FORMS: return action.payload
 	}
 
 	return state

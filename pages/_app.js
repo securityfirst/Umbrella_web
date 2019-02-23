@@ -9,6 +9,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import { getPageContext } from '../lib/mui'
 
 import { getContent } from '../store/actions/content'
+import { syncDb } from '../store/actions/db'
 
 import './index.css'
 
@@ -21,6 +22,7 @@ class MyApp extends App {
 	static async getInitialProps({Component, router, ctx}) {
 		// global data
 		await ctx.reduxStore.dispatch(getContent())
+		await ctx.reduxStore.dispatch(syncDb())
 
 		let pageProps = {}
 

@@ -96,13 +96,6 @@ export const getRss = () => {
 	}
 }
 
-export const syncRssSources = () => {
-	/* TODO: Get RSS sources from local storage */
-	const sources = []
-
-	return {type: feedsTypes.SYNC_RSS_SOURCES, payload: sources}
-}
-
 export const addRssSource = source => {
 	/* TODO: Add source to local storage */
 

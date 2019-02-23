@@ -6,6 +6,7 @@ import forms from './forms'
 import lessons from './lessons'
 import checklists from './checklists'
 import view from './view'
+import db from './db'
 
 const reducer = combineReducers({
 	content,
@@ -15,6 +16,7 @@ const reducer = combineReducers({
 	lessons,
 	checklists,
 	view,
+	db,
 })
 
 export default reducer

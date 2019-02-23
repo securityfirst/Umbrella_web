@@ -68,6 +68,9 @@ export default function reducer(state = initialState, action) {
 				savePasswordError: null,
 				savePasswordSuccess: true,
 			}
+
+		/* SYNC_ACCOUNT */
+		case accountTypes.SYNC_ACCOUNT: return action.payload
 	}
 
 	return state
