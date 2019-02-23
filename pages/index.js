@@ -9,9 +9,15 @@ import Layout from '../components/layout'
 
 import { contentStyles } from '../utils/view'
 
+import { setAppbarTitle } from '../store/actions/view'
+
 const styles = theme => contentStyles(theme)
 
 class Index extends React.Component {
+	static async getInitialProps({reduxStore}) {
+		await reduxStore.dispatch(setAppbarTitle('Home'))
+	}
+
 	render() {
 		const { classes } = this.props
 

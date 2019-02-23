@@ -7,8 +7,6 @@ const content = {
 const account = {
 	loginLoading: false,
 	loginError: null,
-	logoutLoading: false,
-	logoutError: null,
 	password: null,
 	savePasswordLoading: false,
 	savePasswordError: null,

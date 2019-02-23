@@ -25,26 +25,6 @@ export default function reducer(state = initialState, action) {
 				password: action.payload,
 			}
 
-		/* LOGOUT */
-		case pending(accountTypes.LOGOUT):
-			return {
-				...state,
-				logoutLoaidng: true,
-			}
-		case rejected(accountTypes.LOGOUT):
-			return {
-				...state,
-				logoutLoaidng: false,
-				logoutError: action.payload,
-			}
-		case fulfilled(accountTypes.LOGOUT):
-			return {
-				...state,
-				logoutLoaidng: false,
-				logoutError: null,
-				password: null,
-			}
-
 		/* SAVE_PASSWORD */
 		case pending(accountTypes.SAVE_PASSWORD):
 			return {

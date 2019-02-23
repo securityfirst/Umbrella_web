@@ -43,19 +43,6 @@ export const login = (password, router) => {
 	}
 }
 
-export const logout = () => {
-	return (dispatch, getState) => {
-		dispatch(pending(accountTypes.LOGOUT))
-
-		const ClientDB = require('../../db')
-
-		ClientDB.default.store
-			.setItem('h', false)
-			.then(() => dispatch(fulfilled(accountTypes.LOGOUT)))
-			.catch(err => dispatch(rejected(accountTypes.LOGOUT, err)))
-	}
-}
-
 export const savePassword = (password, router) => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.SAVE_PASSWORD))
