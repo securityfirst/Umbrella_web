@@ -47,12 +47,12 @@ class Feeds extends React.Component {
 	}
 
 	renderFeedsView = () => {
-		const { getFeedsLoading, getFeedsError, feeds } = this.props
+		const { getFeedsLoading, getFeedsError, feeds, feedLocation, feedSources } = this.props
 		const { isEdit, tabIndex } = this.state
 
-		if (isEdit) return <FeedsEdit toggleEdit={() => this.setState({isEdit: false})} />
 		if (getFeedsLoading) return <Loading />
 		if (getFeedsError) return <ErrorMessage error={getFeedsError} />
+		if (isEdit || !feedLocation || !feedSources) return <FeedsEdit toggleEdit={() => this.setState({isEdit: false})} />
 
 		return <FeedsAll toggleEdit={() => this.setState({isEdit: true})} />
 	}

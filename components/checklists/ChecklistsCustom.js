@@ -10,7 +10,7 @@ import ErrorMessage from '../common/ErrorMessage'
 
 import { contentStyles } from '../../utils/view'
 
-import { getCustomChecklists } from '../../store/actions/checklists'
+import { getChecklistsCustom } from '../../store/actions/checklists'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -18,18 +18,18 @@ const styles = theme => ({
 
 class ChecklistsCustom extends React.Component {
 	componentWillMount() {
-		this.props.dispatch(getCustomChecklists())
+		this.props.dispatch(getChecklistsCustom())
 	}
 
 	render() {
-		const { classes, getCustomChecklistsLoading, getCustomChecklistsError, customChecklists } = this.props
+		const { classes, getChecklistsCustomLoading, getChecklistsCustomError, checklistsCustom } = this.props
 
-		if (getCustomChecklistsLoading) return <Loading />
-		else if (getCustomChecklistsError) return <ErrorMessage error={getCustomChecklistsError} />
+		if (getChecklistsCustomLoading) return <Loading />
+		else if (getChecklistsCustomError) return <ErrorMessage error={getChecklistsCustomError} />
 
 		return (
 			<div className={classes.content}>
-				{customChecklists.map((checklist, i) => <ChecklistsPanel key={i} name={checklist.name} percentage={checklist.percentage} />)}
+				{checklistsCustom.map((checklist, i) => <ChecklistsPanel key={i} name={checklist.name} percentage={checklist.percentage} />)}
 			</div>
 		)
 	}

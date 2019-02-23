@@ -108,6 +108,7 @@ class Account extends React.Component {
 	}
 
 	savePassword = () => {
+		const { router } = this.props
 		const { password, passwordConfirm } = this.state
 
 		if (
@@ -116,7 +117,7 @@ class Account extends React.Component {
 		) {
 			if (password !== passwordConfirm) return alert('Passwords do not match. Please try again.')
 
-			this.props.dispatch(savePassword(password))
+			this.props.dispatch(savePassword(password, router))
 			this.setState({
 				password: '',
 				passwordConfirm: '',

@@ -1,11 +1,12 @@
 import 'isomorphic-unfetch'
-import CryptoJS from 'crypto-js'
+import Router from 'next/router'
 
 import { accountTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 import { syncDb } from './db'
+import Crypto from '../../utils/crypto'
 
-export const login = password => {
+export const login = (password, router) => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.LOGIN))
 
@@ -21,15 +22,19 @@ export const login = password => {
 						if (!res.ok) return dispatch(rejected(accountTypes.LOGIN, err))
 						return res.text()
 					})
-					.then(key => {
-						const decrypted = CryptoJS.AES.decrypt(hash, key).toString(CryptoJS.enc.Utf8)
+					.then(async key => {
+						const crypto = new Crypto(key)
+						const decrypted = crypto.decrypt(hash)
 
 						if (password !== decrypted) {
 							return dispatch(rejected(accountTypes.LOGIN, 'Password is incorrect'))
 						}
 
-						dispatch(fulfilled(accountTypes.LOGIN, password))
-						dispatch(syncDb())
+						await dispatch(fulfilled(accountTypes.LOGIN, password))
+
+						alert("You are now logged in!")
+						await dispatch(syncDb(password))
+						!!router && router.back()
 					})
 					.catch(err => {
 						return dispatch(rejected(accountTypes.LOGIN, err))
@@ -51,7 +56,7 @@ export const logout = () => {
 	}
 }
 
-export const savePassword = password => {
+export const savePassword = (password, router) => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.SAVE_PASSWORD))
 
@@ -63,11 +68,17 @@ export const savePassword = password => {
 				return res.text()
 			})
 			.then(key => {
-				const hash = CryptoJS.AES.encrypt(password, key).toString()
+				const crypto = new Crypto(key)
+				const hash = crypto.encrypt(password)
+
+				ClientDB.default.store.setItem('enabled', true)
 
 				ClientDB.default.store
 					.setItem('h', hash)
-					.then(() => dispatch(fulfilled(accountTypes.SAVE_PASSWORD)))
+					.then(() => {
+						dispatch(fulfilled(accountTypes.SAVE_PASSWORD, password))
+						!!router && router.back()
+					})
 					.catch(err => dispatch(rejected(accountTypes.SAVE_PASSWORD, err)))
 			})
 			.catch(err => {

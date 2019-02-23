@@ -4,44 +4,44 @@ import initialState from '../initialState.js'
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
-		/* GET_SYSTEM_CHECKLISTS */
-		case pending(checklistsTypes.GET_SYSTEM_CHECKLISTS):
+		/* GET_CHECKLISTS_SYSTEM */
+		case pending(checklistsTypes.GET_CHECKLISTS_SYSTEM):
 			return {
 				...state,
-				getSystemChecklistsLoading: true,
+				getChecklistsSystemLoading: true,
 			}
-		case rejected(checklistsTypes.GET_SYSTEM_CHECKLISTS):
+		case rejected(checklistsTypes.GET_CHECKLISTS_SYSTEM):
 			return {
 				...state,
-				getSystemChecklistsLoading: false,
-				getSystemChecklistsError: action.payload,
+				getChecklistsSystemLoading: false,
+				getChecklistsSystemError: action.payload,
 			}
-		case fulfilled(checklistsTypes.GET_SYSTEM_CHECKLISTS):
+		case fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM):
 			return {
 				...state,
-				getSystemChecklistsLoading: false,
-				getSystemChecklistsError: null,
-				systemChecklists: action.payload,
+				getChecklistsSystemLoading: false,
+				getChecklistsSystemError: null,
+				checklistsSystem: action.payload,
 			}
 
-		/* GET_CUSTOM_CHECKLISTS */
-		case pending(checklistsTypes.GET_CUSTOM_CHECKLISTS):
+		/* GET_CHECKLISTS_CUSTOM */
+		case pending(checklistsTypes.GET_CHECKLISTS_CUSTOM):
 			return {
 				...state,
-				getCustomChecklistsLoading: true,
+				getChecklistsCustomLoading: true,
 			}
-		case rejected(checklistsTypes.GET_CUSTOM_CHECKLISTS):
+		case rejected(checklistsTypes.GET_CHECKLISTS_CUSTOM):
 			return {
 				...state,
-				getCustomChecklistsLoading: false,
-				getCustomChecklistsError: action.payload,
+				getChecklistsCustomLoading: false,
+				getChecklistsCustomError: action.payload,
 			}
-		case fulfilled(checklistsTypes.GET_CUSTOM_CHECKLISTS):
+		case fulfilled(checklistsTypes.GET_CHECKLISTS_CUSTOM):
 			return {
 				...state,
-				getCustomChecklistsLoading: false,
-				getCustomChecklistsError: null,
-				customChecklists: action.payload,
+				getChecklistsCustomLoading: false,
+				getChecklistsCustomError: null,
+				checklistsCustom: action.payload,
 			}
 
 		/* SYNC_CHECKLISTS */

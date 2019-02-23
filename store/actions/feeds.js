@@ -1,13 +1,11 @@
 import 'isomorphic-unfetch'
 import merge from 'lodash.merge'
-import CryptoJS from 'crypto-js'
 
 import { feedsTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
 import { urlParams } from '../../utils/fetch'
-
-import ClientDB from '../../db'
+import Crypto from '../../utils/crypto'
 
 export const getFeeds = () => {
 	return async (dispatch, getState) => {
@@ -57,13 +55,12 @@ export const setFeedLocation = location => {
 		const state = getState()
 
 		if (state.account.password) {
-			ClientDB.store.setItem(
-				'feeds', 
-				CryptoJS.AES.encrypt(
-					merge(state.feeds, {feedLocation: location}),
-					state.account.password
-				).toString()
-			)
+			const crypto = new Crypto(state.account.password)
+			const encrypted = crypto.encrypt(location)
+
+			const ClientDB = require('../../db')
+
+			ClientDB.default.store.setItem('fe_l', encrypted)
 		}
 
 		dispatch({type: feedsTypes.SET_FEED_LOCATION, payload: location})
@@ -75,13 +72,12 @@ export const setFeedSources = sources => {
 		const state = getState()
 
 		if (state.account.password) {
-			ClientDB.store.setItem(
-				'feeds', 
-				CryptoJS.AES.encrypt(
-					merge(state.feeds, {feedSources: sources}),
-					state.account.password
-				).toString()
-			)
+			const crypto = new Crypto(state.account.password)
+			const encrypted = crypto.encrypt(sources)
+
+			const ClientDB = require('../../db')
+
+			ClientDB.default.store.setItem('fe_s', encrypted)
 		}
 
 		dispatch({type: feedsTypes.SET_FEED_SOURCES, payload: sources})

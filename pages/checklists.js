@@ -15,7 +15,7 @@ import ErrorMessage from '../components/common/ErrorMessage'
 
 import { contentStyles } from '../utils/view'
 
-import { getSystemChecklists } from '../store/actions/checklists'
+import { getChecklistsSystem } from '../store/actions/checklists'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -33,7 +33,7 @@ const styles = theme => ({
 
 class Checklists extends React.Component {
 	static async getInitialProps({reduxStore, isServer}) {
-		await reduxStore.dispatch(getSystemChecklists())
+		await reduxStore.dispatch(getChecklistsSystem())
 	}
 
 	state = {
@@ -43,31 +43,31 @@ class Checklists extends React.Component {
 	handleTabSelect = (e, v) => this.setState({tabIndex: v})
 
 	renderOverview = () => {
-		const { classes, getSystemChecklistsLoading, getSystemChecklistsError, systemChecklists } = this.props
+		const { classes, getChecklistsSystemLoading, getChecklistsSystemError, checklistsSystem } = this.props
 
-		if (getSystemChecklistsLoading) return <Loading />
-		else if (getSystemChecklistsError) return <ErrorMessage error={getSystemChecklistsError} />
+		if (getChecklistsSystemLoading) return <Loading />
+		else if (getChecklistsSystemError) return <ErrorMessage error={getChecklistsSystemError} />
 
 		return (
 			<div className={classes.content}>
 				<Typography className={classes.label} variant="subtitle1">Checklists Total</Typography>
 
-				<ChecklistsPanel name="Total done" percentage={systemChecklists.total} />
+				<ChecklistsPanel name="Total done" percentage={checklistsSystem.total} />
 
-				{(systemChecklists.favorites && systemChecklists.favorites.length) && 
+				{(checklistsSystem.favorites && checklistsSystem.favorites.length) && 
 					<Typography className={classes.label} variant="subtitle1">Favourites</Typography>
 				}
 
-				{(systemChecklists.favorites && systemChecklists.favorites.length) && 
-					systemChecklists.favorites.map((checklist, i) => <ChecklistsPanel key={i} name={checklist.name} percentage={checklist.percentage} />)
+				{(checklistsSystem.favorites && checklistsSystem.favorites.length) && 
+					checklistsSystem.favorites.map((checklist, i) => <ChecklistsPanel key={i} name={checklist.name} percentage={checklist.percentage} />)
 				}
 
-				{(systemChecklists.checklists && systemChecklists.checklists.length) && 
+				{(checklistsSystem.checklists && checklistsSystem.checklists.length) && 
 					<Typography className={classes.label} variant="subtitle1">My Checklists</Typography>
 				}
 
-				{(systemChecklists.checklists && systemChecklists.checklists.length) && 
-					systemChecklists.checklists.map((checklist, i) => <ChecklistsPanel key={i} name={checklist.name} percentage={checklist.percentage} />)
+				{(checklistsSystem.checklists && checklistsSystem.checklists.length) && 
+					checklistsSystem.checklists.map((checklist, i) => <ChecklistsPanel key={i} name={checklist.name} percentage={checklist.percentage} />)
 				}
 			</div>
 		)

@@ -3,28 +3,28 @@ import 'isomorphic-unfetch'
 import { checklistsTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
-import { systemChecklists, customChecklists } from '../../mock/checklists'
+import { checklistsSystem, checklistsCustom } from '../../mock/checklists'
 
-export const getSystemChecklists = () => {
+export const getChecklistsSystem = () => {
 	return async (dispatch, getState) => {
-		dispatch(pending(checklistsTypes.GET_SYSTEM_CHECKLISTS))
+		dispatch(pending(checklistsTypes.GET_CHECKLISTS_SYSTEM))
 
 		/* TODO: Replace with API */
 		await fetch('https://jsonplaceholder.typicode.com/users')
 			.then(res => res.json())
-			.then(data => dispatch(fulfilled(checklistsTypes.GET_SYSTEM_CHECKLISTS, systemChecklists)))
-			.catch(err => dispatch(rejected(checklistsTypes.GET_SYSTEM_CHECKLISTS, err)))
+			.then(data => dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, checklistsSystem)))
+			.catch(err => dispatch(rejected(checklistsTypes.GET_CHECKLISTS_SYSTEM, err)))
 	}
 }
 
-export const getCustomChecklists = () => {
+export const getChecklistsCustom = () => {
 	return (dispatch, getState) => {
-		dispatch(pending(checklistsTypes.GET_CUSTOM_CHECKLISTS))
+		dispatch(pending(checklistsTypes.GET_CHECKLISTS_CUSTOM))
 
 		/* TODO: Replace with API */
 		fetch('https://jsonplaceholder.typicode.com/users')
 			.then(res => res.json())
-			.then(data => dispatch(fulfilled(checklistsTypes.GET_CUSTOM_CHECKLISTS, customChecklists)))
-			.catch(err => dispatch(rejected(checklistsTypes.GET_CUSTOM_CHECKLISTS, err)))
+			.then(data => dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_CUSTOM, checklistsCustom)))
+			.catch(err => dispatch(rejected(checklistsTypes.GET_CHECKLISTS_CUSTOM, err)))
 	}
 }

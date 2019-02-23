@@ -22,7 +22,7 @@ export default function reducer(state = initialState, action) {
 				...state,
 				loginLoading: false,
 				loginError: null,
-				password: true,
+				password: action.payload,
 			}
 
 		/* LOGOUT */
@@ -66,6 +66,7 @@ export default function reducer(state = initialState, action) {
 				savePasswordLoading: false,
 				savePasswordError: null,
 				savePasswordSuccess: true,
+				password: action.payload,
 			}
 	}
 

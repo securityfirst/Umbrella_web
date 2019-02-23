@@ -53,13 +53,13 @@ const lessons = {
 }
 
 const checklists = {
-	getSystemChecklistsLoading: true,
-	getSystemChecklistsError: null,
-	systemChecklists: {},
-	getCustomChecklistsLoading: true,
-	getCustomChecklistsError: null,
-	getCustomChecklistsSuccess: false,
-	customChecklists: [],
+	getChecklistsSystemLoading: true,
+	getChecklistsSystemError: null,
+	checklistsSystem: {},
+	getChecklistsCustomLoading: true,
+	getChecklistsCustomError: null,
+	getChecklistsCustomSuccess: false,
+	checklistsCustom: [],
 }
 
 const view = {

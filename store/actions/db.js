@@ -1,10 +1,10 @@
 import merge from 'lodash.merge'
-import CryptoJS from 'crypto-js'
+import Crypto from '../../utils/crypto'
 
 import { accountTypes, feedsTypes, formsTypes, checklistsTypes, dbTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
-export const syncDb = () => {
+export const syncDb = password => {
 	return async (dispatch, getState) => {
 		await dispatch(pending(dbTypes.SYNC_DB))
 
@@ -15,64 +15,59 @@ export const syncDb = () => {
 
 			const enabled = await ClientDB.default.store.getItem('enabled')
 			const hash = await ClientDB.default.store.getItem('h')
-			const password = state.account.password
 
 			if (!enabled || !hash || !password) return await dispatch(fulfilled(dbTypes.SYNC_DB))
 
-			await ClientDB.default.store.getItem('feeds')
-				.then(data => {
-					console.log("data: ", data);
-					if (data) {
-						const feeds = JSON.parse(
-							CryptoJS.AES
-								.decrypt(data, password)
-								.toString(CryptoJS.enc.Utf8)
-						)
+			try {
+				let feedLocation = await ClientDB.default.store.getItem('fe_l')
+				let feedSources = await ClientDB.default.store.getItem('fe_s')
+				let rssSources = await ClientDB.default.store.getItem('rs_s')
+				let formsSubmitted = await ClientDB.default.store.getItem('fo_s')
+				let formsActive = await ClientDB.default.store.getItem('fo_a')
+				let checklistsSystem = await ClientDB.default.store.getItem('ch_s')
+				let checklistsCustom = await ClientDB.default.store.getItem('ch_c')
 
-						dispatch({
-							type: feedsTypes.SYNC_FEEDS, 
-							payload: merge(state.feeds, feeds)
-						})
-					}
-				})
+				const crypto = new Crypto(password)
 
-			await ClientDB.default.store.getItem('forms')
-				.then(data => {
-					console.log("data: ", data);
-					if (data) {
-						const forms = JSON.parse(
-							CryptoJS.AES
-								.decrypt(data, password)
-								.toString(CryptoJS.enc.Utf8)
-						)
+				let feedsMerge = {}
+				let formsMerge = {}
+				let checklistsMerge = {}
 
-						dispatch({
-							type: formsTypes.SYNC_FORMS, 
-							payload: merge(state.forms, forms)
-						})
-					}
-				})
+				if (feedLocation) feedsMerge.feedLocation = crypto.decrypt(feedLocation, password)
+				if (feedSources) feedsMerge.feedSources = crypto.decrypt(feedSources, password)
+				if (rssSources) feedsMerge.rssSources = crypto.decrypt(rssSources, password)
+				if (formsSubmitted) formsMerge.formsSubmitted = crypto.decrypt(formsSubmitted, password)
+				if (formsActive) formsMerge.formsActive = crypto.decrypt(formsActive, password)
+				if (checklistsSystem) checklistsMerge.checklistsSystem = crypto.decrypt(checklistsSystem, password)
+				if (checklistsCustom) checklistsMerge.checklistsCustom = crypto.decrypt(checklistsCustom, password)
 
-			await ClientDB.default.store.getItem('checklists')
-				.then(data => {
-					console.log("data: ", data);
-					if (data) {
-						const checklists = JSON.parse(
-							CryptoJS.AES
-								.decrypt(data, password)
-								.toString(CryptoJS.enc.Utf8)
-						)
-						
-						dispatch({
-							type: checklistsTypes.SYNC_CHECKLISTS, 
-							payload: merge(state.checklists, checklists)
-						})
-					}
-				})
+				if (Object.keys(feedsMerge).length) {
+					await dispatch({
+						type: feedsTypes.SYNC_FEEDS, 
+						payload: merge(state.feeds, feedsMerge)
+					})
+				}
 
-			await dispatch(fulfilled(dbTypes.SYNC_DB))
+				if (Object.keys(formsMerge).length) {
+					await dispatch({
+						type: formsTypes.SYNC_FORMS, 
+						payload: merge(state.forms, formsMerge)
+					})
+				}
+
+				if (Object.keys(checklistsMerge).length) {
+					await dispatch({
+						type: checklistsTypes.SYNC_CHECKLISTS, 
+						payload: merge(state.forms, checklistsMerge)
+					})
+				}
+
+				return await dispatch(fulfilled(dbTypes.SYNC_DB))
+			} catch (e) {
+				return await dispatch(rejected(dbTypes.SYNC_DB, e))
+			}
 		} catch (e) {
-			dispatch(rejected(dbTypes.SYNC_DB, e))
+			return dispatch(rejected(dbTypes.SYNC_DB, e))
 		}
 	}
 }

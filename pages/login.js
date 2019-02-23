@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { withRouter } from 'next/router'
 import Link from 'next/link'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -61,6 +62,7 @@ class Login extends React.Component {
 	}
 
 	handleLoginSubmit = () => {
+		const { router } = this.props
 		const { password } = this.state
 
 		if (!password || !password.length) {
@@ -70,7 +72,7 @@ class Login extends React.Component {
 			})
 		}
 
-		this.props.dispatch(login(password))
+		this.props.dispatch(login(password, router))
 	}
 
 	removeError = () => this.setState({error: false, errorMessage: null})
@@ -115,19 +117,19 @@ class Login extends React.Component {
 											Login
 										</Button>
 									}
-
-									{(!!loginError && loginError.message === 'Password does not exist') &&
-										<Link href={{pathname: '/account', query: {setpassword: true}}}>
-											<Button 
-												className={classes.loginButton}
-												component="button" 
-												color="primary"
-											>
-												Set Password
-											</Button>
-										</Link>
-									}
 								</ClickAwayListener>
+								
+								{(!!loginError && loginError.message === 'Password does not exist') &&
+									<Link href={{pathname: '/account', query: {setpassword: true}}}>
+										<Button 
+											className={classes.loginButton}
+											component="button" 
+											color="primary"
+										>
+											Set Password
+										</Button>
+									</Link>
+								}
 							</FormControl>
 						</form>
 					</Paper>
@@ -139,4 +141,4 @@ class Login extends React.Component {
 
 const mapStateToProps = state => ({...state.account})
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Login))
+export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Login)))

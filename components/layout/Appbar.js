@@ -58,7 +58,7 @@ const styles = theme => ({
 
 class Appbar extends React.Component {
 	renderRightContent() {
-		if (!this.props.loggedIn) {
+		if (!this.props.password) {
 			return (
 				<Link href="/login">
 					<Button classes={{root: this.props.classes.login}} component="button" color="inherit">Login</Button>
