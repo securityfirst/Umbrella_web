@@ -1,6 +1,5 @@
 export const formatError = (err) => {
 	console.error('formatError() err: ', err)
-	console.log("typeof err: ", typeof err);
 
 	if (!err) return {status: 400, message: 'Something went wrong'}
 	if (typeof err === 'string') return {status: 400, message: err}

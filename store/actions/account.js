@@ -22,7 +22,7 @@ export const login = password => {
 						return res.text()
 					})
 					.then(key => {
-						const decrypted = CryptoJS.AES.decrypt(hash, key)
+						const decrypted = CryptoJS.AES.decrypt(hash, key).toString(CryptoJS.enc.Utf8)
 
 						if (password !== decrypted) {
 							return dispatch(rejected(accountTypes.LOGIN, 'Password is incorrect'))
@@ -63,10 +63,7 @@ export const savePassword = password => {
 				return res.text()
 			})
 			.then(key => {
-				console.log("key: ", key);
-				console.log("password: ", password);
 				const hash = CryptoJS.AES.encrypt(password, key).toString()
-				console.log("hash: ", hash);
 
 				ClientDB.default.store
 					.setItem('h', hash)

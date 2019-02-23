@@ -10,7 +10,6 @@ import { withReduxStore } from '../lib/redux.js'
 import { getPageContext } from '../lib/mui'
 
 import { getContent } from '../store/actions/content'
-import { initDb } from '../store/actions/db'
 
 import './index.css'
 
