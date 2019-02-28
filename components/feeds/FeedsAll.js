@@ -20,8 +20,6 @@ import { getFeeds } from '../../store/actions/feeds'
 
 const styles = theme => ({
 	heading: {
-		flexBasis: '33.33%',
-		flexShrink: 0,
 		fontSize: theme.typography.pxToRem(15),
 		fontWeight: 500,
 	},
