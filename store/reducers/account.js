@@ -8,42 +8,66 @@ export default function reducer(state = initialState, action) {
 		case pending(accountTypes.LOGIN):
 			return {
 				...state,
-				loading: true,
+				loginLoading: true,
 			}
 		case rejected(accountTypes.LOGIN):
 			return {
 				...state,
-				loading: false,
-				error: action.payload,
-				isLoggedIn: false,
+				loginLoading: false,
+				loginError: action.payload,
+				password: null,
 			}
 		case fulfilled(accountTypes.LOGIN):
 			return {
 				...state,
-				loading: false,
-				error: null,
-				isLoggedIn: true,
+				loginLoading: false,
+				loginError: null,
+				password: action.payload,
 			}
 
-		/* LOGOUT */
-		case pending(accountTypes.LOGOUT):
+		/* CHECK_PASSWORD */
+		case pending(accountTypes.CHECK_PASSWORD):
 			return {
 				...state,
-				loading: true,
+				checkPasswordLoading: true,
+				checkPasswordError: null,
 			}
-		case rejected(accountTypes.LOGOUT):
+		case rejected(accountTypes.CHECK_PASSWORD):
 			return {
 				...state,
-				loading: false,
-				error: action.payload,
-				isLoggedIn: false,
+				checkPasswordLoading: false,
+				checkPasswordError: action.payload,
 			}
-		case fulfilled(accountTypes.LOGOUT):
+		case fulfilled(accountTypes.CHECK_PASSWORD):
 			return {
 				...state,
-				loading: false,
-				error: null,
-				isLoggedIn: false,
+				checkPasswordLoading: false,
+				checkPasswordError: null,
+				passwordExists: action.payload,
+			}
+
+		/* SAVE_PASSWORD */
+		case pending(accountTypes.SAVE_PASSWORD):
+			return {
+				...state,
+				savePasswordLoading: true,
+				savePasswordError: null,
+				savePasswordSuccess: false,
+			}
+		case rejected(accountTypes.SAVE_PASSWORD):
+			return {
+				...state,
+				savePasswordLoading: false,
+				savePasswordError: action.payload,
+				savePasswordSuccess: false,
+			}
+		case fulfilled(accountTypes.SAVE_PASSWORD):
+			return {
+				...state,
+				savePasswordLoading: false,
+				savePasswordError: null,
+				savePasswordSuccess: true,
+				password: action.payload,
 			}
 	}
 

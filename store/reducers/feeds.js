@@ -58,13 +58,8 @@ export default function reducer(state = initialState, action) {
 				rss: action.payload,
 			}
 
-		/* SYNC_RSS_SOURCES */
-		case feedsTypes.SYNC_RSS_SOURCES:
-			return {
-				...state,
-				rssSources: state.feeds.rssSources.concat(action.payload),
-			}
-
+		/* SYNC_FEEDS */
+		case feedsTypes.SYNC_FEEDS: return action.payload
 	}
 
 	return state

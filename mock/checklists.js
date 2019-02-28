@@ -1,4 +1,4 @@
-export const systemChecklists = {
+export const checklistsSystem = {
 	total: 86,
 	favorites: [
 		{name: "Passwords", percentage: 30},
@@ -9,7 +9,7 @@ export const systemChecklists = {
 	],
 }
 
-export const customChecklists = [
+export const checklistsCustom = [
 	{name: "Angola", percentage: 86},
 	{name: "Secure Call", percentage: 30},
 ]

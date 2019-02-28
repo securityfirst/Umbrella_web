@@ -1,11 +1,11 @@
 import 'isomorphic-unfetch'
+import merge from 'lodash.merge'
 
 import { feedsTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
 import { urlParams } from '../../utils/fetch'
-
-import { feeds } from '../../mock/feeds'
+import Crypto from '../../utils/crypto'
 
 export const getFeeds = () => {
 	return async (dispatch, getState) => {
@@ -52,14 +52,34 @@ export const getFeeds = () => {
 
 export const setFeedLocation = location => {
 	return (dispatch, getState) => {
-		// TODO: Save location to db
+		const state = getState()
+
+		if (state.account.password) {
+			const crypto = new Crypto(state.account.password)
+			const encrypted = crypto.encrypt(location)
+
+			const ClientDB = require('../../db')
+
+			ClientDB.default.store.setItem('fe_l', encrypted)
+		}
+
 		dispatch({type: feedsTypes.SET_FEED_LOCATION, payload: location})
 	}
 }
 
 export const setFeedSources = sources => {
 	return (dispatch, getState) => {
-		// TODO: Save sources to db
+		const state = getState()
+
+		if (state.account.password) {
+			const crypto = new Crypto(state.account.password)
+			const encrypted = crypto.encrypt(sources)
+
+			const ClientDB = require('../../db')
+
+			ClientDB.default.store.setItem('fe_s', encrypted)
+		}
+
 		dispatch({type: feedsTypes.SET_FEED_SOURCES, payload: sources})
 	}
 }
@@ -94,13 +114,6 @@ export const getRss = () => {
 				dispatch(rejected(feedsTypes.GET_RSS, err))
 			})
 	}
-}
-
-export const syncRssSources = () => {
-	/* TODO: Get RSS sources from local storage */
-	const sources = []
-
-	return {type: feedsTypes.SYNC_RSS_SOURCES, payload: sources}
 }
 
 export const addRssSource = source => {

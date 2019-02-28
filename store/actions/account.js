@@ -1,37 +1,92 @@
+import 'isomorphic-unfetch'
+import Router from 'next/router'
+
 import { accountTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
+import { syncDb } from './db'
+import Crypto from '../../utils/crypto'
 
-export const login = (credentials) => {
+export const login = (password, router) => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.LOGIN))
 
-		fetch('/auth/account', {
-			method: "POST",
-			credentials: "same-origin", // include, *same-origin, omit
-			headers: {
-				"Content-Type": "application/json; charset=utf-8",
-			},
-			body: JSON.stringify(credentials), // body data type must match "Content-Type" header
-		})
-			.then(res => res.json())
-			.then(data => dispatch(fulfilled(accountTypes.LOGIN, data)))
-			.catch(err => dispatch(rejected(accountTypes.LOGIN, err)))
+		const ClientDB = require('../../db')
+
+		ClientDB.default.store
+			.getItem('h')
+			.then(hash => {
+				if (!hash) return dispatch(rejected(accountTypes.LOGIN, 'Password does not exist'))
+
+				fetch(`${process.env.ROOT}/api/auth/key`)
+					.then(res => {
+						if (!res.ok) return dispatch(rejected(accountTypes.LOGIN, err))
+						return res.text()
+					})
+					.then(async key => {
+						const crypto = new Crypto(key)
+						const decrypted = crypto.decrypt(hash)
+
+						if (password !== decrypted) {
+							return dispatch(rejected(accountTypes.LOGIN, 'Password is incorrect'))
+						}
+
+						await dispatch(fulfilled(accountTypes.LOGIN, password))
+
+						alert("You are now logged in!")
+						await dispatch(syncDb(password))
+						!!router && router.back()
+					})
+					.catch(err => {
+						return dispatch(rejected(accountTypes.LOGIN, err))
+					})
+			})
 	}
 }
 
-export const logout = () => {
-	return (dispatch, getState) => {
-		dispatch(pending(accountTypes.LOGOUT))
+export const checkPassword = () => {
+	return async (dispatch, getState) => {
+		dispatch(pending(accountTypes.CHECK_PASSWORD))
 
-		fetch('/auth/logout', {
-			method: "POST",
-			credentials: "same-origin", // include, *same-origin, omit
-			headers: {
-				"Content-Type": "application/json; charset=utf-8",
-			},
-		})
-			.then(res => res.json())
-			.then(data => dispatch(fulfilled(accountTypes.LOGOUT, data)))
-			.catch(err => dispatch(rejected(accountTypes.LOGOUT, err)))
+		try {
+			const ClientDB = require('../../db')
+
+			ClientDB.default.store
+				.getItem('h')
+				.then(hash => dispatch(fulfilled(accountTypes.CHECK_PASSWORD, !!hash)))
+				.catch(err => dispatch(rejected(accountTypes.CHECK_PASSWORD, err)))
+		} catch (e) {
+			dispatch(rejected(accountTypes.CHECK_PASSWORD, e))
+		}
+	}
+}
+
+export const savePassword = (password, router) => {
+	return (dispatch, getState) => {
+		dispatch(pending(accountTypes.SAVE_PASSWORD))
+
+		const ClientDB = require('../../db')
+
+		fetch(`${process.env.ROOT}/api/auth/key`)
+			.then(res => {
+				if (!res.ok) return dispatch(rejected(accountTypes.SAVE_PASSWORD, res))
+				return res.text()
+			})
+			.then(key => {
+				const crypto = new Crypto(key)
+				const hash = crypto.encrypt(password)
+
+				ClientDB.default.store.setItem('enabled', true)
+
+				ClientDB.default.store
+					.setItem('h', hash)
+					.then(() => {
+						dispatch(fulfilled(accountTypes.SAVE_PASSWORD, password))
+						!!router && router.back()
+					})
+					.catch(err => dispatch(rejected(accountTypes.SAVE_PASSWORD, err)))
+			})
+			.catch(err => {
+				return dispatch(rejected(accountTypes.SAVE_PASSWORD, err))
+			})
 	}
 }

@@ -57,16 +57,20 @@ const styles = theme => ({
 })
 
 class Appbar extends React.Component {
+	logout = () => {
+		window.location.reload()
+	}
+
 	renderRightContent() {
-		if (!this.props.loggedIn) {
-			return (
-				<Link href="/login">
-					<Button classes={{root: this.props.classes.login}} component="button" color="inherit">Login</Button>
-				</Link>
-			)
+		if (this.props.password) {
+			return <Button classes={{root: this.props.classes.login}} component="button" color="inherit" onClick={this.logout}>Logout</Button>
 		}
 
-		return null
+		return (
+			<Link href="/login">
+				<Button classes={{root: this.props.classes.login}} component="button" color="inherit">Login</Button>
+			</Link>
+		)
 	}
 
 	renderLeftContent() {
@@ -76,7 +80,7 @@ class Appbar extends React.Component {
 			router.pathname == '/'
 				? 'Umbrella'
 				// Split all subroutes and print capitalized divided by hyphens
-				: router.pathname.split("/").slice(1)/*.map(path => path.charAt(0).toUpperCase() + path.slice(1, path.length))*/.join(" / ")
+				: router.pathname.split("/").slice(1).join(" / ")
 		)
 
 		title = title

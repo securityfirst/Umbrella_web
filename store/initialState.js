@@ -5,9 +5,15 @@ const content = {
 }
 
 const account = {
-	loading: false,
-	error: null,
-	loggedIn: false,
+	loginLoading: false,
+	loginError: null,
+	password: null,
+	checkPasswordLoading: false,
+	checkPasswordError: null,
+	passwordExists: false,
+	savePasswordLoading: false,
+	savePasswordError: null,
+	savePasswordSuccess: false,
 }
 
 const feeds = {
@@ -48,13 +54,13 @@ const lessons = {
 }
 
 const checklists = {
-	getSystemChecklistsLoading: true,
-	getSystemChecklistsError: null,
-	systemChecklists: {},
-	getCustomChecklistsLoading: true,
-	getCustomChecklistsError: null,
-	getCustomChecklistsSuccess: false,
-	customChecklists: [],
+	getChecklistsSystemLoading: true,
+	getChecklistsSystemError: null,
+	checklistsSystem: {},
+	getChecklistsCustomLoading: true,
+	getChecklistsCustomError: null,
+	getChecklistsCustomSuccess: false,
+	checklistsCustom: [],
 }
 
 const view = {
@@ -68,6 +74,11 @@ const view = {
 	locale: 'en',
 }
 
+const db = {
+	loading: true,
+	error: null,
+}
+
 export default {
 	content,
 	account,
@@ -76,4 +87,5 @@ export default {
 	lessons,
 	checklists,
 	view,
+	db,
 }

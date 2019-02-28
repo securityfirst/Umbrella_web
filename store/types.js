@@ -4,7 +4,8 @@ export const contentTypes = {
 
 export const accountTypes = {
 	LOGIN: 'LOGIN',
-	LOGOUT: 'LOGOUT',
+	CHECK_PASSWORD: 'CHECK_PASSWORD',
+	SAVE_PASSWORD: 'SAVE_PASSWORD',
 }
 
 export const feedsTypes = {
@@ -12,14 +13,15 @@ export const feedsTypes = {
 	SET_FEED_LOCATION: 'SET_FEED_LOCATION',
 	SET_FEED_SOURCES: 'SET_FEED_SOURCES',
 	GET_RSS: 'GET_RSS',
-	SYNC_RSS_SOURCES: 'SYNC_RSS_SOURCES',
 	ADD_RSS_SOURCE: 'ADD_RSS_SOURCE',
+	SYNC_FEEDS: 'SYNC_FEEDS',
 }
 
 export const formsTypes = {
 	GET_FORM: 'GET_FORM',
 	POST_FORM: 'POST_FORM',
 	RESET_POST_FORM: 'RESET_POST_FORM',
+	SYNC_FORMS: 'SYNC_FORMS',
 }
 
 export const lessonsTypes = {
@@ -32,8 +34,9 @@ export const lessonsTypes = {
 }
 
 export const checklistsTypes = {
-	GET_SYSTEM_CHECKLISTS: 'GET_SYSTEM_CHECKLISTS',
-	GET_CUSTOM_CHECKLISTS: 'GET_CUSTOM_CHECKLISTS',
+	GET_CHECKLISTS_SYSTEM: 'GET_CHECKLISTS_SYSTEM',
+	GET_CHECKLISTS_CUSTOM: 'GET_CHECKLISTS_CUSTOM',
+	SYNC_CHECKLISTS: 'SYNC_CHECKLISTS',
 }
 
 export const viewTypes = {
@@ -47,4 +50,8 @@ export const viewTypes = {
 	CLOSE_LESSON_FILE_VIEW: 'CLOSE_LESSON_FILE_VIEW',
 	RESET_LESSONS: 'RESET_LESSONS',
 	SET_LOCALE: 'SET_LOCALE',
+}
+
+export const dbTypes = {
+	SYNC_DB: 'SYNC_DB',
 }
