@@ -13,19 +13,19 @@ export const syncDb = password => {
 
 			const ClientDB = require('../../db')
 
-			const enabled = await ClientDB.default.store.getItem('enabled')
-			const hash = await ClientDB.default.store.getItem('h')
+			const enabled = await ClientDB.default.get('enabled')
+			const hash = await ClientDB.default.get('h')
 
 			if (!enabled || !hash || !password) return await dispatch(fulfilled(dbTypes.SYNC_DB))
 
 			try {
-				let feedLocation = await ClientDB.default.store.getItem('fe_l')
-				let feedSources = await ClientDB.default.store.getItem('fe_s')
-				let rssSources = await ClientDB.default.store.getItem('rs_s')
-				let formsSubmitted = await ClientDB.default.store.getItem('fo_s')
-				let formsActive = await ClientDB.default.store.getItem('fo_a')
-				let checklistsSystem = await ClientDB.default.store.getItem('ch_s')
-				let checklistsCustom = await ClientDB.default.store.getItem('ch_c')
+				let feedLocation = await ClientDB.default.get('fe_l')
+				let feedSources = await ClientDB.default.get('fe_s')
+				let rssSources = await ClientDB.default.get('rs_s')
+				let formsSubmitted = await ClientDB.default.get('fo_s')
+				let formsActive = await ClientDB.default.get('fo_a')
+				let checklistsSystem = await ClientDB.default.get('ch_s')
+				let checklistsCustom = await ClientDB.default.get('ch_c')
 
 				const crypto = new Crypto(password)
 

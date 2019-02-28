@@ -60,7 +60,7 @@ export const setFeedLocation = location => {
 
 			const ClientDB = require('../../db')
 
-			ClientDB.default.store.setItem('fe_l', encrypted)
+			ClientDB.default.set('fe_l', encrypted)
 		}
 
 		dispatch({type: feedsTypes.SET_FEED_LOCATION, payload: location})
@@ -77,7 +77,7 @@ export const setFeedSources = sources => {
 
 			const ClientDB = require('../../db')
 
-			ClientDB.default.store.setItem('fe_s', encrypted)
+			ClientDB.default.set('fe_s', encrypted)
 		}
 
 		dispatch({type: feedsTypes.SET_FEED_SOURCES, payload: sources})

@@ -22,12 +22,45 @@ class ClientDB {
 					.getItem('enabled')
 					.then(val => {
 						if (!val) this.store.setItem('enabled', false)
-						resolve(this.store)
+
+						return resolve()
 					})
 			} catch (e) {
 				console.error('[ClientDB] init() exception: \n', e)
 				return reject(e)
 			}
+		})
+	}
+
+	get(key) {
+		return new Promise(async (resolve, reject) => {
+			if (!this.store) await this.init()
+
+			this.store
+				.ready()
+				.then(() => {
+					this.store
+						.getItem(key)
+						.then(resolve)
+						.catch(reject)
+				})
+				.catch(reject)
+		})
+	}
+
+	set(key, value) {
+		return new Promise(async (resolve, reject) => {
+			if (!this.store) await this.init()
+
+			this.store
+				.ready()
+				.then(() => {
+					this.store
+						.setItem(key, value)
+						.then(resolve)
+						.catch(reject)
+				})
+				.catch(reject)
 		})
 	}
 

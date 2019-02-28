@@ -41,8 +41,9 @@ class MyApp extends App {
 		}
 
 		if (typeof window !== 'undefined') {
-			const clientDB = require('../db')
-			clientDB.default.init()
+			const ClientDB = require('../db')
+			console.log("ClientDB: ", ClientDB);
+			ClientDB.default.init()
 		}
 	}
 

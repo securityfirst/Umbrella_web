@@ -217,7 +217,7 @@ class Account extends React.Component {
 					sensitive password combination in case it is compromised.
 				</Typography>
 				<Typography className={classes.disclaimerSmall} paragraph>
-					For more information, visit <Link href="/about">this page</Link>.
+					For more information, visit <Link href="/about"><a>this page</a></Link>.
 				</Typography>
 				{this.renderPasswordForm()}
 			</React.Fragment>

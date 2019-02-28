@@ -12,8 +12,8 @@ export const login = (password, router) => {
 
 		const ClientDB = require('../../db')
 
-		ClientDB.default.store
-			.getItem('h')
+		ClientDB.default
+			.get('h')
 			.then(hash => {
 				if (!hash) return dispatch(rejected(accountTypes.LOGIN, 'Password does not exist'))
 
@@ -50,8 +50,8 @@ export const checkPassword = () => {
 		try {
 			const ClientDB = require('../../db')
 
-			ClientDB.default.store
-				.getItem('h')
+			ClientDB.default
+				.get('h')
 				.then(hash => dispatch(fulfilled(accountTypes.CHECK_PASSWORD, !!hash)))
 				.catch(err => dispatch(rejected(accountTypes.CHECK_PASSWORD, err)))
 		} catch (e) {
@@ -75,10 +75,10 @@ export const savePassword = (password, router) => {
 				const crypto = new Crypto(key)
 				const hash = crypto.encrypt(password)
 
-				ClientDB.default.store.setItem('enabled', true)
+				ClientDB.default.set('enabled', true)
 
-				ClientDB.default.store
-					.setItem('h', hash)
+				ClientDB.default
+					.set('h', hash)
 					.then(() => {
 						dispatch(fulfilled(accountTypes.SAVE_PASSWORD, password))
 						!!router && router.back()
