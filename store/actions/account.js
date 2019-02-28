@@ -43,6 +43,23 @@ export const login = (password, router) => {
 	}
 }
 
+export const checkPassword = () => {
+	return async (dispatch, getState) => {
+		dispatch(pending(accountTypes.CHECK_PASSWORD))
+
+		try {
+			const ClientDB = require('../../db')
+
+			ClientDB.default.store
+				.getItem('h')
+				.then(hash => dispatch(fulfilled(accountTypes.CHECK_PASSWORD, !!hash)))
+				.catch(err => dispatch(rejected(accountTypes.CHECK_PASSWORD, err)))
+		} catch (e) {
+			dispatch(rejected(accountTypes.CHECK_PASSWORD, e))
+		}
+	}
+}
+
 export const savePassword = (password, router) => {
 	return (dispatch, getState) => {
 		dispatch(pending(accountTypes.SAVE_PASSWORD))

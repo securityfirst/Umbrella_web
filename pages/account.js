@@ -1,7 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'next/router'
-import PropTypes from 'prop-types'
+import Link from 'next/link'
 
 import { withStyles } from '@material-ui/core/styles'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
@@ -12,17 +13,27 @@ import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import Layout from '../components/layout'
+import Loading from '../components/common/Loading'
+import ErrorMessage from '../components/common/ErrorMessage'
 import FormControlInput from '../components/common/FormControlInput'
 
 import { contentStyles, buttonWrapperStyles } from '../utils/view'
 
-import { savePassword } from '../store/actions/account'
+import { checkPassword, savePassword } from '../store/actions/account'
 
 const styles = theme => ({
 	...contentStyles(theme),
 	heading: {
 		textTransform: 'capitalize',
 		fontWeight: 'normal',
+	},
+	description: {
+		marginBottom: '2rem',
+	},
+	disclaimerLarge: {
+		textTransform: 'uppercase',
+	},
+	disclaimerSmall: {
 	},
 	formWrapper: {
 		flexDirection: 'column',
@@ -52,6 +63,10 @@ class Account extends React.Component {
 	componentDidMount() {
 		const { query } = this.props.router
 		if (query && query.setpassword) this.setState({expanded: 1})
+
+		if (typeof window !== 'undefined') {
+			this.props.dispatch(checkPassword())
+		}
 	}
 
 	handlePanelToggle = i => (e, expanded) => {
@@ -182,6 +197,33 @@ class Account extends React.Component {
 		)
 	}
 
+	renderPassword = () => {
+		const { classes, checkPasswordLoading, checkPasswordError, passwordExists } = this.props
+
+		if (checkPasswordLoading) return <Loading />
+		if (checkPasswordError) return <ErrorMessage error={checkPasswordError} />
+
+		return (
+			<React.Fragment>
+				<Typography><strong>Status: </strong>{passwordExists ? 'Set' : 'Not Set'}</Typography>
+				<Typography className={classes.description} paragraph>
+					Your password must be at least 8 characters long and must contain at least one digit 
+					and one capital letter.
+				</Typography>
+				<Typography className={classes.disclaimerLarge} paragraph>
+					<strong>DISCLAIMER: </strong> We do not store any data on our servers during your 
+					usage, including your password. Your password is encrypted and stored on your browser, 
+					and it is used to decrypt other information you choose to store. Please do not use a 
+					sensitive password combination in case it is compromised.
+				</Typography>
+				<Typography className={classes.disclaimerSmall} paragraph>
+					For more information, visit <Link href="/about">this page</Link>.
+				</Typography>
+				{this.renderPasswordForm()}
+			</React.Fragment>
+		)
+	}
+
 	render() {
 		const { classes } = this.props
 
@@ -212,8 +254,7 @@ class Account extends React.Component {
 							<Typography className={classes.heading} variant="h6">Set password</Typography>
 						</ExpansionPanelSummary>
 						<ExpansionPanelDetails className={classes.formWrapper}>
-							<Typography paragraph>Your password must be at least 8 characters long and must contain at least one digit and one capital letter.</Typography>
-							{this.renderPasswordForm()}
+							{this.renderPassword()}
 						</ExpansionPanelDetails>
 					</ExpansionPanel>
 				</div>
@@ -222,4 +263,8 @@ class Account extends React.Component {
 	}
 }
 
-export default withRouter(connect()(withStyles(styles, { withTheme: true })(Account)))
+const mapStateToProps = state => ({
+	...state.account,
+})
+
+export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Account)))

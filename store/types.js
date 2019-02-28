@@ -4,8 +4,8 @@ export const contentTypes = {
 
 export const accountTypes = {
 	LOGIN: 'LOGIN',
+	CHECK_PASSWORD: 'CHECK_PASSWORD',
 	SAVE_PASSWORD: 'SAVE_PASSWORD',
-	SYNC_ACCOUNT: 'SYNC_ACCOUNT',
 }
 
 export const feedsTypes = {
