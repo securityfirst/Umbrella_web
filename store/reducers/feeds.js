@@ -76,7 +76,7 @@ export default function reducer(state = initialState, action) {
 				addRssSourceLoading: false,
 				addRssSourceError: null,
 				rssSources: action.payload.sources, // New source already concatenated
-				rss: action.payload.rss,
+				rss: action.payload.rss, // New rss already concatenated
 			}
 
 		/* REMOVE_RSS_SOURCE */
@@ -96,7 +96,8 @@ export default function reducer(state = initialState, action) {
 				...state,
 				removeRssSourceLoading: false,
 				removeRssSourceError: null,
-				rssSources: action.payload, // Source already filtered
+				rssSources: action.payload.sources, // Source already filtered
+				rss: action.payload.rss, // Feed already filtered
 			}
 
 		/* SYNC_FEEDS */

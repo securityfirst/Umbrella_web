@@ -143,17 +143,19 @@ export const addRssSource = (source, successCb) => (dispatch, getState) => {
 		.catch(err => dispatch(rejected(feedsTypes.ADD_RSS_SOURCE, err)))
 }
 
-export const removeRssSource = (source, successCb) => (dispatch, getState) => {
+export const removeRssSource = index => (dispatch, getState) => {
 	dispatch(pending(feedsTypes.REMOVE_RSS_SOURCE))
 
 	const state = getState()
+	const source = state.feeds.rssSources[index]
 
-	if (!state.feeds.rssSources.includes(source)) {
+	if (!source) {
 		return dispatch(rejected(feedsTypes.REMOVE_RSS_SOURCE, 'This RSS source does not exist on your list.'))
 	}
 
 	try {
 		const sources = state.feeds.rssSources.filter(s => s !== source)
+		const rss = state.feeds.rss.filter((r, i) => i !== index)
 
 		if (state.account.password) {
 			const crypto = new Crypto(state.account.password)
@@ -164,8 +166,7 @@ export const removeRssSource = (source, successCb) => (dispatch, getState) => {
 			ClientDB.default.set('rs_s', encrypted)
 		}
 
-		dispatch(fulfilled(feedsTypes.REMOVE_RSS_SOURCE, sources))
-		!!successCb && successCb()
+		dispatch(fulfilled(feedsTypes.REMOVE_RSS_SOURCE, {sources, rss}))
 	} catch (e) {
 		dispatch(rejected(feedsTypes.REMOVE_RSS_SOURCE, e))
 	}

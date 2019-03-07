@@ -18,7 +18,7 @@ import AddButton from '../../components/common/AddButton'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
-import { getRss } from '../../store/actions/feeds'
+import { getRss, removeRssSource } from '../../store/actions/feeds'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -28,6 +28,10 @@ const styles = theme => ({
 	},
 	cardContent: {
 		padding: '1rem',
+	},
+	cardRemoveWrapper: {
+		padding: '0 1rem',
+		paddingBottom: '1rem',
 	},
 	cardDescription: {
 		margin: '.5rem 0 0',
@@ -58,6 +62,12 @@ class FeedsRss extends React.Component {
 		this.setState({modalOpen: true})
 	}
 
+	handleSourceRemove = index => () => {
+		if (confirm('Are you sure you want to delete this RSS source?')) {
+			this.props.dispatch(removeRssSource(index))
+		}
+	}
+
 	handleModalClose = () => {
 		this.setState({modalOpen: false})
 	}
@@ -86,6 +96,9 @@ class FeedsRss extends React.Component {
 						<Typography className={classes.cardDescription} paragraph>{source.description}</Typography>
 					</CardContent>
 				</CardActionArea>
+				{i > 3 && <CardContent className={classes.cardRemoveWrapper}>
+					<Button component="button" size="small" onClick={this.handleSourceRemove(i)}>Remove</Button>
+				</CardContent>}
 			</Card>
 		)
 	}
