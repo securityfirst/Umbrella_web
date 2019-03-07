@@ -16,7 +16,7 @@ class Crypto {
 	encrypt(data) {
 		if (!data) throw new Error('No data was attached to be encrypted. Encryption halted.');
 
-		const string = typeof data === 'object' ? JSON.stringify(data) : typeof data == "string" || typeof data == "number" || typeof data == 'boolean' ? data.toString() : null
+		const string = typeof data === 'object' ? JSON.stringify(data) : typeof data == 'string' || typeof data == 'number' || typeof data == 'boolean' ? data.toString() : null
 
 		if (string === null) throw new Error('Only object, string, number and boolean data types that can be encrypted.')
 

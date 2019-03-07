@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import isUrl from 'is-url'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -10,9 +11,10 @@ import RssFeedIcon from '@material-ui/icons/RssFeed'
 
 import FormControlInput from '../../components/common/FormControlInput'
 import IconModalContent from './IconModalContent'
-import IconForm from './IconForm'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
+
+import { addRssSource } from '../../store/actions/feeds'
 
 const styles = theme => ({
 	iconFontSize: {
@@ -29,7 +31,7 @@ const styles = theme => ({
 
 class RssSourceAdd extends React.Component {
 	state = {
-		source: null,
+		source: '',
 		error: null,
 		errorMessage: null,
 	}
@@ -38,19 +40,20 @@ class RssSourceAdd extends React.Component {
 		this.setState({source: e.target.value})
 	}
 
-	handleSubmit = () => {
+	handleSubmit = e => {
+		!!e && e.preventDefault()
+
+		const { dispatch, closeModal } = this.props
 		const { source } = this.state
 
 		if (!isUrl(source)) return alert('Input is not a valid URL.')
 
-		// TODO: Handle submit here, then close on callback
-
-		this.props.closeModal()
+		dispatch(addRssSource(source, closeModal))
 	}
 
 	handleCancel = () => {
 		this.handleRemoveError()
-		this.setState({source: null})
+		this.setState({source: ''})
 		this.props.closeModal()
 	}
 
@@ -64,7 +67,7 @@ class RssSourceAdd extends React.Component {
 			<IconModalContent 
 				icon={<RssFeedIcon classes={{fontSizeLarge: classes.iconFontSize}} fontSize="large" color="primary" />} 
 			>
-				<form>
+				<form onSubmit={this.handleSubmit}>
 					<FormControlInput 
 						className={classes.formControlInput}
 						id="rss-source-form"
@@ -90,4 +93,4 @@ class RssSourceAdd extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(RssSourceAdd)
+export default connect()(withStyles(styles, {withTheme: true})(RssSourceAdd))

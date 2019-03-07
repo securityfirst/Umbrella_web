@@ -93,8 +93,8 @@ app.prepare().then(() => {
 			return app.serveStatic(req, res, path)
 		}
 
-		if (pathname === "/sw.js") {
-			const path = join(__dirname, ".next", pathname)
+		if (pathname === '/sw.js') {
+			const path = join(__dirname, '.next', pathname)
 			return app.serveStatic(req, res, path)
 		}
 

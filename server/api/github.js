@@ -2,9 +2,12 @@ require('isomorphic-unfetch')
 
 const express = require('express')
 const router = express.Router()
+const apicache = require('apicache')
 
 const set = require('lodash.set')
 const get = require('lodash.get')
+
+router.use(apicache.middleware('60 minutes'))
 
 router.get('/tree', async (req, res) => {
 	let lessons
@@ -24,17 +27,17 @@ router.get('/tree', async (req, res) => {
 	try {
 		lessons = lessons.tree.reduce((lessonsSet, node) => {
 			// if the node is a directory
-			if (node.type === "tree") {
+			if (node.type === 'tree') {
 				// get the path string in dot notation
-				const pathDotNotation = node.path.replace(/\//g, ".")
+				const pathDotNotation = node.path.replace(/\//g, '.')
 				// preset path with content array
 				set(lessonsSet, pathDotNotation, get(lessonsSet, pathDotNotation, {content: []}))
 			} 
 			// otherwise if the node is a file
-			else if (node.type === "blob") {
+			else if (node.type === 'blob') {
 				// get the path string without filname in dot notation
-				const nodePaths = node.path.split("/")
-				const pathDotNotation = nodePaths.slice(0, -1).join(".")
+				const nodePaths = node.path.split('/')
+				const pathDotNotation = nodePaths.slice(0, -1).join('.')
 				const filename = nodePaths.slice(-1)[0]
 				// get the original object, default {content: []}
 				let obj = get(lessonsSet, pathDotNotation)

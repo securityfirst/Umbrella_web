@@ -55,7 +55,9 @@ class FeedsEditSources extends React.Component {
 		else this.setState({sourcesSelected: sourcesSelected.concat([sourceValue])})
 	}
 
-	handleSubmit = () => {
+	handleSubmit = e => {
+		!!e && e.preventDefault()
+
 		const { sourcesSelected } = this.state
 
 		// TODO: Handle submit here, then close on callback
@@ -77,7 +79,7 @@ class FeedsEditSources extends React.Component {
 
 		return (
 			<Paper className={classes.container} square>
-				<form>
+				<form onSubmit={this.handleSubmit}>
 					<Typography variant="h6">Select the feed sources</Typography>
 					<FormControl required error={error} component="fieldset" className={classes.checkboxControl}>
 						<FormGroup>

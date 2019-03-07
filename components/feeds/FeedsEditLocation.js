@@ -9,7 +9,6 @@ import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle'
 
 import FormControlLocation from '../../components/common/FormControlLocation'
 import IconModalContent from './IconModalContent'
-import IconForm from './IconForm'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
@@ -37,7 +36,9 @@ class FeedsEditLocation extends React.Component {
 		this.setState({location})
 	}
 
-	handleSubmit = () => {
+	handleSubmit = e => {
+		!!e && e.preventDefault()
+
 		const { location } = this.state
 
 		if (!location) return alert('No location was selected.')
@@ -62,7 +63,7 @@ class FeedsEditLocation extends React.Component {
 			<IconModalContent 
 				icon={<PersonPinCircleIcon classes={{fontSizeLarge: classes.iconFontSize}} fontSize="large" color="primary" />} 
 			>
-				<form>
+				<form onSubmit={this.handleSubmit}>
 					<FormControlLocation 
 						id="feeds-edit-location"
 						className={classes.formControlInput}
