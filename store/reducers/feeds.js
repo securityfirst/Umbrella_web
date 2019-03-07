@@ -58,6 +58,47 @@ export default function reducer(state = initialState, action) {
 				rss: action.payload,
 			}
 
+		/* ADD_RSS_SOURCE */
+		case pending(feedsTypes.ADD_RSS_SOURCE):
+			return {
+				...state,
+				addRssSourceLoading: true,
+			}
+		case rejected(feedsTypes.ADD_RSS_SOURCE):
+			return {
+				...state,
+				addRssSourceLoading: false,
+				addRssSourceError: action.payload,
+			}
+		case fulfilled(feedsTypes.ADD_RSS_SOURCE):
+			return {
+				...state,
+				addRssSourceLoading: false,
+				addRssSourceError: null,
+				rssSources: action.payload.sources, // New source already concatenated
+				rss: action.payload.rss,
+			}
+
+		/* REMOVE_RSS_SOURCE */
+		case pending(feedsTypes.REMOVE_RSS_SOURCE):
+			return {
+				...state,
+				removeRssSourceLoading: true,
+			}
+		case rejected(feedsTypes.REMOVE_RSS_SOURCE):
+			return {
+				...state,
+				removeRssSourceLoading: false,
+				removeRssSourceError: action.payload,
+			}
+		case fulfilled(feedsTypes.REMOVE_RSS_SOURCE):
+			return {
+				...state,
+				removeRssSourceLoading: false,
+				removeRssSourceError: null,
+				rssSources: action.payload, // Source already filtered
+			}
+
 		/* SYNC_FEEDS */
 		case feedsTypes.SYNC_FEEDS: return action.payload
 	}

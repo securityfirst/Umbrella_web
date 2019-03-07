@@ -122,7 +122,9 @@ class Account extends React.Component {
 		}
 	}
 
-	savePassword = () => {
+	savePassword = e => {
+		!!e && e.preventDefault()
+
 		const { router } = this.props
 		const { password, passwordConfirm } = this.state
 
@@ -162,7 +164,7 @@ class Account extends React.Component {
 		} = this.state
 
 		return (
-			<form>
+			<form onSubmit={this.savePassword}>
 				<FormControlInput
 					id="account-password"
 					className={classes.input}

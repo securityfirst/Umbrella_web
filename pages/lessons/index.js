@@ -141,7 +141,7 @@ class Lessons extends React.Component {
 		const { dispatch, content, locale } = this.props
 		const keys = Object.keys(content[locale][category])
 
-		if (category !== 'glossary' && keys.length === 1 && keys[0] === "content") {
+		if (category !== 'glossary' && keys.length === 1 && keys[0] === 'content') {
 			const file = content[locale][category].content.find(file => file.filename.indexOf('.md') > -1)
 
 			dispatch(toggleLessonsFavoritesView(false))
@@ -236,11 +236,11 @@ class Lessons extends React.Component {
 		const { classes, content, locale } = this.props
 		const { categorySelected } = this.state
 
-		if (category == "content" || category == "forms") return null
+		if (category == 'content' || category == 'forms') return null
 
 		const isSelected = categorySelected == category
 		const isGlossary = category === 'glossary'
-		const subcategories = Object.keys(content[locale][category]).filter(subcategory => subcategory != "content")
+		const subcategories = Object.keys(content[locale][category]).filter(subcategory => subcategory != 'content')
 
 		return (
 			<div key={i} className={isSelected ? classes.menuListItemSelected : ''}>

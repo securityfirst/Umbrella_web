@@ -25,7 +25,7 @@ const styles = theme => ({
 		...paperStyles(theme),
 	},
 	formPanelTitle: {
-		textTransform: "capitalize",
+		textTransform: 'capitalize',
 	},
 	formPanelButtonsWrapper: {
 		...buttonWrapperStyles(theme),
@@ -34,17 +34,17 @@ const styles = theme => ({
 
 class Forms extends React.Component {
 	handleEdit = form => () => {
-		alert("Edit " + form.typeId)
+		alert('Edit ' + form.typeId)
 	}
 
 	handleShare = form => () => {
-		alert("Sharing " + form.typeId)
+		alert('Sharing ' + form.typeId)
 	}
 
 	renderPanel = (isActive) => (form, i) => {
 		const { classes } = this.props
 
-		if (form.filename.indexOf("f_") === 0) {
+		if (form.filename.indexOf('f_') === 0) {
 			return (
 				<Paper key={i} className={classes.formPanel} square>
 					<Typography className={classes.formPanelTitle} variant="h6">

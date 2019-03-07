@@ -79,7 +79,7 @@ class LessonsContent extends React.Component {
 		const { dispatch, lessonsContentPath } = this.props
 
 		dispatch(setLesson(lessonsContentPath.split('.').concat([level])))
-		dispatch(setAppbarTitle('Lessons > ' + lessonsContentPath.replace(/-/g, " ").replace(/\./g, " > ")))
+		dispatch(setAppbarTitle('Lessons > ' + lessonsContentPath.replace(/-/g, ' ').replace(/\./g, ' > ')))
 	}
 
 	renderLevels = levels => {
@@ -98,7 +98,7 @@ class LessonsContent extends React.Component {
 				<Typography className={classes.breadcrumb} variant="subtitle1">{lessonsContentPath.split(".").join(" > ").replace(/-/g, ' ')}</Typography>
 
 				{levels.map((level, i) => {
-					if (level === "content") return null
+					if (level === 'content') return null
 
 					return (
 						<Button

@@ -108,7 +108,7 @@ class Menu extends React.Component {
 				{links.map((link, i) => (
 					<Link key={i} href={link.path}>
 						<ListItem className={classes.drawerItem} title={link.name} button onClick={this.handleMenuClick(link)}>
-							<ListItemIcon>{link.icon(this.props.router.pathname == link.path ? "secondary" : "inherit")}</ListItemIcon>
+							<ListItemIcon>{link.icon(this.props.router.pathname == link.path ? 'secondary' : 'inherit')}</ListItemIcon>
 							<ListItemText primary={link.name} />
 						</ListItem>
 					</Link>

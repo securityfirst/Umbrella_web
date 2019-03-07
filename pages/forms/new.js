@@ -70,7 +70,9 @@ class FormsNew extends React.Component {
 		errorMessage: null,
 	}
 
-	onNext = () => {
+	onNext = e => {
+		!!e && e.preventDefault()
+
 		const { form } = this.props
 		const { activeStep, progress } = this.state
 
@@ -184,7 +186,7 @@ class FormsNew extends React.Component {
 			<Paper className={classes.formWrapper} square>
 				<Typography variant="h6" color="primary">{screen.title}</Typography>
 
-				<form>
+				<form onSubmit={this.onNext}>
 					{screen.items.map(this.renderInput)}
 				</form>
 

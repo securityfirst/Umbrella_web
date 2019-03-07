@@ -61,7 +61,9 @@ class Login extends React.Component {
 		errorMessage: null,
 	}
 
-	handleLoginSubmit = () => {
+	handleLoginSubmit = e => {
+		!!e && e.preventDefault()
+
 		const { router } = this.props
 		const { password } = this.state
 
@@ -89,7 +91,7 @@ class Login extends React.Component {
 						
 						<Typography className={classes.description} variant="h6" align="center">Log in with your password</Typography>
 
-						<form>
+						<form onSubmit={this.handleLoginSubmit}>
 							<FormControlInput 
 								id="login-password"
 								label="Password*"
