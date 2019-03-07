@@ -93,7 +93,6 @@ router.post('/rss/add', async (req, res) => {
 
 		const rss = await parser.parseURL(source)
 
-		console.log("rss: ", rss);
 		if (!rss) {
 			console.error('[API] /feeds/rss/add: RSS source is not valid')
 			res.statusMessage = 'RSS source is not valid'

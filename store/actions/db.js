@@ -4,6 +4,11 @@ import Crypto from '../../utils/crypto'
 import { accountTypes, feedsTypes, formsTypes, checklistsTypes, dbTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
+import { clearPassword } from './account'
+import { clearFeeds } from './feeds'
+import { clearForms } from './forms'
+import { clearChecklists } from './checklists'
+
 export const syncDb = password => async (dispatch, getState) => {
 	await dispatch(pending(dbTypes.SYNC_DB))
 
@@ -67,5 +72,25 @@ export const syncDb = password => async (dispatch, getState) => {
 		}
 	} catch (e) {
 		return await dispatch(rejected(dbTypes.SYNC_DB, e))
+	}
+}
+
+export const clearDb = () => async (dispatch, getState) => {
+	await dispatch(pending(dbTypes.CLEAR_DB))
+
+	try {
+		const ClientDB = require('../../db')
+
+		await ClientDB.default.clear()
+
+		alert('Database has been cleared.')
+
+		await dispatch(clearPassword())
+		await dispatch(clearFeeds())
+		await dispatch(clearForms())
+		await dispatch(clearChecklists())
+		await dispatch(fulfilled(dbTypes.CLEAR_DB))
+	} catch (e) {
+		await dispatch(rejected(dbTypes.CLEAR_DB, e))
 	}
 }

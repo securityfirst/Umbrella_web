@@ -56,6 +56,13 @@ export default function reducer(state = initialState, action) {
 
 		/* SYNC_FORMS */
 		case formsTypes.SYNC_FORMS: return action.payload
+
+		/* CLEAR_FORMS */
+		case formsTypes.CLEAR_FORMS:
+			return {
+				...state,
+				...initialState.forms,
+			}
 	}
 
 	return state

@@ -84,3 +84,5 @@ export const savePassword = (password, router) => (dispatch, getState) => {
 			return dispatch(rejected(accountTypes.SAVE_PASSWORD, err))
 		})
 }
+
+export const clearPassword = () => ({type: accountTypes.CLEAR_PASSWORD})
