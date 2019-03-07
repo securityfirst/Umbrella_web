@@ -53,3 +53,5 @@ export const postForm = data => (dispatch, getState) => {
 }
 
 export const resetPostForm = () => ({type: formsTypes.RESET_POST_FORM})
+
+export const clearForms = () => ({type: formsTypes.CLEAR_FORMS})

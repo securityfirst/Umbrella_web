@@ -20,12 +20,23 @@ import FormControlInput from '../components/common/FormControlInput'
 import { contentStyles, buttonWrapperStyles } from '../utils/view'
 
 import { checkPassword, savePassword } from '../store/actions/account'
+import { clearDb } from '../store/actions/db'
 
 const styles = theme => ({
 	...contentStyles(theme),
 	heading: {
 		textTransform: 'capitalize',
 		fontWeight: 'normal',
+	},
+	settingsRow: {
+		display: 'flex',
+		alignItems: 'center',
+	},
+	settingsColumnLeft: {
+		width: '40%',
+	},
+	settingsColumnRight: {
+		width: '60%',
 	},
 	description: {
 		marginBottom: '2rem',
@@ -67,6 +78,10 @@ class Account extends React.Component {
 		if (typeof window !== 'undefined') {
 			this.props.dispatch(checkPassword())
 		}
+	}
+
+	clearDb = () => {
+		this.props.dispatch(clearDb())
 	}
 
 	handlePanelToggle = i => (e, expanded) => {
@@ -199,15 +214,50 @@ class Account extends React.Component {
 		)
 	}
 
+	renderSettings = () => {
+		const { classes, checkPasswordLoading, checkPasswordError, passwordExists, password } = this.props
+
+		if (password) return (
+			<React.Fragment>
+				<div className={classes.settingsRow}>
+					<div className={classes.settingsColumnLeft}>
+						<Button color="primary" onClick={this.clearDb}>Delete Cache</Button>
+					</div>
+					<div className={classes.settingsColumnRight}>
+						<Typography variant="caption">
+							All settings and preferences, including your password, are encrypted and stored in your local browser storage. Deleting your cache will remove all data, including your password.
+						</Typography>
+					</div>
+				</div>
+			</React.Fragment>
+		)
+
+		if (checkPasswordLoading) return <Loading />
+		if (checkPasswordError) return <ErrorMessage error={checkPasswordError} />
+
+		if (passwordExists) return (
+			<Typography>
+				Login to view and make changes to your app settings.
+			</Typography>
+		)
+
+		return (
+			<Typography>
+				You do not have a password set. Create a password to save your app preferences and data.
+			</Typography>
+		)
+	}
+
 	renderPassword = () => {
 		const { classes, checkPasswordLoading, checkPasswordError, passwordExists } = this.props
 
 		if (checkPasswordLoading) return <Loading />
 		if (checkPasswordError) return <ErrorMessage error={checkPasswordError} />
 
+		// TODO: Add toggle to reset password and re-encrypt database
 		return (
 			<React.Fragment>
-				<Typography><strong>Status: </strong>{passwordExists ? 'Set' : 'Not Set'}</Typography>
+				<Typography><strong>Status: </strong>{passwordExists ? 'Already Set' : 'Not Set'}</Typography>
 				<Typography className={classes.description} paragraph>
 					Your password must be at least 8 characters long and must contain at least one digit 
 					and one capital letter.
@@ -237,18 +287,7 @@ class Account extends React.Component {
 							<Typography className={classes.heading} variant="h6">Settings</Typography>
 						</ExpansionPanelSummary>
 						<ExpansionPanelDetails>
-							<Typography>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-								incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent
-								elementum facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in
-								hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-								velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing.
-								Amet nisl suscipit adipiscing bibendum est ultricies integer quis. Cursus euismod quis
-								viverra nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-								Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus
-								at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-								ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-							</Typography>
+							{this.renderSettings()}
 						</ExpansionPanelDetails>
 					</ExpansionPanel>
 					<ExpansionPanel expanded={this.state.expanded === 1} onChange={this.handlePanelToggle(1)}>

@@ -38,3 +38,5 @@ export const getChecklistsCustom = () => (dispatch, getState) => {
 			dispatch(rejected(checklistsTypes.GET_CHECKLISTS_CUSTOM, err))
 		})
 }
+
+export const clearChecklists = () => ({type: checklistsTypes.CLEAR_CHECKLISTS})

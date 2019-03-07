@@ -171,3 +171,5 @@ export const removeRssSource = index => (dispatch, getState) => {
 		dispatch(rejected(feedsTypes.REMOVE_RSS_SOURCE, e))
 	}
 }
+
+export const clearFeeds = () => ({type: feedsTypes.CLEAR_FEEDS})

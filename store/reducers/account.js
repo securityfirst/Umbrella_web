@@ -69,6 +69,13 @@ export default function reducer(state = initialState, action) {
 				savePasswordSuccess: true,
 				password: action.payload,
 			}
+
+		/* CLEAR_PASSWORD */
+		case accountTypes.CLEAR_PASSWORD:
+			return {
+				...state,
+				...initialState.account,
+			}
 	}
 
 	return state

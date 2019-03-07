@@ -6,6 +6,7 @@ export const accountTypes = {
 	LOGIN: 'LOGIN',
 	CHECK_PASSWORD: 'CHECK_PASSWORD',
 	SAVE_PASSWORD: 'SAVE_PASSWORD',
+	CLEAR_PASSWORD: 'CLEAR_PASSWORD',
 }
 
 export const feedsTypes = {
@@ -16,6 +17,7 @@ export const feedsTypes = {
 	ADD_RSS_SOURCE: 'ADD_RSS_SOURCE',
 	REMOVE_RSS_SOURCE: 'REMOVE_RSS_SOURCE',
 	SYNC_FEEDS: 'SYNC_FEEDS',
+	CLEAR_FEEDS: 'CLEAR_FEEDS',
 }
 
 export const formsTypes = {
@@ -23,6 +25,7 @@ export const formsTypes = {
 	POST_FORM: 'POST_FORM',
 	RESET_POST_FORM: 'RESET_POST_FORM',
 	SYNC_FORMS: 'SYNC_FORMS',
+	CLEAR_FORMS: 'CLEAR_FORMS',
 }
 
 export const lessonsTypes = {
@@ -38,6 +41,7 @@ export const checklistsTypes = {
 	GET_CHECKLISTS_SYSTEM: 'GET_CHECKLISTS_SYSTEM',
 	GET_CHECKLISTS_CUSTOM: 'GET_CHECKLISTS_CUSTOM',
 	SYNC_CHECKLISTS: 'SYNC_CHECKLISTS',
+	CLEAR_CHECKLISTS: 'CLEAR_CHECKLISTS',
 }
 
 export const viewTypes = {
@@ -55,4 +59,5 @@ export const viewTypes = {
 
 export const dbTypes = {
 	SYNC_DB: 'SYNC_DB',
+	CLEAR_DB: 'CLEAR_DB',
 }

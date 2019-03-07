@@ -22,6 +22,25 @@ export default function reducer(state = initialState, action) {
 				loading: false,
 				error: null,
 			}
+
+		/* CLEAR_DB */
+		case pending(dbTypes.CLEAR_DB):
+			return {
+				...state,
+				loading: true,
+			}
+		case rejected(dbTypes.CLEAR_DB):
+			return {
+				...state,
+				loading: false,
+				error: action.payload,
+			}
+		case fulfilled(dbTypes.CLEAR_DB):
+			return {
+				...state,
+				loading: false,
+				error: null,
+			}
 	}
 
 	return state
