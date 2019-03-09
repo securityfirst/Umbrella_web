@@ -18,12 +18,12 @@ const styles = theme => ({
 })
 
 class Checklists extends React.Component {
-	static async getInitialProps({reduxStore, isServer}) {
-		await reduxStore.dispatch(getChecklistsSystem())
-	}
-
 	state = {
 		tabIndex: 0
+	}
+
+	componentDidMount() {
+		this.props.dispatch(getChecklistsSystem())
 	}
 
 	handleTabSelect = (e, v) => this.setState({tabIndex: v})

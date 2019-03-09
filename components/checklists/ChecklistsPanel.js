@@ -24,7 +24,7 @@ import { updateChecklistCustom, deleteChecklistCustom } from '../../store/action
 
 const styles = theme => ({
 	header: {
-	    justifyContent: 'space-between',
+		justifyContent: 'space-between',
 	},
 	name: {
 		display: 'inline-block',
