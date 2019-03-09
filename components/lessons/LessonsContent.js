@@ -13,7 +13,7 @@ import yellow from '@material-ui/core/colors/yellow'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
-import { setLesson } from '../../store/actions/lessons'
+import { setCurrentLesson } from '../../store/actions/lessons'
 import { setAppbarTitle } from '../../store/actions/view'
 
 const styles = theme => ({
@@ -75,11 +75,14 @@ const styles = theme => ({
 const levelsOrder = ['beginner', 'advanced', 'expert']
 
 class LessonsContent extends React.Component {
-	setLesson = (level) => () => {
+	setLesson = level => () => {
 		const { dispatch, lessonsContentPath } = this.props
 
-		dispatch(setLesson(lessonsContentPath.split('.').concat([level])))
-		dispatch(setAppbarTitle('Lessons > ' + lessonsContentPath.replace(/-/g, ' ').replace(/\./g, ' > ')))
+		const name = lessonsContentPath.replace(/-/g, ' ').replace(/\./g, ' > ')
+		const path = 'Lessons > ' + name
+		const paths = lessonsContentPath.split('.').concat([level])
+		dispatch(setCurrentLesson(paths, name))
+		dispatch(setAppbarTitle(path))
 	}
 
 	renderLevels = levels => {

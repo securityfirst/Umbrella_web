@@ -6,8 +6,8 @@ export default function reducer(state = initialState, action) {
 	let lessonFilesCache = {}
 
 	switch (action.type) {
-		/* SET_LESSON */
-		case lessonsTypes.SET_LESSON:
+		/* SET_CURRENT_LESSON */
+		case lessonsTypes.SET_CURRENT_LESSON:
 			return {
 				...state,
 				currentLesson: action.payload,

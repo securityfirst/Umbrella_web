@@ -10,18 +10,52 @@ import { checklistsSystem, checklistsCustom } from '../../mock/checklists'
 export const getChecklistsSystem = () => async (dispatch, getState) => {
 	dispatch(pending(checklistsTypes.GET_CHECKLISTS_SYSTEM))
 
-	/* TODO: Replace with API */
-	await fetch('https://jsonplaceholder.typicode.com/users')
-		.then(res => {
-			if (!res.ok) throw res
-			return res.json()
-		})
-		.then(data => {
-			dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, checklistsSystem))
-		})
-		.catch(err => {
-			dispatch(rejected(checklistsTypes.GET_CHECKLISTS_SYSTEM, err))
-		})
+	const state = getState()
+
+	if (!state.account.password) {
+		alert('Login or set a password to create a custom checklist.')
+		return dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, {}))
+	}
+
+	try {
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.get('ch_s', state.account.password, true)
+			.then(checklists => {
+				dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, checklists || {}))
+			})
+			.catch(err => {
+				dispatch(rejected(checklistsTypes.GET_CHECKLISTS_SYSTEM, err))
+			})
+	} catch (e) {
+		dispatch(rejected(checklistsTypes.GET_CHECKLISTS_SYSTEM, e))
+	}
+}
+
+export const updateChecklistsSystem = checklists => (dispatch, getState) => {
+	dispatch(pending(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM))
+
+	const state = getState()
+
+	if (!state.account.password) {
+		return alert('Login or set a password to update lesson checklists.')
+	}
+
+	try {
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.set('ch_s', checklists, state.account.password)
+			.then(() => {
+				dispatch(fulfilled(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, checklists))
+			})
+			.catch(err => {
+				dispatch(rejected(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, err))
+			})
+	} catch (e) {
+		dispatch(rejected(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, e))
+	}
 }
 
 export const getChecklistsCustom = () => (dispatch, getState) => {

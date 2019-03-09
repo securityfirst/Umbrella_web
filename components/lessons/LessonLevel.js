@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormLabel from '@material-ui/core/FormLabel'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
+// import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 
 import CloseIcon from '@material-ui/icons/Close'
@@ -23,10 +23,12 @@ import ShareIcon from '@material-ui/icons/Share'
 import Layout from '../layout'
 import Loading from '../common/Loading'
 import ErrorMessage from '../common/ErrorMessage'
+import FormControlCheckbox from '../common/FormControlCheckbox'
 
 import { contentStyles } from '../../utils/view'
 
 import { getLessonChecklist, getLessonFile, closeLesson } from '../../store/actions/lessons'
+import { getChecklistsSystem, updateChecklistsSystem } from '../../store/actions/checklists'
 import { toggleLessonFileView, setAppbarTitle } from '../../store/actions/view'
 
 const styles = theme => ({
@@ -100,6 +102,7 @@ class LessonLevel extends React.Component {
 
 		if (currentLesson.checklist) {
 			dispatch(getLessonChecklist(currentLesson.checklist.sha))
+			dispatch(getChecklistsSystem())
 		}
 	}
 	
@@ -113,14 +116,43 @@ class LessonLevel extends React.Component {
 		this.props.dispatch(setAppbarTitle('Lessons'))
 	}
 
-	renderChecklist = () => {
-		const { classes, getLessonChecklistLoading, getLessonChecklistError, currentLessonChecklist } = this.props
+	handleCheck = (itemName, savedChecklist) => e => {
+		const { dispatch, currentLesson, checklistsSystem } = this.props
 
-		if (getLessonChecklistLoading) return <Loading />
-		else if (getLessonChecklistError) return <ErrorMessage error={getLessonChecklistError} />
+		const listKey = `${currentLesson.name} > ${currentLesson.level}`
+		let newChecklists = {...checklistsSystem}
+
+		if (!savedChecklist) newChecklists[listKey] = [itemName]
+		else {
+			if (newChecklists[listKey].includes(itemName)) {
+				newChecklists[listKey] = newChecklists[listKey].filter(item => item !== itemName)
+			} else {
+				newChecklists[listKey].push(itemName)
+			}
+		}
+
+		dispatch(updateChecklistsSystem(newChecklists))
+	}
+
+	renderChecklist = () => {
+		const { 
+			classes, 
+			currentLesson,
+			getLessonChecklistLoading, 
+			getLessonChecklistError, 
+			currentLessonChecklist, 
+			getChecklistsSystemLoading,
+			getChecklistsSystemError,
+			checklistsSystem, 
+		} = this.props
+
+		if (getLessonChecklistLoading || getChecklistsSystemLoading) return <Loading />
+		else if (getLessonChecklistError || getChecklistsSystemError) return <ErrorMessage error={getLessonChecklistError || getChecklistsSystemError} />
 		else if (!currentLessonChecklist) return null
 
 		const checklist = YAML.parse(atob(currentLessonChecklist))
+		const listKey = `${currentLesson.name} > ${currentLesson.level}`
+		const savedChecklist = checklistsSystem[listKey]
 
 		return (
 			<Card className={classes.checklistCard}>
@@ -135,11 +167,15 @@ class LessonLevel extends React.Component {
 								return <FormLabel key={i} className={classes.checklistLabel} component="legend">{item.label}</FormLabel>
 							}
 
+							const checked = !!savedChecklist && !!savedChecklist.includes(item.check)
+
 							return (
-								<FormControlLabel
+								<FormControlCheckbox
 									key={i}
-									control={<Checkbox className={classes.checklistCheckbox} checked={false} onChange={() => {}} value="TODO" />}
-									label={item.check}
+									name={item.check}
+									value={item.check}
+									checked={checked} 
+									onChange={this.handleCheck(item.check, savedChecklist)} 
 								/>
 							)
 						})}
@@ -191,6 +227,7 @@ class LessonLevel extends React.Component {
 
 const mapStateToProps = state => ({
 	...state.lessons,
+	...state.checklists,
 })
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true})(LessonLevel))

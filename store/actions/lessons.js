@@ -3,7 +3,7 @@ import 'isomorphic-unfetch'
 import { lessonsTypes, viewTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
-export const setLesson = paths => (dispatch, getState) => {
+export const setCurrentLesson = (paths, name) => (dispatch, getState) => {
 	const state = getState()
 	const { content } = state.content
 	const { locale } = state.view
@@ -18,6 +18,7 @@ export const setLesson = paths => (dispatch, getState) => {
 
 	lesson = [...lesson.content]
 	lesson = {
+		name: name,
 		level: paths[paths.length - 1],
 		path: `../../static/assets/content/${locale}/${paths.join('/')}`,
 		files: lesson.reduce((list, c) => {
@@ -33,7 +34,7 @@ export const setLesson = paths => (dispatch, getState) => {
 		checklist: lesson.find(c => c.filename.indexOf('c_') > -1)
 	}
 
-	dispatch({type: lessonsTypes.SET_LESSON, payload: lesson})
+	dispatch({type: lessonsTypes.SET_CURRENT_LESSON, payload: lesson})
 }
 
 export const getLessonsFavorites = () => {
@@ -68,7 +69,7 @@ export const setLessonsGlossaryIndex = index => (dispatch, getState) => {
 		checklist: null
 	}
 
-	dispatch({type: lessonsTypes.SET_LESSON, payload: glossary})
+	dispatch({type: lessonsTypes.SET_CURRENT_LESSON, payload: glossary})
 }
 
 export const getLessonChecklist = sha => async (dispatch, getState) => {
