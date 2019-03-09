@@ -48,7 +48,7 @@ class ChecklistsCustomAdd extends React.Component {
 
 		if (!name || !name.length) return alert('Name is required.')
 
-		dispatch(addChecklistCustom(name, closeModal))
+		dispatch(addChecklistCustom(name.trim(), closeModal))
 	}
 
 	handleCancel = () => {
