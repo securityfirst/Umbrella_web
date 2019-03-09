@@ -24,6 +24,11 @@ const styles = theme => ({
 		margin: '.75rem 0',
 		...paperStyles(theme),
 	},
+	text: {
+		width: '100%',
+		margin: '1rem 0',
+		textAlign: 'center',
+	},
 	modal: {
 		display: 'flex',
 		justifyContent: 'center',
@@ -63,7 +68,9 @@ class ChecklistsCustom extends React.Component {
 
 		if (!checklistsCustom.length) return (
 			<Paper className={classes.panel} square>
-				<Typography paragraph>You do not have any checklists saved. Click the '+' button to create a custom checklist.</Typography>
+				<Typography className={classes.text} paragraph>
+					You do not have any checklists saved. Click the '+' button to create a custom checklist.
+				</Typography>
 			</Paper>
 		)
 
@@ -87,17 +94,22 @@ class ChecklistsCustom extends React.Component {
 		const { classes, password, getChecklistsCustomLoading, getChecklistsCustomError } = this.props
 		const { modalOpen } = this.state
 
+		if (!password) return (
+			<div className={classes.content}>
+				<Paper className={classes.panel} square>
+					<Typography className={classes.text} paragraph>
+						Login or set your password to manage your custom checklists.
+					</Typography>
+				</Paper>
+			</div>
+		)
+
 		if (getChecklistsCustomLoading) return <Loading />
 		if (getChecklistsCustomError) return <ErrorMessage error={getChecklistsCustomError} />
 
 		return (
 			<div className={classes.content}>
-				{!password 
-					? <Paper className={classes.panel} square>
-						<Typography paragraph>Login or set your password to manage your custom checklists.</Typography>
-					</Paper>
-					: this.renderChecklists()
-				}
+				{this.renderChecklists()}
 
 				<AddButton onClick={this.handleModalOpen} />
 
