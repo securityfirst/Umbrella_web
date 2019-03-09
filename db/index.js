@@ -1,4 +1,5 @@
 import localforage from 'localforage'
+import Crypto from '../utils/crypto'
 
 class ClientDB {
 	constructor() {
@@ -32,7 +33,7 @@ class ClientDB {
 		})
 	}
 
-	get(key) {
+	get(key, encryptionKey, expectsObject = false) {
 		return new Promise(async (resolve, reject) => {
 			if (!this.store) await this.init()
 
@@ -41,20 +42,33 @@ class ClientDB {
 				.then(() => {
 					this.store
 						.getItem(key)
-						.then(resolve)
+						.then(data => {
+							if (!data) return resolve()
+							if (!encryptionKey) return resolve(data)
+
+							const crypto = new Crypto(encryptionKey)
+							const decrypted = crypto.decrypt(data, expectsObject)
+
+							return resolve(decrypted)
+						})
 						.catch(reject)
 				})
 				.catch(reject)
 		})
 	}
 
-	set(key, value) {
+	set(key, value, encryptionKey) {
 		return new Promise(async (resolve, reject) => {
 			if (!this.store) await this.init()
 
 			this.store
 				.ready()
 				.then(() => {
+					if (encryptionKey) {
+						const crypto = new Crypto(encryptionKey)
+						value = crypto.encrypt(value)
+					}
+
 					this.store
 						.setItem(key, value)
 						.then(resolve)

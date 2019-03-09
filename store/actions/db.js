@@ -23,27 +23,25 @@ export const syncDb = password => async (dispatch, getState) => {
 		if (!enabled || !hash || !password) return await dispatch(fulfilled(dbTypes.SYNC_DB))
 
 		try {
-			let feedLocation = await ClientDB.default.get('fe_l')
-			let feedSources = await ClientDB.default.get('fe_s')
-			let rssSources = await ClientDB.default.get('rs_s')
-			let formsSubmitted = await ClientDB.default.get('fo_s')
-			let formsActive = await ClientDB.default.get('fo_a')
-			let checklistsSystem = await ClientDB.default.get('ch_s')
-			let checklistsCustom = await ClientDB.default.get('ch_c')
-
-			const crypto = new Crypto(password)
+			let feedLocation = await ClientDB.default.get('fe_l', password, true)
+			let feedSources = await ClientDB.default.get('fe_s', password, true)
+			let rssSources = await ClientDB.default.get('rs_s', password, true)
+			let formsSubmitted = await ClientDB.default.get('fo_s', password, true)
+			let formsActive = await ClientDB.default.get('fo_a', password, true)
+			let checklistsSystem = await ClientDB.default.get('ch_s', password, true)
+			let checklistsCustom = await ClientDB.default.get('ch_c', password, true)
 
 			let feedsMerge = {}
 			let formsMerge = {}
 			let checklistsMerge = {}
 
-			if (feedLocation) feedsMerge.feedLocation = crypto.decrypt(feedLocation, true)
-			if (feedSources) feedsMerge.feedSources = crypto.decrypt(feedSources, true)
-			if (rssSources) feedsMerge.rssSources = crypto.decrypt(rssSources, true)
-			if (formsSubmitted) formsMerge.formsSubmitted = crypto.decrypt(formsSubmitted, true)
-			if (formsActive) formsMerge.formsActive = crypto.decrypt(formsActive, true)
-			if (checklistsSystem) checklistsMerge.checklistsSystem = crypto.decrypt(checklistsSystem, true)
-			if (checklistsCustom) checklistsMerge.checklistsCustom = crypto.decrypt(checklistsCustom, true)
+			if (feedLocation) feedsMerge.feedLocation = feedLocation
+			if (feedSources) feedsMerge.feedSources = feedSources
+			if (rssSources) feedsMerge.rssSources = rssSources
+			if (formsSubmitted) formsMerge.formsSubmitted = formsSubmitted
+			if (formsActive) formsMerge.formsActive = formsActive
+			if (checklistsSystem) checklistsMerge.checklistsSystem = checklistsSystem
+			if (checklistsCustom) checklistsMerge.checklistsCustom = checklistsCustom
 
 			if (Object.keys(feedsMerge).length) {
 				await dispatch({

@@ -34,15 +34,12 @@ export const getChecklistsCustom = () => (dispatch, getState) => {
 	}
 
 	try {
-		const crypto = new Crypto(state.account.password)
-
 		const ClientDB = require('../../db')
 
 		ClientDB.default
-			.get('ch_c')
+			.get('ch_c', state.account.password, true)
 			.then(checklists => {
-				checklists = checklists ? crypto.decrypt(checklists, true) : []
-				dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_CUSTOM, checklists))
+				dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_CUSTOM, checklists || []))
 			})
 			.catch(err => {
 				dispatch(rejected(checklistsTypes.GET_CHECKLISTS_CUSTOM, err))
@@ -69,13 +66,10 @@ export const addChecklistCustom = (name, successCb) => (dispatch, getState) => {
 		const checklist = {name, items: []}
 		const checklists = state.checklists.checklistsCustom.concat([checklist])
 
-		const crypto = new Crypto(state.account.password)
-		const encrypted = crypto.encrypt(checklists)
-
 		const ClientDB = require('../../db')
 
 		ClientDB.default
-			.set('ch_c', encrypted)
+			.set('ch_c', checklists, state.account.password)
 			.then(() => {
 				dispatch(fulfilled(checklistsTypes.ADD_CHECKLIST_CUSTOM, checklists))
 				!!successCb && successCb()
@@ -102,13 +96,10 @@ export const updateChecklistCustom = (checklist, i) => (dispatch, getState) => {
 		let checklists = [...state.checklists.checklistsCustom]
 		checklists[i] = checklist
 
-		const crypto = new Crypto(state.account.password)
-		const encrypted = crypto.encrypt(checklists)
-
 		const ClientDB = require('../../db')
 
 		ClientDB.default
-			.set('ch_c', encrypted)
+			.set('ch_c', checklists, state.account.password)
 			.then(() => {
 				dispatch(fulfilled(checklistsTypes.UPDATE_CHECKLIST_CUSTOM, checklists))
 			})
@@ -134,13 +125,10 @@ export const deleteChecklistCustom = i => (dispatch, getState) => {
 		let checklists = [...state.checklists.checklistsCustom]
 		checklists.splice(i, 1)
 
-		const crypto = new Crypto(state.account.password)
-		const encrypted = crypto.encrypt(checklists)
-
 		const ClientDB = require('../../db')
 
 		ClientDB.default
-			.set('ch_c', encrypted)
+			.set('ch_c', checklists, state.account.password)
 			.then(() => {
 				dispatch(fulfilled(checklistsTypes.DELETE_CHECKLIST_CUSTOM, checklists))
 			})
