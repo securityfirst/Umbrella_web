@@ -19,6 +19,7 @@ export const setCurrentLesson = (paths, name) => (dispatch, getState) => {
 	lesson = [...lesson.content]
 	lesson = {
 		name: name,
+		isGlossary: false,
 		level: paths[paths.length - 1],
 		path: `../../static/assets/content/${locale}/${paths.join('/')}`,
 		files: lesson.reduce((list, c) => {
@@ -50,6 +51,7 @@ export const setLessonsGlossaryIndex = index => (dispatch, getState) => {
 	let glossary = [...content[locale].glossary.content]
 
 	glossary = {
+		isGlossary: true,
 		path: `../../static/assets/content/${locale}/glossary`,
 		files: glossary.reduce((list, c) => {
 
@@ -87,6 +89,8 @@ export const getLessonChecklist = sha => async (dispatch, getState) => {
 			dispatch(rejected(lessonsTypes.GET_LESSON_CHECKLIST, err))
 		})
 }
+
+export const unsetLessonChecklist = () => ({type: lessonsTypes.UNSET_LESSON_CHECKLIST})
 
 export const getLessonFile = sha => async (dispatch, getState) => {
 	dispatch(pending(lessonsTypes.GET_LESSON_FILE))

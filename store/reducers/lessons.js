@@ -40,6 +40,13 @@ export default function reducer(state = initialState, action) {
 				currentLessonChecklist: action.payload,
 			}
 
+		/* UNSET_LESSON_CHECKLIST */ 
+		case lessonsTypes.UNSET_LESSON_CHECKLIST:
+			return {
+				...state,
+				currentLessonChecklist: null,
+			}
+
 		/* GET_LESSON_FILE */
 		case pending(lessonsTypes.GET_LESSON_FILE):
 			return {

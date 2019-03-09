@@ -13,7 +13,6 @@ import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormLabel from '@material-ui/core/FormLabel'
-// import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 
 import CloseIcon from '@material-ui/icons/Close'
@@ -27,7 +26,7 @@ import FormControlCheckbox from '../common/FormControlCheckbox'
 
 import { contentStyles } from '../../utils/view'
 
-import { getLessonChecklist, getLessonFile, closeLesson } from '../../store/actions/lessons'
+import { getLessonChecklist, unsetLessonChecklist, getLessonFile, closeLesson } from '../../store/actions/lessons'
 import { getChecklistsSystem, updateChecklistsSystem } from '../../store/actions/checklists'
 import { toggleLessonFileView, setAppbarTitle } from '../../store/actions/view'
 
@@ -103,6 +102,8 @@ class LessonLevel extends React.Component {
 		if (currentLesson.checklist) {
 			dispatch(getLessonChecklist(currentLesson.checklist.sha))
 			dispatch(getChecklistsSystem())
+		} else {
+			dispatch(unsetLessonChecklist())
 		}
 	}
 	
@@ -116,10 +117,13 @@ class LessonLevel extends React.Component {
 		this.props.dispatch(setAppbarTitle('Lessons'))
 	}
 
+	getChecklistKey = () => (`${this.props.currentLesson.name} > ${this.props.currentLesson.level}`)
+
 	handleCheck = (itemName, savedChecklist) => e => {
 		const { dispatch, currentLesson, checklistsSystem } = this.props
 
-		const listKey = `${currentLesson.name} > ${currentLesson.level}`
+		const listKey = this.getChecklistKey()
+
 		let newChecklists = {...checklistsSystem}
 
 		if (!savedChecklist) newChecklists[listKey] = [itemName]
@@ -151,7 +155,7 @@ class LessonLevel extends React.Component {
 		else if (!currentLessonChecklist) return null
 
 		const checklist = YAML.parse(atob(currentLessonChecklist))
-		const listKey = `${currentLesson.name} > ${currentLesson.level}`
+		const listKey = this.getChecklistKey()
 		const savedChecklist = checklistsSystem[listKey]
 
 		return (
