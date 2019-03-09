@@ -1,16 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import isUrl from 'is-url'
 
 import { withStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import Button from '@material-ui/core/Button'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle'
+import DoneAllIcon from '@material-ui/icons/DoneAll'
 
-import FormControlLocation from '../../components/common/FormControlLocation'
+import FormControlInput from '../../components/common/FormControlInput'
 import IconModalContent from '../../components/common/IconModalContent'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
+
+import { addChecklistCustom } from '../../store/actions/checklists'
 
 const styles = theme => ({
 	iconFontSize: {
@@ -25,31 +29,31 @@ const styles = theme => ({
 	},
 })
 
-class FeedsEditLocation extends React.Component {
+class ChecklistsCustomAdd extends React.Component {
 	state = {
-		location: null,
+		name: '',
 		error: null,
 		errorMessage: null,
 	}
 
-	handleSelect = location => {
-		this.setState({location})
+	handleChange = e => {
+		this.setState({name: e.target.value})
 	}
 
 	handleSubmit = e => {
 		!!e && e.preventDefault()
 
-		const { location } = this.state
+		const { dispatch, closeModal } = this.props
+		const { name } = this.state
 
-		if (!location) return alert('No location was selected.')
+		if (!name || !name.length) return alert('Input is not a valid URL.')
 
-		this.props.onSubmit(location)
-		this.props.closeModal()
+		dispatch(addChecklistCustom(name, closeModal))
 	}
 
 	handleCancel = () => {
 		this.handleRemoveError()
-		this.setState({location: null})
+		this.setState({name: ''})
 		this.props.closeModal()
 	}
 
@@ -57,21 +61,23 @@ class FeedsEditLocation extends React.Component {
 
 	render() {
 		const { theme, classes, closeModal, confirm } = this.props
-		const { location, error, errorMessage } = this.state
+		const { name, error, errorMessage } = this.state
 
 		return (
 			<IconModalContent 
-				icon={<PersonPinCircleIcon classes={{fontSizeLarge: classes.iconFontSize}} fontSize="large" color="primary" />} 
+				icon={<DoneAllIcon classes={{fontSizeLarge: classes.iconFontSize}} fontSize="large" color="primary" />} 
 			>
 				<form onSubmit={this.handleSubmit}>
-					<FormControlLocation 
-						id="feeds-edit-location"
+					<FormControlInput 
 						className={classes.formControlInput}
-						label="Set location"
-						types={'country'}
+						id="checklist-custom-form"
+						label="Custom checklist name"
+						value={name}
+						type="string"
 						error={error}
 						errorMessage={errorMessage}
-						onSelect={this.handleSelect}
+						onChange={this.handleChange}
+						required
 						autoFocus
 					/>
 
@@ -87,4 +93,4 @@ class FeedsEditLocation extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEditLocation)
+export default connect()(withStyles(styles, {withTheme: true})(ChecklistsCustomAdd))

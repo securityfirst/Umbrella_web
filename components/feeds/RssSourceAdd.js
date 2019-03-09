@@ -10,7 +10,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import RssFeedIcon from '@material-ui/icons/RssFeed'
 
 import FormControlInput from '../../components/common/FormControlInput'
-import IconModalContent from './IconModalContent'
+import IconModalContent from '../../components/common/IconModalContent'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 

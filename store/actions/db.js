@@ -37,13 +37,13 @@ export const syncDb = password => async (dispatch, getState) => {
 			let formsMerge = {}
 			let checklistsMerge = {}
 
-			if (feedLocation) feedsMerge.feedLocation = crypto.decrypt(feedLocation, password)
-			if (feedSources) feedsMerge.feedSources = crypto.decrypt(feedSources, password)
-			if (rssSources) feedsMerge.rssSources = crypto.decrypt(rssSources, password)
-			if (formsSubmitted) formsMerge.formsSubmitted = crypto.decrypt(formsSubmitted, password)
-			if (formsActive) formsMerge.formsActive = crypto.decrypt(formsActive, password)
-			if (checklistsSystem) checklistsMerge.checklistsSystem = crypto.decrypt(checklistsSystem, password)
-			if (checklistsCustom) checklistsMerge.checklistsCustom = crypto.decrypt(checklistsCustom, password)
+			if (feedLocation) feedsMerge.feedLocation = crypto.decrypt(feedLocation, true)
+			if (feedSources) feedsMerge.feedSources = crypto.decrypt(feedSources, true)
+			if (rssSources) feedsMerge.rssSources = crypto.decrypt(rssSources, true)
+			if (formsSubmitted) formsMerge.formsSubmitted = crypto.decrypt(formsSubmitted, true)
+			if (formsActive) formsMerge.formsActive = crypto.decrypt(formsActive, true)
+			if (checklistsSystem) checklistsMerge.checklistsSystem = crypto.decrypt(checklistsSystem, true)
+			if (checklistsCustom) checklistsMerge.checklistsCustom = crypto.decrypt(checklistsCustom, true)
 
 			if (Object.keys(feedsMerge).length) {
 				await dispatch({

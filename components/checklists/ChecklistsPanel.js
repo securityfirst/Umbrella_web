@@ -24,11 +24,21 @@ const styles = theme => ({
 	},
 })
 
-const ChecklistsPanel = (props) => {
+const ChecklistsPanel = props => {
+	if (!props.checklist) return <Paper className={props.classes.formPanel} square></Paper>
+
+	let percentage
+
+	if (!props.checklist.items || !props.checklist.items.length) percentage = 0
+	else {
+		const itemsDone = props.checklist.items.reduce((acc, item) => acc + (item.done ? 1 : 0), 0)
+		percentage = parseFloat((itemsDone / props.checklist.items.length) * 100)
+	}
+
 	return (
 		<Paper className={props.classes.formPanel} square>
-			<Typography className={props.classes.formPanelTitle} variant="h6">{props.name}</Typography>
-			<Typography className={props.classes.formPanelPercentage} variant="h6">{props.percentage}%</Typography>
+			<Typography className={props.classes.formPanelTitle} variant="h6">{props.checklist.name}</Typography>
+			<Typography className={props.classes.formPanelPercentage} variant="h6">{percentage}%</Typography>
 		</Paper>
 	)
 }

@@ -44,6 +44,46 @@ export default function reducer(state = initialState, action) {
 				checklistsCustom: action.payload,
 			}
 
+		/* ADD_CHECKLIST_CUSTOM */
+		case pending(checklistsTypes.ADD_CHECKLIST_CUSTOM):
+			return {
+				...state,
+				addChecklistCustomLoading: true,
+			}
+		case rejected(checklistsTypes.ADD_CHECKLIST_CUSTOM):
+			return {
+				...state,
+				addChecklistCustomLoading: false,
+				addChecklistCustomError: action.payload,
+			}
+		case fulfilled(checklistsTypes.ADD_CHECKLIST_CUSTOM):
+			return {
+				...state,
+				addChecklistCustomLoading: false,
+				addChecklistCustomError: null,
+				checklistsCustom: action.payload,
+			}
+
+		/* UPDATE_CHECKLIST_CUSTOM */
+		case pending(checklistsTypes.UPDATE_CHECKLIST_CUSTOM):
+			return {
+				...state,
+				updateChecklistCustomLoading: true,
+			}
+		case rejected(checklistsTypes.UPDATE_CHECKLIST_CUSTOM):
+			return {
+				...state,
+				updateChecklistCustomLoading: false,
+				updateChecklistCustomError: action.payload,
+			}
+		case fulfilled(checklistsTypes.UPDATE_CHECKLIST_CUSTOM):
+			return {
+				...state,
+				updateChecklistCustomLoading: false,
+				updateChecklistCustomError: null,
+				checklistsCustom: action.payload,
+			}
+
 		/* SYNC_CHECKLISTS */
 		case checklistsTypes.SYNC_CHECKLISTS: return action.payload
 

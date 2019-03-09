@@ -52,14 +52,14 @@ class Checklists extends React.Component {
 			<div className={classes.content}>
 				<Typography className={classes.label} variant="subtitle1">Checklists Total</Typography>
 
-				<ChecklistsPanel name="Total done" percentage={checklistsSystem.total} />
+				<ChecklistsPanel checklist={{name: "Total done"}} />
 
 				{(checklistsSystem.favorites && checklistsSystem.favorites.length) && 
 					<Typography className={classes.label} variant="subtitle1">Favourites</Typography>
 				}
 
 				{(checklistsSystem.favorites && checklistsSystem.favorites.length) && 
-					checklistsSystem.favorites.map((checklist, i) => <ChecklistsPanel key={i} name={checklist.name} percentage={checklist.percentage} />)
+					checklistsSystem.favorites.map((checklist, i) => <ChecklistsPanel key={i} checklist={checklist} />)
 				}
 
 				{(checklistsSystem.checklists && checklistsSystem.checklists.length) && 
@@ -67,7 +67,7 @@ class Checklists extends React.Component {
 				}
 
 				{(checklistsSystem.checklists && checklistsSystem.checklists.length) && 
-					checklistsSystem.checklists.map((checklist, i) => <ChecklistsPanel key={i} name={checklist.name} percentage={checklist.percentage} />)
+					checklistsSystem.checklists.map((checklist, i) => <ChecklistsPanel key={i} checklist={checklist} />)
 				}
 			</div>
 		)
