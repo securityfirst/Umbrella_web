@@ -20,9 +20,9 @@ import CloseIcon from '@material-ui/icons/Close'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import ShareIcon from '@material-ui/icons/Share'
 
-import Layout from '../../components/layout'
-import Loading from '../../components/common/Loading'
-import ErrorMessage from '../../components/common/ErrorMessage'
+import Layout from '../layout'
+import Loading from '../common/Loading'
+import ErrorMessage from '../common/ErrorMessage'
 
 import { contentStyles } from '../../utils/view'
 

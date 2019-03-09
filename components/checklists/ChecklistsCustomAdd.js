@@ -9,8 +9,8 @@ import Button from '@material-ui/core/Button'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import DoneAllIcon from '@material-ui/icons/DoneAll'
 
-import FormControlInput from '../../components/common/FormControlInput'
-import IconModalContent from '../../components/common/IconModalContent'
+import FormControlInput from '../common/FormControlInput'
+import IconModalContent from '../common/IconModalContent'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
@@ -46,7 +46,7 @@ class ChecklistsCustomAdd extends React.Component {
 		const { dispatch, closeModal } = this.props
 		const { name } = this.state
 
-		if (!name || !name.length) return alert('Input is not a valid URL.')
+		if (!name || !name.length) return alert('Name is required.')
 
 		dispatch(addChecklistCustom(name, closeModal))
 	}

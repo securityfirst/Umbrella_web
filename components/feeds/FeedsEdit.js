@@ -24,8 +24,8 @@ const styles = theme => ({
 		fontSize: '1.5rem',
 	},
 	panelContent: {
+		color: theme.palette.grey[600],
 		fontSize: '.875rem',
-		color: theme.palette.grey[600]
 	},
 	changeButtonWrapper: {
 		...buttonWrapperStyles(theme),
@@ -87,7 +87,7 @@ class FeedsEdit extends React.Component {
 				{/* Info panel */}
 				<Paper className={classes.panel} square>
 					<Typography className={classes.panelTitle} variant="h6">Set your feed</Typography>
-					<Typography className={classes.panelContent} paragraph>You haven’t set the country and the sources for the feed yet. You have to do it in order for the feed to start displaying, and you can change it any time later in the settings.</Typography>
+					<Typography className={classes.panelContent} paragraph>You haven't set the country and the sources for the feed yet. You have to do it in order for the feed to start displaying, and you can change it any time later in the settings.</Typography>
 				</Paper>
 
 				{/* Location panel */}

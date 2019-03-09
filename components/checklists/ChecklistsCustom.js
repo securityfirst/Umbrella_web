@@ -33,11 +33,16 @@ const styles = theme => ({
 
 class ChecklistsCustom extends React.Component {
 	state = {
+		expanded: false,
 		modalOpen: false,
 	}
 
 	componentWillMount() {
 		this.props.dispatch(getChecklistsCustom())
+	}
+
+	handlePanelToggle = i => (e, expanded) => {
+		this.setState({expanded: expanded ? i : false})
 	}
 	
 	handleModalOpen = () => {
@@ -54,6 +59,7 @@ class ChecklistsCustom extends React.Component {
 
 	renderChecklists = () => {
 		const { classes, checklistsCustom } = this.props
+		const { expanded } = this.state
 
 		if (!checklistsCustom.length) return (
 			<Paper className={classes.panel} square>
@@ -63,7 +69,16 @@ class ChecklistsCustom extends React.Component {
 
 		return (
 			<React.Fragment>
-				{checklistsCustom.map((checklist, i) => <ChecklistsPanel key={i} checklist={checklist} />)}
+				{checklistsCustom.map((checklist, i) => (
+					<ChecklistsPanel 
+						key={i} 
+						index={i}
+						checklist={checklist} 
+						isCustom={true}
+						expanded={expanded} 
+						handlePanelToggle={this.handlePanelToggle} 
+					/>
+				))}
 			</React.Fragment>
 		)
 	}

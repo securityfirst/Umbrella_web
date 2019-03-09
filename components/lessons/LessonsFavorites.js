@@ -9,9 +9,9 @@ import Button from '@material-ui/core/Button'
 
 import CloseIcon from '@material-ui/icons/Close'
 
-import Layout from '../../components/layout'
-import Loading from '../../components/common/Loading'
-import ErrorMessage from '../../components/common/ErrorMessage'
+import Layout from '../layout'
+import Loading from '../common/Loading'
+import ErrorMessage from '../common/ErrorMessage'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 

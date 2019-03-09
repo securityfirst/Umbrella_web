@@ -120,4 +120,36 @@ export const updateChecklistCustom = (checklist, i) => (dispatch, getState) => {
 	}
 }
 
+export const deleteChecklistCustom = i => (dispatch, getState) => {
+	dispatch(pending(checklistsTypes.DELETE_CHECKLIST_CUSTOM))
+
+	const state = getState()
+
+	if (!state.account.password) {
+		alert('You must be logged in to update your custom checklist')
+		return window.reload()
+	}
+
+	try {
+		let checklists = [...state.checklists.checklistsCustom]
+		checklists.splice(i, 1)
+
+		const crypto = new Crypto(state.account.password)
+		const encrypted = crypto.encrypt(checklists)
+
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.set('ch_c', encrypted)
+			.then(() => {
+				dispatch(fulfilled(checklistsTypes.DELETE_CHECKLIST_CUSTOM, checklists))
+			})
+			.catch(err => {
+				dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_CUSTOM, err))
+			})
+	} catch (e) {
+		dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_CUSTOM, e))
+	}
+}
+
 export const clearChecklists = () => ({type: checklistsTypes.CLEAR_CHECKLISTS})

@@ -7,8 +7,8 @@ import Button from '@material-ui/core/Button'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle'
 
-import FormControlLocation from '../../components/common/FormControlLocation'
-import IconModalContent from '../../components/common/IconModalContent'
+import FormControlLocation from '../common/FormControlLocation'
+import IconModalContent from '../common/IconModalContent'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 

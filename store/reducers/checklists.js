@@ -84,6 +84,26 @@ export default function reducer(state = initialState, action) {
 				checklistsCustom: action.payload,
 			}
 
+		/* DELETE_CHECKLIST_CUSTOM */
+		case pending(checklistsTypes.DELETE_CHECKLIST_CUSTOM):
+			return {
+				...state,
+				deleteChecklistCustomLoading: true,
+			}
+		case rejected(checklistsTypes.DELETE_CHECKLIST_CUSTOM):
+			return {
+				...state,
+				deleteChecklistCustomLoading: false,
+				deleteChecklistCustomError: action.payload,
+			}
+		case fulfilled(checklistsTypes.DELETE_CHECKLIST_CUSTOM):
+			return {
+				...state,
+				deleteChecklistCustomLoading: false,
+				deleteChecklistCustomError: null,
+				checklistsCustom: action.payload,
+			}
+
 		/* SYNC_CHECKLISTS */
 		case checklistsTypes.SYNC_CHECKLISTS: return action.payload
 

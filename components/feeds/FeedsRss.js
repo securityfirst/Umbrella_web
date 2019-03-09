@@ -11,10 +11,10 @@ import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 
 import RssSourceAdd from './RssSourceAdd'
-import Loading from '../../components/common/Loading'
-import ErrorMessage from '../../components/common/ErrorMessage'
-import Marked from '../../components/common/Marked'
-import AddButton from '../../components/common/AddButton'
+import Loading from '../common/Loading'
+import ErrorMessage from '../common/ErrorMessage'
+import Marked from '../common/Marked'
+import AddButton from '../common/AddButton'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
