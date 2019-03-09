@@ -11,10 +11,10 @@ import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
 
 import RssSourceAdd from './RssSourceAdd'
-import Loading from '../../components/common/Loading'
-import ErrorMessage from '../../components/common/ErrorMessage'
-import Marked from '../../components/common/Marked'
-import AddButton from '../../components/common/AddButton'
+import Loading from '../common/Loading'
+import ErrorMessage from '../common/ErrorMessage'
+import Marked from '../common/Marked'
+import AddButton from '../common/AddButton'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
@@ -58,18 +58,18 @@ class FeedsRss extends React.Component {
 		this.props.dispatch(getRss())
 	}
 
-	handleAddRss = () => {
+	handleModalOpen = () => {
 		this.setState({modalOpen: true})
+	}
+
+	handleModalClose = () => {
+		this.setState({modalOpen: false})
 	}
 
 	handleSourceRemove = index => () => {
 		if (confirm('Are you sure you want to delete this RSS source?')) {
 			this.props.dispatch(removeRssSource(index))
 		}
-	}
-
-	handleModalClose = () => {
-		this.setState({modalOpen: false})
 	}
 
 	handleSourceClick = source => () => {
@@ -144,7 +144,7 @@ class FeedsRss extends React.Component {
 			<React.Fragment>
 				{this.renderContent()}
 				
-				<AddButton onClick={this.handleAddRss} />
+				<AddButton onClick={this.handleModalOpen} />
 
 				<Modal
 					className={classes.modal}

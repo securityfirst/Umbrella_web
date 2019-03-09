@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 
-import Loading from '../../components/common/Loading'
+import Loading from '../common/Loading'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 

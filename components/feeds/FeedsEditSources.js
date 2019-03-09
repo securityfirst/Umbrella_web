@@ -13,7 +13,7 @@ import AccessAlarmIcon from '@material-ui/icons/AccessAlarm'
 
 import teal from '@material-ui/core/colors/teal'
 
-import FormControlCheckbox from '../../components/common/FormControlCheckbox'
+import FormControlCheckbox from '../common/FormControlCheckbox'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
