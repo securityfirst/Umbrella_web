@@ -12,7 +12,7 @@ class GithubContent {
 		console.log('[CRON] GITHUB_CONTENT: Cloning content repository...')
 
 		git(appRoot).clone(
-			'https://github.com/klaidliadon/umbrella-content.git', 
+			`https://github.com/${process.env.GITHUB_CONTENT_REPO}.git`, 
 			this.directory, 
 			() => console.log('[CRON] GITHUB_CONTENT: Finished.'
 		))
