@@ -91,7 +91,7 @@ class ChecklistsSystem extends React.Component {
 		const { classes } = this.props
 
 		let optionalProps = {}
-		if (index) optionalProps.index = index
+		if (!isNaN(index)) optionalProps.index = index
 
 		return (
 			<Paper className={classes.panel} {...optionalProps}>
