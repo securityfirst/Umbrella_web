@@ -24,6 +24,26 @@ export default function reducer(state = initialState, action) {
 				checklistsSystem: action.payload,
 			}
 
+		/* UPDATE_CHECKLISTS_SYSTEM */
+		case pending(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM):
+			return {
+				...state,
+				updateChecklistsSystemLoading: true,
+			}
+		case rejected(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM):
+			return {
+				...state,
+				updateChecklistsSystemLoading: false,
+				updateChecklistsSystemError: action.payload,
+			}
+		case fulfilled(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM):
+			return {
+				...state,
+				updateChecklistsSystemLoading: false,
+				updateChecklistsSystemError: null,
+				checklistsSystem: action.payload,
+			}
+
 		/* GET_CHECKLISTS_CUSTOM */
 		case pending(checklistsTypes.GET_CHECKLISTS_CUSTOM):
 			return {

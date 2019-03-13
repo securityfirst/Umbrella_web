@@ -2,7 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+
+import cyan from '@material-ui/core/colors/cyan'
 
 import ChecklistsPanel from './ChecklistsPanel'
 import Loading from '../common/Loading'
@@ -17,72 +20,145 @@ const styles = theme => ({
 		color: theme.palette.grey[500],
 		fontSize: '.875rem',
 	},
+	panel: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		margin: '.5rem 0',
+		padding: '.75rem 1.5rem',
+	},
+	panelTitle: {
+		display: 'inline-block',
+		color: theme.palette.grey[800],
+		fontSize: '1.125rem',
+		fontWeight: 'normal',
+		textTransform: 'capitalize',
+	},
+	panelPercentage: {
+		display: 'inline-block',
+		fontWeight: 'normal',
+		color: cyan[500],
+	},
 })
 
 class ChecklistsSystem extends React.Component {
 	state = {
 		expanded: false,
+		checklistCount: 0,
+		checklists: [],
+	}
+
+	componentDidMount() {
+		const { content, locale } = this.props
+		const YAML = require('yaml')
+
+		let checklists = []
+
+		const check = async (item) => {
+			if (!item) return
+			if (typeof item !== 'object') return
+
+			if (item.filename === 'c_checklist.yml') {
+				const res = await fetch(`${process.env.ROOT}/api/github/content/${item.sha}`)
+				const encoded = await res.text()
+				const checklist = YAML.parse(atob(encoded))
+
+				if (checklist) {
+					checklists.push(checklist)
+					this.setState({checklistCount: this.state.checklistCount + checklist.list.length})
+				}
+
+				return
+			}
+
+			if (item.content) item.content.forEach(i => check(i))
+
+			Object.keys(item).forEach(i => {
+				if (i !== 'content') check(item[i])
+			})
+		}
+
+		check(content[locale])
+
+		this.setState({checklists})
 	}
 
 	handlePanelToggle = i => (e, expanded) => {
 		this.setState({expanded: expanded ? i : false})
 	}
 
+	renderPanel = (title, percentage, index) => {
+		const { classes } = this.props
+
+		let optionalProps = {}
+		if (index) optionalProps.index = index
+
+		return (
+			<Paper className={classes.panel} {...optionalProps}>
+				<Typography className={classes.panelTitle} variant="h6">{title}</Typography>
+				{!isNaN(percentage) && <Typography className={classes.panelPercentage} variant="h6">{percentage}%</Typography>}
+			</Paper>
+		)
+	}
+
+	renderLessonChecklists = () => {
+		const { checklistsSystem } = this.props
+		const { checklists } = this.state
+
+		return (
+			<React.Fragment>
+				{Object.keys(checklistsSystem).map((name, i) => {
+					let checklist, checklistCount
+
+					if (checklists.length) {
+						checklist = checklists.find(set => {
+							return set.list.find(item => item.check === checklistsSystem[name][0])
+						})
+
+						if (checklist) checklistCount = checklist.list.reduce((acc, item) => !!item.check ? acc + 1 : acc, 0)
+					}
+
+					const percentage = !!checklist ? parseInt((checklistsSystem[name].length / checklistCount) * 100) : 0
+
+					return this.renderPanel(name, percentage, i)
+				})}
+			</React.Fragment>
+		)
+	}
+
 	render() {
 		const { classes, getChecklistsSystemLoading, getChecklistsSystemError, checklistsSystem } = this.props
-		const { expanded } = this.state
+		const { expanded, checklistCount } = this.state
 
 		if (getChecklistsSystemLoading) return <Loading />
 		else if (getChecklistsSystemError) return <ErrorMessage error={getChecklistsSystemError} />
+
+		const totalDone = Object.keys(checklistsSystem).reduce((acc, key) => (acc + checklistsSystem[key].length), 0)
 
 		return (
 			<div className={classes.content}>
 				<Typography className={classes.label} variant="subtitle1">Checklists Total</Typography>
 
-				<ChecklistsPanel 
-					index={0}
-					checklist={{name: "Total done"}} 
-					expanded={expanded} 
-					handlePanelToggle={this.handlePanelToggle} 
-				/>
+				{this.renderPanel('Total done', parseInt((totalDone / checklistCount) * 100))}
 
-				{(checklistsSystem.favorites && checklistsSystem.favorites.length) && 
-					<Typography className={classes.label} variant="subtitle1">Favourites</Typography>
+				<Typography className={classes.label} variant="subtitle1">Favourites</Typography>
+
+				{(checklistsSystem.favorites && checklistsSystem.favorites.length) 
+					? checklistsSystem.favorites.map((checklist, i) => this.renderPanel(checklist.name, 0, i))
+					: this.renderPanel('No favorites saved', 0)
 				}
 
-				{(checklistsSystem.favorites && checklistsSystem.favorites.length) && 
-					checklistsSystem.favorites.map((checklist, i) => (
-						<ChecklistsPanel 
-							key={i} 
-							index={i + 1}
-							checklist={checklist} 
-							expanded={expanded} 
-							handlePanelToggle={this.handlePanelToggle} 
-						/>
-					))
-				}
+				<Typography className={classes.label} variant="subtitle1">My Checklists</Typography>
 
-				{(checklistsSystem.checklists && checklistsSystem.checklists.length) && 
-					<Typography className={classes.label} variant="subtitle1">My Checklists</Typography>
-				}
-
-				{(checklistsSystem.checklists && checklistsSystem.checklists.length) && 
-					checklistsSystem.checklists.map((checklist, i) => (
-						<ChecklistsPanel 
-							key={i} 
-							index={i + 1 + (checklistsSystem.favorites ? checklistsSystem.favorites.length : 0)}
-							checklist={checklist} 
-							expanded={expanded} 
-							handlePanelToggle={this.handlePanelToggle} 
-						/>
-					))
-				}
+				{this.renderLessonChecklists()}
 			</div>
 		)
 	}
 }
 
 const mapStateToProps = state => ({
+	...state.view,
+	...state.content,
 	...state.checklists,
 })
 

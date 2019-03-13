@@ -6,8 +6,8 @@ export default function reducer(state = initialState, action) {
 	let lessonFilesCache = {}
 
 	switch (action.type) {
-		/* SET_LESSON */
-		case lessonsTypes.SET_LESSON:
+		/* SET_CURRENT_LESSON */
+		case lessonsTypes.SET_CURRENT_LESSON:
 			return {
 				...state,
 				currentLesson: action.payload,
@@ -38,6 +38,13 @@ export default function reducer(state = initialState, action) {
 				getLessonChecklistLoading: false,
 				getLessonChecklistError: null,
 				currentLessonChecklist: action.payload,
+			}
+
+		/* UNSET_LESSON_CHECKLIST */ 
+		case lessonsTypes.UNSET_LESSON_CHECKLIST:
+			return {
+				...state,
+				currentLessonChecklist: null,
 			}
 
 		/* GET_LESSON_FILE */

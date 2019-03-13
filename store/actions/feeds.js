@@ -48,12 +48,9 @@ export const setFeedLocation = location => (dispatch, getState) => {
 	const state = getState()
 
 	if (state.account.password) {
-		const crypto = new Crypto(state.account.password)
-		const encrypted = crypto.encrypt(location)
-
 		const ClientDB = require('../../db')
 
-		ClientDB.default.set('fe_l', encrypted)
+		ClientDB.default.set('fe_l', location, state.account.password)
 	}
 
 	dispatch({type: feedsTypes.SET_FEED_LOCATION, payload: location})
@@ -63,12 +60,9 @@ export const setFeedSources = sources => (dispatch, getState) => {
 	const state = getState()
 
 	if (state.account.password) {
-		const crypto = new Crypto(state.account.password)
-		const encrypted = crypto.encrypt(sources)
-
 		const ClientDB = require('../../db')
 
-		ClientDB.default.set('fe_s', encrypted)
+		ClientDB.default.set('fe_s', sources, state.account.password)
 	}
 
 	dispatch({type: feedsTypes.SET_FEED_SOURCES, payload: sources})
@@ -129,12 +123,9 @@ export const addRssSource = (source, successCb) => (dispatch, getState) => {
 			const rss = state.feeds.rss.concat([data])
 
 			if (state.account.password) {
-				const crypto = new Crypto(state.account.password)
-				const encrypted = crypto.encrypt(sources)
-
 				const ClientDB = require('../../db')
 
-				ClientDB.default.set('rs_s', encrypted)
+				ClientDB.default.set('rs_s', sources, state.account.password)
 			}
 
 			dispatch(fulfilled(feedsTypes.ADD_RSS_SOURCE, {sources, rss}))
@@ -158,12 +149,9 @@ export const removeRssSource = index => (dispatch, getState) => {
 		const rss = state.feeds.rss.filter((r, i) => i !== index)
 
 		if (state.account.password) {
-			const crypto = new Crypto(state.account.password)
-			const encrypted = crypto.encrypt(sources)
-
 			const ClientDB = require('../../db')
 
-			ClientDB.default.set('rs_s', encrypted)
+			ClientDB.default.set('rs_s', sources, state.account.password)
 		}
 
 		dispatch(fulfilled(feedsTypes.REMOVE_RSS_SOURCE, {sources, rss}))

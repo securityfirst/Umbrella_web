@@ -24,7 +24,7 @@ import { updateChecklistCustom, deleteChecklistCustom } from '../../store/action
 
 const styles = theme => ({
 	header: {
-	    justifyContent: 'space-between',
+		justifyContent: 'space-between',
 	},
 	name: {
 		display: 'inline-block',
@@ -104,7 +104,7 @@ class ChecklistsPanel extends React.Component {
 
 		if (!itemText || !itemText.length) return alert('Item text is required.')
 
-		const item = {text: itemText, done: false}
+		const item = {text: itemText.trim(), done: false}
 		const newChecklist = {...checklist, items: checklist.items.concat([item])}
 
 		dispatch(updateChecklistCustom(newChecklist, index))
