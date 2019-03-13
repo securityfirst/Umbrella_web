@@ -23,12 +23,16 @@ const styles = theme => ({
 	panel: {
 		display: 'flex',
 		justifyContent: 'space-between',
+		alignItems: 'center',
+		margin: '.5rem 0',
 		padding: '.75rem 1.5rem',
 	},
 	panelTitle: {
 		display: 'inline-block',
 		color: theme.palette.grey[800],
+		fontSize: '1.125rem',
 		fontWeight: 'normal',
+		textTransform: 'capitalize',
 	},
 	panelPercentage: {
 		display: 'inline-block',
@@ -41,11 +45,14 @@ class ChecklistsSystem extends React.Component {
 	state = {
 		expanded: false,
 		checklistCount: 0,
+		checklists: [],
 	}
 
 	componentDidMount() {
 		const { content, locale } = this.props
 		const YAML = require('yaml')
+
+		let checklists = []
 
 		const check = async (item) => {
 			if (!item) return
@@ -56,7 +63,10 @@ class ChecklistsSystem extends React.Component {
 				const encoded = await res.text()
 				const checklist = YAML.parse(atob(encoded))
 
-				this.setState({checklistCount: this.state.checklistCount + checklist.list.length})
+				if (checklist) {
+					checklists.push(checklist)
+					this.setState({checklistCount: this.state.checklistCount + checklist.list.length})
+				}
 
 				return
 			}
@@ -69,6 +79,8 @@ class ChecklistsSystem extends React.Component {
 		}
 
 		check(content[locale])
+
+		this.setState({checklists})
 	}
 
 	handlePanelToggle = i => (e, expanded) => {
@@ -77,11 +89,40 @@ class ChecklistsSystem extends React.Component {
 
 	renderPanel = (title, percentage, index) => {
 		const { classes } = this.props
+
+		let optionalProps = {}
+		if (index) optionalProps.index = index
+
 		return (
-			<Paper className={classes.panel} square>
+			<Paper className={classes.panel} {...optionalProps}>
 				<Typography className={classes.panelTitle} variant="h6">{title}</Typography>
 				{!isNaN(percentage) && <Typography className={classes.panelPercentage} variant="h6">{percentage}%</Typography>}
 			</Paper>
+		)
+	}
+
+	renderLessonChecklists = () => {
+		const { checklistsSystem } = this.props
+		const { checklists } = this.state
+
+		return (
+			<React.Fragment>
+				{Object.keys(checklistsSystem).map((name, i) => {
+					let checklist, checklistCount
+
+					if (checklists.length) {
+						checklist = checklists.find(set => {
+							return set.list.find(item => item.check === checklistsSystem[name][0])
+						})
+
+						if (checklist) checklistCount = checklist.list.reduce((acc, item) => !!item.check ? acc + 1 : acc, 0)
+					}
+
+					const percentage = !!checklist ? parseInt((checklistsSystem[name].length / checklistCount) * 100) : 0
+
+					return this.renderPanel(name, percentage, i)
+				})}
+			</React.Fragment>
 		)
 	}
 
@@ -104,12 +145,12 @@ class ChecklistsSystem extends React.Component {
 
 				{(checklistsSystem.favorites && checklistsSystem.favorites.length) 
 					? checklistsSystem.favorites.map((checklist, i) => this.renderPanel(checklist.name, 0, i))
-					: this.renderPanel('No favorites saved')
+					: this.renderPanel('No favorites saved', 0)
 				}
 
 				<Typography className={classes.label} variant="subtitle1">My Checklists</Typography>
 
-				{Object.keys(checklistsSystem).map((name, i) => this.renderPanel(name, 0, i))}
+				{this.renderLessonChecklists()}
 			</div>
 		)
 	}
