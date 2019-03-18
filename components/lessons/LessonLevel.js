@@ -6,29 +6,27 @@ import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
-import CardActionArea from '@material-ui/core/CardActionArea'
-import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormLabel from '@material-ui/core/FormLabel'
 import Checkbox from '@material-ui/core/Checkbox'
-
 import CloseIcon from '@material-ui/icons/Close'
-import BookmarkIcon from '@material-ui/icons/Bookmark'
-import ShareIcon from '@material-ui/icons/Share'
+// import BookmarkIcon from '@material-ui/icons/Bookmark'
+// import ShareIcon from '@material-ui/icons/Share'
 
 import Layout from '../layout'
 import Loading from '../common/Loading'
 import ErrorMessage from '../common/ErrorMessage'
 import FormControlCheckbox from '../common/FormControlCheckbox'
+import LessonCardTile from './LessonCardTile'
 
 import { contentStyles } from '../../utils/view'
 
-import { getLessonChecklist, unsetLessonChecklist, getLessonFile, closeLesson } from '../../store/actions/lessons'
+import { getLessonChecklist, unsetLessonChecklist, closeLesson } from '../../store/actions/lessons'
 import { getChecklistsSystem, updateChecklistsSystem } from '../../store/actions/checklists'
-import { toggleLessonFileView, setAppbarTitle } from '../../store/actions/view'
+import { setAppbarTitle } from '../../store/actions/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -39,35 +37,11 @@ const styles = theme => ({
 			flexWrap: 'wrap',
 		},
 	},
-	card: {
-		margin: '1rem 0',
-		[theme.breakpoints.up('sm')]: {
-			width: '23%',
-			margin: '1%',
-		},
-	},
-	cardHead: {
-		padding: '1rem',
-		backgroundColor: theme.palette.primary.main,
-		[theme.breakpoints.up('sm')]: {
-			minHeight: '8rem',
-		},
-	},
 	cardTitle: {
-		display: 'block',
 		color: 'white',
 		fontSize: '1.25rem',
 		lineHeight: 1,
 		textTransform: 'capitalize',
-	},
-	cardActions: {
-		[theme.breakpoints.up('sm')]: {
-			display: 'flex',
-			justifyContent: 'space-between',
-		},
-	},
-	cardActionIcon: {
-		color: theme.palette.grey[600],
 	},
 	checklistCard: {
 		margin: '1rem 0',
@@ -105,11 +79,6 @@ class LessonLevel extends React.Component {
 		} else {
 			dispatch(unsetLessonChecklist())
 		}
-	}
-	
-	getLessonFile = sha => () => {
-		this.props.dispatch(toggleLessonFileView(true))
-		this.props.dispatch(getLessonFile(sha))
 	}
 
 	closeLevel = () => {
@@ -190,26 +159,6 @@ class LessonLevel extends React.Component {
 		)
 	}
 
-	renderCard = (file, i) => {
-		const { classes } = this.props
-		const title = file.name.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
-
-		return (
-			<Card key={i} className={classes.card}>
-				<CardActionArea onClick={this.getLessonFile(file.sha)}>
-					<CardContent className={classes.cardHead}>
-						<Typography className={classes.cardTitle}>{i+1}</Typography>
-						<Typography className={classes.cardTitle}>{title}</Typography>
-					</CardContent>
-				</CardActionArea>
-				<CardActions classes={{root: classes.cardActions}}>
-					<Button size="small" className={classes.cardActionIcon}><BookmarkIcon /></Button>
-					<Button size="small" className={classes.cardActionIcon}><ShareIcon /></Button>
-				</CardActions>
-			</Card>
-		)
-	}
-
 	render() {
 		const { classes, currentLesson, currentLessonChecklist } = this.props
 
@@ -220,7 +169,7 @@ class LessonLevel extends React.Component {
 				</Button>
 
 				<div className={classes.cardsWrapper}>
-					{currentLesson.files.map(this.renderCard)}
+					{currentLesson.files.map((file, i) => <LessonCardTile index={i} file={file} />)}
 				</div>
 
 				{this.renderChecklist()}

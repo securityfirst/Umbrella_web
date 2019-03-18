@@ -90,6 +90,26 @@ export default function reducer(state = initialState, action) {
 				currentLesson: null,
 				currentLessonFile: null,
 			}
+
+		/* GET_LESSON_CARDS_FAVORITES */
+		case pending(lessonsTypes.GET_LESSON_CARDS_FAVORITES):
+			return {
+				...state,
+				getLessonCardsFavoritesLoading: true,
+			}
+		case rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES):
+			return {
+				...state,
+				getLessonCardsFavoritesLoading: false,
+				getLessonCardsFavoritesError: action.payload,
+			}
+		case fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES):
+			return {
+				...state,
+				getLessonCardsFavoritesLoading: false,
+				getLessonCardsFavoritesError: null,
+				lessonCardsFavorites: action.payload,
+			}
 	}
 
 	return state

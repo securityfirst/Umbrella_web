@@ -38,10 +38,6 @@ export const setCurrentLesson = (paths, name) => (dispatch, getState) => {
 	dispatch({type: lessonsTypes.SET_CURRENT_LESSON, payload: lesson})
 }
 
-export const getLessonsFavorites = () => {
-	// TODO: Get favorites from client data store
-}
-
 export const setLessonsGlossaryIndex = index => (dispatch, getState) => {
 	const state = getState()
 	const { content } = state.content
@@ -115,4 +111,30 @@ export const closeLessonFile = () => ({type: lessonsTypes.CLOSE_LESSON_FILE})
 export const resetLessons = () => (dispatch, getState) => {
 	dispatch({type: lessonsTypes.RESET_LESSONS})
 	dispatch({type: viewTypes.RESET_LESSONS})
+}
+
+export const getLessonCardsFavorites = () => (dispatch, getState) => {
+	dispatch(pending(lessonsTypes.GET_LESSON_CARDS_FAVORITES))
+
+	const state = getState()
+
+	if (!state.account.password) {
+		alert('Login or set a password to save your favorite lessons.')
+		return dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES, []))
+	}
+
+	try {
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.get('le_f', state.account.password, true)
+			.then(lessons => {
+				dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES, lessons || []))
+			})
+			.catch(err => {
+				dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, err))
+			})
+	} catch (e) {
+		dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, e))
+	}
 }
