@@ -88,7 +88,7 @@ class LessonCardTile extends React.Component {
 	}
 
 	render() {
-		const { classes, lessonCardsFavorites, index, file, level, isFavorite } = this.props
+		const { classes, lessonCardsFavorites, index, file, level, isFavorited } = this.props
 
 		const title = file.name.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
 		const isFavoriteAdded = !!lessonCardsFavorites.find(item => item.name === file.name)
@@ -106,7 +106,7 @@ class LessonCardTile extends React.Component {
 						onFavoriteRemove={this.onFavoriteRemove}
 						onFavoriteAdd={this.onFavoriteAdd}
 						onShare={this.onShare}
-						isFavorited={isFavorite}
+						isFavorited={isFavorited}
 						isFavoriteAdded={isFavoriteAdded}
 					/>
 				</CardActions>

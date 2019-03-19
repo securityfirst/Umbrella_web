@@ -7,13 +7,13 @@ import Crypto from '../../utils/crypto'
 
 import { checklistsSystem, checklistsCustom } from '../../mock/checklists'
 
-export const getChecklistsSystem = () => async (dispatch, getState) => {
+export const getChecklistsSystem = checkPassword => async (dispatch, getState) => {
 	dispatch(pending(checklistsTypes.GET_CHECKLISTS_SYSTEM))
 
 	const state = getState()
 
 	if (!state.account.password) {
-		alert('Login or set a password to create a custom checklist.')
+		if (checkPassword) alert('Login or set a password to create a custom checklist.')
 		return dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, {}))
 	}
 
