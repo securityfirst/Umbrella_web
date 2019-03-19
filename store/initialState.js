@@ -51,12 +51,22 @@ const lessons = {
 	getLessonFileLoading: true,
 	getLessonFileError: null,
 	currentLessonFile: null,
+	getLessonCardsFavorites: true,
+	getLessonCardsError: null,
+	lessonCardsFavorites: [],
+	addLessonCardFavoriteLoading: false,
+	addLessonCardFavoriteError: null,
+	removeLessonCardFavoriteLoading: false,
+	removeLessonCardFavoriteError: null,
 }
 
 const checklists = {
 	getChecklistsSystemLoading: true,
 	getChecklistsSystemError: null,
 	checklistsSystem: {},
+	getChecklistsSystemFavoritesLoading: true,
+	getChecklistsSystemFavoritesError: null,
+	checklistsSystemFavorites: [],
 	getChecklistsCustomLoading: true,
 	getChecklistsCustomError: null,
 	getChecklistsCustomSuccess: false,

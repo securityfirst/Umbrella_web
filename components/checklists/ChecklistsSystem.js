@@ -91,7 +91,7 @@ class ChecklistsSystem extends React.Component {
 		const { classes } = this.props
 
 		let optionalProps = {}
-		if (!isNaN(index)) optionalProps.index = index
+		if (!isNaN(index)) optionalProps.key = index
 
 		return (
 			<Paper className={classes.panel} {...optionalProps}>
@@ -102,12 +102,16 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	renderLessonChecklists = () => {
-		const { checklistsSystem } = this.props
+		const { classes, checklistsSystem } = this.props
 		const { checklists } = this.state
+
+		const checklistsSystemKeys = Object.keys(checklistsSystem)
+
+		if (!checklistsSystemKeys.length) return this.renderPanel('No checklists available', 0)
 
 		return (
 			<React.Fragment>
-				{Object.keys(checklistsSystem).map((name, i) => {
+				{checklistsSystemKeys.map((name, i) => {
 					let checklist, checklistCount
 
 					if (checklists.length) {

@@ -29,8 +29,14 @@ import yellow from '@material-ui/core/colors/yellow'
 
 import { contentStyles } from '../../utils/view'
 
-import { getLessonFile, getLessonsFavorites, setLessonsGlossaryIndex } from '../../store/actions/lessons'
-import { setLessonsContentType, setLessonsContentPath, toggleLessonFileView, toggleLessonsFavoritesView } from '../../store/actions/view'
+import { getLessonFile, getLessonCardsFavorites, setLessonsGlossaryIndex } from '../../store/actions/lessons'
+import { 
+	setLessonsContentType, 
+	setLessonsContentPath, 
+	toggleLessonFileView, 
+	toggleLessonsFavoritesView,
+	setAppbarTitle
+} from '../../store/actions/view'
 
 
 const menuWidth = 300
@@ -130,7 +136,8 @@ class Lessons extends React.Component {
 	handleFavoritesSelect = () => {
 		const { dispatch, lessonsFavoritesView } = this.props
 
-		// dispatch(getLessonsFavorites())
+		dispatch(getLessonCardsFavorites())
+		dispatch(setAppbarTitle('Lessons > Favorites'))
 
 		if (!lessonsFavoritesView) {
 			dispatch(toggleLessonsFavoritesView(true))
@@ -300,8 +307,8 @@ class Lessons extends React.Component {
 	renderContent = () => {
 		const { currentLesson, lessonsFavoritesView, lessonFileView } = this.props
 
-		if (lessonsFavoritesView) return <LessonsFavorites />
-		else if (lessonFileView) return <LessonCard />
+		if (lessonFileView) return <LessonCard />
+		else if (lessonsFavoritesView) return <LessonsFavorites />
 		else if (currentLesson) return <LessonLevel />
 		else return <LessonsContent />
 	}

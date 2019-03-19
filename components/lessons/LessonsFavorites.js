@@ -12,52 +12,74 @@ import CloseIcon from '@material-ui/icons/Close'
 import Layout from '../layout'
 import Loading from '../common/Loading'
 import ErrorMessage from '../common/ErrorMessage'
+import LessonCardTile from './LessonCardTile'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
-import { toggleLessonsFavoritesView } from '../../store/actions/view'
+import { toggleLessonsFavoritesView, setAppbarTitle } from '../../store/actions/view'
 
 const styles = theme => ({
-	...contentStyles(theme),
-	paper: {
-		position: 'relative',
-		...paperStyles(theme),
-	},
-	title: {
-		display: 'block',
-		margin: '1rem 0',
-		fontSize: '1.25rem',
-		lineHeight: 1,
-		textTransform: 'capitalize',
-		[theme.breakpoints.up('sm')]: {
-			fontSize: '1.5rem',
-		},
-	},
 	lessonClose: {
 		position: 'absolute',
 		top: '.5rem',
 		right: '.5rem',
 		minWidth: '45px',
 	},
+	label: {
+		margin: '1rem 0',
+		color: theme.palette.grey[500],
+		fontSize: '.875rem',
+	},
+	paper: {
+		position: 'relative',
+		...paperStyles(theme),
+	},
+	cardsWrapper: {
+		[theme.breakpoints.up('sm')]: {
+			display: 'flex',
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+		},
+	},
 })
 
 class LessonsFavorites extends React.Component {
 	closeFavorites = () => {
 		this.props.dispatch(toggleLessonsFavoritesView(false))
+		this.props.dispatch(setAppbarTitle('Lessons'))
 	}
 
 	render() {
-		const { classes } = this.props
+		const { classes, getLessonCardsFavoritesLoading, getLessonCardsFavoritesError, lessonCardsFavorites } = this.props
 
+		if (getLessonCardsFavoritesLoading) return <Loading />
+		else if (getLessonCardsFavoritesError) return <ErrorMessage error={getLessonCardsFavoritesError} />
 
 		return (
-			<Paper className={classes.paper}>
+			<React.Fragment>
 				<Button className={classes.lessonClose} size="small" onClick={this.closeFavorites}>
 					<CloseIcon className={classes.lessonCloseIcon} />
 				</Button>
-				
-				<Typography className={classes.title} variant="h2">Favorites</Typography>
-			</Paper>
+
+				<Typography className={classes.label} variant="subtitle1">Lesson Favorites</Typography>
+
+				{!lessonCardsFavorites.length
+					? <Paper className={classes.paper}>
+						<Typography>You do not have any favourite lessons saved.</Typography>
+					</Paper>
+					: <div className={classes.cardsWrapper}>
+						{lessonCardsFavorites.map((file, i) => (
+							<LessonCardTile 
+								key={i} 
+								index={i} 
+								file={file} 
+								level={file.level} 
+								isFavorited 
+							/>
+						))}
+					</div>
+				}
+			</React.Fragment>
 		)
 	}
 }

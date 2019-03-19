@@ -90,6 +90,66 @@ export default function reducer(state = initialState, action) {
 				currentLesson: null,
 				currentLessonFile: null,
 			}
+
+		/* GET_LESSON_CARDS_FAVORITES */
+		case pending(lessonsTypes.GET_LESSON_CARDS_FAVORITES):
+			return {
+				...state,
+				getLessonCardsFavoritesLoading: true,
+			}
+		case rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES):
+			return {
+				...state,
+				getLessonCardsFavoritesLoading: false,
+				getLessonCardsFavoritesError: action.payload,
+			}
+		case fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES):
+			return {
+				...state,
+				getLessonCardsFavoritesLoading: false,
+				getLessonCardsFavoritesError: null,
+				lessonCardsFavorites: action.payload,
+			}
+
+		/* ADD_LESSON_CARD_FAVORITE */
+		case pending(lessonsTypes.ADD_LESSON_CARD_FAVORITE):
+			return {
+				...state,
+				addLessonCardFavoriteLoading: true,
+			}
+		case rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE):
+			return {
+				...state,
+				addLessonCardFavoriteLoading: false,
+				addLessonCardFavoriteError: action.payload,
+			}
+		case fulfilled(lessonsTypes.ADD_LESSON_CARD_FAVORITE):
+			return {
+				...state,
+				addLessonCardFavoriteLoading: false,
+				addLessonCardFavoriteError: null,
+				lessonCardsFavorites: action.payload,
+			}
+
+		/* REMOVE_LESSON_CARD_FAVORITE */
+		case pending(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE):
+			return {
+				...state,
+				removeLessonCardFavoriteLoading: true,
+			}
+		case rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE):
+			return {
+				...state,
+				removeLessonCardFavoriteLoading: false,
+				removeLessonCardFavoriteError: action.payload,
+			}
+		case fulfilled(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE):
+			return {
+				...state,
+				removeLessonCardFavoriteLoading: false,
+				removeLessonCardFavoriteError: null,
+				lessonCardsFavorites: action.payload,
+			}
 	}
 
 	return state
