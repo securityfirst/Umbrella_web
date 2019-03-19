@@ -169,7 +169,14 @@ class LessonLevel extends React.Component {
 				</Button>
 
 				<div className={classes.cardsWrapper}>
-					{currentLesson.files.map((file, i) => <LessonCardTile index={i} file={file} />)}
+					{currentLesson.files.map((file, i) => (
+						<LessonCardTile 
+							key={i} 
+							index={i} 
+							file={file} 
+							level={currentLesson.level}
+						/>
+					))}
 				</div>
 
 				{this.renderChecklist()}

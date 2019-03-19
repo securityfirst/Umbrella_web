@@ -307,8 +307,8 @@ class Lessons extends React.Component {
 	renderContent = () => {
 		const { currentLesson, lessonsFavoritesView, lessonFileView } = this.props
 
-		if (lessonsFavoritesView) return <LessonsFavorites />
-		else if (lessonFileView) return <LessonCard />
+		if (lessonFileView) return <LessonCard />
+		else if (lessonsFavoritesView) return <LessonsFavorites />
 		else if (currentLesson) return <LessonLevel />
 		else return <LessonsContent />
 	}

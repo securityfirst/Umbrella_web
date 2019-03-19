@@ -68,7 +68,15 @@ class LessonsFavorites extends React.Component {
 						<Typography>You do not have any favourite lessons saved.</Typography>
 					</Paper>
 					: <div className={classes.cardsWrapper}>
-						{lessonCardsFavorites.map((file, i) => <LessonCardTile index={i} file={file} />)}
+						{lessonCardsFavorites.map((file, i) => (
+							<LessonCardTile 
+								key={i} 
+								index={i} 
+								file={file} 
+								level={file.level} 
+								isFavorite 
+							/>
+						))}
 					</div>
 				}
 			</React.Fragment>

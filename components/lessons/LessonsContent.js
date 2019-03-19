@@ -89,7 +89,7 @@ class LessonsContent extends React.Component {
 		const { classes, lessonsContentPath } = this.props
 
 		levels = Object.keys(levels)
-
+		
 		levels.sort(function(x, y) {
 			if (levelsOrder.indexOf(x) < levelsOrder.indexOf(y)) return -1
 			if (levelsOrder.indexOf(x) > levelsOrder.indexOf(y)) return 1

@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
@@ -9,9 +10,13 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import BookmarkIcon from '@material-ui/icons/Bookmark'
+import DeleteIcon from '@material-ui/icons/Delete'
 import ShareIcon from '@material-ui/icons/Share'
 
-import { getLessonFile } from '../../store/actions/lessons'
+import yellow from '@material-ui/core/colors/yellow'
+import teal from '@material-ui/core/colors/teal'
+
+import { getLessonFile, addLessonCardFavorite, removeLessonCardFavorite } from '../../store/actions/lessons'
 import { toggleLessonFileView } from '../../store/actions/view'
 
 const styles = theme => ({
@@ -45,6 +50,18 @@ const styles = theme => ({
 	cardActionIcon: {
 		color: theme.palette.grey[600],
 	},
+	cardActionIconActive: {
+		color: teal[500],
+	},
+	beginner: {
+		backgroundColor: theme.palette.secondary.main,
+	},
+	advanced: {
+		backgroundColor: yellow[700],
+	},
+	expert: {
+		backgroundColor: theme.palette.primary.main,
+	},
 })
 
 class LessonCardTile extends React.Component {
@@ -55,32 +72,53 @@ class LessonCardTile extends React.Component {
 		dispatch(getLessonFile(file.sha))
 	}
 
-	onFavorite = () => {
-
+	onFavoriteAdd = () => {
+		this.props.dispatch(addLessonCardFavorite(this.props.file, this.props.level))
 	}
 
+	onFavoriteRemove = () => {
+		this.props.dispatch(removeLessonCardFavorite(this.props.file))
+	}
+
+	/* TODO */
 	onShare = () => {
 
 	}
 
 	render() {
-		const { classes, index, file } = this.props
+		const { classes, lessonCardsFavorites, index, file, level, isFavorite } = this.props
 
 		const title = file.name.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
-
-		let optionalProps = {}
-		if (!isNaN(index)) optionalProps.key = index
+		const isFavoriteAdded = !!lessonCardsFavorites.find(item => item.name === file.name)
 
 		return (
-			<Card className={classes.card} {...optionalProps}>
+			<Card className={classes.card}>
 				<CardActionArea onClick={this.onClick}>
-					<CardContent className={classes.cardHead}>
+					<CardContent className={classNames(classes.cardHead, classes[level])}>
 						{!isNaN(index) && <Typography className={classes.cardTitle}>{index+1}</Typography>}
 						<Typography className={classes.cardTitle}>{title}</Typography>
 					</CardContent>
 				</CardActionArea>
 				<CardActions classes={{root: classes.cardActions}}>
-					<Button size="small" className={classes.cardActionIcon} onClick={this.onFavorite}><BookmarkIcon /></Button>
+					{isFavorite
+						? <Button 
+							size="small" 
+							className={classes.cardActionIcon} 
+							onClick={this.onFavoriteRemove}
+						>
+							<DeleteIcon />
+						</Button>
+						: <Button 
+							size="small" 
+							className={!isFavoriteAdded
+								? classes.cardActionIcon
+								: classNames(classes.cardActionIcon, classes.cardActionIconActive)
+							} 
+							onClick={this.onFavoriteAdd}
+						>
+							<BookmarkIcon />
+						</Button>
+					}
 					<Button size="small" className={classes.cardActionIcon} onClick={this.onShare}><ShareIcon /></Button>
 				</CardActions>
 			</Card>
@@ -88,4 +126,8 @@ class LessonCardTile extends React.Component {
 	}
 }
 
-export default connect()(withStyles(styles)(LessonCardTile))
+const mapStateToProps = state => ({
+	...state.lessons,
+})
+
+export default connect(mapStateToProps)(withStyles(styles)(LessonCardTile))

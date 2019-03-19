@@ -138,3 +138,75 @@ export const getLessonCardsFavorites = () => (dispatch, getState) => {
 		dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, e))
 	}
 }
+
+export const addLessonCardFavorite = (file, level) => (dispatch, getState) => {
+	dispatch(pending(lessonsTypes.ADD_LESSON_CARD_FAVORITE))
+
+	const state = getState()
+
+	if (!state.account.password) {
+		return alert('You need to login to save favorite lessons.')
+	}
+
+	if (!file) {
+		return dispatch(rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE, 'Something went wrong.'))
+	}
+
+	if (state.lessons.lessonCardsFavorites.find(item => item.name === file.name)) {
+		return alert('This lesson already exists in your Favorites list.')
+	}
+
+	const favorites = state.lessons.lessonCardsFavorites.concat([{...file, level}])
+
+	try {
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.set('le_f', favorites, state.account.password)
+			.then(() => {
+				alert('Added to your favorites list!')
+				return dispatch(fulfilled(lessonsTypes.ADD_LESSON_CARD_FAVORITE, favorites))
+			})
+			.catch(err => {
+				dispatch(rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE, err))
+			})
+	} catch (e) {
+		dispatch(rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE, e))
+	}
+}
+
+export const removeLessonCardFavorite = file => (dispatch, getState) => {
+	dispatch(pending(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE))
+
+	const state = getState()
+
+	if (!state.account.password) {
+		return alert('Please login to save favorite lessons.')
+	}
+
+	if (!file) {
+		return dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, 'Something went wrong.'))
+	}
+
+	if (!state.lessons.lessonCardsFavorites.find(item => item.name === file.name)) {
+		return alert('This lesson does not exist in your favorites list.')
+	}
+
+	const favorites = state.lessons.lessonCardsFavorites.filter(item => item.name !== file.name)
+
+	try {
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.set('le_f', favorites, state.account.password)
+			.then(() => {
+				alert('Lesson has been removed from favorites.')
+				return dispatch(fulfilled(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, favorites))
+			})
+			.catch(err => {
+				dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, err))
+			})
+	} catch (e) {
+		dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, e))
+	}
+}

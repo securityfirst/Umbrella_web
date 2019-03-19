@@ -51,6 +51,13 @@ const lessons = {
 	getLessonFileLoading: true,
 	getLessonFileError: null,
 	currentLessonFile: null,
+	getLessonCardsFavorites: true,
+	getLessonCardsError: null,
+	lessonCardsFavorites: [],
+	addLessonCardFavoriteLoading: false,
+	addLessonCardFavoriteError: null,
+	removeLessonCardFavoriteLoading: false,
+	removeLessonCardFavoriteError: null,
 }
 
 const checklists = {
