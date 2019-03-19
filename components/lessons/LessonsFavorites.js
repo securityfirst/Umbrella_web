@@ -74,7 +74,7 @@ class LessonsFavorites extends React.Component {
 								index={i} 
 								file={file} 
 								level={file.level} 
-								isFavorite 
+								isFavorited 
 							/>
 						))}
 					</div>

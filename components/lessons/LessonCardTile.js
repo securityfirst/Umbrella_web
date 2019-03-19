@@ -8,13 +8,15 @@ import CardActionArea from '@material-ui/core/CardActionArea'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import BookmarkIcon from '@material-ui/icons/Bookmark'
-import DeleteIcon from '@material-ui/icons/Delete'
-import ShareIcon from '@material-ui/icons/Share'
+// import Button from '@material-ui/core/Button'
+// import BookmarkIcon from '@material-ui/icons/Bookmark'
+// import DeleteIcon from '@material-ui/icons/Delete'
+// import ShareIcon from '@material-ui/icons/Share'
 
 import yellow from '@material-ui/core/colors/yellow'
-import teal from '@material-ui/core/colors/teal'
+// import teal from '@material-ui/core/colors/teal'
+
+import FavoriteShareIcons from '../common/FavoriteShareIcons'
 
 import { getLessonFile, addLessonCardFavorite, removeLessonCardFavorite } from '../../store/actions/lessons'
 import { toggleLessonFileView } from '../../store/actions/view'
@@ -47,12 +49,12 @@ const styles = theme => ({
 			justifyContent: 'space-between',
 		},
 	},
-	cardActionIcon: {
-		color: theme.palette.grey[600],
-	},
-	cardActionIconActive: {
-		color: teal[500],
-	},
+	// cardActionIcon: {
+	// 	color: theme.palette.grey[600],
+	// },
+	// cardActionIconActive: {
+	// 	color: teal[500],
+	// },
 	beginner: {
 		backgroundColor: theme.palette.secondary.main,
 	},
@@ -100,26 +102,13 @@ class LessonCardTile extends React.Component {
 					</CardContent>
 				</CardActionArea>
 				<CardActions classes={{root: classes.cardActions}}>
-					{isFavorite
-						? <Button 
-							size="small" 
-							className={classes.cardActionIcon} 
-							onClick={this.onFavoriteRemove}
-						>
-							<DeleteIcon />
-						</Button>
-						: <Button 
-							size="small" 
-							className={!isFavoriteAdded
-								? classes.cardActionIcon
-								: classNames(classes.cardActionIcon, classes.cardActionIconActive)
-							} 
-							onClick={this.onFavoriteAdd}
-						>
-							<BookmarkIcon />
-						</Button>
-					}
-					<Button size="small" className={classes.cardActionIcon} onClick={this.onShare}><ShareIcon /></Button>
+					<FavoriteShareIcons
+						onFavoriteRemove={this.onFavoriteRemove}
+						onFavoriteAdd={this.onFavoriteAdd}
+						onShare={this.onShare}
+						isFavorited={isFavorite}
+						isFavoriteAdded={isFavoriteAdded}
+					/>
 				</CardActions>
 			</Card>
 		)

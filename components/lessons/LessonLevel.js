@@ -13,13 +13,15 @@ import FormGroup from '@material-ui/core/FormGroup'
 import FormLabel from '@material-ui/core/FormLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import CloseIcon from '@material-ui/icons/Close'
-// import BookmarkIcon from '@material-ui/icons/Bookmark'
-// import ShareIcon from '@material-ui/icons/Share'
+import BookmarkIcon from '@material-ui/icons/Bookmark'
+import DeleteIcon from '@material-ui/icons/Delete'
+import ShareIcon from '@material-ui/icons/Share'
 
 import Layout from '../layout'
 import Loading from '../common/Loading'
 import ErrorMessage from '../common/ErrorMessage'
 import FormControlCheckbox from '../common/FormControlCheckbox'
+import FavoriteShareIcons from '../common/FavoriteShareIcons'
 import LessonCardTile from './LessonCardTile'
 
 import { contentStyles } from '../../utils/view'
@@ -37,12 +39,6 @@ const styles = theme => ({
 			flexWrap: 'wrap',
 		},
 	},
-	cardTitle: {
-		color: 'white',
-		fontSize: '1.25rem',
-		lineHeight: 1,
-		textTransform: 'capitalize',
-	},
 	checklistCard: {
 		margin: '1rem 0',
 		[theme.breakpoints.up('sm')]: {
@@ -50,8 +46,20 @@ const styles = theme => ({
 		},
 	},
 	checklistCardHead: {
-		padding: '1rem',
+		display: 'flex',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		padding: '.5rem 1rem',
 		backgroundColor: theme.palette.primary.main,
+	},
+	checklistCardTitle: {
+		color: 'white',
+		fontSize: '1.25rem',
+		lineHeight: 1,
+		textTransform: 'capitalize',
+	},
+	checklistCardIconsWrapper: {
+		display: 'inline-block',
 	},
 	checklistCardContent: {
 		padding: '1rem',
@@ -106,6 +114,18 @@ class LessonLevel extends React.Component {
 
 		dispatch(updateChecklistsSystem(newChecklists))
 	}
+	
+	onChecklistFavoriteAdd = checklist => () => {
+		
+	}
+
+	onChecklistFavoriteRemove = checklist => () => {
+
+	}
+
+	onChecklistShare = checklist => () => {
+
+	}
 
 	renderChecklist = () => {
 		const { 
@@ -126,11 +146,22 @@ class LessonLevel extends React.Component {
 		const checklist = YAML.parse(atob(currentLessonChecklist))
 		const listKey = this.getChecklistKey()
 		const savedChecklist = checklistsSystem[listKey]
+		// const isFavorited = 
 
 		return (
 			<Card className={classes.checklistCard}>
 				<CardContent className={classes.checklistCardHead}>
-					<Typography className={classes.cardTitle}>Checklist</Typography>
+					<Typography className={classes.checklistCardTitle}>Checklist</Typography>
+					<div className={classes.checklist}>
+						<FavoriteShareIcons
+							onFavoriteRemove={this.onChecklistFavoriteRemove(checklist)}
+							onFavoriteAdd={this.onChecklistFavoriteAdd(checklist)}
+							onShare={this.onChecklistShare(checklist)}
+							//isFavorited={isFavorited}
+							//isFavoriteAdded={isFavoriteAdded}
+							isLight
+						/>
+					</div>
 				</CardContent>
 				<CardContent className={classes.checklistCardContent}>
 					<FormControl component="fieldset" className={classes.formControl}>
