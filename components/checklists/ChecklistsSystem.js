@@ -87,6 +87,12 @@ class ChecklistsSystem extends React.Component {
 		this.setState({expanded: expanded ? i : false})
 	}
 
+	sortFavorites = () => {
+		const { checklistsSystem, checklistFavorites } = this.props
+
+		const favorites = checklistFavorites
+	}
+
 	renderPanel = (title, percentage, index) => {
 		const { classes } = this.props
 
@@ -101,28 +107,61 @@ class ChecklistsSystem extends React.Component {
 		)
 	}
 
+	renderLessonChecklistFavorites = () => {
+		const { classes, checklistsSystem } = this.props
+		const { checklists } = this.state
+
+		const checklistsSystemKeys = Object.keys(checklistsSystem)
+
+		if (!checklistsSystemKeys.length) return this.renderPanel('No favorites saved')
+
+		return (
+			<React.Fragment>
+				{checklistsSystemKeys.map((name, i) => {
+					if (!checklistsSystem[name].isFavorited) return null
+
+					let checklist, checklistCount
+
+					if (checklists.length) {
+						checklist = checklists.find(set => {
+							return set.list.find(item => item.check === checklistsSystem[name].items[0])
+						})
+
+						if (checklist) checklistCount = checklist.list.reduce((acc, item) => !!item.check ? acc + 1 : acc, 0)
+					}
+
+					const percentage = !!checklist ? parseInt((checklistsSystem[name].items.length / checklistCount) * 100) : 0
+
+					return this.renderPanel(name, percentage, i)
+				})}
+			</React.Fragment>
+		)
+	}
+
 	renderLessonChecklists = () => {
 		const { classes, checklistsSystem } = this.props
 		const { checklists } = this.state
 
 		const checklistsSystemKeys = Object.keys(checklistsSystem)
 
-		if (!checklistsSystemKeys.length) return this.renderPanel('No checklists available', 0)
+		if (!checklistsSystemKeys.length) return this.renderPanel('No checklists available')
 
 		return (
 			<React.Fragment>
 				{checklistsSystemKeys.map((name, i) => {
+					if (checklistsSystem[name].isFavorited) return null
+
 					let checklist, checklistCount
 
 					if (checklists.length) {
 						checklist = checklists.find(set => {
-							return set.list.find(item => item.check === checklistsSystem[name][0])
+							return set.list.find(item => item.check === checklistsSystem[name].items[0])
 						})
 
 						if (checklist) checklistCount = checklist.list.reduce((acc, item) => !!item.check ? acc + 1 : acc, 0)
 					}
 
-					const percentage = !!checklist ? parseInt((checklistsSystem[name].length / checklistCount) * 100) : 0
+					const percentage = !!checklist ? parseInt((checklistsSystem[name].items.length / checklistCount) * 100) : 0
 
 					return this.renderPanel(name, percentage, i)
 				})}
@@ -147,10 +186,12 @@ class ChecklistsSystem extends React.Component {
 
 				<Typography className={classes.label} variant="subtitle1">Favourites</Typography>
 
-				{(checklistsSystem.favorites && checklistsSystem.favorites.length) 
+				{this.renderLessonChecklistFavorites()}
+
+				{/*(checklistsSystem.favorites && checklistsSystem.favorites.length) 
 					? checklistsSystem.favorites.map((checklist, i) => this.renderPanel(checklist.name, 0, i))
-					: this.renderPanel('No favorites saved', 0)
-				}
+					: this.renderPanel('No favorites saved')
+				*/}
 
 				<Typography className={classes.label} variant="subtitle1">My Checklists</Typography>
 

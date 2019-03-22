@@ -27,7 +27,7 @@ import LessonCardTile from './LessonCardTile'
 import { contentStyles } from '../../utils/view'
 
 import { getLessonChecklist, unsetLessonChecklist, closeLesson } from '../../store/actions/lessons'
-import { getChecklistsSystem, updateChecklistsSystem } from '../../store/actions/checklists'
+import { getChecklistsSystem, updateChecklistsSystem, toggleChecklistFavorite } from '../../store/actions/checklists'
 import { setAppbarTitle } from '../../store/actions/view'
 
 const styles = theme => ({
@@ -96,31 +96,12 @@ class LessonLevel extends React.Component {
 
 	getChecklistKey = () => (`${this.props.currentLesson.name} > ${this.props.currentLesson.level}`)
 
-	handleCheck = (itemName, savedChecklist) => e => {
-		const { dispatch, currentLesson, checklistsSystem } = this.props
-
-		const listKey = this.getChecklistKey()
-
-		let newChecklists = {...checklistsSystem}
-
-		if (!savedChecklist) newChecklists[listKey] = [itemName]
-		else {
-			if (newChecklists[listKey].includes(itemName)) {
-				newChecklists[listKey] = newChecklists[listKey].filter(item => item !== itemName)
-			} else {
-				newChecklists[listKey].push(itemName)
-			}
-		}
-
-		dispatch(updateChecklistsSystem(newChecklists))
+	handleCheck = itemName => e => {
+		this.props.dispatch(updateChecklistsSystem(itemName))
 	}
 	
-	onChecklistFavoriteAdd = checklist => () => {
-		
-	}
-
-	onChecklistFavoriteRemove = checklist => () => {
-
+	onChecklistFavoriteToggle = checklist => () => {
+		this.props.dispatch(toggleChecklistFavorite())
 	}
 
 	onChecklistShare = checklist => () => {
@@ -146,7 +127,7 @@ class LessonLevel extends React.Component {
 		const checklist = YAML.parse(atob(currentLessonChecklist))
 		const listKey = this.getChecklistKey()
 		const savedChecklist = checklistsSystem[listKey]
-		// const isFavorited = 
+		const isFavorited = !!savedChecklist && savedChecklist.isFavorited
 
 		return (
 			<Card className={classes.checklistCard}>
@@ -154,11 +135,9 @@ class LessonLevel extends React.Component {
 					<Typography className={classes.checklistCardTitle}>Checklist</Typography>
 					<div className={classes.checklist}>
 						<FavoriteShareIcons
-							onFavoriteRemove={this.onChecklistFavoriteRemove(checklist)}
-							onFavoriteAdd={this.onChecklistFavoriteAdd(checklist)}
+							onFavoriteToggle={this.onChecklistFavoriteToggle(checklist)}
 							onShare={this.onChecklistShare(checklist)}
-							//isFavorited={isFavorited}
-							//isFavoriteAdded={isFavoriteAdded}
+							isFavoriteAdded={isFavorited}
 							isLight
 						/>
 					</div>
@@ -171,7 +150,11 @@ class LessonLevel extends React.Component {
 								return <FormLabel key={i} className={classes.checklistLabel} component="legend">{item.label}</FormLabel>
 							}
 
-							const checked = !!savedChecklist && !!savedChecklist.includes(item.check)
+							const checked = (
+								!!savedChecklist && 
+								!!savedChecklist.items.length &&
+								!!savedChecklist.items.includes(item.check)
+							)
 
 							return (
 								<FormControlCheckbox

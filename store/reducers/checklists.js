@@ -44,6 +44,26 @@ export default function reducer(state = initialState, action) {
 				checklistsSystem: action.payload,
 			}
 
+		/* ADD_CHECKLIST_FAVORITE */
+		case pending(checklistsTypes.ADD_CHECKLIST_FAVORITE):
+			return {
+				...state,
+				toggleChecklistFavoriteLoading: true,
+			}
+		case rejected(checklistsTypes.ADD_CHECKLIST_FAVORITE):
+			return {
+				...state,
+				toggleChecklistFavoriteLoading: false,
+				toggleChecklistFavoriteError: action.payload,
+			}
+		case fulfilled(checklistsTypes.ADD_CHECKLIST_FAVORITE):
+			return {
+				...state,
+				toggleChecklistFavoriteLoading: false,
+				toggleChecklistFavoriteError: null,
+				checklistsSystem: action.payload,
+			}
+
 		/* GET_CHECKLISTS_CUSTOM */
 		case pending(checklistsTypes.GET_CHECKLISTS_CUSTOM):
 			return {

@@ -54,7 +54,7 @@ const FavoriteShareIcon = props => {
 								: props.classes.cardActionIconTeal
 							: null
 					)} 
-					onClick={props.onFavoriteAdd}
+					onClick={props.onFavoriteToggle}
 				>
 					<BookmarkIcon />
 				</Button>

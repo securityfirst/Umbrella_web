@@ -8,13 +8,8 @@ import CardActionArea from '@material-ui/core/CardActionArea'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-// import Button from '@material-ui/core/Button'
-// import BookmarkIcon from '@material-ui/icons/Bookmark'
-// import DeleteIcon from '@material-ui/icons/Delete'
-// import ShareIcon from '@material-ui/icons/Share'
 
 import yellow from '@material-ui/core/colors/yellow'
-// import teal from '@material-ui/core/colors/teal'
 
 import FavoriteShareIcons from '../common/FavoriteShareIcons'
 
@@ -31,7 +26,7 @@ const styles = theme => ({
 	},
 	cardHead: {
 		padding: '1rem',
-		backgroundColor: theme.palette.primary.main, // TODO: Add level color background
+		backgroundColor: theme.palette.primary.main,
 		[theme.breakpoints.up('sm')]: {
 			minHeight: '8rem',
 		},
@@ -49,12 +44,6 @@ const styles = theme => ({
 			justifyContent: 'space-between',
 		},
 	},
-	// cardActionIcon: {
-	// 	color: theme.palette.grey[600],
-	// },
-	// cardActionIconActive: {
-	// 	color: teal[500],
-	// },
 	beginner: {
 		backgroundColor: theme.palette.secondary.main,
 	},
@@ -74,10 +63,11 @@ class LessonCardTile extends React.Component {
 		dispatch(getLessonFile(file.sha))
 	}
 
-	onFavoriteAdd = () => {
+	onFavoriteToggle = () => {
 		this.props.dispatch(addLessonCardFavorite(this.props.file, this.props.level))
 	}
 
+	/* TODO: Remove this and change add to toggle */
 	onFavoriteRemove = () => {
 		this.props.dispatch(removeLessonCardFavorite(this.props.file))
 	}
@@ -103,8 +93,8 @@ class LessonCardTile extends React.Component {
 				</CardActionArea>
 				<CardActions classes={{root: classes.cardActions}}>
 					<FavoriteShareIcons
-						onFavoriteRemove={this.onFavoriteRemove}
-						onFavoriteAdd={this.onFavoriteAdd}
+						//onFavoriteRemove={this.onFavoriteRemove}
+						onFavoriteToggle={this.onFavoriteToggle}
 						onShare={this.onShare}
 						isFavorited={isFavorited}
 						isFavoriteAdded={isFavoriteAdded}
