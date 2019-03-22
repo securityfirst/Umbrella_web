@@ -123,6 +123,7 @@ class LessonLevel extends React.Component {
 		if (getLessonChecklistLoading || getChecklistsSystemLoading) return <Loading />
 		else if (getLessonChecklistError || getChecklistsSystemError) return <ErrorMessage error={getLessonChecklistError || getChecklistsSystemError} />
 		else if (!currentLessonChecklist) return null
+		else if (!checklistsSystem) return null
 
 		const checklist = YAML.parse(atob(currentLessonChecklist))
 		const listKey = this.getChecklistKey()
