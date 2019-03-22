@@ -71,6 +71,9 @@ const checklists = {
 	getChecklistsCustomError: null,
 	getChecklistsCustomSuccess: false,
 	checklistsCustom: [],
+	toggleChecklistFavoriteLoading: false,
+	toggleChecklistFavoriteError: false,
+	checklistFavorites: [],
 }
 
 const view = {

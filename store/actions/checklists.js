@@ -33,7 +33,7 @@ export const getChecklistsSystem = checkPassword => async (dispatch, getState) =
 	}
 }
 
-export const updateChecklistsSystem = checklists => (dispatch, getState) => {
+export const updateChecklistsSystem = itemName => (dispatch, getState) => {
 	dispatch(pending(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM))
 
 	const state = getState()
@@ -42,13 +42,31 @@ export const updateChecklistsSystem = checklists => (dispatch, getState) => {
 		return alert('Login or set a password to update lesson checklists.')
 	}
 
+	if (!state.lessons.currentLesson) {
+		return alert('Something went wrong. Please refresh the page and try again.')
+	}
+
 	try {
+		const listKey = `${state.lessons.currentLesson.name} > ${state.lessons.currentLesson.level}`
+		const savedChecklist = state.checklists.checklistsSystem[listKey]
+
+		let newChecklists = {...state.checklists.checklistsSystem}
+
+		if (!savedChecklist) newChecklists[listKey] = {isFavorited: false, items: [itemName]}
+		else {
+			if (newChecklists[listKey].items.includes(itemName)) {
+				newChecklists[listKey].items = newChecklists[listKey].items.filter(item => item !== itemName)
+			} else {
+				newChecklists[listKey].items.push(itemName)
+			}
+		}
+
 		const ClientDB = require('../../db')
 
 		ClientDB.default
-			.set('ch_s', checklists, state.account.password)
+			.set('ch_s', newChecklists, state.account.password)
 			.then(() => {
-				dispatch(fulfilled(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, checklists))
+				dispatch(fulfilled(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, newChecklists))
 			})
 			.catch(err => {
 				dispatch(rejected(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, err))
@@ -171,6 +189,39 @@ export const deleteChecklistCustom = i => (dispatch, getState) => {
 			})
 	} catch (e) {
 		dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_CUSTOM, e))
+	}
+}
+
+export const toggleChecklistFavorite = () => (dispatch, getState) => {
+	dispatch(pending(checklistsTypes.ADD_CHECKLIST_FAVORITE))
+
+	const state = getState()
+
+	if (!state.account.password) {
+		return alert('You must be logged in to save your favorite checklists')
+	}
+
+	try {
+		const listKey = `${state.lessons.currentLesson.name} > ${state.lessons.currentLesson.level}`
+		const savedChecklist = state.checklists.checklistsSystem[listKey]
+
+		let newChecklists = {...state.checklists.checklistsSystem}
+
+		if (!savedChecklist) newChecklists[listKey] = {isFavorited: true, items: []}
+		else newChecklists[listKey].isFavorited = !newChecklists[listKey].isFavorited
+
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.set('ch_s', newChecklists, state.account.password)
+			.then(() => {
+				dispatch(fulfilled(checklistsTypes.ADD_CHECKLIST_FAVORITE, newChecklists))
+			})
+			.catch(err => {
+				dispatch(rejected(checklistsTypes.ADD_CHECKLIST_FAVORITE, err))
+			})
+	} catch (e) {
+		dispatch(rejected(checklistsTypes.ADD_CHECKLIST_FAVORITE, e))
 	}
 }
 
