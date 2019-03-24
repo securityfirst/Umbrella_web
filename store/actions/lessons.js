@@ -113,29 +113,28 @@ export const resetLessons = () => (dispatch, getState) => {
 	dispatch({type: viewTypes.RESET_LESSONS})
 }
 
-export const getLessonCardsFavorites = () => (dispatch, getState) => {
+export const getLessonCardsFavorites = () => async (dispatch, getState) => {
 	dispatch(pending(lessonsTypes.GET_LESSON_CARDS_FAVORITES))
 
 	const state = getState()
 
 	if (!state.account.password) {
-		alert('Login or set a password to save your favorite lessons.')
 		return dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES, []))
 	}
 
 	try {
 		const ClientDB = require('../../db')
 
-		ClientDB.default
+		await ClientDB.default
 			.get('le_f', state.account.password, true)
-			.then(lessons => {
-				dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES, lessons || []))
+			.then(async lessons => {
+				await dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES, lessons || []))
 			})
-			.catch(err => {
-				dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, err))
+			.catch(async err => {
+				await dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, err))
 			})
 	} catch (e) {
-		dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, e))
+		await dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, e))
 	}
 }
 

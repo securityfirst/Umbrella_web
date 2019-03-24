@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Link from 'next/link'
 
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -32,13 +33,16 @@ class AddButton extends React.Component {
 	render() {
 		const { classes, onClick, href } = this.props
 
-		let fabProps = {}
-
-		if (href) fabProps.href = href
-		else fabProps.onClick = onClick
+		if (href) return (
+			<Link href={href}>
+				<Fab className={classes.button} color="secondary" aria-label="Add">
+					<AddIcon className={classes.icon} />
+				</Fab>
+			</Link>
+		)
 
 		return (
-			<Fab className={classes.button} color="secondary" aria-label="Add" {...fabProps}>
+			<Fab className={classes.button} color="secondary" aria-label="Add" onClick={onClick}>
 				<AddIcon className={classes.icon} />
 			</Fab>
 		)

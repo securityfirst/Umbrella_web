@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import Link from 'next/link'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -58,7 +58,7 @@ class Forms extends React.Component {
 							<Button color="primary" onClick={this.handleShare(form)}>Share</Button>
 						</div>
 						: <div className={classes.formPanelButtonsWrapper}>
-							<Button color="primary" href={`/forms/${form.sha}`}>New</Button>
+							<Link href={`/forms/${form.sha}`}><Button color="primary">New</Button></Link>
 						</div>
 					}
 				</Paper>

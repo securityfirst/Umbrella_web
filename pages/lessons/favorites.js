@@ -2,29 +2,21 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
-import classNames from 'classnames'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
-import Button from '@material-ui/core/Button'
 
-import CloseIcon from '@material-ui/icons/Close'
-
-import Layout from '../layout'
-import Loading from '../common/Loading'
-import ErrorMessage from '../common/ErrorMessage'
-import LessonCardTile from './LessonCardTile'
+import Layout from '../../components/layout'
+import Loading from '../../components/common/Loading'
+import ErrorMessage from '../../components/common/ErrorMessage'
+import LessonCardTile from '../../components/lessons/LessonCardTile'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
-import { toggleLessonsFavoritesView, setAppbarTitle } from '../../store/actions/view'
+import { setAppbarTitle } from '../../store/actions/view'
+import { getLessonCardsFavorites } from '../../store/actions/lessons'
 
 const styles = theme => ({
-	lessonClose: {
-		position: 'absolute',
-		top: '.5rem',
-		right: '.5rem',
-		minWidth: '45px',
-	},
+	...contentStyles(theme),
 	label: {
 		margin: '1rem 0',
 		color: theme.palette.grey[500],
@@ -44,6 +36,11 @@ const styles = theme => ({
 })
 
 class LessonsFavorites extends React.Component {
+	static async getInitialProps({reduxStore}) {
+		await reduxStore.dispatch(getLessonCardsFavorites())
+		await reduxStore.dispatch(setAppbarTitle('Lessons > Favorites'))
+	}
+
 	closeFavorites = () => {
 		this.props.dispatch(toggleLessonsFavoritesView(false))
 		this.props.dispatch(setAppbarTitle('Lessons'))
@@ -56,30 +53,28 @@ class LessonsFavorites extends React.Component {
 		else if (getLessonCardsFavoritesError) return <ErrorMessage error={getLessonCardsFavoritesError} />
 
 		return (
-			<React.Fragment>
-				<Button className={classes.lessonClose} size="small" onClick={this.closeFavorites}>
-					<CloseIcon className={classes.lessonCloseIcon} />
-				</Button>
+			<Layout title="Umbrella | Lessons" description="Umbrella web application">
+				<div className={classes.content}>
+					<Typography className={classes.label} variant="subtitle1">Lesson Favorites</Typography>
 
-				<Typography className={classes.label} variant="subtitle1">Lesson Favorites</Typography>
-
-				{!lessonCardsFavorites.length
-					? <Paper className={classes.paper}>
-						<Typography>You do not have any favourite lessons saved.</Typography>
-					</Paper>
-					: <div className={classes.cardsWrapper}>
-						{lessonCardsFavorites.map((file, i) => (
-							<LessonCardTile 
-								key={i} 
-								index={i} 
-								file={file} 
-								level={file.level} 
-								isFavorited 
-							/>
-						))}
-					</div>
-				}
-			</React.Fragment>
+					{!lessonCardsFavorites.length
+						? <Paper className={classes.paper}>
+							<Typography>You do not have any favourite lessons saved.</Typography>
+						</Paper>
+						: <div className={classes.cardsWrapper}>
+							{lessonCardsFavorites.map((file, i) => (
+								<LessonCardTile 
+									key={i} 
+									index={i} 
+									file={file} 
+									level={file.level} 
+									isFavorited 
+								/>
+							))}
+						</div>
+					}
+				</div>
+			</Layout>
 		)
 	}
 }

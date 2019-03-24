@@ -4,3 +4,32 @@ exports.index = (app) => (req, res) => {
 	const actualPage = '/lessons'
 	return renderAndCache(app, req, res, actualPage)
 }
+
+exports.favorites = (app) => (req, res) => {
+	const actualPage = '/lessons/favorites'
+	return renderAndCache(app, req, res, actualPage)
+}
+
+exports.category = (app) => (req, res) => {
+	const actualPage = '/lessons/category'
+	return renderAndCache(app, req, res, actualPage, {
+		category: req.params.category,
+	})
+}
+
+exports.level = (app) => (req, res) => {
+	const actualPage = '/lessons/level'
+	return renderAndCache(app, req, res, actualPage, {
+		category: req.params.category,
+		level: req.params.level,
+	})
+}
+
+exports.card = (app) => (req, res) => {
+	const actualPage = '/lessons/card'
+	return renderAndCache(app, req, res, actualPage, {
+		category: req.params.category,
+		level: req.params.level,
+		sha: req.params.sha,
+	})
+}

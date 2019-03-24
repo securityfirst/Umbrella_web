@@ -1,7 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import Link from 'next/link'
 import { connect } from 'react-redux'
-import 'isomorphic-unfetch'
 
 import { withStyles } from '@material-ui/core/styles'
 import classNames from 'classnames'
@@ -20,7 +19,6 @@ import ExpandMore from '@material-ui/icons/ExpandMore'
 import Layout from '../../components/layout'
 import Loading from '../../components/common/Loading'
 import ErrorMessage from '../../components/common/ErrorMessage'
-import LessonsFavorites from '../../components/lessons/LessonsFavorites'
 import LessonLevel from '../../components/lessons/LessonLevel'
 import LessonsContent from '../../components/lessons/LessonsContent'
 import LessonCard from '../../components/lessons/LessonCard'
@@ -29,12 +27,11 @@ import yellow from '@material-ui/core/colors/yellow'
 
 import { contentStyles } from '../../utils/view'
 
-import { getLessonFile, getLessonCardsFavorites, setLessonsGlossaryIndex } from '../../store/actions/lessons'
+import { getLessonFile, setLessonsGlossaryIndex } from '../../store/actions/lessons'
 import { 
 	setLessonsContentType, 
 	setLessonsContentPath, 
 	toggleLessonFileView, 
-	toggleLessonsFavoritesView,
 	setAppbarTitle
 } from '../../store/actions/view'
 
@@ -133,17 +130,6 @@ class Lessons extends React.Component {
 		lessonSelected: null,
 	}
 
-	handleFavoritesSelect = () => {
-		const { dispatch, lessonsFavoritesView } = this.props
-
-		dispatch(getLessonCardsFavorites())
-		dispatch(setAppbarTitle('Lessons > Favorites'))
-
-		if (!lessonsFavoritesView) {
-			dispatch(toggleLessonsFavoritesView(true))
-		}
-	}
-
 	handleCategorySelect = category => e => {
 		const { dispatch, content, locale } = this.props
 		const keys = Object.keys(content[locale][category])
@@ -151,7 +137,6 @@ class Lessons extends React.Component {
 		if (category !== 'glossary' && keys.length === 1 && keys[0] === 'content') {
 			const file = content[locale][category].content.find(file => file.filename.indexOf('.md') > -1)
 
-			dispatch(toggleLessonsFavoritesView(false))
 			dispatch(toggleLessonFileView(true))
 			dispatch(getLessonFile(file.sha))
 		} else {
@@ -164,7 +149,6 @@ class Lessons extends React.Component {
 		const { dispatch } = this.props
 		const { categorySelected } = this.state
 
-		dispatch(toggleLessonsFavoritesView(false))
 		dispatch(toggleLessonFileView(false))
 
 		this.setState(
@@ -178,8 +162,7 @@ class Lessons extends React.Component {
 
 	handleGlossarySelect = index => () => {
 		const { dispatch } = this.props
-		
-		dispatch(toggleLessonsFavoritesView(false))
+
 		dispatch(setLessonsGlossaryIndex(index))
 		dispatch(setLessonsContentType('levels'))
 		dispatch(setLessonsContentPath(`glossary.${index}`))
@@ -291,12 +274,14 @@ class Lessons extends React.Component {
 			>
 				{/* Favorites menu item */}
 				<div className={categorySelected == "favorites" ? classes.menuListItemSelected : ''}>
-					<ListItem button onClick={this.handleFavoritesSelect}>
-						<ListItemIcon className={classes.menuListItemIcon}>
-							<BookmarkIcon className={classes.menuListItemMUIIcon} />
-						</ListItemIcon>
-						<ListItemText className={classes.menuListItemText} inset primary="Favorites" />
-					</ListItem>
+					<Link href="/lessons/favorites">
+						<ListItem button>
+							<ListItemIcon className={classes.menuListItemIcon}>
+								<BookmarkIcon className={classes.menuListItemMUIIcon} />
+							</ListItemIcon>
+							<ListItemText className={classes.menuListItemText} inset primary="Favorites" />
+						</ListItem>
+					</Link>
 				</div>
 
 				{Object.keys(content[locale]).map(this.renderMenuCategory)}
@@ -305,10 +290,9 @@ class Lessons extends React.Component {
 	}
 
 	renderContent = () => {
-		const { currentLesson, lessonsFavoritesView, lessonFileView } = this.props
+		const { currentLesson, lessonFileView } = this.props
 
 		if (lessonFileView) return <LessonCard />
-		else if (lessonsFavoritesView) return <LessonsFavorites />
 		else if (currentLesson) return <LessonLevel />
 		else return <LessonsContent />
 	}
