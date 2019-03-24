@@ -3,8 +3,6 @@ import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
-import Paper from '@material-ui/core/Paper'
 
 import Layout from '../../components/layout'
 import Loading from '../../components/common/Loading'
@@ -13,7 +11,7 @@ import LessonCardTile from '../../components/lessons/LessonCardTile'
 
 import LessonsMenu from '../../components/lessons/LessonsMenu'
 
-import { contentStyles, paperStyles } from '../../utils/view'
+import { contentStyles } from '../../utils/view'
 
 import { setAppbarTitle } from '../../store/actions/view'
 
@@ -30,15 +28,6 @@ const styles = theme => ({
 		display: 'flex',
 		flex: 1,
 		height: '100%',
-	},
-	label: {
-		margin: '1rem 0',
-		color: theme.palette.grey[500],
-		fontSize: '.875rem',
-	},
-	paper: {
-		position: 'relative',
-		...paperStyles(theme),
 	},
 	cardsWrapper: {
 		[theme.breakpoints.up('sm')]: {
@@ -80,15 +69,12 @@ class LessonsGlossary extends React.Component {
 					<LessonsMenu />
 
 					<div className={classes.content}>
-						<Typography className={classes.label} variant="subtitle1">Lesson Favorites</Typography>
-
 						<div className={classes.cardsWrapper}>
 							{files.map((file, i) => (
 								<LessonCardTile 
 									key={i} 
 									index={i} 
 									file={file} 
-									isFavorited 
 								/>
 							))}
 						</div>
