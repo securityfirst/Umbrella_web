@@ -10,6 +10,13 @@ exports.favorites = (app) => (req, res) => {
 	return renderAndCache(app, req, res, actualPage)
 }
 
+exports.glossary = (app) => (req, res) => {
+	const actualPage = '/lessons/glossary'
+	return renderAndCache(app, req, res, actualPage, {
+		index: req.params.index,
+	})
+}
+
 exports.category = (app) => (req, res) => {
 	const actualPage = '/lessons/category'
 	return renderAndCache(app, req, res, actualPage, {

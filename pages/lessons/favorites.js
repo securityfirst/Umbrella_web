@@ -10,13 +10,23 @@ import Loading from '../../components/common/Loading'
 import ErrorMessage from '../../components/common/ErrorMessage'
 import LessonCardTile from '../../components/lessons/LessonCardTile'
 
+import LessonsMenu from '../../components/lessons/LessonsMenu'
+
 import { contentStyles, paperStyles } from '../../utils/view'
 
 import { setAppbarTitle } from '../../store/actions/view'
 import { getLessonCardsFavorites } from '../../store/actions/lessons'
 
 const styles = theme => ({
-	...contentStyles(theme),
+	...contentStyles(theme, {
+		width: '100%',
+	}),
+	wrapper: {
+		position: 'relative',
+		display: 'flex',
+		flex: 1,
+		height: '100%',
+	},
 	label: {
 		margin: '1rem 0',
 		color: theme.palette.grey[500],
@@ -54,25 +64,29 @@ class LessonsFavorites extends React.Component {
 
 		return (
 			<Layout title="Umbrella | Lessons" description="Umbrella web application">
-				<div className={classes.content}>
-					<Typography className={classes.label} variant="subtitle1">Lesson Favorites</Typography>
+				<div className={classes.wrapper}>
+					<LessonsMenu />
 
-					{!lessonCardsFavorites.length
-						? <Paper className={classes.paper}>
-							<Typography>You do not have any favourite lessons saved.</Typography>
-						</Paper>
-						: <div className={classes.cardsWrapper}>
-							{lessonCardsFavorites.map((file, i) => (
-								<LessonCardTile 
-									key={i} 
-									index={i} 
-									file={file} 
-									level={file.level} 
-									isFavorited 
-								/>
-							))}
-						</div>
-					}
+					<div className={classes.content}>
+						<Typography className={classes.label} variant="subtitle1">Lesson Favorites</Typography>
+
+						{!lessonCardsFavorites.length
+							? <Paper className={classes.paper}>
+								<Typography>You do not have any favourite lessons saved.</Typography>
+							</Paper>
+							: <div className={classes.cardsWrapper}>
+								{lessonCardsFavorites.map((file, i) => (
+									<LessonCardTile 
+										key={i} 
+										index={i} 
+										file={file} 
+										level={file.level} 
+										isFavorited 
+									/>
+								))}
+							</div>
+						}
+					</div>
 				</div>
 			</Layout>
 		)
