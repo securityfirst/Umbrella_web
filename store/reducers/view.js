@@ -39,13 +39,6 @@ export default function reducer(state = initialState, action) {
 				lessonsContentPath: action.payload,
 			}
 
-		/* TOGGLE_LESSONS_FAVORITES_VIEW */
-		case viewTypes.TOGGLE_LESSONS_FAVORITES_VIEW:
-			return {
-				...state,
-				lessonsFavoritesView: action.payload,
-			}
-
 		/* TOGGLE_LESSON_FILE_VIEW */
 		case viewTypes.TOGGLE_LESSON_FILE_VIEW:
 			return {

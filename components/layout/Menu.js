@@ -100,15 +100,23 @@ class Menu extends React.Component {
 		}
 	}
 
-	renderContent = () => {
-		const { classes } = this.props
+	renderItems = () => {
+		const { router, classes } = this.props
 
 		return (
 			<List>
 				{links.map((link, i) => (
 					<Link key={i} href={link.path}>
-						<ListItem className={classes.drawerItem} title={link.name} button onClick={this.handleMenuClick(link)}>
-							<ListItemIcon>{link.icon(this.props.router.pathname == link.path ? 'secondary' : 'inherit')}</ListItemIcon>
+						<ListItem 
+							className={classes.drawerItem} 
+							title={link.name} 
+							onClick={this.handleMenuClick(link)}
+							button 
+						>
+							<ListItemIcon>
+								{link.icon(router.pathname.indexOf(link.path) === 0 ? 'secondary' : 'inherit')}
+							</ListItemIcon>
+
 							<ListItemText primary={link.name} />
 						</ListItem>
 					</Link>
@@ -143,7 +151,7 @@ class Menu extends React.Component {
 
 				<Divider />
 
-				{this.renderContent()}
+				{this.renderItems()}
 			</Drawer>
 		)
 	}

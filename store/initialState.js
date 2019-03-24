@@ -43,7 +43,7 @@ const forms = {
 }
 
 const lessons = {
-	currentLesson: null,
+	// currentLesson: null,
 	lessonsGlossaryIndex: null,
 	getLessonChecklistLoading: false,
 	getLessonChecklistError: null,

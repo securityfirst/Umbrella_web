@@ -1,4 +1,5 @@
 import React from 'react'
+import atob from 'atob'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -7,34 +8,33 @@ import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 
-import CloseIcon from '@material-ui/icons/Close'
-
-import Layout from '../layout'
-import Loading from '../common/Loading'
-import ErrorMessage from '../common/ErrorMessage'
-import Marked from '../common/Marked'
+import Layout from '../../components/layout'
+import Loading from '../../components/common/Loading'
+import ErrorMessage from '../../components/common/ErrorMessage'
+import Marked from '../../components/common/Marked'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
-import { closeLessonFile } from '../../store/actions/lessons'
-import { toggleLessonFileView } from '../../store/actions/view'
+import { setAppbarTitle } from '../../store/actions/view'
+import { getLessonFile } from '../../store/actions/lessons'
 
 const styles = theme => ({
-	...contentStyles(theme),
+	...contentStyles(theme, {
+		width: '100%',
+	}),
 	paper: {
 		...paperStyles(theme),
-	},
-	lessonClose: {
-		position: 'absolute',
-		top: '1rem',
-		right: '1rem',
+		paddingTop: '.5rem',
+		paddingRight: '2rem !important',
+		paddingBottom: '2rem',
+		paddingLeft: '2rem !important',
 	},
 })
 
 class LessonCard extends React.Component {
-	closeLesson = () => {
-		this.props.dispatch(closeLessonFile())
-		this.props.dispatch(toggleLessonFileView(false))
+	static async getInitialProps({reduxStore, query}) {
+		await reduxStore.dispatch(getLessonFile(query.sha))
+		await reduxStore.dispatch(setAppbarTitle(`Lesson Card`))
 	}
 
 	renderContent = () => {
@@ -48,15 +48,14 @@ class LessonCard extends React.Component {
 	render() {
 		const { classes, currentLessonFile, getLessonFileLoading, getLessonFileError } = this.props
 
-
 		return (
-			<Paper className={'lessons-card ' + classes.paper}>
-				<Button className={classes.lessonClose} size="small" onClick={this.closeLesson}>
-					<CloseIcon />
-				</Button>
-				
-				{this.renderContent()}
-			</Paper>
+			<Layout title="Umbrella | Lesson Card" description="Umbrella web application">
+				<div className={classes.content}>
+					<Paper className={'lessons-card ' + classes.paper}>
+						{this.renderContent()}
+					</Paper>
+				</div>
+			</Layout>
 		)
 	}
 }

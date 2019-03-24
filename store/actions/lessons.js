@@ -19,7 +19,7 @@ export const setCurrentLesson = (paths, name) => (dispatch, getState) => {
 	lesson = [...lesson.content]
 	lesson = {
 		name: name,
-		isGlossary: false,
+		// isGlossary: false,
 		level: paths[paths.length - 1],
 		path: `../../static/assets/content/${locale}/${paths.join('/')}`,
 		files: lesson.reduce((list, c) => {
@@ -36,38 +36,6 @@ export const setCurrentLesson = (paths, name) => (dispatch, getState) => {
 	}
 
 	dispatch({type: lessonsTypes.SET_CURRENT_LESSON, payload: lesson})
-}
-
-export const setLessonsGlossaryIndex = index => (dispatch, getState) => {
-	const state = getState()
-	const { content } = state.content
-	const { locale } = state.view
-	const range = index.toLowerCase().split('-')
-
-	let glossary = [...content[locale].glossary.content]
-
-	glossary = {
-		isGlossary: true,
-		path: `../../static/assets/content/${locale}/glossary`,
-		files: glossary.reduce((list, c) => {
-
-			if (
-				c.filename.indexOf('s_') === 0 && // if it's a file
-				c.filename[2] >= range[0] && // if it's within glossary range
-				c.filename[2] <= range[1] // if it's within glossary range
-			) {
-				list.push({
-					name: c.filename,
-					sha: c.sha,
-				})
-			}
-
-			return list
-		}, []),
-		checklist: null
-	}
-
-	dispatch({type: lessonsTypes.SET_CURRENT_LESSON, payload: glossary})
 }
 
 export const getLessonChecklist = sha => async (dispatch, getState) => {
@@ -104,38 +72,28 @@ export const getLessonFile = sha => async (dispatch, getState) => {
 		})
 }
 
-export const closeLesson = () => ({type: lessonsTypes.CLOSE_LESSON})
-
-export const closeLessonFile = () => ({type: lessonsTypes.CLOSE_LESSON_FILE})
-
-export const resetLessons = () => (dispatch, getState) => {
-	dispatch({type: lessonsTypes.RESET_LESSONS})
-	dispatch({type: viewTypes.RESET_LESSONS})
-}
-
-export const getLessonCardsFavorites = () => (dispatch, getState) => {
+export const getLessonCardsFavorites = () => async (dispatch, getState) => {
 	dispatch(pending(lessonsTypes.GET_LESSON_CARDS_FAVORITES))
 
 	const state = getState()
 
 	if (!state.account.password) {
-		alert('Login or set a password to save your favorite lessons.')
 		return dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES, []))
 	}
 
 	try {
 		const ClientDB = require('../../db')
 
-		ClientDB.default
+		await ClientDB.default
 			.get('le_f', state.account.password, true)
-			.then(lessons => {
-				dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES, lessons || []))
+			.then(async lessons => {
+				await dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES, lessons || []))
 			})
-			.catch(err => {
-				dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, err))
+			.catch(async err => {
+				await dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, err))
 			})
 	} catch (e) {
-		dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, e))
+		await dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, e))
 	}
 }
 
@@ -208,6 +166,11 @@ export const removeLessonCardFavorite = file => (dispatch, getState) => {
 	} catch (e) {
 		dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, e))
 	}
+}
+
+export const resetLessons = () => (dispatch, getState) => {
+	dispatch({type: lessonsTypes.RESET_LESSONS})
+	dispatch({type: viewTypes.RESET_LESSONS})
 }
 
 export const clearLessons = () => ({type: lessonsTypes.CLEAR_LESSONS})

@@ -1,9 +1,11 @@
 import React from 'react'
+import classNames from 'classnames'
+import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
+import get from 'lodash.get'
 import YAML from 'yaml'
 
 import { withStyles } from '@material-ui/core/styles'
-import classNames from 'classnames'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
@@ -11,18 +13,17 @@ import Button from '@material-ui/core/Button'
 import FormControl from '@material-ui/core/FormControl'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormLabel from '@material-ui/core/FormLabel'
-import Checkbox from '@material-ui/core/Checkbox'
-import CloseIcon from '@material-ui/icons/Close'
-import BookmarkIcon from '@material-ui/icons/Bookmark'
-import DeleteIcon from '@material-ui/icons/Delete'
-import ShareIcon from '@material-ui/icons/Share'
+import Fab from '@material-ui/core/Fab'
 
-import Layout from '../layout'
-import Loading from '../common/Loading'
-import ErrorMessage from '../common/ErrorMessage'
-import FormControlCheckbox from '../common/FormControlCheckbox'
-import FavoriteShareIcons from '../common/FavoriteShareIcons'
-import LessonCardTile from './LessonCardTile'
+import yellow from '@material-ui/core/colors/yellow'
+
+import Layout from '../../components/layout'
+import Loading from '../../components/common/Loading'
+import ErrorMessage from '../../components/common/ErrorMessage'
+import FormControlCheckbox from '../../components/common/FormControlCheckbox'
+import FavoriteShareIcons from '../../components/common/FavoriteShareIcons'
+import LessonsMenu from '../../components/lessons/LessonsMenu'
+import LessonCardTile from '../../components/lessons/LessonCardTile'
 
 import { contentStyles } from '../../utils/view'
 
@@ -31,7 +32,50 @@ import { getChecklistsSystem, updateChecklistsSystem, toggleChecklistFavorite } 
 import { setAppbarTitle } from '../../store/actions/view'
 
 const styles = theme => ({
-	...contentStyles(theme),
+	...contentStyles(theme, {
+		width: '100%',
+		[theme.breakpoints.up('sm')]: {
+			maxHeight: 'calc(100vh - 48px)',
+			overflow: 'scroll',
+		}
+	}),
+	wrapper: {
+		position: 'relative',
+		display: 'flex',
+		flex: 1,
+		height: '100%',
+	},
+	level: {
+		color: 'white',
+		cursor: 'initial',
+		[theme.breakpoints.up('sm')]: {
+			marginLeft: '.5rem',
+			marginBottom: '1rem',
+		},
+		[theme.breakpoints.up('md')]: {
+			position: 'absolute',
+			top: '2rem',
+			left: '2rem',
+		},
+	},
+	beginner: {
+		backgroundColor: theme.palette.secondary.main,
+		'&.hover': {
+			backgroundColor: theme.palette.secondary.main,
+		},
+	},
+	advanced: {
+		backgroundColor: yellow[700],
+		'&.hover': {
+			backgroundColor: yellow[700],
+		},
+	},
+	expert: {
+		backgroundColor: theme.palette.primary.main,
+		'&.hover': {
+			backgroundColor: theme.palette.primary.main,
+		},
+	},
 	cardsWrapper: {
 		[theme.breakpoints.up('sm')]: {
 			display: 'flex',
@@ -70,31 +114,53 @@ const styles = theme => ({
 	checklistCheckbox: {
 		padding: '6px 15px',
 	},
-	lessonClose: {
-		position: 'absolute',
-		top: '1rem',
-		right: '1rem',
-	},
 })
 
-class LessonLevel extends React.Component {
+class LessonsLevel extends React.Component {
+	static async getInitialProps({reduxStore, query}) {
+		const category = query.category.replace(/-/g, ' ').split('.').join(' / ')
+		await reduxStore.dispatch(setAppbarTitle(`Lessons / ${category} / ${query.level}`))
+	}
+
+	state = {
+		files: [],
+		checklist: null,
+	}
+
 	componentWillMount() {
-		const { dispatch, currentLesson } = this.props
+		const { router, dispatch, content, locale } = this.props
 
-		if (currentLesson.checklist) {
-			dispatch(getLessonChecklist(currentLesson.checklist.sha))
+		const paths = router.query.category.split('.').concat([router.query.level])
+
+		console.log("`${locale}.${router.query.category}.${router.query.level}`: ", `${locale}.${router.query.category}.${router.query.level}`);
+
+		let lesson = get(content, `${locale}.${router.query.category}.${router.query.level}`)
+
+		const files = lesson.content.reduce((list, c) => {
+			if (c.filename.indexOf('s_') === 0) {
+				list.push({
+					name: c.filename,
+					sha: c.sha,
+				})
+			}
+
+			return list
+		}, [])
+
+		const checklist = lesson.content.find(c => c.filename.indexOf('c_') > -1)
+
+		if (checklist) {
+			dispatch(getLessonChecklist(checklist.sha))
 			dispatch(getChecklistsSystem())
-		} else {
-			dispatch(unsetLessonChecklist())
 		}
+
+		this.setState({files, checklist})
 	}
 
-	closeLevel = () => {
-		this.props.dispatch(closeLesson())
-		this.props.dispatch(setAppbarTitle('Lessons'))
+	getChecklistKey = () => {
+		const { router } = this.props
+		return `${router.query.category.split('.').join(' > ')} > ${router.query.level}`
 	}
-
-	getChecklistKey = () => (`${this.props.currentLesson.name} > ${this.props.currentLesson.level}`)
 
 	handleCheck = itemName => e => {
 		this.props.dispatch(updateChecklistsSystem(itemName))
@@ -111,7 +177,6 @@ class LessonLevel extends React.Component {
 	renderChecklist = () => {
 		const { 
 			classes, 
-			currentLesson,
 			getLessonChecklistLoading, 
 			getLessonChecklistError, 
 			currentLessonChecklist, 
@@ -175,34 +240,39 @@ class LessonLevel extends React.Component {
 	}
 
 	render() {
-		const { classes, currentLesson, currentLessonChecklist } = this.props
+		const { router, classes } = this.props
+		const { files } = this.state
 
 		return (
-			<React.Fragment>
-				<Button className={classes.lessonClose} size="small" onClick={this.closeLevel}>
-					<CloseIcon />
-				</Button>
+			<Layout title="Umbrella | Lessons Cards" description="Umbrella web application">
+				<div className={classes.wrapper}>
+					<LessonsMenu />
 
-				<div className={classes.cardsWrapper}>
-					{currentLesson.files.map((file, i) => (
-						<LessonCardTile 
-							key={i} 
-							index={i} 
-							file={file} 
-							level={currentLesson.level}
-						/>
-					))}
+					<div className={classes.content}>
+						<div className={classes.cardsWrapper}>
+							{files.map((file, i) => (
+								<LessonCardTile 
+									key={i} 
+									index={i} 
+									file={file} 
+									level={router.query.level}
+								/>
+							))}
+
+							{this.renderChecklist()}
+						</div>
+					</div>
 				</div>
-
-				{this.renderChecklist()}
-			</React.Fragment>
+			</Layout>
 		)
 	}
 }
 
 const mapStateToProps = state => ({
+	...state.content,
+	...state.view,
 	...state.lessons,
 	...state.checklists,
 })
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true})(LessonLevel))
+export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true})(LessonsLevel)))

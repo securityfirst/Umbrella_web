@@ -1,5 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import Link from 'next/link'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -63,8 +63,8 @@ class FormsNewSubmit extends React.Component {
 				<Typography className={classes.copy} paragraph>Your form has been submitted.</Typography>
 
 				<div className={classes.buttonsWrapper}>
-					<Button href="/forms/new">Submit Another</Button>
-					<Button href="/forms" color="secondary">Finish</Button>
+					<Link href="/forms/new"><Button>Submit Another</Button></Link>
+					<Link href="/forms"><Button color="secondary">Finish</Button></Link>
 				</div>
 			</div>
 		)
