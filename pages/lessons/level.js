@@ -185,10 +185,6 @@ class LessonsLevel extends React.Component {
 			checklistsSystem, 
 		} = this.props
 
-		console.log("currentLessonChecklist: ", currentLessonChecklist);
-		console.log("getLessonChecklistLoading: ", getLessonChecklistLoading);
-		console.log("getChecklistsSystemLoading: ", getChecklistsSystemLoading);
-
 		if (getLessonChecklistLoading || getChecklistsSystemLoading) return <Loading />
 		else if (getLessonChecklistError || getChecklistsSystemError) return <ErrorMessage error={getLessonChecklistError || getChecklistsSystemError} />
 		else if (!currentLessonChecklist) return null
@@ -253,14 +249,6 @@ class LessonsLevel extends React.Component {
 					<LessonsMenu />
 
 					<div className={classes.content}>
-						{/*<Fab 
-							className={classNames(classes.level, classes[router.query.level])} 
-							component="div"
-							variant="extended"
-							disableFocusRipple
-							disableRipple
-						>{router.query.level}</Fab>*/}
-
 						<div className={classes.cardsWrapper}>
 							{files.map((file, i) => (
 								<LessonCardTile 
