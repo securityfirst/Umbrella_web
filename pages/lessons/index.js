@@ -29,7 +29,7 @@ import yellow from '@material-ui/core/colors/yellow'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
-import { getLessonFile, setLessonsGlossaryIndex } from '../../store/actions/lessons'
+import { getLessonFile/*, setLessonsGlossaryIndex*/ } from '../../store/actions/lessons'
 import { 
 	setLessonsContentType, 
 	setLessonsContentPath, 
@@ -318,7 +318,6 @@ class Lessons extends React.Component {
 		return (
 			<Layout title="Umbrella | Lessons" description="Umbrella web application">
 				<div className={classes.wrapper}>
-					{/*!currentLesson && this.renderMenuList()*/}
 					<LessonsMenu />
 
 					<div className={classes.content}>

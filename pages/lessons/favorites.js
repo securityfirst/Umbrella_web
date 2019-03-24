@@ -51,11 +51,6 @@ class LessonsFavorites extends React.Component {
 		await reduxStore.dispatch(setAppbarTitle('Lessons > Favorites'))
 	}
 
-	closeFavorites = () => {
-		this.props.dispatch(toggleLessonsFavoritesView(false))
-		this.props.dispatch(setAppbarTitle('Lessons'))
-	}
-
 	render() {
 		const { classes, getLessonCardsFavoritesLoading, getLessonCardsFavoritesError, lessonCardsFavorites } = this.props
 
@@ -63,7 +58,7 @@ class LessonsFavorites extends React.Component {
 		else if (getLessonCardsFavoritesError) return <ErrorMessage error={getLessonCardsFavoritesError} />
 
 		return (
-			<Layout title="Umbrella | Lessons" description="Umbrella web application">
+			<Layout title="Umbrella | Lessons Favorites" description="Umbrella web application">
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 

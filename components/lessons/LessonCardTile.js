@@ -86,7 +86,7 @@ class LessonCardTile extends React.Component {
 		return (
 			<Card className={classes.card}>
 				<CardActionArea onClick={this.onClick}>
-					<CardContent className={classNames(classes.cardHead, classes[level])}>
+					<CardContent className={classNames(classes.cardHead, classes[level] || 'advanced')}>
 						{!isNaN(index) && <Typography className={classes.cardTitle}>{index+1}</Typography>}
 						<Typography className={classes.cardTitle}>{title}</Typography>
 					</CardContent>

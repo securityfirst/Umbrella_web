@@ -74,7 +74,11 @@ const styles = theme => ({
 
 class LessonsMenu extends React.Component {
 	state = {
-		categorySelected: this.props.router.query.category ? this.props.router.query.category.split('.')[0] : null,
+		categorySelected: !!this.props.router.query && !!this.props.router.query.category 
+			? this.props.router.query.category.split('.')[0] 
+			: !!this.props.router.pathname && !!this.props.router.pathname.indexOf('/glossary') > -1
+				? 'glossary'
+				: null,
 		lessonSelected: null,
 	}
 
@@ -141,6 +145,9 @@ class LessonsMenu extends React.Component {
 	renderMenuCategory = (category, i) => {
 		const { classes, content, locale } = this.props
 		const { categorySelected } = this.state
+
+		console.log("categorySelected: ", categorySelected);
+		console.log("category: ", category);
 
 		if (category == 'content' || category == 'forms') return null
 

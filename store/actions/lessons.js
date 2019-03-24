@@ -19,7 +19,7 @@ export const setCurrentLesson = (paths, name) => (dispatch, getState) => {
 	lesson = [...lesson.content]
 	lesson = {
 		name: name,
-		isGlossary: false,
+		// isGlossary: false,
 		level: paths[paths.length - 1],
 		path: `../../static/assets/content/${locale}/${paths.join('/')}`,
 		files: lesson.reduce((list, c) => {
@@ -38,37 +38,37 @@ export const setCurrentLesson = (paths, name) => (dispatch, getState) => {
 	dispatch({type: lessonsTypes.SET_CURRENT_LESSON, payload: lesson})
 }
 
-export const setLessonsGlossaryIndex = index => (dispatch, getState) => {
-	const state = getState()
-	const { content } = state.content
-	const { locale } = state.view
-	const range = index.toLowerCase().split('-')
+// export const setLessonsGlossaryIndex = index => (dispatch, getState) => {
+// 	const state = getState()
+// 	const { content } = state.content
+// 	const { locale } = state.view
+// 	const range = index.toLowerCase().split('-')
 
-	let glossary = [...content[locale].glossary.content]
+// 	let glossary = [...content[locale].glossary.content]
 
-	glossary = {
-		isGlossary: true,
-		path: `../../static/assets/content/${locale}/glossary`,
-		files: glossary.reduce((list, c) => {
+// 	glossary = {
+// 		isGlossary: true,
+// 		path: `../../static/assets/content/${locale}/glossary`,
+// 		files: glossary.reduce((list, c) => {
 
-			if (
-				c.filename.indexOf('s_') === 0 && // if it's a file
-				c.filename[2] >= range[0] && // if it's within glossary range
-				c.filename[2] <= range[1] // if it's within glossary range
-			) {
-				list.push({
-					name: c.filename,
-					sha: c.sha,
-				})
-			}
+// 			if (
+// 				c.filename.indexOf('s_') === 0 && // if it's a file
+// 				c.filename[2] >= range[0] && // if it's within glossary range
+// 				c.filename[2] <= range[1] // if it's within glossary range
+// 			) {
+// 				list.push({
+// 					name: c.filename,
+// 					sha: c.sha,
+// 				})
+// 			}
 
-			return list
-		}, []),
-		checklist: null
-	}
+// 			return list
+// 		}, []),
+// 		checklist: null
+// 	}
 
-	dispatch({type: lessonsTypes.SET_CURRENT_LESSON, payload: glossary})
-}
+// 	dispatch({type: lessonsTypes.SET_CURRENT_LESSON, payload: glossary})
+// }
 
 export const getLessonChecklist = sha => async (dispatch, getState) => {
 	dispatch(pending(lessonsTypes.GET_LESSON_CHECKLIST))
