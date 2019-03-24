@@ -150,6 +150,16 @@ export default function reducer(state = initialState, action) {
 				removeLessonCardFavoriteError: null,
 				lessonCardsFavorites: action.payload,
 			}
+
+		/* SYNC_LESSONS */
+		case lessonsTypes.SYNC_LESSONS: return action.payload
+
+		/* CLEAR_LESSONS */
+		case lessonsTypes.CLEAR_LESSONS:
+			return {
+				...state,
+				...initialState.lessons,
+			}
 	}
 
 	return state

@@ -176,7 +176,7 @@ class ChecklistsSystem extends React.Component {
 		if (getChecklistsSystemLoading) return <Loading />
 		else if (getChecklistsSystemError) return <ErrorMessage error={getChecklistsSystemError} />
 
-		const totalDone = Object.keys(checklistsSystem).reduce((acc, key) => (acc + checklistsSystem[key].length), 0)
+		const totalDone = Object.keys(checklistsSystem).reduce((acc, key) => (acc + checklistsSystem[key].items.length), 0)
 
 		return (
 			<div className={classes.content}>
@@ -187,11 +187,6 @@ class ChecklistsSystem extends React.Component {
 				<Typography className={classes.label} variant="subtitle1">Favourites</Typography>
 
 				{this.renderLessonChecklistFavorites()}
-
-				{/*(checklistsSystem.favorites && checklistsSystem.favorites.length) 
-					? checklistsSystem.favorites.map((checklist, i) => this.renderPanel(checklist.name, 0, i))
-					: this.renderPanel('No favorites saved')
-				*/}
 
 				<Typography className={classes.label} variant="subtitle1">My Checklists</Typography>
 

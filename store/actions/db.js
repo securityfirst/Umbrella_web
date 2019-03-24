@@ -1,13 +1,14 @@
 import merge from 'lodash.merge'
 import Crypto from '../../utils/crypto'
 
-import { accountTypes, feedsTypes, formsTypes, checklistsTypes, dbTypes } from '../types.js'
+import { accountTypes, feedsTypes, formsTypes, checklistsTypes, lessonsTypes, dbTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
 import { clearPassword } from './account'
 import { clearFeeds } from './feeds'
 import { clearForms } from './forms'
 import { clearChecklists } from './checklists'
+import { clearLessons } from './lessons'
 
 export const syncDb = password => async (dispatch, getState) => {
 	await dispatch(pending(dbTypes.SYNC_DB))
@@ -30,22 +31,24 @@ export const syncDb = password => async (dispatch, getState) => {
 			let formsActive = await ClientDB.default.get('fo_a', password, true)
 			let checklistsSystem = await ClientDB.default.get('ch_s', password, true)
 			let checklistsCustom = await ClientDB.default.get('ch_c', password, true)
-			// let checklistsFavorites = await ClientDB.default.get('ch_f', password, true)
-			let lessonsFavorites = await ClientDB.default.get('le_f', password, true)
+			let lessonCardsFavorites = await ClientDB.default.get('le_f', password, true)
 
 			let feedsMerge = {}
 			let formsMerge = {}
 			let checklistsMerge = {}
+			let lessonsMerge = {}
 
 			if (feedLocation) feedsMerge.feedLocation = feedLocation
 			if (feedSources) feedsMerge.feedSources = feedSources
 			if (rssSources) feedsMerge.rssSources = rssSources
+
 			if (formsSubmitted) formsMerge.formsSubmitted = formsSubmitted
 			if (formsActive) formsMerge.formsActive = formsActive
+
 			if (checklistsSystem) checklistsMerge.checklistsSystem = checklistsSystem
 			if (checklistsCustom) checklistsMerge.checklistsCustom = checklistsCustom
-			// if (checklistsFavorites) checklistsMerge.checklistsFavorites = checklistsFavorites
-			if (lessonsFavorites) checklistsMerge.lessonsFavorites = lessonsFavorites
+
+			if (lessonCardsFavorites) lessonsMerge.lessonCardsFavorites = lessonCardsFavorites
 
 			if (Object.keys(feedsMerge).length) {
 				await dispatch({
@@ -64,7 +67,14 @@ export const syncDb = password => async (dispatch, getState) => {
 			if (Object.keys(checklistsMerge).length) {
 				await dispatch({
 					type: checklistsTypes.SYNC_CHECKLISTS, 
-					payload: merge(state.forms, checklistsMerge)
+					payload: merge(state.checklists, checklistsMerge)
+				})
+			}
+
+			if (Object.keys(lessonssMerge).length) {
+				await dispatch({
+					type: lessonsTypes.SYNC_CHECKLISTS, 
+					payload: merge(state.lessons, lessonsMerge)
 				})
 			}
 
@@ -91,6 +101,8 @@ export const clearDb = () => async (dispatch, getState) => {
 		await dispatch(clearFeeds())
 		await dispatch(clearForms())
 		await dispatch(clearChecklists())
+		await dispatch(clearLessons())
+		
 		await dispatch(fulfilled(dbTypes.CLEAR_DB))
 	} catch (e) {
 		await dispatch(rejected(dbTypes.CLEAR_DB, e))

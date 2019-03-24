@@ -164,7 +164,6 @@ export const addLessonCardFavorite = (file, level) => (dispatch, getState) => {
 		ClientDB.default
 			.set('le_f', favorites, state.account.password)
 			.then(() => {
-				alert('Added to your favorites list!')
 				return dispatch(fulfilled(lessonsTypes.ADD_LESSON_CARD_FAVORITE, favorites))
 			})
 			.catch(err => {
@@ -210,3 +209,5 @@ export const removeLessonCardFavorite = file => (dispatch, getState) => {
 		dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, e))
 	}
 }
+
+export const clearLessons = () => ({type: lessonsTypes.CLEAR_LESSONS})
