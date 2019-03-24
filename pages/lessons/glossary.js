@@ -20,6 +20,10 @@ import { setAppbarTitle } from '../../store/actions/view'
 const styles = theme => ({
 	...contentStyles(theme, {
 		width: '100%',
+		[theme.breakpoints.up('sm')]: {
+			maxHeight: 'calc(100vh - 48px)',
+			overflow: 'scroll',
+		}
 	}),
 	wrapper: {
 		position: 'relative',
@@ -47,7 +51,7 @@ const styles = theme => ({
 
 class LessonsGlossary extends React.Component {
 	static async getInitialProps({reduxStore, query}) {
-		await reduxStore.dispatch(setAppbarTitle(`Lessons > Glossary > ${query.index}`))
+		await reduxStore.dispatch(setAppbarTitle(`Lessons / Glossary / ${query.index}`))
 	}
 
 	render() {

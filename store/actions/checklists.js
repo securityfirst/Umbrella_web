@@ -11,14 +11,15 @@ export const getChecklistsSystem = checkPassword => async (dispatch, getState) =
 	const state = getState()
 
 	if (!state.account.password) {
-		if (checkPassword) alert('Login or set a password to create a custom checklist.')
+		console.log('should return')
+		// if (checkPassword) alert('Login or set a password to create a custom checklist.')
 		return dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, {}))
 	}
 
 	try {
 		const ClientDB = require('../../db')
 
-		ClientDB.default
+		await ClientDB.default
 			.get('ch_s', state.account.password, true)
 			.then(checklists => {
 				dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, checklists || {}))

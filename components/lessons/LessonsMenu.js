@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import Link from 'next/link'
-import { withRouter } from 'next/router'
+import Router, { withRouter } from 'next/router'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -32,15 +32,18 @@ const styles = theme => ({
 	...contentStyles(theme),
 	menuList: {
 		width: menuWidth,
+		maxHeight: 'calc(100vh - 48px)',
 		flexShrink: 0,
-		height: '100%',
 		whiteSpace: 'nowrap',
 		backgroundColor: theme.palette.background.paper,
-		overflow: 'hidden',
 		transition: theme.transitions.create(['width'], {
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen * 5,
 		}),
+		[theme.breakpoints.up('sm')]: {
+			maxHeight: 'calc(100vh - 48px)',
+			overflow: 'scroll',
+		}
 	},
 	menuListOpened: {
 		width: menuWidth,
@@ -83,14 +86,13 @@ class LessonsMenu extends React.Component {
 	}
 
 	handleCategorySelect = category => e => {
-		const { dispatch, content, locale } = this.props
+		const { router, dispatch, content, locale } = this.props
 		const keys = Object.keys(content[locale][category])
 
 		if (category !== 'glossary' && keys.length === 1 && keys[0] === 'content') {
 			const file = content[locale][category].content.find(file => file.filename.indexOf('.md') > -1)
 
-			dispatch(toggleLessonFileView(true))
-			dispatch(getLessonFile(file.sha))
+			Router.push(`/lessons/cards/${file.sha}`)
 		} else {
 			if (category == this.state.categorySelected) this.setState({categorySelected: null})
 			else this.setState({categorySelected: category})
@@ -145,9 +147,6 @@ class LessonsMenu extends React.Component {
 	renderMenuCategory = (category, i) => {
 		const { classes, content, locale } = this.props
 		const { categorySelected } = this.state
-
-		console.log("categorySelected: ", categorySelected);
-		console.log("category: ", category);
 
 		if (category == 'content' || category == 'forms') return null
 

@@ -38,38 +38,6 @@ export const setCurrentLesson = (paths, name) => (dispatch, getState) => {
 	dispatch({type: lessonsTypes.SET_CURRENT_LESSON, payload: lesson})
 }
 
-// export const setLessonsGlossaryIndex = index => (dispatch, getState) => {
-// 	const state = getState()
-// 	const { content } = state.content
-// 	const { locale } = state.view
-// 	const range = index.toLowerCase().split('-')
-
-// 	let glossary = [...content[locale].glossary.content]
-
-// 	glossary = {
-// 		isGlossary: true,
-// 		path: `../../static/assets/content/${locale}/glossary`,
-// 		files: glossary.reduce((list, c) => {
-
-// 			if (
-// 				c.filename.indexOf('s_') === 0 && // if it's a file
-// 				c.filename[2] >= range[0] && // if it's within glossary range
-// 				c.filename[2] <= range[1] // if it's within glossary range
-// 			) {
-// 				list.push({
-// 					name: c.filename,
-// 					sha: c.sha,
-// 				})
-// 			}
-
-// 			return list
-// 		}, []),
-// 		checklist: null
-// 	}
-
-// 	dispatch({type: lessonsTypes.SET_CURRENT_LESSON, payload: glossary})
-// }
-
 export const getLessonChecklist = sha => async (dispatch, getState) => {
 	dispatch(pending(lessonsTypes.GET_LESSON_CHECKLIST))
 
@@ -102,15 +70,6 @@ export const getLessonFile = sha => async (dispatch, getState) => {
 		.catch(err => {
 			dispatch(rejected(lessonsTypes.GET_LESSON_FILE, err))
 		})
-}
-
-export const closeLesson = () => ({type: lessonsTypes.CLOSE_LESSON})
-
-export const closeLessonFile = () => ({type: lessonsTypes.CLOSE_LESSON_FILE})
-
-export const resetLessons = () => (dispatch, getState) => {
-	dispatch({type: lessonsTypes.RESET_LESSONS})
-	dispatch({type: viewTypes.RESET_LESSONS})
 }
 
 export const getLessonCardsFavorites = () => async (dispatch, getState) => {
@@ -207,6 +166,11 @@ export const removeLessonCardFavorite = file => (dispatch, getState) => {
 	} catch (e) {
 		dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, e))
 	}
+}
+
+export const resetLessons = () => (dispatch, getState) => {
+	dispatch({type: lessonsTypes.RESET_LESSONS})
+	dispatch({type: viewTypes.RESET_LESSONS})
 }
 
 export const clearLessons = () => ({type: lessonsTypes.CLEAR_LESSONS})

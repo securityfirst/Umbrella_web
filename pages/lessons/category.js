@@ -78,7 +78,7 @@ const styles = theme => ({
 
 class LessonsCategory extends React.Component {
 	static async getInitialProps({reduxStore, query}) {
-		await reduxStore.dispatch(setAppbarTitle(`Lessons > ${query.category.split('.').join(' > ')}`))
+		await reduxStore.dispatch(setAppbarTitle(`Lessons / ${query.category.split('.').join(' / ')}`))
 	}
 
 	render() {
@@ -107,7 +107,7 @@ class LessonsCategory extends React.Component {
 							if (level === 'content') return null
 
 							return (
-								<Link key={i} href={`/lessons/${this.category}/${level}`}>
+								<Link key={i} href={`/lessons/${category}/${level}`}>
 									<Button
 										className={classNames(classes.panel, classes[level])}
 										classes={{label: classes.panelTitle}}

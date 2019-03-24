@@ -20,6 +20,10 @@ import { getLessonCardsFavorites } from '../../store/actions/lessons'
 const styles = theme => ({
 	...contentStyles(theme, {
 		width: '100%',
+		[theme.breakpoints.up('sm')]: {
+			maxHeight: 'calc(100vh - 48px)',
+			overflow: 'scroll',
+		}
 	}),
 	wrapper: {
 		position: 'relative',
@@ -48,7 +52,7 @@ const styles = theme => ({
 class LessonsFavorites extends React.Component {
 	static async getInitialProps({reduxStore}) {
 		await reduxStore.dispatch(getLessonCardsFavorites())
-		await reduxStore.dispatch(setAppbarTitle('Lessons > Favorites'))
+		await reduxStore.dispatch(setAppbarTitle('Lessons / Favorites'))
 	}
 
 	render() {

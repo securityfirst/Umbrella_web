@@ -1,4 +1,6 @@
 import React from 'react'
+import Link from 'next/link'
+import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
 
 import classNames from 'classnames'
@@ -78,19 +80,21 @@ class LessonCardTile extends React.Component {
 	}
 
 	render() {
-		const { classes, lessonCardsFavorites, index, file, level, isFavorited } = this.props
+		const { router, classes, lessonCardsFavorites, index, file, level, isFavorited } = this.props
 
 		const title = file.name.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
 		const isFavoriteAdded = !!lessonCardsFavorites.find(item => item.name === file.name)
 
 		return (
 			<Card className={classes.card}>
-				<CardActionArea onClick={this.onClick}>
-					<CardContent className={classNames(classes.cardHead, classes[level] || 'advanced')}>
-						{!isNaN(index) && <Typography className={classes.cardTitle}>{index+1}</Typography>}
-						<Typography className={classes.cardTitle}>{title}</Typography>
-					</CardContent>
-				</CardActionArea>
+				<Link href={`/lessons/cards/${file.sha}`}>
+					<CardActionArea>
+						<CardContent className={classNames(classes.cardHead, classes[level] || 'advanced')}>
+							{!isNaN(index) && <Typography className={classes.cardTitle}>{index+1}</Typography>}
+							<Typography className={classes.cardTitle}>{title}</Typography>
+						</CardContent>
+					</CardActionArea>
+				</Link>
 				<CardActions classes={{root: classes.cardActions}}>
 					<FavoriteShareIcons
 						//onFavoriteRemove={this.onFavoriteRemove}
@@ -109,4 +113,4 @@ const mapStateToProps = state => ({
 	...state.lessons,
 })
 
-export default connect(mapStateToProps)(withStyles(styles)(LessonCardTile))
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(LessonCardTile)))
