@@ -79,7 +79,7 @@ class LessonsMenu extends React.Component {
 	state = {
 		categorySelected: !!this.props.router.query && !!this.props.router.query.category 
 			? this.props.router.query.category.split('.')[0] 
-			: !!this.props.router.pathname && !!this.props.router.pathname.indexOf('/glossary') > -1
+			: (!!this.props.router.pathname && this.props.router.pathname.indexOf('/glossary') > -1)
 				? 'glossary'
 				: null,
 		lessonSelected: null,

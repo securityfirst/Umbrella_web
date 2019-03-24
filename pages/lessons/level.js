@@ -84,6 +84,7 @@ const styles = theme => ({
 		},
 	},
 	checklistCard: {
+	    width: '100%',
 		margin: '1rem 0',
 		[theme.breakpoints.up('sm')]: {
 			margin: '.5rem',
@@ -132,9 +133,7 @@ class LessonsLevel extends React.Component {
 
 		const paths = router.query.category.split('.').concat([router.query.level])
 
-		console.log("`${locale}.${router.query.category}.${router.query.level}`: ", `${locale}.${router.query.category}.${router.query.level}`);
-
-		let lesson = get(content, `${locale}.${router.query.category}.${router.query.level}`)
+		const lesson = get(content, `${locale}.${router.query.category}.${router.query.level}`)
 
 		const files = lesson.content.reduce((list, c) => {
 			if (c.filename.indexOf('s_') === 0) {
