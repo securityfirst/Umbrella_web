@@ -1,4 +1,4 @@
-export const formatError = (err) => {
+export const formatError = err => {
 	console.error('formatError() err: ', err)
 
 	if (!err) return {status: 400, message: 'Something went wrong'}

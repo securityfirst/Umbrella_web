@@ -175,6 +175,7 @@ class LessonsLevel extends React.Component {
 
 	renderChecklist = () => {
 		const { 
+			router,
 			classes, 
 			getLessonChecklistLoading, 
 			getLessonChecklistError, 
@@ -200,10 +201,11 @@ class LessonsLevel extends React.Component {
 					<Typography className={classes.checklistCardTitle}>Checklist</Typography>
 					<div className={classes.checklist}>
 						<FavoriteShareIcons
+							url={`${process.env.ROOT}/lessons/${router.query.category}/${router.query.level}`}
+							isLight
+							isFavoriteAdded={isFavorited}
 							onFavoriteToggle={this.onChecklistFavoriteToggle(checklist)}
 							onShare={this.onChecklistShare(checklist)}
-							isFavoriteAdded={isFavorited}
-							isLight
 						/>
 					</div>
 				</CardContent>

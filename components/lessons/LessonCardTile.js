@@ -98,6 +98,7 @@ class LessonCardTile extends React.Component {
 				<CardActions classes={{root: classes.cardActions}}>
 					<FavoriteShareIcons
 						//onFavoriteRemove={this.onFavoriteRemove}
+						url={`${process.env.ROOT}/lessons/cards/${file.sha}`}
 						onFavoriteToggle={this.onFavoriteToggle}
 						onShare={this.onShare}
 						isFavorited={isFavorited}
