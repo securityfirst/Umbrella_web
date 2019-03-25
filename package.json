@@ -1,10 +1,22 @@
 {
   "private": false,
-  "name": "Umbrella_client",
-  "description": "Digital and Physical Security Advice App for the web",
-  "version": "0.0.0",
-  "author": "Security First",
+  "name": "umbrella-web",
+  "description": "Umbrella - Digital and Physical Security Advice App for the web",
+  "version": "1.0.0",
   "license": "MIT",
+  "author": {
+    "name" : "Security First",
+    "email" : "info@secfirst.org",
+    "url" : "https://secfirst.org/"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/securityfirst/Umbrella_web.git"
+  },
+  "engines": { 
+    "node": "10.15.1",
+    "npm": "6.4.1"
+  },
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
