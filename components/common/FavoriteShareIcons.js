@@ -18,7 +18,7 @@ import LinkIcon from '@material-ui/icons/Link'
 import teal from '@material-ui/core/colors/teal'
 import yellow from '@material-ui/core/colors/yellow'
 
-import { copy } from '../../utils/dom'
+import { download, copy } from '../../utils/dom'
 
 const styles = theme => ({
 	cardActionIcon: {
@@ -50,7 +50,7 @@ class FavoriteShareIcon extends React.Component {
 	}
 
 	handleDownload = () => {
-
+		download(this.props.name, this.props.sha)
 	}
 
 	handleCopyLink = () => {

@@ -8,7 +8,7 @@ class Marked extends React.Component {
 
 		if (!content) return <div></div>
 
-		return <div className="markdown-body" dangerouslySetInnerHTML={{__html: marked(content, {...this.props})}} />
+		return <div className="markdown-body" dangerouslySetInnerHTML={{__html: marked(content)}} />
 	}
 }
 

@@ -16,7 +16,6 @@ import yellow from '@material-ui/core/colors/yellow'
 import FavoriteShareIcons from '../common/FavoriteShareIcons'
 
 import { getLessonFile, addLessonCardFavorite, removeLessonCardFavorite } from '../../store/actions/lessons'
-import { toggleLessonFileView } from '../../store/actions/view'
 
 const styles = theme => ({
 	card: {
@@ -58,13 +57,6 @@ const styles = theme => ({
 })
 
 class LessonCardTile extends React.Component {
-	onClick = () => {
-		const { dispatch, file } = this.props
-
-		dispatch(toggleLessonFileView(true))
-		dispatch(getLessonFile(file.sha))
-	}
-
 	onFavoriteToggle = () => {
 		this.props.dispatch(addLessonCardFavorite(this.props.file, this.props.level))
 	}
@@ -98,6 +90,8 @@ class LessonCardTile extends React.Component {
 				<CardActions classes={{root: classes.cardActions}}>
 					<FavoriteShareIcons
 						//onFavoriteRemove={this.onFavoriteRemove}
+						name={title.replace(/ /g, '')}
+						sha={file.sha}
 						url={`${process.env.ROOT}/lessons/cards/${file.sha}`}
 						onFavoriteToggle={this.onFavoriteToggle}
 						onShare={this.onShare}
