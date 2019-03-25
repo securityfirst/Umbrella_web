@@ -8,6 +8,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
+    "postinstall": "npm audit fix",
     "build": "next build",
     "start": "NODE_ENV=production node server.js"
   },
