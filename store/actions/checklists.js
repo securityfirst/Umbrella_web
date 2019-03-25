@@ -11,8 +11,6 @@ export const getChecklistsSystem = checkPassword => async (dispatch, getState) =
 	const state = getState()
 
 	if (!state.account.password) {
-		console.log('should return')
-		// if (checkPassword) alert('Login or set a password to create a custom checklist.')
 		return dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, {}))
 	}
 

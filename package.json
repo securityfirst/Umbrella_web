@@ -9,7 +9,6 @@
   "scripts": {
     "dev": "nodemon server.js",
     "build": "next build",
-    "postinstall": "npm run build",
     "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
