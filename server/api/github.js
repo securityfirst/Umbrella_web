@@ -20,7 +20,7 @@ router.get('/tree', async (req, res) => {
 		lessons = await masterTreeReq.json()
 	} catch (err) {
 		console.error('[API] /github/tree - Tree fetch error: ', err)
-		res.statusMessage = 'Failed to retrieve lessons'
+		res.statusMessage = 'Failed to retrieve GitHub repository'
 		return res.status(500).end()
 	}
 
@@ -53,13 +53,13 @@ router.get('/tree', async (req, res) => {
 		}, {})
 	} catch (e) {
 		console.error('[API] /github/tree - Create lesson JSON exception: ', e)
-		res.statusMessage = 'Failed to retrieve lessons'
+		res.statusMessage = 'Failed to retrieve GitHub repository'
 		return res.status(500).end()
 	}
 
 	if (!lessons) {
 		console.error('[API] /github/tree - Failed to create lessons object.')
-		res.statusMessage = 'Failed to retrieve lessons'
+		res.statusMessage = 'Failed to retrieve GitHub repository'
 		return res.status(500).end()
 	}
 

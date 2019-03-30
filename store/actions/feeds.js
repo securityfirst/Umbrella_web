@@ -71,6 +71,11 @@ export const setFeedSources = sources => (dispatch, getState) => {
 export const getRss = () => (dispatch, getState) => {
 	dispatch(pending(feedsTypes.GET_RSS))
 
+	if (process.env.ENABLE_MOCK === 'true') {
+		const { rss } = require('../../mock/rss')
+		return dispatch(fulfilled(feedsTypes.GET_RSS, data))
+	}
+
 	const state = getState()
 
 	fetch(`${process.env.ROOT}/api/feeds/rss`, {

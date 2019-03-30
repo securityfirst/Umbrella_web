@@ -5,15 +5,15 @@
   "version": "1.0.0",
   "license": "MIT",
   "author": {
-    "name" : "Security First",
-    "email" : "info@secfirst.org",
-    "url" : "https://secfirst.org/"
+    "name": "Security First",
+    "email": "info@secfirst.org",
+    "url": "https://secfirst.org/"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/securityfirst/Umbrella_web.git"
+    "type": "git",
+    "url": "https://github.com/securityfirst/Umbrella_web.git"
   },
-  "engines": { 
+  "engines": {
     "node": "10.15.1",
     "npm": "6.4.1"
   },
@@ -35,8 +35,10 @@
     "dotenv": "^6.0.0",
     "express": "^4.16.4",
     "express-basic-auth": "^1.1.5",
+    "html2canvas": "^1.0.0-alpha.12",
     "is-url": "^1.2.4",
     "isomorphic-unfetch": "^3.0.0",
+    "jspdf": "^1.5.3",
     "jss": "^9.8.7",
     "localforage": "^1.7.3",
     "lodash.get": "^4.4.2",

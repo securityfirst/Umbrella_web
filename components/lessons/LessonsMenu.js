@@ -40,10 +40,7 @@ const styles = theme => ({
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen * 5,
 		}),
-		[theme.breakpoints.up('sm')]: {
-			maxHeight: 'calc(100vh - 48px)',
-			overflow: 'scroll',
-		}
+		overflow: 'scroll',
 	},
 	menuListOpened: {
 		width: menuWidth,

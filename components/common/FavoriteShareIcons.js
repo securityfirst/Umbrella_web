@@ -18,7 +18,7 @@ import LinkIcon from '@material-ui/icons/Link'
 import teal from '@material-ui/core/colors/teal'
 import yellow from '@material-ui/core/colors/yellow'
 
-import { copy } from '../../utils/dom'
+import { downloadLesson } from '../../utils/dom'
 
 const styles = theme => ({
 	cardActionIcon: {
@@ -32,6 +32,9 @@ const styles = theme => ({
 	},
 	cardActionIconTeal: {
 		color: teal[500],
+	},
+	copyInput: {
+		maxWidth: '10rem',
 	},
 })
 
@@ -50,11 +53,21 @@ class FavoriteShareIcon extends React.Component {
 	}
 
 	handleDownload = () => {
-
+		downloadLesson(this.props.name, this.props.sha)
 	}
 
 	handleCopyLink = () => {
-		if (copy(this.props.url)) {
+		if (typeof document === 'undefined') return false
+
+		if (!document.queryCommandSupported('copy')) {
+			alert('This is not supported by your browser.')
+			return false
+		}
+
+		this.copyInput.focus()
+		this.copyInput.select()
+
+		if (document.execCommand('copy')) {
 			this.setState({tooltipOpen: true}, () => {
 				setTimeout(() => {
 					this.setState({tooltipOpen: false})
@@ -137,9 +150,18 @@ class FavoriteShareIcon extends React.Component {
 								<LinkIcon />
 							</ListItemIcon>
 							<ListItemText inset primary="Copy Link" />
+							<input 
+								ref={el => this.copyInput = el} 
+								className={classes.copyInput} 
+								type="text"
+								tabIndex="-1" 
+								aria-hidden="true" 
+								defaultValue={url}
+							/>
 						</MenuItem>
 					</Tooltip>}
 				</Menu>
+
 			</React.Fragment>
 		)
 	}
