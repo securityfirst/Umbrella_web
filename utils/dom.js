@@ -3,12 +3,12 @@ import atob from 'atob'
 import marked from 'marked'
 
 export const download = (name, sha) => {
+	if (typeof window === 'undefined') return false
+
 	if (!name || !sha) {
 		alert('Something went wrong. Please refresh the page and try again.')
 		return false
 	}
-
-	if (typeof window === 'undefined') return
 
 	fetch(`${process.env.ROOT}/api/github/content/${sha}`)
 		.then(res => {
