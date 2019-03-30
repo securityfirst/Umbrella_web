@@ -13,6 +13,7 @@ module.exports = withCSS({
 		config.plugins.push(
 			new webpack.DefinePlugin({
 				'process.env.ROOT': JSON.stringify(process.env.ROOT),
+				'process.env.ENABLE_MOCK': JSON.stringify(process.env.ENABLE_MOCK),
 				'process.env.MAPBOX_ACCESS_TOKEN': JSON.stringify(process.env.MAPBOX_ACCESS_TOKEN),
 			})
 		);

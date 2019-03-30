@@ -12,6 +12,12 @@ export const getContent = () => async (dispatch, getState) => {
 		return dispatch(fulfilled(contentTypes.GET_CONTENT, state.content.content))
 	}
 
+	if (process.env.ENABLE_MOCK === 'true') {
+		console.log('Mock is enabled')
+		const { content } = require('../../mock/content')
+		return dispatch(fulfilled(contentTypes.GET_CONTENT, content))
+	}
+
 	await fetch(`${process.env.ROOT}/api/github/tree`)
 		.then(res => {
 			if (!res.ok) throw res
