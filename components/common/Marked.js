@@ -1,4 +1,3 @@
-import 'isomorphic-unfetch'
 import React from 'react'
 import marked from 'marked'
 
