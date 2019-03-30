@@ -1,4 +1,7 @@
+import 'isomorphic-unfetch'
 import React from 'react'
+import atob from 'atob'
+import marked from 'marked'
 
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
@@ -18,7 +21,7 @@ import LinkIcon from '@material-ui/icons/Link'
 import teal from '@material-ui/core/colors/teal'
 import yellow from '@material-ui/core/colors/yellow'
 
-import { downloadLesson } from '../../utils/dom'
+import { download } from '../../utils/dom'
 
 const styles = theme => ({
 	cardActionIcon: {
@@ -53,7 +56,20 @@ class FavoriteShareIcon extends React.Component {
 	}
 
 	handleDownload = () => {
-		downloadLesson(this.props.name, this.props.sha)
+		const { name, sha } = this.props
+
+		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
+			.then(res => {
+				if (!res.ok) throw res
+				return res.text()
+			})
+			.then(content => {
+				download(name, marked(atob(content)))
+			})
+			.catch(err => {
+				console.error('FavoriteShareIcons handleDownload error: ', err)
+				alert('Something went wrong. Please refresh the page and try again.')
+			})
 	}
 
 	handleCopyLink = () => {
