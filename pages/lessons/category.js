@@ -78,7 +78,7 @@ const styles = theme => ({
 
 class LessonsCategory extends React.Component {
 	static async getInitialProps({reduxStore, query}) {
-		await reduxStore.dispatch(setAppbarTitle(`Lessons / ${query.category.split('.').join(' / ')}`))
+		await reduxStore.dispatch(setAppbarTitle(`Lessons / ${query.category.replace(/-/g, ' ').split('.').join(' / ')}`))
 	}
 
 	render() {

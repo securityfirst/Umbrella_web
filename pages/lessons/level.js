@@ -27,7 +27,7 @@ import LessonCardTile from '../../components/lessons/LessonCardTile'
 
 import { contentStyles } from '../../utils/view'
 
-import { getLessonChecklist, unsetLessonChecklist, closeLesson } from '../../store/actions/lessons'
+import { getLessonChecklist, unsetLessonChecklist } from '../../store/actions/lessons'
 import { getChecklistsSystem, updateChecklistsSystem, toggleChecklistFavorite } from '../../store/actions/checklists'
 import { setAppbarTitle } from '../../store/actions/view'
 
@@ -157,20 +157,23 @@ class LessonsLevel extends React.Component {
 	}
 
 	getChecklistKey = () => {
-		const { router } = this.props
-		return `${router.query.category.split('.').join(' > ')} > ${router.query.level}`
+		const { category, level } = this.props.router.query
+
+		return `${category} > ${level}`
 	}
 
 	handleCheck = itemName => e => {
-		this.props.dispatch(updateChecklistsSystem(itemName))
+		const { dispatch, router } = this.props
+		const { category, level } = router.query
+
+		dispatch(updateChecklistsSystem(itemName, category, level))
 	}
 	
 	onChecklistFavoriteToggle = checklist => () => {
-		this.props.dispatch(toggleChecklistFavorite())
-	}
+		const { dispatch, router } = this.props
+		const { category, level } = router.query
 
-	onChecklistShare = checklist => () => {
-
+		dispatch(toggleChecklistFavorite(category, level))
 	}
 
 	renderChecklist = () => {
@@ -205,7 +208,6 @@ class LessonsLevel extends React.Component {
 							isLight
 							isFavoriteAdded={isFavorited}
 							onFavoriteToggle={this.onChecklistFavoriteToggle(checklist)}
-							onShare={this.onChecklistShare(checklist)}
 						/>
 					</div>
 				</CardContent>

@@ -25,36 +25,6 @@ export default function reducer(state = initialState, action) {
 				lessonsMenuOpened: action.payload,
 			}
 
-		/* SET_LESSONS_CONTENT_TYPE */
-		case viewTypes.SET_LESSONS_CONTENT_TYPE:
-			return {
-				...state,
-				lessonsContentType: action.payload,
-			}
-
-		/* SET_LESSONS_CONTENT_PATH */
-		case viewTypes.SET_LESSONS_CONTENT_PATH:
-			return {
-				...state,
-				lessonsContentPath: action.payload,
-			}
-
-		/* TOGGLE_LESSON_FILE_VIEW */
-		case viewTypes.TOGGLE_LESSON_FILE_VIEW:
-			return {
-				...state,
-				lessonFileView: action.payload,
-			}
-
-		/* RESET_LESSONS */
-		case viewTypes.RESET_LESSONS:
-			return {
-				...state,
-				lessonsContentType: null,
-				lessonsContentPath: null,
-				lessonFileView: false,
-			}
-
 		/* SET_LOCALE */
 		case viewTypes.SET_LOCALE:
 			return {
