@@ -12,6 +12,7 @@ import Layout from '../../components/layout'
 import Loading from '../../components/common/Loading'
 import ErrorMessage from '../../components/common/ErrorMessage'
 import Marked from '../../components/common/Marked'
+import LessonsMenu from '../../components/lessons/LessonsMenu'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
@@ -21,7 +22,17 @@ import { getLessonFile } from '../../store/actions/lessons'
 const styles = theme => ({
 	...contentStyles(theme, {
 		width: '100%',
+		[theme.breakpoints.up('sm')]: {
+			maxHeight: 'calc(100vh - 48px)',
+			overflow: 'scroll',
+		}
 	}),
+	wrapper: {
+		position: 'relative',
+		display: 'flex',
+		flex: 1,
+		height: '100%',
+	},
 	paper: {
 		...paperStyles(theme),
 		paddingTop: '.5rem',
@@ -50,10 +61,14 @@ class LessonCard extends React.Component {
 
 		return (
 			<Layout title="Umbrella | Lesson Card" description="Umbrella web application">
-				<div className={classes.content}>
-					<Paper className={'lessons-card ' + classes.paper}>
-						{this.renderContent()}
-					</Paper>
+				<div className={classes.wrapper}>
+					<LessonsMenu />
+
+					<div className={classes.content}>
+						<Paper className={'lessons-card ' + classes.paper}>
+							{this.renderContent()}
+						</Paper>
+					</div>
 				</div>
 			</Layout>
 		)
