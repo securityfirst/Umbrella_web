@@ -21,7 +21,7 @@ import FormControlCheckboxes from '../../components/common/FormControlCheckboxes
 import teal from '@material-ui/core/colors/teal'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
-import { getForm, resetPostForm } from '../../store/actions/forms'
+import { getForm, resetSaveForm } from '../../store/actions/forms'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -128,7 +128,7 @@ class FormsNew extends React.Component {
 			progress: 0,
 		})
 
-		this.props.dispatch(resetPostForm())
+		this.props.dispatch(resetSaveForm())
 	}
 
 	removeError = () => this.setState({error: null, errorMessage: null})

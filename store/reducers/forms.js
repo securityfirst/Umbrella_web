@@ -25,33 +25,55 @@ export default function reducer(state = initialState, action) {
 				form: action.payload,
 			}
 
-		/* POST_FORM */
-		case pending(formsTypes.POST_FORM):
+		/* SAVE_FORM */
+		case pending(formsTypes.SAVE_FORM):
 			return {
 				...state,
-				postFormLoading: true,
+				saveFormLoading: true,
 			}
-		case rejected(formsTypes.POST_FORM):
+		case rejected(formsTypes.SAVE_FORM):
 			return {
 				...state,
-				postFormLoading: false,
-				postFormError: action.payload,
+				saveFormLoading: false,
+				saveFormError: action.payload,
 			}
-		case fulfilled(formsTypes.POST_FORM):
+		case fulfilled(formsTypes.SAVE_FORM):
 			return {
 				...state,
-				postFormLoading: false,
-				postFormError: null,
-				postFormSuccess: true,
+				saveFormLoading: false,
+				saveFormError: null,
+				saveFormSuccess: true,
+				formsSaved: action.payload,
 			}
 
-		/* RESET_POST_FORM */
-		case formsTypes.RESET_POST_FORM:
+		/* UPDATE_FORM */
+		case pending(formsTypes.UPDATE_FORM):
 			return {
 				...state,
-				postFormLoading: false,
-				postFormError: null,
-				postFormSuccess: false,
+				updateFormLoading: true,
+			}
+		case rejected(formsTypes.UPDATE_FORM):
+			return {
+				...state,
+				updateFormLoading: false,
+				updateFormError: action.payload,
+			}
+		case fulfilled(formsTypes.UPDATE_FORM):
+			return {
+				...state,
+				updateFormLoading: false,
+				updateFormError: null,
+				updateFormSuccess: true,
+				formsSaved: action.payload,
+			}
+
+		/* RESET_SAVE_FORM */
+		case formsTypes.RESET_SAVE_FORM:
+			return {
+				...state,
+				saveFormLoading: false,
+				saveFormError: null,
+				saveFormSuccess: false,
 			}
 
 		/* SYNC_FORMS */

@@ -11,7 +11,7 @@ import Loading from '../common/Loading'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
-import { postForm } from '../../store/actions/forms'
+import { saveForm } from '../../store/actions/forms'
 
 const styles = theme => ({
 	wrapper: {
@@ -31,21 +31,21 @@ const styles = theme => ({
 
 class FormsNewSubmit extends React.Component {
 	componentWillMount() {
-		this.props.dispatch(postForm(this.props.forms))
+		this.props.dispatch(saveForm(this.props.forms))
 	}
 
 	removeError = () => this.setState({error: null, errorMessage: null})
 
 	onGoBack = () => this.props.onGoBack({data: this.state.data})
 
-	onSubmit = () => this.props.dispatch(postForm(this.props.forms))
+	onSubmit = () => this.props.dispatch(saveForm(this.props.forms))
 
 	renderError = () => {
-		const { classes, postFormError } = this.props
+		const { classes, saveFormError } = this.props
 
 		return (
 			<div>
-				<Typography className={classes.copy} paragraph><strong>Error [{postFormError.status}]</strong>{postFormError.message}</Typography>
+				<Typography className={classes.copy} paragraph><strong>Error [{saveFormError.status}]</strong>{saveFormError.message}</Typography>
 
 				<div className={classes.buttonsWrapper}>
 					<Button onClick={this.onGoBack}>Go Back</Button>
@@ -71,16 +71,16 @@ class FormsNewSubmit extends React.Component {
 	}
 
 	render() {
-		const { classes, postFormLoading, postFormError, postFormSuccess } = this.props
+		const { classes, saveFormLoading, saveFormError, saveFormSuccess } = this.props
 
 		return (
 			<Paper className={classes.wrapper} square>
 				<Typography variant="h6" color="primary">Submit</Typography>
 				<Typography className={classes.hint}>Placeholder</Typography>
 
-				{postFormLoading
+				{saveFormLoading
 					? <Loading />
-					: postFormSuccess
+					: saveFormSuccess
 						? this.renderError()
 						: this.renderSuccess()
 				}

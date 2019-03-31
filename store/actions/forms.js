@@ -25,33 +25,69 @@ export const getForm = sha => async (dispatch, getState) => {
 		})
 }
 
-export const postForm = data => (dispatch, getState) => {
-	dispatch(pending(formsTypes.POST_FORM))
+export const saveForm = form => (dispatch, getState) => {
+	dispatch(pending(formsTypes.SAVE_FORM))
+
+	const state = getState()
+
+	if (!state.account.password) {
+		alert('Please login to save your form')
+		return dispatch(rejected(formsTypes.SAVE_FORM, 'Please login to save your form'))
+	}
 
 	try {
-		/* TODO: Replace with API */
-		/* TODO: Fix extra webpack calls */
-		fetch('https://jsonplaceholder.typicode.com/users', {
-			method: 'post',
-			body: JSON.stringify({test: 1}), 
-			headers: {'Content-Type': 'application/json'},
-		})
-			.then(res => {
-				if (!res.ok) throw res
-				return res.json()
-			})
-			.then(data => {
-				dispatch(fulfilled(formsTypes.POST_FORM))
-			})
-			.catch(err => {
-				dispatch(rejected(formsTypes.POST_FORM, err))
-			})
+		const date = new Date()
+		form.dateCreated = date.valueOf()
+
+		const forms = state.forms.formsSaved.concat([form])
+
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.set('fo_s', forms)
+			.then(hash => dispatch(fulfilled(formsTypes.SAVE_FORM, forms)))
+			.catch(err => dispatch(rejected(formsTypes.SAVE_FORM, err)))
 	} catch (e) {
-		console.error('[ACTION] postForm exception: ', e)
-		dispatch(rejected(formsTypes.POST_FORM, e))
+		console.error('[ACTION] saveForm exception: ', e)
+		dispatch(rejected(formsTypes.SAVE_FORM, e))
 	}
 }
 
-export const resetPostForm = () => ({type: formsTypes.RESET_POST_FORM})
+export const updateForm = form => (dispatch, getState) => {
+	dispatch(pending(formsTypes.UPDATE_FORM))
+
+	const state = getState()
+
+	if (!state.account.password) {
+		alert('Please login to save your form')
+		return dispatch(rejected(formsTypes.UPDATE_FORM, 'Please login to save your form'))
+	}
+
+	if (!form.dateCreated) {
+		alert('Something went wrong. Please refresh the page and try again.')
+		return dispatch(rejected(formsTypes.UPDATE_FORM, null))
+	}
+
+	try {
+		const date = new Date()
+		form.dateUpdated = date.valueOf()
+		
+		const forms = [...state.forms.formsSaved]
+		const index = forms.findIndex(item => item.dateCreated === form.dateCreated)
+		forms[index] = form
+
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.set('fo_s', forms)
+			.then(hash => dispatch(fulfilled(formsTypes.UPDATE_FORM, forms)))
+			.catch(err => dispatch(rejected(formsTypes.UPDATE_FORM, err)))
+	} catch (e) {
+		console.error('[ACTION] saveForm exception: ', e)
+		dispatch(rejected(formsTypes.UPDATE_FORM, e))
+	}
+}
+
+export const resetSaveForm = () => ({type: formsTypes.RESET_SAVE_FORM})
 
 export const clearForms = () => ({type: formsTypes.CLEAR_FORMS})
