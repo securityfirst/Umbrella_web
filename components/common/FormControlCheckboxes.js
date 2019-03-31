@@ -21,24 +21,24 @@ const FormControlCheckboxes = (props) => {
 
 	return (
 		<FormControl className={classes.wrapper}>
-			{!!label && <InputLabel
-				error={error}
-				classes={{root: classes.label}}
-			>
-				{label}
-			</InputLabel>}
+			{!!label && 
+				<InputLabel
+					error={error}
+					classes={{root: classes.label}}
+				>
+					{label}
+				</InputLabel>
+			}
 
-			{options.map((option, i) => {
-				return (
-					<FormControlCheckbox
-						key={i}
-						name={option.label}
-						value={option.value}
-						checked={(state || []).includes(option.value)} 
-						onChange={() => onChange(option.value)} 
-					/>
-				)
-			})}
+			{options.map((option, i) => (
+				<FormControlCheckbox
+					key={i}
+					name={option.label}
+					value={option.value}
+					checked={(state || []).includes(option.value)} 
+					onChange={() => onChange(option.value)} 
+				/>
+			))}
 		</FormControl>
 	)
 }

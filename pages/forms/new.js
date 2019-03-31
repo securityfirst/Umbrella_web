@@ -17,6 +17,7 @@ import Loading from '../../components/common/Loading'
 import ErrorMessage from '../../components/common/ErrorMessage'
 import FormControlInput from '../../components/common/FormControlInput'
 import FormControlCheckboxes from '../../components/common/FormControlCheckboxes'
+import FormControlRadios from '../../components/common/FormControlRadios'
 
 import teal from '@material-ui/core/colors/teal'
 
@@ -65,9 +66,32 @@ class FormsNew extends React.Component {
 	state = {
 		activeStep: 0,
 		progress: 0,
-		formState: {},
+		formState: [],
 		error: null, 
 		errorMessage: null,
+	}
+
+	componentDidMount() {
+		const { form } = this.props
+
+		this.setState({
+			formState: form.screens.map(screen => {
+				return screen.items.reduce((acc, item) => {
+					switch (item.type) {
+						case 'text_input': 
+						case 'text_area': 
+						case 'single_choice': 
+							acc[item.name] = ''
+							break
+						case 'multiple_choice': 
+							acc[item.name] = []
+							break
+					}
+
+					return acc
+				}, {})
+			})
+		})
 	}
 
 	onNext = e => {
@@ -97,16 +121,19 @@ class FormsNew extends React.Component {
 	}
 
 	onChange = (field, value) => {
-		const { formState } = this.state
+		const { activeStep, formState } = this.state
 
 		let newValue;
+		let newState = [...formState]
 
 		switch (field.type) {
 			case 'text_input': 
+			case 'text_area': 
+			case 'single_choice': 
 				newValue = value
 				break;
 			case 'multiple_choice':
-				let oldValue = formState[field.name] || []
+				let oldValue = formState[activeStep][field.name] || []
 
 				if (oldValue.includes(value)) newValue = oldValue.filter(v => v !== value)
 				else newValue = oldValue.concat([value])
@@ -114,15 +141,15 @@ class FormsNew extends React.Component {
 				break;
 		}
 
-		this.setState({
-			formState: {
-				...this.state.formState,
-				[field.name]: newValue
-			}
-		})
+		newState[activeStep] = {
+			...formState[activeStep],
+			[field.name]: newValue
+		}
+
+		this.setState({formState: newState})
 	}
 
-	onSubmitSuccess = () => {
+	onFinish = () => {
 		this.setState({
 			activeStep: 0,
 			progress: 0,
@@ -133,69 +160,89 @@ class FormsNew extends React.Component {
 
 	removeError = () => this.setState({error: null, errorMessage: null})
 
-	renderInput = (field, i) => {
+	renderField = (field, i) => {
 		const { classes } = this.props
-		const { formState, error, errorMessage } = this.state
+		const { activeStep, formState, error, errorMessage } = this.state
 
 		switch (field.type) {
 			case 'text_input': 
 				return (
 					<FormControlInput 
+						key={i}
 						className={classes.formControlInput}
 						id={`form-input-${field.label}`}
 						label={field.label}
-						value={formState[field.name]}
+						value={formState[activeStep][field.name]}
 						error={error}
 						errorMessage={errorMessage}
-						onChange={e => onChange(field, e.target.value)}
+						onChange={e => this.onChange(field, e.target.value)}
 						required
-					/>
-				)
-			case 'multiple_choice':
-				return (
-					<FormControlCheckboxes 
-						label={field.label}
-						options={field.options}
-						state={formState[field.name]}
-						error={error}
-						onChange={this.onChange}
 					/>
 				)
 			case 'text_area':
 				return (
 					<FormControlInput 
+						key={i}
 						className={classes.formControlInput}
 						id={`form-input-${field.label}`}
 						label={field.label}
-						value={formState[field.name]}
+						value={formState[activeStep][field.name]}
 						error={error}
 						errorMessage={errorMessage}
-						onChange={e => onChange(field, e.target.value)}
+						onChange={e => this.onChange(field, e.target.value)}
 						required
 						multiline
 						rows={3}
 					/>
 				)
+			case 'multiple_choice':
+				return (
+					<FormControlCheckboxes 
+						key={i}
+						label={field.label}
+						options={field.options}
+						state={formState[activeStep][field.name]}
+						error={error}
+						onChange={v => this.onChange(field, v)}
+					/>
+				)
+			case 'single_choice':
+				return (
+					<FormControlRadios 
+						key={i}
+						label={field.label}
+						options={field.options}
+						value={formState[activeStep][field.name]}
+						error={error}
+						onChange={v => this.onChange(field, v)}
+					/>
+				)
 		}
 	}
 
-	renderForm = screen => {
-		const { classes, title } = this.props
+	renderScreen = screen => {
+		const { classes, title, form } = this.props
+		const { activeStep } = this.state
 
 		return (
 			<Paper className={classes.formWrapper} square>
 				<Typography variant="h6" color="primary">{screen.title}</Typography>
 
 				<form onSubmit={this.onNext}>
-					{screen.items.map(this.renderInput)}
+					{screen.items.map(this.renderField)}
 				</form>
 
 				<FormControl className={classes.buttonsWrapper} fullWidth>
-					<Button onClick={this.onBack}>Go Back</Button>
+					{activeStep !== 0 && <Button onClick={this.onBack}>Go Back</Button>}
 
-					<ClickAwayListener onClickAway={this.removeError}>
-						<Button color="secondary" onClick={this.onNext}>Next</Button>
-					</ClickAwayListener>
+					{activeStep !== form.screens.length - 1 
+						? <ClickAwayListener onClickAway={this.removeError}>
+							<Button color="secondary" onClick={this.onNext}>Next</Button>
+						</ClickAwayListener>
+						: <ClickAwayListener onClickAway={this.removeError}>
+							<Button color="secondary" onClick={this.onFinish}>Finish</Button>
+						</ClickAwayListener>
+					}
 				</FormControl>
 			</Paper>
 		)
@@ -203,9 +250,9 @@ class FormsNew extends React.Component {
 
 	render() {
 		const { classes, getFormLoading, getFormError, form } = this.props
-		const { activeStep, progress } = this.state
+		const { activeStep, progress, formState } = this.state
 
-		if (getFormLoading) return <Loading />
+		if (getFormLoading || !formState.length) return <Loading />
 		else if (getFormError) return <ErrorMessage error={getFormError} />
 
 		const screen = form.screens[activeStep]
@@ -237,7 +284,7 @@ class FormsNew extends React.Component {
 				<Typography className={classes.percentage} align="center" color="secondary">{progress}%</Typography>
 
 				<div className={classes.content}>
-					{this.renderForm(screen)}
+					{this.renderScreen(screen)}
 				</div>
 			</Layout>
 		)
