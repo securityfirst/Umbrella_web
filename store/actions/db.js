@@ -69,7 +69,7 @@ export const syncDb = password => async (dispatch, getState) => {
 				})
 			}
 
-			if (Object.keys(lessonssMerge).length) {
+			if (Object.keys(lessonsMerge).length) {
 				await dispatch({
 					type: lessonsTypes.SYNC_CHECKLISTS, 
 					payload: merge(state.lessons, lessonsMerge)
