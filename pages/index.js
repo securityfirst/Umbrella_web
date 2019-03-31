@@ -59,9 +59,8 @@ const styles = theme => ({
 	divider: {
 		margin: '2rem 0',
 	},
-	footerText: {
+	footerLinks: {
 	    margin: '.25rem 0',
-		fontSize: '.75rem',
 	},
 })
 
@@ -100,7 +99,7 @@ class Index extends React.Component {
 						<Divider className={classes.divider} />
 
 						<Typography className={classes.title} variant="h2">What you can do with Umbrella</Typography>
-						<Typography>
+						<Typography component="div">
 							<ul className={classes.list}>
 								<li>Protect yourself with lessons covering dozens of everyday and emergency situations, from sending a secure message to travelling safely in a dangerous country</li>
 								<li>Protect devices and data with simple step-by-step guides to digital security tools</li>
@@ -116,7 +115,7 @@ class Index extends React.Component {
 						<Divider className={classes.divider} />
 
 						<Typography className={classes.title} variant="h2">How we help protect you</Typography>
-						<Typography>
+						<Typography component="div">
 							<ul className={classes.list}>
 								<li>Password encrypts data on your device, we can’t access it</li>
 								<li>You enter your location, no GPS or data sharing - we don’t store your data</li>
@@ -127,16 +126,16 @@ class Index extends React.Component {
 
 						<Divider className={classes.divider} />
 
-						<Typography className={classes.footerText} paragraph>
+						<Typography variant="caption" paragraph>
 							Our content is published under a Creative Commons licence, so feel free to reuse it. Check or 
 							contribute to content and code: <a href="https://github.com/securityfirst" target="_blank">https://github.com/securityfirst</a>
 						</Typography>
 
-						<Typography className={classes.footerText} paragraph>
+						<Typography className={classes.footerLinks} variant="caption" paragraph>
 							Terms: <a href="https://secfirst.org/terms/" target="_blank">https://secfirst.org/terms/</a>
 						</Typography>
 
-						<Typography className={classes.footerText} paragraph>
+						<Typography className={classes.footerLinks} variant="caption" paragraph>
 							Privacy: <a href="https://secfirst.org/privacy/" target="_blank">https://secfirst.org/privacy/</a>
 						</Typography>
 					</Paper>
