@@ -46,7 +46,7 @@ class LessonCard extends React.Component {
 	}
 
 	render() {
-		const { classes, currentLessonFile, getLessonFileLoading, getLessonFileError } = this.props
+		const { classes } = this.props
 
 		return (
 			<Layout title="Umbrella | Lesson Card" description="Umbrella web application">

@@ -44,19 +44,19 @@ export default function reducer(state = initialState, action) {
 				checklistsSystem: action.payload,
 			}
 
-		/* ADD_CHECKLIST_FAVORITE */
-		case pending(checklistsTypes.ADD_CHECKLIST_FAVORITE):
+		/* TOGGLE_CHECKLIST_FAVORITE */
+		case pending(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE):
 			return {
 				...state,
 				toggleChecklistFavoriteLoading: true,
 			}
-		case rejected(checklistsTypes.ADD_CHECKLIST_FAVORITE):
+		case rejected(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE):
 			return {
 				...state,
 				toggleChecklistFavoriteLoading: false,
 				toggleChecklistFavoriteError: action.payload,
 			}
-		case fulfilled(checklistsTypes.ADD_CHECKLIST_FAVORITE):
+		case fulfilled(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE):
 			return {
 				...state,
 				toggleChecklistFavoriteLoading: false,

@@ -101,7 +101,7 @@ class ChecklistsSystem extends React.Component {
 
 		return (
 			<Paper className={classes.panel} {...optionalProps}>
-				<Typography className={classes.panelTitle} variant="h6">{title}</Typography>
+				<Typography className={classes.panelTitle} variant="h6">{title.replace(/\./g, ' > ').replace(/-/g, ' ')}</Typography>
 				{!isNaN(percentage) && <Typography className={classes.panelPercentage} variant="h6">{percentage}%</Typography>}
 			</Paper>
 		)

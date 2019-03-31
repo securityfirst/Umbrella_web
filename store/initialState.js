@@ -44,7 +44,6 @@ const forms = {
 }
 
 const lessons = {
-	// currentLesson: null,
 	lessonsGlossaryIndex: null,
 	getLessonChecklistLoading: false,
 	getLessonChecklistError: null,
@@ -81,10 +80,6 @@ const view = {
 	mainMenuOpened: false,
 	appbarTitle: null,
 	lessonsMenuOpened: 0,
-	lessonsContentType: null,
-	lessonsContentPath: null,
-	lessonsFavoritesView: false,
-	lessonFileView: false,
 	locale: 'en',
 }
 

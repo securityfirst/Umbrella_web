@@ -3,41 +3,6 @@ import 'isomorphic-unfetch'
 import { lessonsTypes, viewTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
-export const setCurrentLesson = (paths, name) => (dispatch, getState) => {
-	const state = getState()
-	const { content } = state.content
-	const { locale } = state.view
-
-	let index = 0
-	let lesson = {...content}[locale]
-
-	while (index < paths.length) {
-		lesson = lesson[paths[index]]
-		index++
-	}
-
-	lesson = [...lesson.content]
-	lesson = {
-		name: name,
-		// isGlossary: false,
-		level: paths[paths.length - 1],
-		path: `../../static/assets/content/${locale}/${paths.join('/')}`,
-		files: lesson.reduce((list, c) => {
-			if (c.filename.indexOf('s_') === 0) {
-				list.push({
-					name: c.filename,
-					sha: c.sha,
-				})
-			}
-
-			return list
-		}, []),
-		checklist: lesson.find(c => c.filename.indexOf('c_') > -1)
-	}
-
-	dispatch({type: lessonsTypes.SET_CURRENT_LESSON, payload: lesson})
-}
-
 export const getLessonChecklist = sha => async (dispatch, getState) => {
 	dispatch(pending(lessonsTypes.GET_LESSON_CHECKLIST))
 
@@ -166,11 +131,6 @@ export const removeLessonCardFavorite = file => (dispatch, getState) => {
 	} catch (e) {
 		dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, e))
 	}
-}
-
-export const resetLessons = () => (dispatch, getState) => {
-	dispatch({type: lessonsTypes.RESET_LESSONS})
-	dispatch({type: viewTypes.RESET_LESSONS})
 }
 
 export const clearLessons = () => ({type: lessonsTypes.CLEAR_LESSONS})

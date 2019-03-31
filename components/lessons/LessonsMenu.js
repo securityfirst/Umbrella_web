@@ -179,12 +179,11 @@ class LessonsMenu extends React.Component {
 	}
 
 	render() {
-		const { classes, locale, content, getContentLoading, getContentError, lessonsMenuOpened, currentLesson } = this.props
+		const { classes, locale, content, getContentLoading, getContentError, lessonsMenuOpened } = this.props
 		const { categorySelected } = this.state
 
 		if (getContentLoading) return <Loading />
 		else if (getContentError) return <ErrorMessage error={getContentError} />
-		else if (currentLesson) return null
 
 		return (
 			<List

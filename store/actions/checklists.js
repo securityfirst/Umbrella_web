@@ -30,7 +30,7 @@ export const getChecklistsSystem = checkPassword => async (dispatch, getState) =
 	}
 }
 
-export const updateChecklistsSystem = itemName => (dispatch, getState) => {
+export const updateChecklistsSystem = (itemName, category, level) => (dispatch, getState) => {
 	dispatch(pending(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM))
 
 	const state = getState()
@@ -39,12 +39,8 @@ export const updateChecklistsSystem = itemName => (dispatch, getState) => {
 		return alert('Login or set a password to update lesson checklists.')
 	}
 
-	if (!state.lessons.currentLesson) {
-		return alert('Something went wrong. Please refresh the page and try again.')
-	}
-
 	try {
-		const listKey = `${state.lessons.currentLesson.name} > ${state.lessons.currentLesson.level}`
+		const listKey = `${category} > ${level}`
 		const savedChecklist = state.checklists.checklistsSystem[listKey]
 
 		let newChecklists = {...state.checklists.checklistsSystem}
@@ -189,8 +185,8 @@ export const deleteChecklistCustom = i => (dispatch, getState) => {
 	}
 }
 
-export const toggleChecklistFavorite = () => (dispatch, getState) => {
-	dispatch(pending(checklistsTypes.ADD_CHECKLIST_FAVORITE))
+export const toggleChecklistFavorite = (category, level) => (dispatch, getState) => {
+	dispatch(pending(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE))
 
 	const state = getState()
 
@@ -199,7 +195,7 @@ export const toggleChecklistFavorite = () => (dispatch, getState) => {
 	}
 
 	try {
-		const listKey = `${state.lessons.currentLesson.name} > ${state.lessons.currentLesson.level}`
+		const listKey = `${category} > ${level}`
 		const savedChecklist = state.checklists.checklistsSystem[listKey]
 
 		let newChecklists = {...state.checklists.checklistsSystem}
@@ -212,13 +208,13 @@ export const toggleChecklistFavorite = () => (dispatch, getState) => {
 		ClientDB.default
 			.set('ch_s', newChecklists, state.account.password)
 			.then(() => {
-				dispatch(fulfilled(checklistsTypes.ADD_CHECKLIST_FAVORITE, newChecklists))
+				dispatch(fulfilled(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE, newChecklists))
 			})
 			.catch(err => {
-				dispatch(rejected(checklistsTypes.ADD_CHECKLIST_FAVORITE, err))
+				dispatch(rejected(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE, err))
 			})
 	} catch (e) {
-		dispatch(rejected(checklistsTypes.ADD_CHECKLIST_FAVORITE, e))
+		dispatch(rejected(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE, e))
 	}
 }
 

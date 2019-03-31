@@ -25,7 +25,6 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox'
 
 import { setAppbarTitle } from '../../store/actions/view'
 import { toggleMainMenu, toggleLessonsMenu } from '../../store/actions/view'
-import { resetLessons } from '../../store/actions/lessons'
 
 import { viewConstants } from '../../utils/view'
 
@@ -95,7 +94,6 @@ class Menu extends React.Component {
 		switch (link.name) {
 			case 'Lessons': 
 				dispatch(toggleLessonsMenu(true)) 
-				dispatch(resetLessons()) 
 				break
 		}
 	}
