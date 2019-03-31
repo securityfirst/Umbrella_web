@@ -37,9 +37,10 @@ const forms = {
 	getFormLoading: true,
 	getFormError: null,
 	form: null,
-	postFormLoading: false,
-	postFormError: null,
-	postFormSuccess: false,
+	saveFormLoading: false,
+	saveFormError: null,
+	saveFormSuccess: false,
+	formsSaved: [],
 }
 
 const lessons = {

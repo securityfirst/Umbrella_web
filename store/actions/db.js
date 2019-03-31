@@ -27,8 +27,7 @@ export const syncDb = password => async (dispatch, getState) => {
 			let feedLocation = await ClientDB.default.get('fe_l', password, true)
 			let feedSources = await ClientDB.default.get('fe_s', password, true)
 			let rssSources = await ClientDB.default.get('rs_s', password, true)
-			let formsSubmitted = await ClientDB.default.get('fo_s', password, true)
-			let formsActive = await ClientDB.default.get('fo_a', password, true)
+			let formsSaved = await ClientDB.default.get('fo_s', password, true)
 			let checklistsSystem = await ClientDB.default.get('ch_s', password, true)
 			let checklistsCustom = await ClientDB.default.get('ch_c', password, true)
 			let lessonCardsFavorites = await ClientDB.default.get('le_f', password, true)
@@ -42,8 +41,7 @@ export const syncDb = password => async (dispatch, getState) => {
 			if (feedSources) feedsMerge.feedSources = feedSources
 			if (rssSources) feedsMerge.rssSources = rssSources
 
-			if (formsSubmitted) formsMerge.formsSubmitted = formsSubmitted
-			if (formsActive) formsMerge.formsActive = formsActive
+			if (formsSaved) formsMerge.formsSaved = formsSaved
 
 			if (checklistsSystem) checklistsMerge.checklistsSystem = checklistsSystem
 			if (checklistsCustom) checklistsMerge.checklistsCustom = checklistsCustom
