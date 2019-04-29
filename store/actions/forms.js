@@ -25,7 +25,7 @@ export const getForm = sha => async (dispatch, getState) => {
 		})
 }
 
-export const saveForm = form => (dispatch, getState) => {
+export const saveForm = (form, successCb) => (dispatch, getState) => {
 	dispatch(pending(formsTypes.SAVE_FORM))
 
 	const state = getState()
@@ -36,17 +36,19 @@ export const saveForm = form => (dispatch, getState) => {
 	}
 
 	try {
-		const date = new Date()
-		form.dateCreated = date.valueOf()
-
 		const forms = state.forms.formsSaved.concat([form])
 
 		const ClientDB = require('../../db')
 
 		ClientDB.default
-			.set('fo_s', forms)
-			.then(hash => dispatch(fulfilled(formsTypes.SAVE_FORM, forms)))
-			.catch(err => dispatch(rejected(formsTypes.SAVE_FORM, err)))
+			.set('fo_s', forms, state.account.password)
+			.then(() => {
+				dispatch(fulfilled(formsTypes.SAVE_FORM, forms))
+				!!successCb && successCb()
+			})
+			.catch(err => {
+				dispatch(rejected(formsTypes.SAVE_FORM, err))
+			})
 	} catch (e) {
 		console.error('[ACTION] saveForm exception: ', e)
 		dispatch(rejected(formsTypes.SAVE_FORM, e))

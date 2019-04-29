@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'next/router'
 
 import { withStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
@@ -21,8 +22,9 @@ import FormControlRadios from '../../components/common/FormControlRadios'
 
 import teal from '@material-ui/core/colors/teal'
 
+import { getForm, saveForm, resetSaveForm } from '../../store/actions/forms'
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
-import { getForm, resetSaveForm } from '../../store/actions/forms'
+import { ID } from '../../utils/id'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -155,7 +157,20 @@ class FormsNew extends React.Component {
 			progress: 0,
 		})
 
-		this.props.dispatch(resetSaveForm())
+		const date = new Date()
+
+		const form = {
+			id: ID(),
+			sha: this.props.router.query.sha,
+			filename: this.props.form.title,
+			state: this.state.formState,
+			dateCreated: date.valueOf()
+		}
+
+		this.props.dispatch(saveForm(form, () => {
+			this.props.dispatch(resetSaveForm())
+			alert("Finished")
+		}))
 	}
 
 	removeError = () => this.setState({error: null, errorMessage: null})
@@ -295,4 +310,4 @@ const mapStateToProps = state => ({
 	...state.forms
 })
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(FormsNew))
+export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(FormsNew)))

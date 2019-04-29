@@ -36,12 +36,16 @@ const styles = theme => ({
 })
 
 class Forms extends React.Component {
-	handleEdit = form => () => {
-		alert('Edit ' + form.typeId)
+	handleShare = form => () => {
+		alert('Share ' + form.id)
 	}
 
-	handleShare = form => () => {
-		alert('Sharing ' + form.typeId)
+	handleDownload = form => () => {
+		alert('Download ' + form.id)
+	}
+
+	handleDelete = form => () => {
+		alert('Delete ' + form.id)
 	}
 
 	renderActivePanel = (form, i) => {
@@ -50,12 +54,14 @@ class Forms extends React.Component {
 		return (
 			<Paper key={i} className={classes.formPanel} square>
 				<Typography className={classes.formPanelTitle} variant="h6">
-					{form.filename.slice(2, form.filename.length - 4).replace(/-/g, " ")}
+					{form.filename}
 				</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
-					<Button component="button" onClick={this.handleEdit(form)}>Edit</Button>
-					<Button color="primary" onClick={this.handleShare(form)}>Share</Button>
+					<Link href={`/forms/edit/${form.sha}`}><Button component="button">Edit</Button></Link>
+					<Button component="button" onClick={this.handleShare(form)}>Share</Button>
+					<Button component="button" onClick={this.handleDownload(form)}>Download</Button>
+					<Button component="button" color="primary" onClick={this.handleDelete(form)}>Delete</Button>
 				</div>
 			</Paper>
 		)
@@ -85,14 +91,15 @@ class Forms extends React.Component {
 		return (
 			<Paper key={i} className={classes.formPanel} square>
 				<Typography className={classes.formPanelTitle} variant="h6">
-					{form.filename.slice(2, form.filename.length - 4).replace(/-/g, " ")}
+					{form.filename}
 				</Typography>
 				<Typography paragraph>{date.toLocaleString()}</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
-					<Button color="primary" onClick={this.handleShare(form)}>Share</Button>
 					<Button component="button" onClick={this.handleEdit(form)}>Edit</Button>
-					<Button component="button" onClick={this.handleDelete(form)}>Delete</Button>
+					<Button component="button" onClick={this.handleShare(form)}>Share</Button>
+					<Button component="button" onClick={this.handleDownload(form)}>Download</Button>
+					<Button component="button" color="primary" onClick={this.handleDelete(form)}>Delete</Button>
 				</div>
 			</Paper>
 		)
@@ -114,8 +121,8 @@ class Forms extends React.Component {
 		else if (getContentError || getFormsSavedError) return <ErrorMessage error={getContentError || getFormsSavedError} />
 
 		const formsSorted = formsSaved.reduce((acc, form) => {
-			if (form.completed) acc.formsFilled.push(form)
-			else acc.formsActive.push(form)
+			if (form.completed) acc.filled.push(form)
+			else acc.active.push(form)
 			return acc
 		}, {
 			active: [], 
