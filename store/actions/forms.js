@@ -25,6 +25,35 @@ export const getForm = sha => async (dispatch, getState) => {
 		})
 }
 
+export const getFormSaved = (id, successCb) => async (dispatch, getState) => {
+	dispatch(pending(formsTypes.GET_FORM_SAVED))
+
+	const state = getState()
+
+	// if (!state.account.password) {
+	// 	console.log("state.account.password: ", state.account.password);
+	// 	return dispatch(rejected(formsTypes.GET_FORM_SAVED, 'Please login to edit your saved form'))
+	// }
+
+	try {
+		const ClientDB = require('../../db')
+
+		await ClientDB.default
+			// .get('fo_s', state.account.password, true)
+			.get('fo_s', 'Pass1234', true)
+			.then(formsSaved => {
+				const form = formsSaved.find(f => f.id === id)
+				dispatch(fulfilled(formsTypes.GET_FORM_SAVED, form))
+				!!successCb && successCb(form)
+			})
+			.catch(err => {
+				dispatch(rejected(formsTypes.GET_FORM_SAVED, err))
+			})
+	} catch (e) {
+		dispatch(rejected(formsTypes.GET_FORM_SAVED, e))
+	}
+}
+
 export const saveForm = (form, successCb) => (dispatch, getState) => {
 	dispatch(pending(formsTypes.SAVE_FORM))
 

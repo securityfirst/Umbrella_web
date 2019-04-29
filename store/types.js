@@ -22,6 +22,7 @@ export const feedsTypes = {
 
 export const formsTypes = {
 	GET_FORM: 'GET_FORM',
+	GET_FORM_SAVED: 'GET_FORM_SAVED',
 	SAVE_FORM: 'SAVE_FORM',
 	UPDATE_FORM: 'UPDATE_FORM',
 	RESET_SAVE_FORM: 'RESET_SAVE_FORM',

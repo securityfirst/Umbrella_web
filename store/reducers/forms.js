@@ -25,6 +25,26 @@ export default function reducer(state = initialState, action) {
 				form: action.payload,
 			}
 
+		/* GET_FORM_SAVED */
+		case pending(formsTypes.GET_FORM_SAVED):
+			return {
+				...state,
+				getFormSavedLoading: true,
+			}
+		case rejected(formsTypes.GET_FORM_SAVED):
+			return {
+				...state,
+				getFormSavedLoading: false,
+				getFormSavedError: action.payload,
+			}
+		case fulfilled(formsTypes.GET_FORM_SAVED):
+			return {
+				...state,
+				getFormSavedLoading: false,
+				getFormSavedError: null,
+				formSaved: action.payload,
+			}
+
 		/* SAVE_FORM */
 		case pending(formsTypes.SAVE_FORM):
 			return {

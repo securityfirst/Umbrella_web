@@ -58,7 +58,7 @@ class Forms extends React.Component {
 				</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
-					<Link href={`/forms/edit/${form.sha}`}><Button component="button">Edit</Button></Link>
+					<Link href={`/forms/${form.sha}/${form.id}`}><Button component="button">Edit</Button></Link>
 					<Button component="button" onClick={this.handleShare(form)}>Share</Button>
 					<Button component="button" onClick={this.handleDownload(form)}>Download</Button>
 					<Button component="button" color="primary" onClick={this.handleDelete(form)}>Delete</Button>
@@ -96,7 +96,7 @@ class Forms extends React.Component {
 				<Typography paragraph>{date.toLocaleString()}</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
-					<Button component="button" onClick={this.handleEdit(form)}>Edit</Button>
+					<Link href={`/forms/${form.sha}/${form.id}`}><Button component="button">Edit</Button></Link>
 					<Button component="button" onClick={this.handleShare(form)}>Share</Button>
 					<Button component="button" onClick={this.handleDownload(form)}>Download</Button>
 					<Button component="button" color="primary" onClick={this.handleDelete(form)}>Delete</Button>
