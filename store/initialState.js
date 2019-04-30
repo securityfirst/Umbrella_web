@@ -43,6 +43,9 @@ const forms = {
 	saveFormLoading: false,
 	saveFormError: null,
 	saveFormSuccess: false,
+	deleteFormLoading: false,
+	deleteFormError: null,
+	deleteFormSuccess: false,
 	formsSaved: [],
 }
 

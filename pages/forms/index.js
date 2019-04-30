@@ -11,6 +11,7 @@ import Layout from '../../components/layout'
 import Loading from '../../components/common/Loading'
 import ErrorMessage from '../../components/common/ErrorMessage'
 
+import { deleteForm } from '../../store/actions/forms'
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 
 const styles = theme => ({
@@ -45,7 +46,11 @@ class Forms extends React.Component {
 	}
 
 	handleDelete = form => () => {
-		alert('Delete ' + form.id)
+		if (confirm('Are you sure you want to delete this form?')) {
+			this.props.dispatch(deleteForm(form, () => {
+				alert('Your form has been deleted')
+			}))
+		}
 	}
 
 	renderActivePanel = (form, i) => {

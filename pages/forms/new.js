@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'next/router'
+import Router, { withRouter } from 'next/router'
 
 import { withStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
@@ -169,7 +169,8 @@ class FormsNew extends React.Component {
 
 		this.props.dispatch(saveForm(form, () => {
 			this.props.dispatch(resetSaveForm())
-			alert("Finished")
+			alert('Your form has been saved')
+			Router.push('/forms')
 		}))
 	}
 

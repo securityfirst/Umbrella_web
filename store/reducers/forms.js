@@ -66,6 +66,28 @@ export default function reducer(state = initialState, action) {
 				formsSaved: action.payload,
 			}
 
+		/* DELETE_FORM */
+		case pending(formsTypes.DELETE_FORM):
+			return {
+				...state,
+				deleteFormLoading: true,
+				deleteFormError: null,
+			}
+		case rejected(formsTypes.DELETE_FORM):
+			return {
+				...state,
+				deleteFormLoading: false,
+				deleteFormError: action.payload,
+			}
+		case fulfilled(formsTypes.DELETE_FORM):
+			return {
+				...state,
+				deleteFormLoading: false,
+				deleteFormError: null,
+				deleteFormSuccess: true,
+				formsSaved: action.payload,
+			}
+
 		/* SYNC_FORMS */
 		case formsTypes.SYNC_FORMS: return action.payload
 

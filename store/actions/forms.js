@@ -1,6 +1,5 @@
 import 'isomorphic-unfetch'
 import YAML from 'yaml'
-import atob from 'atob'
 
 import { formsTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
@@ -32,15 +31,16 @@ export const getFormSaved = (id, successCb) => async (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
-		return dispatch(rejected(formsTypes.GET_FORM_SAVED, 'Please login to edit your saved form'))
-	}
+	// if (!state.account.password) {
+	// 	return dispatch(rejected(formsTypes.GET_FORM_SAVED, 'Please login to edit your saved form'))
+	// }
 
 	try {
 		const ClientDB = require('../../db')
 
 		await ClientDB.default
-			.get('fo_s', state.account.password, true)
+			// .get('fo_s', state.account.password, true)
+			.get('fo_s', 'Pass1234', true)
 			.then(formsSaved => {
 				const form = formsSaved.find(f => f.id === id)
 				dispatch(fulfilled(formsTypes.GET_FORM_SAVED, form))
@@ -85,6 +85,46 @@ export const saveForm = (form, successCb) => (dispatch, getState) => {
 	} catch (e) {
 		console.error('[ACTION] saveForm exception: ', e)
 		dispatch(rejected(formsTypes.SAVE_FORM, e))
+	}
+}
+
+export const deleteForm = (form, successCb) => (dispatch, getState) => {
+	dispatch(pending(formsTypes.DELETE_FORM))
+
+	const state = getState()
+
+	if (!state.account.password) {
+		const message = 'Please login to delete forms'
+		alert(message)
+		return dispatch(rejected(formsTypes.DELETE_FORM, message))
+	}
+
+	try {
+		const index = state.forms.formsSaved.findIndex(f => f.id === form.id)
+
+		if (index === -1) {
+			const message = 'Something went wrong - the form was not found'
+			alert(message)
+			return dispatch(rejected(formsTypes.DELETE_FORM, message))
+		}
+
+		let forms = [...state.forms.formsSaved]
+		forms.splice(index, 1)
+
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.set('fo_s', forms, state.account.password)
+			.then(() => {
+				dispatch(fulfilled(formsTypes.DELETE_FORM, forms))
+				!!successCb && successCb()
+			})
+			.catch(err => {
+				dispatch(rejected(formsTypes.DELETE_FORM, err))
+			})
+	} catch (e) {
+		console.error('[ACTION] deleteForm exception: ', e)
+		dispatch(rejected(formsTypes.DELETE_FORM, e))
 	}
 }
 
