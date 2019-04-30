@@ -22,7 +22,7 @@ import FormControlRadios from '../../components/common/FormControlRadios'
 
 import teal from '@material-ui/core/colors/teal'
 
-import { getForm, getFormSaved, updateForm, resetSaveForm } from '../../store/actions/forms'
+import { getForm, getFormSaved, saveForm, resetSaveForm } from '../../store/actions/forms'
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { ID } from '../../utils/id'
 
@@ -135,7 +135,7 @@ class FormEdit extends React.Component {
 	}
 
 	onFinish = () => {
-		const { form } = this.props
+		const { formSaved } = this.props
 
 		this.setState({
 			activeStep: 0,
@@ -145,12 +145,12 @@ class FormEdit extends React.Component {
 		const date = new Date()
 
 		const formUpdated = {
-			...form,
+			...formSaved,
 			state: this.state.formState,
 			dateModified: date.valueOf(),
 		}
 
-		this.props.dispatch(updateForm(formUpdated, () => {
+		this.props.dispatch(saveForm(formUpdated, () => {
 			this.props.dispatch(resetSaveForm())
 			alert('Finished')
 		}))

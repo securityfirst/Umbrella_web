@@ -66,36 +66,6 @@ export default function reducer(state = initialState, action) {
 				formsSaved: action.payload,
 			}
 
-		/* UPDATE_FORM */
-		case pending(formsTypes.UPDATE_FORM):
-			return {
-				...state,
-				updateFormLoading: true,
-			}
-		case rejected(formsTypes.UPDATE_FORM):
-			return {
-				...state,
-				updateFormLoading: false,
-				updateFormError: action.payload,
-			}
-		case fulfilled(formsTypes.UPDATE_FORM):
-			return {
-				...state,
-				updateFormLoading: false,
-				updateFormError: null,
-				updateFormSuccess: true,
-				formsSaved: action.payload,
-			}
-
-		/* RESET_SAVE_FORM */
-		case formsTypes.RESET_SAVE_FORM:
-			return {
-				...state,
-				saveFormLoading: false,
-				saveFormError: null,
-				saveFormSuccess: false,
-			}
-
 		/* SYNC_FORMS */
 		case formsTypes.SYNC_FORMS: return action.payload
 

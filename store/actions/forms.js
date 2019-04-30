@@ -65,7 +65,11 @@ export const saveForm = (form, successCb) => (dispatch, getState) => {
 	}
 
 	try {
-		const forms = state.forms.formsSaved.concat([form])
+		let formIndex = state.forms.formsSaved.findIndex(f => f.id === form.id)
+		let forms = [...state.forms.formsSaved]
+
+		if (formIndex === -1) forms.push(form)
+		else forms[formIndex] = form
 
 		const ClientDB = require('../../db')
 
@@ -81,41 +85,6 @@ export const saveForm = (form, successCb) => (dispatch, getState) => {
 	} catch (e) {
 		console.error('[ACTION] saveForm exception: ', e)
 		dispatch(rejected(formsTypes.SAVE_FORM, e))
-	}
-}
-
-export const updateForm = form => (dispatch, getState) => {
-	dispatch(pending(formsTypes.UPDATE_FORM))
-
-	const state = getState()
-
-	if (!state.account.password) {
-		alert('Please login to save your form')
-		return dispatch(rejected(formsTypes.UPDATE_FORM, 'Please login to save your form'))
-	}
-
-	if (!form.dateCreated) {
-		alert('Something went wrong. Please refresh the page and try again.')
-		return dispatch(rejected(formsTypes.UPDATE_FORM, null))
-	}
-
-	try {
-		const date = new Date()
-		form.dateUpdated = date.valueOf()
-		
-		const forms = [...state.forms.formsSaved]
-		const index = forms.findIndex(item => item.dateCreated === form.dateCreated)
-		forms[index] = form
-
-		const ClientDB = require('../../db')
-
-		ClientDB.default
-			.set('fo_s', forms)
-			.then(hash => dispatch(fulfilled(formsTypes.UPDATE_FORM, forms)))
-			.catch(err => dispatch(rejected(formsTypes.UPDATE_FORM, err)))
-	} catch (e) {
-		console.error('[ACTION] saveForm exception: ', e)
-		dispatch(rejected(formsTypes.UPDATE_FORM, e))
 	}
 }
 
