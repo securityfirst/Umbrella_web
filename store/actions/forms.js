@@ -7,6 +7,8 @@ import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js
 
 import { setAppbarTitle } from './view'
 
+import { decodeBlob } from '../../utils/github'
+
 export const getForm = sha => async (dispatch, getState) => {
 	dispatch(pending(formsTypes.GET_FORM))
 
@@ -16,7 +18,7 @@ export const getForm = sha => async (dispatch, getState) => {
 			return res.text()
 		})
 		.then(content => {
-			const form = YAML.parse(atob(content))
+			const form = YAML.parse(decodeBlob(content))
 			dispatch(fulfilled(formsTypes.GET_FORM, form))
 			dispatch(setAppbarTitle(form.title))
 		})
