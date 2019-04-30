@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter } from 'next/router'
+import Router, { withRouter } from 'next/router'
 
 import { withStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
@@ -79,32 +79,6 @@ class FormEdit extends React.Component {
 		}))
 	}
 
-	onNext = e => {
-		!!e && e.preventDefault()
-
-		const { form } = this.props
-		const { activeStep, progress } = this.state
-
-		const stepCount = 100 / form.screens.length
-
-		this.setState({
-			activeStep: activeStep + 1,
-			progress: progress + stepCount,
-		})
-	}
-
-	onBack = () => {
-		const { form } = this.props
-		const { activeStep, progress } = this.state
-
-		const stepCount = 100 / form.screens.length
-
-		this.setState(state => ({
-			activeStep: activeStep - 1, 
-			progress: progress - stepCount,
-		}))
-	}
-
 	onChange = (field, value) => {
 		const { activeStep, formState } = this.state
 
@@ -134,13 +108,50 @@ class FormEdit extends React.Component {
 		this.setState({formState: newState})
 	}
 
-	onFinish = () => {
-		const { formSaved } = this.props
+	onNext = e => {
+		!!e && e.preventDefault()
+
+		const { form } = this.props
+		const { activeStep, progress } = this.state
+
+		const stepCount = 100 / form.screens.length
 
 		this.setState({
-			activeStep: 0,
-			progress: 0,
+			activeStep: activeStep + 1,
+			progress: progress + stepCount,
 		})
+	}
+
+	onBack = () => {
+		const { form } = this.props
+		const { activeStep, progress } = this.state
+
+		const stepCount = 100 / form.screens.length
+
+		this.setState(state => ({
+			activeStep: activeStep - 1, 
+			progress: progress - stepCount,
+		}))
+	}
+
+	onSave = () => {
+		const { formSaved } = this.props
+
+		const date = new Date()
+
+		const formUpdated = {
+			...formSaved,
+			state: this.state.formState,
+			dateModified: date.valueOf(),
+		}
+
+		this.props.dispatch(saveForm(formUpdated, () => {
+			alert('Your form has been saved.')
+		}))
+	}
+
+	onFinish = () => {
+		const { formSaved } = this.props
 
 		const date = new Date()
 
@@ -152,7 +163,8 @@ class FormEdit extends React.Component {
 
 		this.props.dispatch(saveForm(formUpdated, () => {
 			this.props.dispatch(resetSaveForm())
-			alert('Finished')
+			alert('Your form has been saved.')
+			Router.push('/forms')
 		}))
 	}
 
@@ -233,6 +245,8 @@ class FormEdit extends React.Component {
 				</form>
 
 				<FormControl className={classes.buttonsWrapper} fullWidth>
+					{activeStep !== form.screens.length - 1 && <Button onClick={this.onSave}>Save</Button>}
+
 					{activeStep !== 0 && <Button onClick={this.onBack}>Go Back</Button>}
 
 					{activeStep !== form.screens.length - 1 

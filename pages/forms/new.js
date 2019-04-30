@@ -96,32 +96,6 @@ class FormsNew extends React.Component {
 		})
 	}
 
-	onNext = e => {
-		!!e && e.preventDefault()
-
-		const { form } = this.props
-		const { activeStep, progress } = this.state
-
-		const stepCount = 100 / form.screens.length
-
-		this.setState({
-			activeStep: activeStep + 1,
-			progress: progress + stepCount,
-		})
-	}
-
-	onBack = () => {
-		const { form } = this.props
-		const { activeStep, progress } = this.state
-
-		const stepCount = 100 / form.screens.length
-
-		this.setState(state => ({
-			activeStep: activeStep - 1, 
-			progress: progress - stepCount,
-		}))
-	}
-
 	onChange = (field, value) => {
 		const { activeStep, formState } = this.state
 
@@ -149,6 +123,32 @@ class FormsNew extends React.Component {
 		}
 
 		this.setState({formState: newState})
+	}
+
+	onNext = e => {
+		!!e && e.preventDefault()
+
+		const { form } = this.props
+		const { activeStep, progress } = this.state
+
+		const stepCount = 100 / form.screens.length
+
+		this.setState({
+			activeStep: activeStep + 1,
+			progress: progress + stepCount,
+		})
+	}
+
+	onBack = () => {
+		const { form } = this.props
+		const { activeStep, progress } = this.state
+
+		const stepCount = 100 / form.screens.length
+
+		this.setState(state => ({
+			activeStep: activeStep - 1, 
+			progress: progress - stepCount,
+		}))
 	}
 
 	onFinish = () => {
