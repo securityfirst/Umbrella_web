@@ -11,8 +11,10 @@ import Layout from '../../components/layout'
 import Loading from '../../components/common/Loading'
 import ErrorMessage from '../../components/common/ErrorMessage'
 
-import { deleteForm } from '../../store/actions/forms'
+import { getForm, deleteForm } from '../../store/actions/forms'
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
+import { generateForm } from '../../utils/forms'
+import { download } from '../../utils/dom'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -37,36 +39,39 @@ const styles = theme => ({
 })
 
 class Forms extends React.Component {
-	handleShare = form => () => {
-		alert('Share ' + form.id)
+	handleShare = formSaved => () => {
+		alert('Share ' + formSaved.id)
 	}
 
-	handleDownload = form => () => {
-		alert('Download ' + form.id)
+	handleDownload = formSaved => async () => {
+		await this.props.dispatch(getForm(formSaved.sha))
+		const html = generateForm(this.props.form, formSaved)
+		console.log("html: ", html);
+		download(formSaved.filename, html)
 	}
 
-	handleDelete = form => () => {
+	handleDelete = formSaved => () => {
 		if (confirm('Are you sure you want to delete this form?')) {
-			this.props.dispatch(deleteForm(form, () => {
+			this.props.dispatch(deleteForm(formSaved, () => {
 				alert('Your form has been deleted')
 			}))
 		}
 	}
 
-	renderActivePanel = (form, i) => {
+	renderActivePanel = (formSaved, i) => {
 		const { classes } = this.props
 
 		return (
 			<Paper key={i} className={classes.formPanel} square>
 				<Typography className={classes.formPanelTitle} variant="h6">
-					{form.filename}
+					{formSaved.filename}
 				</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
-					<Link href={`/forms/${form.sha}/${form.id}`}><Button component="button">Edit</Button></Link>
-					<Button component="button" onClick={this.handleShare(form)}>Share</Button>
-					<Button component="button" onClick={this.handleDownload(form)}>Download</Button>
-					<Button component="button" color="primary" onClick={this.handleDelete(form)}>Delete</Button>
+					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">Edit</Button></Link>
+					<Button component="button" onClick={this.handleShare(formSaved)}>Share</Button>
+					<Button component="button" onClick={this.handleDownload(formSaved)}>Download</Button>
+					<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>Delete</Button>
 				</div>
 			</Paper>
 		)
@@ -88,23 +93,23 @@ class Forms extends React.Component {
 		)
 	}
 
-	renderFilledPanel = (form, i) => {
+	renderFilledPanel = (formSaved, i) => {
 		const { dispatch, classes } = this.props
 
-		const date = new Date(form.dateCompleted)
+		const date = new Date(formSaved.dateCompleted)
 
 		return (
 			<Paper key={i} className={classes.formPanel} square>
 				<Typography className={classes.formPanelTitle} variant="h6">
-					{form.filename}
+					{formSaved.filename}
 				</Typography>
 				<Typography paragraph>{date.toLocaleString()}</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
-					<Link href={`/forms/${form.sha}/${form.id}`}><Button component="button">Edit</Button></Link>
-					<Button component="button" onClick={this.handleShare(form)}>Share</Button>
-					<Button component="button" onClick={this.handleDownload(form)}>Download</Button>
-					<Button component="button" color="primary" onClick={this.handleDelete(form)}>Delete</Button>
+					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">Edit</Button></Link>
+					<Button component="button" onClick={this.handleShare(formSaved)}>Share</Button>
+					<Button component="button" onClick={this.handleDownload(formSaved)}>Download</Button>
+					<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>Delete</Button>
 				</div>
 			</Paper>
 		)
