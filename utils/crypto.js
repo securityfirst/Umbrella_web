@@ -43,9 +43,9 @@ class Crypto {
 	decrypt(ciphered, expectsObject = false, enc = CryptoJS.enc.Utf8) {
 		if (!ciphered) throw new Error('No encrypted string was attached to be decrypted. Decryption halted.');
 
-		const salt = CryptoJS.enc.Hex.parse(ciphered.substr(0, 32)).toString()
+		const salt = CryptoJS.enc.Hex.parse(ciphered.substring(0, 32)).toString()
 
-		const initialVector = CryptoJS.enc.Hex.parse(ciphered.substr(32, 32)).toString()
+		const initialVector = CryptoJS.enc.Hex.parse(ciphered.substring(32, 32)).toString()
 
 		const encrypted = ciphered.substring(64)
 

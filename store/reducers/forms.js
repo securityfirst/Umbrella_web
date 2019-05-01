@@ -25,6 +25,26 @@ export default function reducer(state = initialState, action) {
 				form: action.payload,
 			}
 
+		/* GET_FORM_SAVED */
+		case pending(formsTypes.GET_FORM_SAVED):
+			return {
+				...state,
+				getFormSavedLoading: true,
+			}
+		case rejected(formsTypes.GET_FORM_SAVED):
+			return {
+				...state,
+				getFormSavedLoading: false,
+				getFormSavedError: action.payload,
+			}
+		case fulfilled(formsTypes.GET_FORM_SAVED):
+			return {
+				...state,
+				getFormSavedLoading: false,
+				getFormSavedError: null,
+				formSaved: action.payload,
+			}
+
 		/* SAVE_FORM */
 		case pending(formsTypes.SAVE_FORM):
 			return {
@@ -46,34 +66,26 @@ export default function reducer(state = initialState, action) {
 				formsSaved: action.payload,
 			}
 
-		/* UPDATE_FORM */
-		case pending(formsTypes.UPDATE_FORM):
+		/* DELETE_FORM */
+		case pending(formsTypes.DELETE_FORM):
 			return {
 				...state,
-				updateFormLoading: true,
+				deleteFormLoading: true,
+				deleteFormError: null,
 			}
-		case rejected(formsTypes.UPDATE_FORM):
+		case rejected(formsTypes.DELETE_FORM):
 			return {
 				...state,
-				updateFormLoading: false,
-				updateFormError: action.payload,
+				deleteFormLoading: false,
+				deleteFormError: action.payload,
 			}
-		case fulfilled(formsTypes.UPDATE_FORM):
+		case fulfilled(formsTypes.DELETE_FORM):
 			return {
 				...state,
-				updateFormLoading: false,
-				updateFormError: null,
-				updateFormSuccess: true,
+				deleteFormLoading: false,
+				deleteFormError: null,
+				deleteFormSuccess: true,
 				formsSaved: action.payload,
-			}
-
-		/* RESET_SAVE_FORM */
-		case formsTypes.RESET_SAVE_FORM:
-			return {
-				...state,
-				saveFormLoading: false,
-				saveFormError: null,
-				saveFormSuccess: false,
 			}
 
 		/* SYNC_FORMS */

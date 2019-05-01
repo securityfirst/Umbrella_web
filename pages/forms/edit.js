@@ -22,7 +22,7 @@ import FormControlRadios from '../../components/common/FormControlRadios'
 
 import teal from '@material-ui/core/colors/teal'
 
-import { getForm, saveForm, resetSaveForm } from '../../store/actions/forms'
+import { getForm, getFormSaved, saveForm, resetSaveForm } from '../../store/actions/forms'
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { ID } from '../../utils/id'
 
@@ -60,7 +60,7 @@ const styles = theme => ({
 	},
 })
 
-class FormsNew extends React.Component {
+class FormEdit extends React.Component {
 	static async getInitialProps({reduxStore, query}) {
 		await reduxStore.dispatch(getForm(query.sha))
 	}
@@ -74,26 +74,9 @@ class FormsNew extends React.Component {
 	}
 
 	componentDidMount() {
-		const { form } = this.props
-
-		this.setState({
-			formState: form.screens.map(screen => {
-				return screen.items.reduce((acc, item) => {
-					switch (item.type) {
-						case 'text_input': 
-						case 'text_area': 
-						case 'single_choice': 
-							acc[item.name] = ''
-							break
-						case 'multiple_choice': 
-							acc[item.name] = []
-							break
-					}
-
-					return acc
-				}, {})
-			})
-		})
+		this.props.dispatch(getFormSaved(this.props.router.query.id, formSaved => {
+			this.setState({formState: formSaved.state})
+		}))
 	}
 
 	onChange = (field, value) => {
@@ -151,25 +134,36 @@ class FormsNew extends React.Component {
 		}))
 	}
 
-	onFinish = () => {
-		this.setState({
-			activeStep: 0,
-			progress: 0,
-		})
+	onSave = () => {
+		const { formSaved } = this.props
 
 		const date = new Date()
 
-		const form = {
-			id: ID(),
-			sha: this.props.router.query.sha,
-			filename: this.props.form.title,
+		const formUpdated = {
+			...formSaved,
 			state: this.state.formState,
-			dateCreated: date.valueOf()
+			dateModified: date.valueOf(),
 		}
 
-		this.props.dispatch(saveForm(form, () => {
+		this.props.dispatch(saveForm(formUpdated, () => {
+			alert('Your form has been saved.')
+		}))
+	}
+
+	onFinish = () => {
+		const { formSaved } = this.props
+
+		const date = new Date()
+
+		const formUpdated = {
+			...formSaved,
+			state: this.state.formState,
+			dateModified: date.valueOf(),
+		}
+
+		this.props.dispatch(saveForm(formUpdated, () => {
 			this.props.dispatch(resetSaveForm())
-			alert('Your form has been saved')
+			alert('Your form has been saved.')
 			Router.push('/forms')
 		}))
 	}
@@ -179,6 +173,8 @@ class FormsNew extends React.Component {
 	renderField = (field, i) => {
 		const { classes } = this.props
 		const { activeStep, formState, error, errorMessage } = this.state
+
+		if (!field) return null
 
 		switch (field.type) {
 			case 'text_input': 
@@ -249,6 +245,8 @@ class FormsNew extends React.Component {
 				</form>
 
 				<FormControl className={classes.buttonsWrapper} fullWidth>
+					{activeStep !== form.screens.length - 1 && <Button onClick={this.onSave}>Save</Button>}
+
 					{activeStep !== 0 && <Button onClick={this.onBack}>Go Back</Button>}
 
 					{activeStep !== form.screens.length - 1 
@@ -265,16 +263,16 @@ class FormsNew extends React.Component {
 	}
 
 	render() {
-		const { classes, getFormLoading, getFormError, form } = this.props
+		const { classes, getFormLoading, getFormError, getFormSavedLoading, getFormSavedError, form } = this.props
 		const { activeStep, progress, formState } = this.state
 
-		if (getFormLoading || !formState.length) return <Loading />
-		else if (getFormError) return <ErrorMessage error={getFormError} />
+		if (getFormLoading || getFormSavedLoading || !formState.length) return <Loading />
+		else if (getFormError || getFormSavedError) return <ErrorMessage error={getFormError || getFormSavedError} />
 
 		const screen = form.screens[activeStep]
 
 		return (
-			<Layout title="Umbrella | New Form" description="Umbrella web application">
+			<Layout title="Umbrella | Edit Form" description="Umbrella web application">
 				<div className={classes.stepperWrapper}>
 					<Stepper className={classes.stepper} activeStep={activeStep}>
 						{form.screens.map((screen, i) => (
@@ -311,4 +309,4 @@ const mapStateToProps = state => ({
 	...state.forms
 })
 
-export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(FormsNew)))
+export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(FormEdit)))

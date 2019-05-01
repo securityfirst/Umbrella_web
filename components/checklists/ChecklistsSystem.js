@@ -178,11 +178,14 @@ class ChecklistsSystem extends React.Component {
 
 		const totalDone = Object.keys(checklistsSystem).reduce((acc, key) => (acc + checklistsSystem[key].items.length), 0)
 
+		let totalDonePercentage = (totalDone / checklistCount) * 100
+		totalDonePercentage = totalDonePercentage < 1 ? (totalDonePercentage).toFixed(1) : parseInt(totalDonePercentage)
+
 		return (
 			<div className={classes.content}>
 				<Typography className={classes.label} variant="subtitle1">Checklists Total</Typography>
 
-				{this.renderPanel('Total done', parseInt((totalDone / checklistCount) * 100))}
+				{this.renderPanel('Total done', totalDonePercentage)}
 
 				<Typography className={classes.label} variant="subtitle1">Favourites</Typography>
 

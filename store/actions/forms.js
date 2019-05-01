@@ -1,11 +1,12 @@
 import 'isomorphic-unfetch'
 import YAML from 'yaml'
-import atob from 'atob'
 
 import { formsTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
 import { setAppbarTitle } from './view'
+
+import { decodeBlob } from '../../utils/github'
 
 export const getForm = sha => async (dispatch, getState) => {
 	dispatch(pending(formsTypes.GET_FORM))
@@ -16,7 +17,7 @@ export const getForm = sha => async (dispatch, getState) => {
 			return res.text()
 		})
 		.then(content => {
-			const form = YAML.parse(atob(content))
+			const form = YAML.parse(decodeBlob(content))
 			dispatch(fulfilled(formsTypes.GET_FORM, form))
 			dispatch(setAppbarTitle(form.title))
 		})
@@ -25,7 +26,35 @@ export const getForm = sha => async (dispatch, getState) => {
 		})
 }
 
-export const saveForm = form => (dispatch, getState) => {
+export const getFormSaved = (id, successCb) => async (dispatch, getState) => {
+	dispatch(pending(formsTypes.GET_FORM_SAVED))
+
+	const state = getState()
+
+	// if (!state.account.password) {
+	// 	return dispatch(rejected(formsTypes.GET_FORM_SAVED, 'Please login to edit your saved form'))
+	// }
+
+	try {
+		const ClientDB = require('../../db')
+
+		await ClientDB.default
+			// .get('fo_s', state.account.password, true)
+			.get('fo_s', 'Pass1234', true)
+			.then(formsSaved => {
+				const form = formsSaved.find(f => f.id === id)
+				dispatch(fulfilled(formsTypes.GET_FORM_SAVED, form))
+				!!successCb && successCb(form)
+			})
+			.catch(err => {
+				dispatch(rejected(formsTypes.GET_FORM_SAVED, err))
+			})
+	} catch (e) {
+		dispatch(rejected(formsTypes.GET_FORM_SAVED, e))
+	}
+}
+
+export const saveForm = (form, successCb) => (dispatch, getState) => {
 	dispatch(pending(formsTypes.SAVE_FORM))
 
 	const state = getState()
@@ -36,55 +65,66 @@ export const saveForm = form => (dispatch, getState) => {
 	}
 
 	try {
-		const date = new Date()
-		form.dateCreated = date.valueOf()
+		let formIndex = state.forms.formsSaved.findIndex(f => f.id === form.id)
+		let forms = [...state.forms.formsSaved]
 
-		const forms = state.forms.formsSaved.concat([form])
+		if (formIndex === -1) forms.push(form)
+		else forms[formIndex] = form
 
 		const ClientDB = require('../../db')
 
 		ClientDB.default
-			.set('fo_s', forms)
-			.then(hash => dispatch(fulfilled(formsTypes.SAVE_FORM, forms)))
-			.catch(err => dispatch(rejected(formsTypes.SAVE_FORM, err)))
+			.set('fo_s', forms, state.account.password)
+			.then(() => {
+				dispatch(fulfilled(formsTypes.SAVE_FORM, forms))
+				!!successCb && successCb()
+			})
+			.catch(err => {
+				dispatch(rejected(formsTypes.SAVE_FORM, err))
+			})
 	} catch (e) {
 		console.error('[ACTION] saveForm exception: ', e)
 		dispatch(rejected(formsTypes.SAVE_FORM, e))
 	}
 }
 
-export const updateForm = form => (dispatch, getState) => {
-	dispatch(pending(formsTypes.UPDATE_FORM))
+export const deleteForm = (form, successCb) => (dispatch, getState) => {
+	dispatch(pending(formsTypes.DELETE_FORM))
 
 	const state = getState()
 
 	if (!state.account.password) {
-		alert('Please login to save your form')
-		return dispatch(rejected(formsTypes.UPDATE_FORM, 'Please login to save your form'))
-	}
-
-	if (!form.dateCreated) {
-		alert('Something went wrong. Please refresh the page and try again.')
-		return dispatch(rejected(formsTypes.UPDATE_FORM, null))
+		const message = 'Please login to delete forms'
+		alert(message)
+		return dispatch(rejected(formsTypes.DELETE_FORM, message))
 	}
 
 	try {
-		const date = new Date()
-		form.dateUpdated = date.valueOf()
-		
-		const forms = [...state.forms.formsSaved]
-		const index = forms.findIndex(item => item.dateCreated === form.dateCreated)
-		forms[index] = form
+		const index = state.forms.formsSaved.findIndex(f => f.id === form.id)
+
+		if (index === -1) {
+			const message = 'Something went wrong - the form was not found'
+			alert(message)
+			return dispatch(rejected(formsTypes.DELETE_FORM, message))
+		}
+
+		let forms = [...state.forms.formsSaved]
+		forms.splice(index, 1)
 
 		const ClientDB = require('../../db')
 
 		ClientDB.default
-			.set('fo_s', forms)
-			.then(hash => dispatch(fulfilled(formsTypes.UPDATE_FORM, forms)))
-			.catch(err => dispatch(rejected(formsTypes.UPDATE_FORM, err)))
+			.set('fo_s', forms, state.account.password)
+			.then(() => {
+				dispatch(fulfilled(formsTypes.DELETE_FORM, forms))
+				!!successCb && successCb()
+			})
+			.catch(err => {
+				dispatch(rejected(formsTypes.DELETE_FORM, err))
+			})
 	} catch (e) {
-		console.error('[ACTION] saveForm exception: ', e)
-		dispatch(rejected(formsTypes.UPDATE_FORM, e))
+		console.error('[ACTION] deleteForm exception: ', e)
+		dispatch(rejected(formsTypes.DELETE_FORM, e))
 	}
 }
 

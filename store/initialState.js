@@ -37,9 +37,15 @@ const forms = {
 	getFormLoading: true,
 	getFormError: null,
 	form: null,
+	getFormSavedLoading: true,
+	getFormSavedError: null,
+	formSaved: null,
 	saveFormLoading: false,
 	saveFormError: null,
 	saveFormSuccess: false,
+	deleteFormLoading: false,
+	deleteFormError: null,
+	deleteFormSuccess: false,
 	formsSaved: [],
 }
 
