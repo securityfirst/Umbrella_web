@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { connect } from 'react-redux'
+import classNames from 'classnames'
 
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -51,6 +52,25 @@ const styles = theme => ({
 		marginLeft: 'auto',
 		fontWeight: 'normal',
 		color: cyan[500],
+	},
+	panelTotalIconsWrapper: {
+		position: 'relative',
+    	width: '5rem',
+    	height: '2.5rem',
+		marginRight: '1rem',
+	},
+	panelTotalIcon: {
+		position: 'absolute',
+		top: '50%',
+		transform: 'translateY(-50%)',
+		display: 'inline-block',
+		width: '2.5rem',
+	},
+	panelTotalIconSecond: {
+		left: '1.25rem',
+	},
+	panelTotalIconThird: {
+		left: '2.5rem',
 	},
 })
 
@@ -216,6 +236,11 @@ class ChecklistsSystem extends React.Component {
 				<Typography className={classes.label} variant="subtitle1">Checklists Total</Typography>
 
 				<Paper className={classes.panel}>
+					<div className={classes.panelTotalIconsWrapper}>
+						<img className={classes.panelTotalIcon} src={`/static/assets/images/beginner.png`} alt={`Umbrella lesson beginner icon`}/>
+						<img className={classNames(classes.panelTotalIcon, classes.panelTotalIconSecond)} src={`/static/assets/images/intermediate.png`} alt={`Umbrella lesson intermediate icon`}/>
+						<img className={classNames(classes.panelTotalIcon, classes.panelTotalIconThird)} src={`/static/assets/images/expert.png`} alt={`Umbrella lesson expert icon`}/>
+					</div>
 					<Typography className={classes.panelTitle} variant="h6">Total done</Typography>
 					<Typography className={classes.panelPercentage} variant="h6">{totalDonePercentage}%</Typography>
 				</Paper>
