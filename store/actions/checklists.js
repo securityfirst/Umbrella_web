@@ -69,6 +69,34 @@ export const updateChecklistsSystem = (itemName, category, level) => (dispatch, 
 	}
 }
 
+export const deleteChecklistSystem = listKey => (dispatch, getState) => {
+	dispatch(pending(checklistsTypes.DELETE_CHECKLIST_SYSTEM))
+
+	const state = getState()
+
+	if (!state.account.password) {
+		return alert('Login or set a password to delete lesson checklists.')
+	}
+
+	try {
+		let newChecklists = {...state.checklists.checklistsSystem}
+		delete newChecklists[listKey]
+
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.set('ch_s', newChecklists, state.account.password)
+			.then(() => {
+				dispatch(fulfilled(checklistsTypes.DELETE_CHECKLIST_SYSTEM, newChecklists))
+			})
+			.catch(err => {
+				dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_SYSTEM, err))
+			})
+	} catch (e) {
+		dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_SYSTEM, e))
+	}
+}
+
 export const getChecklistsCustom = () => (dispatch, getState) => {
 	dispatch(pending(checklistsTypes.GET_CHECKLISTS_CUSTOM))
 

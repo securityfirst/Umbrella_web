@@ -44,6 +44,26 @@ export default function reducer(state = initialState, action) {
 				checklistsSystem: action.payload,
 			}
 
+		/* DELETE_CHECKLIST_SYSTEM */
+		case pending(checklistsTypes.DELETE_CHECKLIST_SYSTEM):
+			return {
+				...state,
+				deleteChecklistSystemLoading: true,
+			}
+		case rejected(checklistsTypes.DELETE_CHECKLIST_SYSTEM):
+			return {
+				...state,
+				deleteChecklistSystemLoading: false,
+				deleteChecklistSystemError: action.payload,
+			}
+		case fulfilled(checklistsTypes.DELETE_CHECKLIST_SYSTEM):
+			return {
+				...state,
+				deleteChecklistSystemLoading: false,
+				deleteChecklistSystemError: null,
+				checklistsSystem: action.payload,
+			}
+
 		/* TOGGLE_CHECKLIST_FAVORITE */
 		case pending(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE):
 			return {

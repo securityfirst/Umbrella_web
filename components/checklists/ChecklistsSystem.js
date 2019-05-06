@@ -7,12 +7,16 @@ import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import DeleteIcon from '@material-ui/icons/Delete'
 
 import cyan from '@material-ui/core/colors/cyan'
 
 import ChecklistsPanel from './ChecklistsPanel'
 import Loading from '../common/Loading'
 import ErrorMessage from '../common/ErrorMessage'
+
+import { deleteChecklistSystem } from '../../store/actions/checklists'
 
 import { contentStyles } from '../../utils/view'
 
@@ -22,6 +26,9 @@ const styles = theme => ({
 		marginTop: '1rem',
 		color: theme.palette.grey[500],
 		fontSize: '.875rem',
+	},
+	panelWrapper: {
+		position: 'relative',
 	},
 	panel: {
 		display: 'flex',
@@ -71,6 +78,12 @@ const styles = theme => ({
 	},
 	panelTotalIconThird: {
 		left: '2.5rem',
+	},
+	panelActionButton: {
+		position: 'absolute',
+		left: '101%',
+		top: '50%',
+    	transform: 'translateY(-50%)',
 	},
 })
 
@@ -126,6 +139,12 @@ class ChecklistsSystem extends React.Component {
 		const favorites = checklistFavorites
 	}
 
+	deleteChecklist = title => () => {
+		if (confirm('Are you sure you want to delete this checklist?')) {
+			this.props.dispatch(deleteChecklistSystem(title))
+		}
+	}
+
 	renderPanel = title => {
 		const { classes } = this.props
 
@@ -141,17 +160,22 @@ class ChecklistsSystem extends React.Component {
 		const level = title.split(' > ')[1]
 
 		return (
-			<Link key={index} href={`/lessons/${title.replace(/ > /, '/')}`}>
-				<Button
-					className={classes.panel}
-					classes={{label: classes.panelButtonInner}}
-					variant="contained"
-				>
-					<img className={classes.panelIcon} src={`/static/assets/images/${level}.png`} alt={`Umbrella lesson ${level} icon`}/>
-					<Typography className={classes.panelTitle} variant="h6">{title.replace(/\./g, ' > ').replace(/-/g, ' ')}</Typography>
-					{percentage !== null && <Typography className={classes.panelPercentage} variant="h6">{percentage}%</Typography>}
-				</Button>
-			</Link>
+			<div className={classes.panelWrapper} key={index}>
+				<Link href={`/lessons/${title.replace(/ > /, '/')}`}>
+					<Button
+						className={classes.panel}
+						classes={{label: classes.panelButtonInner}}
+						variant="contained"
+					>
+						<img className={classes.panelIcon} src={`/static/assets/images/${level}.png`} alt={`Umbrella lesson ${level} icon`}/>
+						<Typography className={classes.panelTitle} variant="h6">{title.replace(/\./g, ' > ').replace(/-/g, ' ')}</Typography>
+						{percentage !== null && <Typography className={classes.panelPercentage} variant="h6">{percentage}%</Typography>}
+					</Button>
+				</Link>
+				<IconButton className={classes.panelActionButton} aria-label="Delete" onClick={this.deleteChecklist(title)}>
+					<DeleteIcon />
+				</IconButton>
+			</div>
 		)
 	}
 
@@ -238,7 +262,7 @@ class ChecklistsSystem extends React.Component {
 				<Paper className={classes.panel}>
 					<div className={classes.panelTotalIconsWrapper}>
 						<img className={classes.panelTotalIcon} src={`/static/assets/images/beginner.png`} alt={`Umbrella lesson beginner icon`}/>
-						<img className={classNames(classes.panelTotalIcon, classes.panelTotalIconSecond)} src={`/static/assets/images/intermediate.png`} alt={`Umbrella lesson intermediate icon`}/>
+						<img className={classNames(classes.panelTotalIcon, classes.panelTotalIconSecond)} src={`/static/assets/images/advanced.png`} alt={`Umbrella lesson intermediate icon`}/>
 						<img className={classNames(classes.panelTotalIcon, classes.panelTotalIconThird)} src={`/static/assets/images/expert.png`} alt={`Umbrella lesson expert icon`}/>
 					</div>
 					<Typography className={classes.panelTitle} variant="h6">Total done</Typography>
