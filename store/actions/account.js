@@ -5,38 +5,48 @@ import { accountTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 import { syncDb } from './db'
 
-export const login = (password, router) => (dispatch, getState) => {
+export const login = (password, cb) => (dispatch, getState) => {
 	dispatch(pending(accountTypes.LOGIN))
 
-	const ClientDB = require('../../db')
+	try {
+		const ClientDB = require('../../db')
+		const Account = require('../../account')
 
-	fetch(`${process.env.ROOT}/api/auth/key`)
-		.then(res => {
-			if (!res.ok) throw res
-			return res.text()
-		})
-		.then(key => {
-			ClientDB.default
-				.get('h', key)
-				.then(async data => {
-					if (!data) {
-						return dispatch(rejected(accountTypes.LOGIN, 'Password does not exist'))
-					}
+		// Get server key
+		fetch(`${process.env.ROOT}/api/auth/key`)
+			.then(res => {
+				if (!res.ok) throw res
+				return res.text()
+			})
+			.then(key => {
+				ClientDB.default
+					// get encrypted password
+					.get('h', key)
+					.then(async data => {
+						if (!data) {
+							return dispatch(rejected(accountTypes.LOGIN, 'Password does not exist'))
+						}
 
-					if (password !== data) {
-						return dispatch(rejected(accountTypes.LOGIN, 'Password is incorrect'))
-					}
+						// if given password doesn't match decrypted password
+						if (password !== data) {
+							return dispatch(rejected(accountTypes.LOGIN, 'Password is incorrect'))
+						}
 
-					await dispatch(fulfilled(accountTypes.LOGIN, password))
-					await dispatch(syncDb(password))
+						// Success and sync database to store
+						Account.default.login(password, async () => {
+							await dispatch(fulfilled(accountTypes.LOGIN, password))
+							await dispatch(syncDb())
 
-					alert('You are now logged in!')
-					!!router && router.back()
-				})
-		})
-		.catch(err => {
-			return dispatch(rejected(accountTypes.LOGIN, err))
-		})
+							!!cb && cb()
+						})
+					})
+			})
+			.catch(err => {
+				return dispatch(rejected(accountTypes.LOGIN, err))
+			})
+	} catch (e) {
+		dispatch(rejected(accountTypes.LOGIN, e))
+	}
 }
 
 export const checkPassword = () => async (dispatch, getState) => {
@@ -44,10 +54,16 @@ export const checkPassword = () => async (dispatch, getState) => {
 
 	try {
 		const ClientDB = require('../../db')
+		const Account = require('../../account')
 
 		ClientDB.default
 			.get('h')
-			.then(hash => dispatch(fulfilled(accountTypes.CHECK_PASSWORD, !!hash)))
+			.then(async hash => {
+				const password = await Account.default.password()
+				const loggedIn = !!hash && password === hash
+
+				dispatch(fulfilled(accountTypes.CHECK_PASSWORD, loggedIn))
+			})
 			.catch(err => dispatch(rejected(accountTypes.CHECK_PASSWORD, err)))
 	} catch (e) {
 		dispatch(rejected(accountTypes.CHECK_PASSWORD, e))
@@ -58,6 +74,7 @@ export const savePassword = (password, router) => (dispatch, getState) => {
 	dispatch(pending(accountTypes.SAVE_PASSWORD))
 
 	const ClientDB = require('../../db')
+	const Account = require('../../account')
 
 	fetch(`${process.env.ROOT}/api/auth/key`)
 		.then(res => {
@@ -70,6 +87,7 @@ export const savePassword = (password, router) => (dispatch, getState) => {
 			ClientDB.default
 				.set('h', password, key)
 				.then(() => {
+					Account.default.login(password)
 					dispatch(fulfilled(accountTypes.SAVE_PASSWORD, password))
 					!!router && router.back()
 				})

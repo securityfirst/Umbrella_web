@@ -5,7 +5,7 @@ import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js
 
 import Crypto from '../../utils/crypto'
 
-export const getChecklistsSystem = checkPassword => async (dispatch, getState) => {
+export const getChecklistsSystem = () => async (dispatch, getState) => {
 	dispatch(pending(checklistsTypes.GET_CHECKLISTS_SYSTEM))
 
 	const state = getState()

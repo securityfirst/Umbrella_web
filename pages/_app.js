@@ -10,6 +10,7 @@ import { withReduxStore } from '../lib/redux.js'
 import { getPageContext } from '../lib/mui'
 
 import { getContent } from '../store/actions/content'
+import { login } from '../store/actions/account'
 
 import './index.css'
 
@@ -41,8 +42,15 @@ class MyApp extends App {
 		}
 
 		if (typeof window !== 'undefined') {
+			const Account = require('../account')
 			const ClientDB = require('../db')
+			
 			ClientDB.default.init()
+
+			if (!!Account.default.isLoggedIn()) {
+				const password = await Account.default.password()
+				this.props.reduxStore.dispatch(login(password))
+			}
 		}
 	}
 
