@@ -46,7 +46,6 @@ class Forms extends React.Component {
 	handleDownload = formSaved => async () => {
 		await this.props.dispatch(getForm(formSaved.sha))
 		const html = generateForm(this.props.form, formSaved)
-		console.log("html: ", html);
 		download(formSaved.filename, html)
 	}
 

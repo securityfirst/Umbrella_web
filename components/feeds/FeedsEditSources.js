@@ -60,7 +60,6 @@ class FeedsEditSources extends React.Component {
 
 		const { sourcesSelected } = this.state
 
-		// TODO: Handle submit here, then close on callback
 		this.props.onSubmit(sourcesSelected)
 		this.props.closeModal()
 	}

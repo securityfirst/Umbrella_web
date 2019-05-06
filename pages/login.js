@@ -17,7 +17,7 @@ import FormControlInput from '../components/common/FormControlInput'
 
 import { contentStyles } from '../utils/view'
 
-import { login } from '../store/actions/account'
+import { checkPassword, login } from '../store/actions/account'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -61,6 +61,15 @@ class Login extends React.Component {
 		errorMessage: null,
 	}
 
+	componentDidMount() {
+		const { query } = this.props.router
+		if (query && query.setpassword) this.setState({expanded: 1})
+
+		if (typeof window !== 'undefined') {
+			this.props.dispatch(checkPassword())
+		}
+	}
+
 	handleLoginSubmit = e => {
 		!!e && e.preventDefault()
 
@@ -74,13 +83,16 @@ class Login extends React.Component {
 			})
 		}
 
-		this.props.dispatch(login(password, router))
+		this.props.dispatch(login(password, () => {
+			alert('You are now logged in!')
+			router.back()
+		}))
 	}
 
 	removeError = () => this.setState({error: false, errorMessage: null})
 
 	render() {
-		const { classes, loginLoading, loginError } = this.props
+		const { classes, loginLoading, loginError, checkPassword } = this.props
 		const { password, error, errorMessage } = this.state
 
 		return (
@@ -141,6 +153,8 @@ class Login extends React.Component {
 	}
 }
 
-const mapStateToProps = state => ({...state.account})
+const mapStateToProps = state => ({
+	...state.account
+})
 
 export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Login)))

@@ -10,16 +10,18 @@ import { clearForms } from './forms'
 import { clearChecklists } from './checklists'
 import { clearLessons } from './lessons'
 
-export const syncDb = password => async (dispatch, getState) => {
+export const syncDb = () => async (dispatch, getState) => {
 	await dispatch(pending(dbTypes.SYNC_DB))
 
 	try {
 		const state = getState()
 
 		const ClientDB = require('../../db')
+		const Account = require('../../account')
 
 		const enabled = await ClientDB.default.get('enabled')
 		const hash = await ClientDB.default.get('h')
+		const password = await Account.default.password()
 
 		if (!enabled || !hash || !password) return await dispatch(fulfilled(dbTypes.SYNC_DB))
 

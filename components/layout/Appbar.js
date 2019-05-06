@@ -58,7 +58,8 @@ const styles = theme => ({
 
 class Appbar extends React.Component {
 	logout = () => {
-		window.location.reload()
+		const Account = require('../../account')
+		Account.default.logout()
 	}
 
 	renderRightContent() {
