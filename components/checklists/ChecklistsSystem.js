@@ -102,7 +102,7 @@ class ChecklistsSystem extends React.Component {
 		return (
 			<Paper className={classes.panel} {...optionalProps}>
 				<Typography className={classes.panelTitle} variant="h6">{title.replace(/\./g, ' > ').replace(/-/g, ' ')}</Typography>
-				{!isNaN(percentage) && <Typography className={classes.panelPercentage} variant="h6">{percentage}%</Typography>}
+				{percentage !== null && <Typography className={classes.panelPercentage} variant="h6">{percentage}%</Typography>}
 			</Paper>
 		)
 	}
@@ -179,7 +179,9 @@ class ChecklistsSystem extends React.Component {
 		const totalDone = Object.keys(checklistsSystem).reduce((acc, key) => (acc + checklistsSystem[key].items.length), 0)
 
 		let totalDonePercentage = (totalDone / checklistCount) * 100
-		totalDonePercentage = totalDonePercentage < 1 ? (totalDonePercentage).toFixed(1) : parseInt(totalDonePercentage)
+
+		if (totalDonePercentage !== 0 && totalDonePercentage < 1) totalDonePercentage = '< 1'
+		else totalDonePercentage = parseInt(totalDonePercentage)
 
 		return (
 			<div className={classes.content}>
