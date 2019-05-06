@@ -24,7 +24,7 @@ const styles = theme => ({
 	},
 	panel: {
 		display: 'flex',
-		justifyContent: 'space-between',
+		justifyContent: 'left',
 		alignItems: 'center',
 		width: '100%',
 		margin: '.5rem 0',
@@ -33,7 +33,11 @@ const styles = theme => ({
 	},
 	panelButtonInner: {
 		display: 'flex',
-		justifyContent: 'space-between',
+		justifyContent: 'left',
+	},
+	panelIcon: {
+		width: '2.5rem',
+		marginRight: '1rem',
 	},
 	panelTitle: {
 		display: 'inline-block',
@@ -44,6 +48,7 @@ const styles = theme => ({
 	},
 	panelPercentage: {
 		display: 'inline-block',
+		marginLeft: 'auto',
 		fontWeight: 'normal',
 		color: cyan[500],
 	},
@@ -113,6 +118,7 @@ class ChecklistsSystem extends React.Component {
 
 	renderPanelLink = (title, percentage, index) => {
 		const { classes } = this.props
+		const level = title.split(' > ')[1]
 
 		return (
 			<Link key={index} href={`/lessons/${title.replace(/ > /, '/')}`}>
@@ -121,6 +127,7 @@ class ChecklistsSystem extends React.Component {
 					classes={{label: classes.panelButtonInner}}
 					variant="contained"
 				>
+					<img className={classes.panelIcon} src={`/static/assets/images/${level}.png`} alt={`Umbrella lesson ${level} icon`}/>
 					<Typography className={classes.panelTitle} variant="h6">{title.replace(/\./g, ' > ').replace(/-/g, ' ')}</Typography>
 					{percentage !== null && <Typography className={classes.panelPercentage} variant="h6">{percentage}%</Typography>}
 				</Button>
