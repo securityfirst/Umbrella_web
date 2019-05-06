@@ -1,9 +1,11 @@
 import React from 'react'
+import Link from 'next/link'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 
 import cyan from '@material-ui/core/colors/cyan'
 
@@ -24,8 +26,14 @@ const styles = theme => ({
 		display: 'flex',
 		justifyContent: 'space-between',
 		alignItems: 'center',
+		width: '100%',
 		margin: '.5rem 0',
 		padding: '.75rem 1.5rem',
+		backgroundColor: theme.palette.common.white,
+	},
+	panelButtonInner: {
+		display: 'flex',
+		justifyContent: 'space-between',
 	},
 	panelTitle: {
 		display: 'inline-block',
@@ -93,17 +101,30 @@ class ChecklistsSystem extends React.Component {
 		const favorites = checklistFavorites
 	}
 
-	renderPanel = (title, percentage, index) => {
+	renderPanel = title => {
 		const { classes } = this.props
 
-		let optionalProps = {}
-		if (!isNaN(index)) optionalProps.key = index
+		return (
+			<Paper className={classes.panel}>
+				<Typography className={classes.panelTitle} variant="h6">{title}</Typography>
+			</Paper>
+		)
+	}
+
+	renderPanelLink = (title, percentage, index) => {
+		const { classes } = this.props
 
 		return (
-			<Paper className={classes.panel} {...optionalProps}>
-				<Typography className={classes.panelTitle} variant="h6">{title.replace(/\./g, ' > ').replace(/-/g, ' ')}</Typography>
-				{percentage !== null && <Typography className={classes.panelPercentage} variant="h6">{percentage}%</Typography>}
-			</Paper>
+			<Link key={index} href={`/lessons/${title.replace(/ > /, '/')}`}>
+				<Button
+					className={classes.panel}
+					classes={{label: classes.panelButtonInner}}
+					variant="contained"
+				>
+					<Typography className={classes.panelTitle} variant="h6">{title.replace(/\./g, ' > ').replace(/-/g, ' ')}</Typography>
+					{percentage !== null && <Typography className={classes.panelPercentage} variant="h6">{percentage}%</Typography>}
+				</Button>
+			</Link>
 		)
 	}
 
@@ -132,7 +153,7 @@ class ChecklistsSystem extends React.Component {
 
 					const percentage = !!checklist ? parseInt((checklistsSystem[name].items.length / checklistCount) * 100) : 0
 
-					return this.renderPanel(name, percentage, i)
+					return this.renderPanelLink(name, percentage, i)
 				})}
 			</React.Fragment>
 		)
@@ -163,7 +184,7 @@ class ChecklistsSystem extends React.Component {
 
 					const percentage = !!checklist ? parseInt((checklistsSystem[name].items.length / checklistCount) * 100) : 0
 
-					return this.renderPanel(name, percentage, i)
+					return this.renderPanelLink(name, percentage, i)
 				})}
 			</React.Fragment>
 		)
@@ -187,7 +208,10 @@ class ChecklistsSystem extends React.Component {
 			<div className={classes.content}>
 				<Typography className={classes.label} variant="subtitle1">Checklists Total</Typography>
 
-				{this.renderPanel('Total done', totalDonePercentage)}
+				<Paper className={classes.panel}>
+					<Typography className={classes.panelTitle} variant="h6">Total done</Typography>
+					<Typography className={classes.panelPercentage} variant="h6">{totalDonePercentage}%</Typography>
+				</Paper>
 
 				<Typography className={classes.label} variant="subtitle1">Favourites</Typography>
 
