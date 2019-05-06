@@ -14,6 +14,7 @@ import FormControl from '@material-ui/core/FormControl'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormLabel from '@material-ui/core/FormLabel'
 import Fab from '@material-ui/core/Fab'
+import DeleteIcon from '@material-ui/icons/Delete'
 
 import yellow from '@material-ui/core/colors/yellow'
 
@@ -28,7 +29,7 @@ import LessonCardTile from '../../components/lessons/LessonCardTile'
 import { contentStyles } from '../../utils/view'
 
 import { getLessonChecklist, unsetLessonChecklist } from '../../store/actions/lessons'
-import { getChecklistsSystem, updateChecklistsSystem, toggleChecklistFavorite } from '../../store/actions/checklists'
+import { getChecklistsSystem, updateChecklistsSystem, deleteChecklistSystem, toggleChecklistFavorite } from '../../store/actions/checklists'
 import { setAppbarTitle } from '../../store/actions/view'
 
 const styles = theme => ({
@@ -106,6 +107,9 @@ const styles = theme => ({
 	checklistCardIconsWrapper: {
 		display: 'inline-block',
 	},
+	checklistCardDeleteIcon: {
+		color: theme.palette.common.white,
+	},
 	checklistCardContent: {
 		padding: '1rem',
 	},
@@ -168,7 +172,13 @@ class LessonsLevel extends React.Component {
 
 		dispatch(updateChecklistsSystem(itemName, category, level))
 	}
-	
+
+	deleteChecklist = title => () => {
+		if (confirm('Are you sure you want to delete this checklist?')) {
+			this.props.dispatch(deleteChecklistSystem(title))
+		}
+	}
+
 	onChecklistFavoriteToggle = checklist => () => {
 		const { dispatch, router } = this.props
 		const { category, level } = router.query
@@ -203,6 +213,14 @@ class LessonsLevel extends React.Component {
 				<CardContent className={classes.checklistCardHead}>
 					<Typography className={classes.checklistCardTitle}>Checklist</Typography>
 					<div className={classes.checklist}>
+						{!!savedChecklist && <Button 
+							size="small" 
+							className={classes.checklistCardDeleteIcon} 
+							aria-haspopup="true"
+							onClick={this.deleteChecklist(listKey)}
+						>
+							<DeleteIcon />
+						</Button>}
 						<FavoriteShareIcons
 							url={`${process.env.ROOT}/lessons/${router.query.category}/${router.query.level}`}
 							isLight
