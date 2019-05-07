@@ -132,7 +132,7 @@ class LessonsLevel extends React.Component {
 		checklist: null,
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		const { router, dispatch, content, locale } = this.props
 
 		const paths = router.query.category.split('.').concat([router.query.level])

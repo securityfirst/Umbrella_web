@@ -23,7 +23,7 @@ export const syncDb = () => async (dispatch, getState) => {
 		const hash = await ClientDB.default.get('h')
 		const password = await Account.default.password()
 
-		if (!enabled || !hash || !password) return await dispatch(fulfilled(dbTypes.SYNC_DB))
+		if (!enabled || !hash || !password) return await dispatch(rejected(dbTypes.SYNC_DB, 'DB sync failed to authenticate'))
 
 		try {
 			let feedLocation = await ClientDB.default.get('fe_l', password, true)
@@ -73,7 +73,7 @@ export const syncDb = () => async (dispatch, getState) => {
 
 			if (Object.keys(lessonsMerge).length) {
 				await dispatch({
-					type: lessonsTypes.SYNC_CHECKLISTS, 
+					type: lessonsTypes.SYNC_LESSONS, 
 					payload: merge(state.lessons, lessonsMerge)
 				})
 			}
