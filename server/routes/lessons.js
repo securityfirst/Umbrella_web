@@ -12,9 +12,7 @@ exports.favorites = (app) => (req, res) => {
 
 exports.glossary = (app) => (req, res) => {
 	const actualPage = '/lessons/glossary'
-	return renderAndCache(app, req, res, actualPage, {
-		index: req.params.index,
-	})
+	return renderAndCache(app, req, res, actualPage)
 }
 
 exports.card = (app) => (req, res) => {

@@ -76,7 +76,7 @@ app.prepare().then(() => {
 	server.get('/checklists', checklists.index(app))
 	server.get('/lessons', lessons.index(app))
 	server.get('/lessons/favorites', lessons.favorites(app))
-	server.get('/lessons/glossary/:index', lessons.glossary(app))
+	server.get('/lessons/glossary', lessons.glossary(app))
 	server.get('/lessons/cards/:sha', lessons.card(app))
 	server.get('/lessons/:category', lessons.category(app))
 	server.get('/lessons/:category/:level', lessons.level(app))

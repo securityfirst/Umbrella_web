@@ -1,5 +1,4 @@
 import React from 'react'
-import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -40,20 +39,14 @@ const styles = theme => ({
 
 class LessonsGlossary extends React.Component {
 	static async getInitialProps({reduxStore, query}) {
-		await reduxStore.dispatch(setAppbarTitle(`Lessons / Glossary / ${query.index}`))
+		await reduxStore.dispatch(setAppbarTitle(`Lessons / Glossary`))
 	}
 
 	render() {
-		const { router, classes, content, locale } = this.props
-
-		const range = router.query.index.toLowerCase().split('-')
+		const { classes, content, locale } = this.props
 
 		const files = content[locale].glossary.content.reduce((acc, c) => {
-			if (
-				c.filename.indexOf('s_') === 0 && // if it's a file
-				c.filename[2] >= range[0] && // if it's within glossary range
-				c.filename[2] <= range[1] // if it's within glossary range
-			) {
+			if (c.filename.indexOf('s_') === 0) {  // if it's a file
 				acc.push({
 					name: c.filename,
 					sha: c.sha,
@@ -90,4 +83,4 @@ const mapStateToProps = state => ({
 	...state.view,
 })
 
-export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true})(LessonsGlossary)))
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true})(LessonsGlossary))

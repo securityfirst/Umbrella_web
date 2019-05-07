@@ -26,8 +26,6 @@ import { getLessonCardsFavorites } from '../../store/actions/lessons'
 
 const menuWidth = 300
 
-const glossaryIndex = ['A-D', 'E-H', 'I-L', 'M-P', 'Q-T', 'U-Z']
-
 const styles = theme => ({
 	...contentStyles(theme),
 	menuList: {
@@ -76,9 +74,7 @@ class LessonsMenu extends React.Component {
 	state = {
 		categorySelected: !!this.props.router.query && !!this.props.router.query.category 
 			? this.props.router.query.category.split('.')[0] 
-			: (!!this.props.router.pathname && this.props.router.pathname.indexOf('/glossary') > -1)
-				? 'glossary'
-				: null,
+			: this.props.router.pathname,
 		lessonSelected: null,
 	}
 
@@ -86,7 +82,7 @@ class LessonsMenu extends React.Component {
 		const { router, dispatch, content, locale } = this.props
 		const keys = Object.keys(content[locale][category])
 
-		if (category !== 'glossary' && keys.length === 1 && keys[0] === 'content') {
+		if (keys.length === 1 && keys[0] === 'content') {
 			const file = content[locale][category].content.find(file => file.filename.indexOf('.md') > -1)
 
 			Router.push(`/lessons/cards/${file.sha}`)
@@ -94,28 +90,6 @@ class LessonsMenu extends React.Component {
 			if (category == this.state.categorySelected) this.setState({categorySelected: null})
 			else this.setState({categorySelected: category})
 		}
-	}
-
-	renderMenuGlossary = isSelected => {
-		const { classes } = this.props
-
-		return (
-			<Collapse in={isSelected} timeout="auto" unmountOnExit>
-				<List component="div" disablePadding>
-					{glossaryIndex.map((index, i) => (
-						<Link key={i} href={`/lessons/glossary/${index}`}>
-							<ListItem button className={classes.menuListSubItem}>
-								<ListItemText 
-									className={classes.menuListItemText} 
-									primary={index}
-									inset 
-								/>
-							</ListItem>
-						</Link>
-					))}
-				</List>
-			</Collapse>
-		)
 	}
 
 	renderMenuSubcategories = (subcategories, isSelected) => {
@@ -148,7 +122,6 @@ class LessonsMenu extends React.Component {
 		if (category == 'content' || category == 'forms') return null
 
 		const isSelected = categorySelected == category
-		const isGlossary = category === 'glossary'
 		const subcategories = Object.keys(content[locale][category]).filter(subcategory => subcategory != 'content')
 
 		return (
@@ -162,18 +135,13 @@ class LessonsMenu extends React.Component {
 					</ListItemIcon>
 					<ListItemText className={classes.menuListItemText} inset primary={category.replace(/-/g, ' ')} />
 
-					{(isGlossary || !!subcategories.length)
+					{!!subcategories.length
 						? isSelected ? <ExpandLess /> : <ExpandMore />
 						: null
 					}
 				</ListItem>
 
-				{isGlossary 
-					? this.renderMenuGlossary(isSelected)
-					: !!subcategories.length
-						? this.renderMenuSubcategories(subcategories, isSelected)
-						: null
-				}
+				{!!subcategories.length && this.renderMenuSubcategories(subcategories, isSelected)}
 			</div>
 		)
 	}
@@ -205,7 +173,22 @@ class LessonsMenu extends React.Component {
 					</Link>
 				</div>
 
-				{Object.keys(content[locale]).map(this.renderMenuCategory)}
+				{Object.keys(content[locale]).filter(category => category !== 'glossary').map(this.renderMenuCategory)}
+
+				{/* Glossary menu item */}
+				<div className={categorySelected == "glossary" ? classes.menuListItemSelected : ''}>
+					<Link href="/lessons/glossary">
+						<ListItem button>
+							<ListItemIcon className={classes.menuListItemIcon}>
+								<img 
+									className={classes.menuListItemIconImg} 
+									src={`/static/assets/content/${locale}/glossary/glossary.png`} 
+								/>
+							</ListItemIcon>
+							<ListItemText className={classes.menuListItemText} inset primary="Glossary" />
+						</ListItem>
+					</Link>
+				</div>
 			</List>
 		)
 	}
