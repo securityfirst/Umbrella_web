@@ -34,6 +34,7 @@ const styles = theme => ({
 		marginTop: 0,
 		lineHeight: '1.5rem',
 		overflow: 'visible',
+		'-webkit-overflow-scrolling': 'touch',
 	},
 })
 

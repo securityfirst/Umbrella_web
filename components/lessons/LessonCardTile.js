@@ -80,7 +80,7 @@ class LessonCardTile extends React.Component {
 		const isFavoriteAdded = !!lessonCardsFavorites.find(item => item.name === file.name)
 
 		return (
-			<Card className={classes.card}>
+			<Card key={index} className={classes.card}>
 				<Link href={`/lessons/${category}/${level}/${file.sha}`}>
 					<CardActionArea>
 						<CardContent className={classNames(classes.cardHead, classes[level] || 'advanced')}>

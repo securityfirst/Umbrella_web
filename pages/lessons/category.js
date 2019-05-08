@@ -25,9 +25,7 @@ import { getLessonCardsFavorites } from '../../store/actions/lessons'
 const levelsOrder = ['beginner', 'advanced', 'expert']
 
 const styles = theme => ({
-	...contentStyles(theme, {
-		width: '100%',
-	}),
+	...contentStyles(theme),
 	wrapper: {
 		position: 'relative',
 		display: 'flex',

@@ -39,6 +39,7 @@ const styles = theme => ({
 			duration: theme.transitions.duration.leavingScreen * 5,
 		}),
 		overflow: 'scroll',
+		'-webkit-overflow-scrolling': 'touch',
 	},
 	menuListOpened: {
 		width: menuWidth,

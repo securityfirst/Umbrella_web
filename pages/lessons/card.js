@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import MoreIcon from '@material-ui/icons/MoreVert'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline'
 import DoneAllIcon from '@material-ui/icons/DoneAll'
@@ -30,16 +31,10 @@ import { contentStyles, paperStyles } from '../../utils/view'
 import { setAppbarTitle } from '../../store/actions/view'
 import { getLessonFile } from '../../store/actions/lessons'
 
-import { getNameFromFilename } from '../../utils/github'
+import { decodeBlob, getNameFromFilename } from '../../utils/github'
 
 const styles = theme => ({
-	...contentStyles(theme, {
-		width: '100%',
-		[theme.breakpoints.up('sm')]: {
-			maxHeight: 'calc(100vh - 48px)',
-			overflow: 'scroll',
-		}
-	}),
+	...contentStyles(theme),
 	wrapper: {
 		position: 'relative',
 		display: 'flex',
@@ -70,9 +65,6 @@ class LessonCard extends React.Component {
 		await reduxStore.dispatch(setAppbarTitle(`Lesson Card`))
 	}
 
-	static async getInitialProps({reduxStore, query}) {
-	}
-
 	state = {
 		anchorEl: null,
 	}
@@ -99,6 +91,7 @@ class LessonCard extends React.Component {
 		const lessons = content[locale][cat][subcat][level].content.filter(l => l.filename.indexOf('s_') === 0)
 		const lessonIndex = lessons.findIndex(l => l.sha === sha)
 		const isLast = lessonIndex === lessons.length - 1
+		const isFirst = lessonIndex === 0
 
 		return (
 			<AppBar position="static">
@@ -139,22 +132,33 @@ class LessonCard extends React.Component {
 						</Menu>
 					</div>
 
-					<div className={classes.grow}>
-						{isLast
-							? <Link href={`/lessons/${category}/${level}`}>
+					
+					{isLast
+						? <div className={classes.grow}>
+							<Link href={`/lessons/${category}/${level}`}>
 								<Button color="inherit">
 									Finish
 									<DoneOutlineIcon className={classes.buttonRightIcon} />
 								</Button>
 							</Link>
-							: <Link href={`/lessons/${category}/${level}/${lessons[lessonIndex + 1].sha}`}>
+						</div>
+						: <div className={classes.grow}>
+							{!isFirst &&
+								<Link href={`/lessons/${category}/${level}/${lessons[lessonIndex - 1].sha}`}>
+									<Button color="inherit">
+										<ChevronLeftIcon className={classes.buttonLeftIcon} />
+										Prev
+									</Button>
+								</Link>
+							}
+							<Link href={`/lessons/${category}/${level}/${lessons[lessonIndex + 1].sha}`}>
 								<Button color="inherit">
 									Next
 									<ChevronRightIcon className={classes.buttonRightIcon} />
 								</Button>
 							</Link>
-						}
-					</div>
+						</div>
+					}
 
 					<Link href={`/lessons/${category}/${level}`}>
 						<IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
@@ -171,7 +175,7 @@ class LessonCard extends React.Component {
 
 		if (getLessonFileLoading) return <Loading />
 		else if (getLessonFileError) return <ErrorMessage error={getLessonFileError} />
-		return <Marked content={atob(currentLessonFile)} />
+		return <Marked content={decodeBlob(currentLessonFile)} />
 	}
 
 	render() {
