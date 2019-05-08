@@ -131,7 +131,6 @@ class LessonCard extends React.Component {
 							))}
 						</Menu>
 					</div>
-
 					
 					{isLast
 						? <div className={classes.grow}>

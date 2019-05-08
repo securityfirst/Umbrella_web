@@ -47,13 +47,13 @@ const styles = theme => ({
 			justifyContent: 'space-between',
 		},
 	},
-	beginner: {
+	color0: {
 		backgroundColor: theme.palette.secondary.main,
 	},
-	advanced: {
+	color1: {
 		backgroundColor: yellow[700],
 	},
-	expert: {
+	color2: {
 		backgroundColor: theme.palette.primary.main,
 	},
 })
@@ -83,7 +83,8 @@ class LessonCardTile extends React.Component {
 			<Card key={index} className={classes.card}>
 				<Link href={`/lessons/${category}/${level}/${file.sha}`}>
 					<CardActionArea>
-						<CardContent className={classNames(classes.cardHead, classes[level] || 'advanced')}>
+						{/* Alternate color in threes */}
+						<CardContent className={classNames(classes.cardHead, classes['color' + (index % 3).toString()])}>
 							{!isNaN(index) && <Typography className={classes.cardTitle}>{index+1}</Typography>}
 							<Typography className={classes.cardTitle}>{title}</Typography>
 						</CardContent>
