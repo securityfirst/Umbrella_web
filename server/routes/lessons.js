@@ -12,16 +12,7 @@ exports.favorites = (app) => (req, res) => {
 
 exports.glossary = (app) => (req, res) => {
 	const actualPage = '/lessons/glossary'
-	return renderAndCache(app, req, res, actualPage, {
-		index: req.params.index,
-	})
-}
-
-exports.card = (app) => (req, res) => {
-	const actualPage = '/lessons/card'
-	return renderAndCache(app, req, res, actualPage, {
-		sha: req.params.sha,
-	})
+	return renderAndCache(app, req, res, actualPage)
 }
 
 exports.category = (app) => (req, res) => {
@@ -36,5 +27,14 @@ exports.level = (app) => (req, res) => {
 	return renderAndCache(app, req, res, actualPage, {
 		category: req.params.category,
 		level: req.params.level,
+	})
+}
+
+exports.card = (app) => (req, res) => {
+	const actualPage = '/lessons/card'
+	return renderAndCache(app, req, res, actualPage, {
+		category: req.params.category,
+		level: req.params.level,
+		sha: req.params.sha,
 	})
 }

@@ -7,3 +7,7 @@ export const decodeBlob = content => {
 		return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
 	}).join(''))
 }
+
+export const getNameFromFilename = filename => {
+	return !!filename ? filename.slice(2).replace(/\.md/, '').replace(/-/g, ' ') : ''
+}

@@ -17,6 +17,8 @@ import FavoriteShareIcons from '../common/FavoriteShareIcons'
 
 import { getLessonFile, addLessonCardFavorite, removeLessonCardFavorite } from '../../store/actions/lessons'
 
+import { getNameFromFilename } from '../../utils/github'
+
 const styles = theme => ({
 	card: {
 		margin: '1rem 0',
@@ -72,14 +74,14 @@ class LessonCardTile extends React.Component {
 	}
 
 	render() {
-		const { router, classes, lessonCardsFavorites, index, file, level, isFavorited } = this.props
+		const { router, classes, lessonCardsFavorites, index, file, category, level, isFavorited } = this.props
 
-		const title = file.name.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
+		const title = getNameFromFilename(file.name)
 		const isFavoriteAdded = !!lessonCardsFavorites.find(item => item.name === file.name)
 
 		return (
 			<Card className={classes.card}>
-				<Link href={`/lessons/cards/${file.sha}`}>
+				<Link href={`/lessons/${category}/${level}/${file.sha}`}>
 					<CardActionArea>
 						<CardContent className={classNames(classes.cardHead, classes[level] || 'advanced')}>
 							{!isNaN(index) && <Typography className={classes.cardTitle}>{index+1}</Typography>}
