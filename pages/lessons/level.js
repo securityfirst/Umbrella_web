@@ -276,6 +276,7 @@ class LessonsLevel extends React.Component {
 									key={i} 
 									index={i} 
 									file={file} 
+									category={router.query.category}
 									level={router.query.level}
 								/>
 							))}

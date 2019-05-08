@@ -85,7 +85,7 @@ class LessonsMenu extends React.Component {
 		if (keys.length === 1 && keys[0] === 'content') {
 			const file = content[locale][category].content.find(file => file.filename.indexOf('.md') > -1)
 
-			Router.push(`/lessons/cards/${file.sha}`)
+			Router.push(`/lessons/default/default/${file.sha}`)
 		} else {
 			if (category == this.state.categorySelected) this.setState({categorySelected: null})
 			else this.setState({categorySelected: category})

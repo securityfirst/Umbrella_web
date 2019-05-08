@@ -77,9 +77,9 @@ app.prepare().then(() => {
 	server.get('/lessons', lessons.index(app))
 	server.get('/lessons/favorites', lessons.favorites(app))
 	server.get('/lessons/glossary', lessons.glossary(app))
-	server.get('/lessons/cards/:sha', lessons.card(app))
 	server.get('/lessons/:category', lessons.category(app))
 	server.get('/lessons/:category/:level', lessons.level(app))
+	server.get('/lessons/:category/:level/:sha', lessons.card(app))
 	
 	// Next.js routes that don't require backend routes
 	server.get('*', (req, res) => {
