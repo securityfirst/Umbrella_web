@@ -12,9 +12,7 @@ import LessonsMenu from '../../components/lessons/LessonsMenu'
 import { contentStyles, paperStyles } from '../../utils/view'
 
 const styles = theme => ({
-	...contentStyles(theme, {
-		width: '100%',
-	}),
+	...contentStyles(theme),
 	wrapper: {
 		position: 'relative',
 		display: 'flex',

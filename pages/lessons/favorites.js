@@ -18,13 +18,7 @@ import { setAppbarTitle } from '../../store/actions/view'
 import { getLessonCardsFavorites } from '../../store/actions/lessons'
 
 const styles = theme => ({
-	...contentStyles(theme, {
-		width: '100%',
-		[theme.breakpoints.up('sm')]: {
-			maxHeight: 'calc(100vh - 48px)',
-			overflow: 'scroll',
-		}
-	}),
+	...contentStyles(theme),
 	wrapper: {
 		position: 'relative',
 		display: 'flex',

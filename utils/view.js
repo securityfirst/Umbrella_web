@@ -1,10 +1,14 @@
 export const contentStyles = (theme, options = {}) => ({
 	content: {
+		width: '100%',
 		maxWidth: '50rem',
 		margin: '0 auto',
 		padding: '1rem',
 		[theme.breakpoints.up('sm')]: {
 			padding: '2rem',
+			maxHeight: 'calc(100vh - 48px)',
+			overflow: 'scroll',
+			'-webkit-overflow-scrolling': 'touch',
 		},
 		...options
 	},
