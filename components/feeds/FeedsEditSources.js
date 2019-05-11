@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -30,12 +31,11 @@ const styles = theme => ({
 })
 
 const sources = [
-	{name: 'ReliefWeb', value: 'relief_web'},
-	{name: 'UN', value: 'un'},
-	{name: 'FCO', value: 'fco'},
-	{name: 'CDC', value: 'cdc'},
-	{name: 'Global Disaster and Alert Coordination System', value: 'global_disaster'},
-	{name: 'US State Department Country Warnings', value: 'us_state_department'},
+	{name: 'ReliefWeb / United Nations', value: '0,2'},
+	{name: 'United Kingdom Foreign and Commonwealth Office', value: '1'},
+	{name: 'Centres for Disease Control', value: '3'},
+	{name: 'Global Disaster Alert Coordination System', value: '4'},
+	{name: 'US State Department Country Warnings', value: '5'},
 ]
 
 class FeedsEditSources extends React.Component {
@@ -43,6 +43,10 @@ class FeedsEditSources extends React.Component {
 		sourcesSelected: [],
 		error: null,
 		errorMessage: null,
+	}
+
+	componentDidMount() {
+		this.setState({sourcesSelected: this.props.feedSources})
 	}
 
 	handleSelect = (sourceValue) => () => {
@@ -107,4 +111,8 @@ class FeedsEditSources extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEditSources)
+const mapStateToProps = state => ({
+	...state.feeds,
+})
+
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(FeedsEditSources))

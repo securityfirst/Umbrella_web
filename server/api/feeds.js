@@ -12,6 +12,7 @@ router.post('/', (req, res) => {
 
 		if (
 			!location || 
+			!(typeof location === 'string') || 
 			!sources || 
 			!(sources instanceof Array) ||
 			!sources.length
@@ -21,21 +22,24 @@ router.post('/', (req, res) => {
 			return res.status(400).end()
 		}
 
-		let data = []
+		let since = new Date()
+		since = since.valueOf() - 2592000000 // 30 days ago
 
-		fetch(`${process.env.API_HOST}v3/feed?country=${location}&sources=0`)
+		fetch(`${process.env.API_HOST}v3/feed?since=${since}&country=${location}&sources=${sources.join(',')}`)
 			.then(resp => {
 				if (!resp.ok) {
-					console.error('[API] /feeds error: ', resp)
+					console.error('[API] /feeds response error: ', resp)
 					res.statusMessage = 'Failed to retrieve feeds'
 					return res.status(500).end()
 				}
 
 				return resp.json()
 			})
-			.then(data => res.status(200).send(data))
+			.then(data => {
+				return res.status(200).send(data)
+			})
 			.catch(err => {
-				console.error('[API] /feeds error: ', err)
+				console.error('[API] /feeds catch error: ', JSON.stringify(err))
 				res.statusMessage = 'Failed to retrieve feeds'
 				return res.status(500).end()
 			})
