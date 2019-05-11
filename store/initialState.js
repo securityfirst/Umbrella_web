@@ -26,9 +26,12 @@ const feeds = {
 	getRssError: null,
 	rss: [],
 	rssSources: [
+		'http://feeds.bbci.co.uk/news/world/rss.xml',
+		'https://www.aljazeera.com/xml/rss/all.xml',
 		'https://threatpost.com/feed/',
 		'https://krebsonsecurity.com/feed/',
-		'https://www.aljazeera.com/xml/rss/all.xml',
+		'https://nakedsecurity.sophos.com/feed/',
+		'http://rss.cnn.com/rss/cnn_world.rss',
 		'https://www.theguardian.com/world/rss',
 	],
 }

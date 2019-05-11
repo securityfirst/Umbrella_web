@@ -96,7 +96,7 @@ class FeedsRss extends React.Component {
 						<Typography className={classes.cardDescription} paragraph>{source.description}</Typography>
 					</CardContent>
 				</CardActionArea>
-				{i > 3 && <CardContent className={classes.cardRemoveWrapper}>
+				{i > 6 && <CardContent className={classes.cardRemoveWrapper}>
 					<Button component="button" size="small" onClick={this.handleSourceRemove(i)}>Remove</Button>
 				</CardContent>}
 			</Card>
