@@ -1,5 +1,4 @@
 import React from 'react'
-import atob from 'atob'
 import Link from 'next/link'
 import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
@@ -78,8 +77,8 @@ class LessonCard extends React.Component {
 	}
 
 	renderNavigation = () => {
-		const { classes, content, locale, router } = this.props
-		const { category, level, sha } = router.query
+		const { router, classes, content } = this.props
+		const { locale, category, level, sha } = router.query
 		const { anchorEl } = this.state
 
 		const cats = category.split('.')
@@ -120,7 +119,7 @@ class LessonCard extends React.Component {
 							onClose={this.handleClose}
 						>
 							{lessons.map((lesson, i) => (
-								<Link key={i} href={`/lessons/${category}/${level}/${lesson.sha}`}>
+								<Link key={i} href={`/lessons/${locale}/${category}/${level}/${lesson.sha}`}>
 									<MenuItem 
 										className={classes.menuItem}
 										onClick={this.handleClose}
@@ -134,7 +133,7 @@ class LessonCard extends React.Component {
 					
 					{isLast
 						? <div className={classes.grow}>
-							<Link href={`/lessons/${category}/${level}`}>
+							<Link href={`/lessons/${locale}/${category}/${level}`}>
 								<Button color="inherit">
 									Finish
 									<DoneOutlineIcon className={classes.buttonRightIcon} />
@@ -143,14 +142,14 @@ class LessonCard extends React.Component {
 						</div>
 						: <div className={classes.grow}>
 							{!isFirst &&
-								<Link href={`/lessons/${category}/${level}/${lessons[lessonIndex - 1].sha}`}>
+								<Link href={`/lessons/${locale}/${category}/${level}/${lessons[lessonIndex - 1].sha}`}>
 									<Button color="inherit">
 										<ChevronLeftIcon className={classes.buttonLeftIcon} />
 										Prev
 									</Button>
 								</Link>
 							}
-							<Link href={`/lessons/${category}/${level}/${lessons[lessonIndex + 1].sha}`}>
+							<Link href={`/lessons/${locale}/${category}/${level}/${lessons[lessonIndex + 1].sha}`}>
 								<Button color="inherit">
 									Next
 									<ChevronRightIcon className={classes.buttonRightIcon} />
@@ -159,7 +158,7 @@ class LessonCard extends React.Component {
 						</div>
 					}
 
-					<Link href={`/lessons/${category}/${level}`}>
+					<Link href={`/lessons/${locale}/${category}/${level}`}>
 						<IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
 							<DoneAllIcon />
 						</IconButton>

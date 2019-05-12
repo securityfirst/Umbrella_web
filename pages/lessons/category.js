@@ -80,8 +80,8 @@ class LessonsCategory extends React.Component {
 	}
 
 	render() {
-		const { router, classes, content, locale } = this.props
-		const { category } = router.query
+		const { router, classes, content } = this.props
+		const { locale, category } = router.query
 
 		let levels = get(content, `${locale}.${category}`)
 
@@ -105,7 +105,7 @@ class LessonsCategory extends React.Component {
 							if (level === 'content') return null
 
 							return (
-								<Link key={i} href={`/lessons/${category}/${level}`}>
+								<Link key={i} href={`/lessons/${locale}/${category}/${level}`}>
 									<Button
 										className={classNames(classes.panel, classes[level])}
 										classes={{label: classes.panelTitle}}

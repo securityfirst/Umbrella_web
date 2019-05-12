@@ -22,6 +22,7 @@ import teal from '@material-ui/core/colors/teal'
 import yellow from '@material-ui/core/colors/yellow'
 
 import { download } from '../../utils/dom'
+import { decodeBlob } from '../../utils/github'
 
 const styles = theme => ({
 	cardActionIcon: {
@@ -60,7 +61,7 @@ class FavoriteShareIcon extends React.Component {
 				return res.text()
 			})
 			.then(content => {
-				download(name, marked(atob(content)))
+				download(name, marked(decodeBlob(content)))
 			})
 			.catch(err => {
 				console.error('FavoriteShareIcons handleDownload error: ', err)

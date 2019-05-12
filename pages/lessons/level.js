@@ -26,11 +26,12 @@ import FavoriteShareIcons from '../../components/common/FavoriteShareIcons'
 import LessonsMenu from '../../components/lessons/LessonsMenu'
 import LessonCardTile from '../../components/lessons/LessonCardTile'
 
-import { contentStyles } from '../../utils/view'
-
 import { getLessonChecklist, unsetLessonChecklist } from '../../store/actions/lessons'
 import { getChecklistsSystem, updateChecklistsSystem, deleteChecklistSystem, toggleChecklistFavorite } from '../../store/actions/checklists'
 import { setAppbarTitle } from '../../store/actions/view'
+
+import { contentStyles } from '../../utils/view'
+import { decodeBlob } from '../../utils/github'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -127,11 +128,12 @@ class LessonsLevel extends React.Component {
 	}
 
 	componentDidMount() {
-		const { router, dispatch, content, locale } = this.props
+		const { router, dispatch, content } = this.props
+		const { locale, category, level } = router.query
 
-		const paths = router.query.category.split('.').concat([router.query.level])
+		const paths = category.split('.').concat([level])
 
-		const lesson = get(content, `${locale}.${router.query.category}.${router.query.level}`)
+		const lesson = get(content, `${locale}.${category}.${level}`)
 
 		const files = lesson.content.reduce((list, c) => {
 			if (c.filename.indexOf('s_') === 0) {
@@ -192,12 +194,14 @@ class LessonsLevel extends React.Component {
 			checklistsSystem, 
 		} = this.props
 
+		const { locale, category, level } = router.query
+
 		if (getLessonChecklistLoading || getChecklistsSystemLoading) return <Loading />
 		else if (getLessonChecklistError || getChecklistsSystemError) return <ErrorMessage error={getLessonChecklistError || getChecklistsSystemError} />
 		else if (!currentLessonChecklist) return null
 		else if (!checklistsSystem) return null
 
-		const checklist = YAML.parse(atob(currentLessonChecklist))
+		const checklist = YAML.parse(decodeBlob(currentLessonChecklist))
 		const listKey = this.getChecklistKey()
 		const savedChecklist = checklistsSystem[listKey]
 		const isFavorited = !!savedChecklist && savedChecklist.isFavorited
@@ -216,7 +220,7 @@ class LessonsLevel extends React.Component {
 							<DeleteIcon />
 						</Button>}
 						<FavoriteShareIcons
-							url={`${process.env.ROOT}/lessons/${router.query.category}/${router.query.level}`}
+							url={`${process.env.ROOT}/lessons/${locale}/${category}/${level}`}
 							isLight
 							isFavoriteAdded={isFavorited}
 							onFavoriteToggle={this.onChecklistFavoriteToggle(checklist)}
@@ -256,6 +260,7 @@ class LessonsLevel extends React.Component {
 
 	render() {
 		const { router, classes } = this.props
+		const { locale, category, level } = router.query
 		const { files } = this.state
 
 		return (
@@ -270,8 +275,9 @@ class LessonsLevel extends React.Component {
 									key={i} 
 									index={i} 
 									file={file} 
-									category={router.query.category}
-									level={router.query.level}
+									locale={locale}
+									category={category}
+									level={level}
 								/>
 							))}
 

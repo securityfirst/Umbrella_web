@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -37,7 +38,8 @@ class LessonsGlossary extends React.Component {
 	}
 
 	render() {
-		const { classes, content, locale } = this.props
+		const { classes, router, content } = this.props
+		const { locale } = router.query
 
 		const files = content[locale].glossary.content.reduce((acc, c) => {
 			if (c.filename.indexOf('s_') === 0) {  // if it's a file
@@ -62,6 +64,7 @@ class LessonsGlossary extends React.Component {
 									key={i} 
 									index={i} 
 									file={file} 
+									locale={locale}
 								/>
 							))}
 						</div>
@@ -77,4 +80,4 @@ const mapStateToProps = state => ({
 	...state.view,
 })
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true})(LessonsGlossary))
+export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true})(LessonsGlossary)))
