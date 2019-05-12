@@ -47,13 +47,9 @@ class FavoriteShareIcon extends React.Component {
 		tooltipOpen: false,
 	}
 
-	handleClick = event => {
-		this.setState({ anchorEl: event.currentTarget })
-	}
+	handleClick = e => this.setState({ anchorEl: e.currentTarget })
 
-	handleClose = () => {
-		this.setState({ anchorEl: null })
-	}
+	handleClose = () => this.setState({ anchorEl: null })
 
 	handleDownload = () => {
 		const { name, sha } = this.props

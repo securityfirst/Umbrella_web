@@ -26,11 +26,28 @@ export default function reducer(state = initialState, action) {
 			}
 
 		/* SET_LOCALE */
-		case viewTypes.SET_LOCALE:
+		case pending(viewTypes.SET_LOCALE):
 			return {
 				...state,
+				setLocaleLoading: true,
+				setLocaleError: null,
+			}
+		case rejected(viewTypes.SET_LOCALE):
+			return {
+				...state,
+				setLocaleLoading: false,
+				setLocaleError: action.payload,
+			}
+		case fulfilled(viewTypes.SET_LOCALE):
+			return {
+				...state,
+				setLocaleLoading: false,
+				setLocaleError: null,
 				locale: action.payload,
 			}
+
+		/* SYNC_VIEW */
+		case viewTypes.SYNC_VIEW: return action.payload
 	}
 
 	return state

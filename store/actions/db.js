@@ -1,7 +1,7 @@
 import merge from 'lodash.merge'
 import Crypto from '../../utils/crypto'
 
-import { accountTypes, feedsTypes, formsTypes, checklistsTypes, lessonsTypes, dbTypes } from '../types.js'
+import { accountTypes, feedsTypes, formsTypes, checklistsTypes, lessonsTypes, viewTypes, dbTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
 import { clearPassword } from './account'
@@ -26,6 +26,7 @@ export const syncDb = () => async (dispatch, getState) => {
 		if (!enabled || !hash || !password) return await dispatch(rejected(dbTypes.SYNC_DB, 'DB sync failed to authenticate'))
 
 		try {
+			let locale = await ClientDB.default.get('locale')
 			let feedLocation = await ClientDB.default.get('fe_l', password, true)
 			let feedSources = await ClientDB.default.get('fe_s', password, true)
 			let rssSources = await ClientDB.default.get('rs_s', password, true)
@@ -34,10 +35,13 @@ export const syncDb = () => async (dispatch, getState) => {
 			let checklistsCustom = await ClientDB.default.get('ch_c', password, true)
 			let lessonCardsFavorites = await ClientDB.default.get('le_f', password, true)
 
+			let viewMerge = {}
 			let feedsMerge = {}
 			let formsMerge = {}
 			let checklistsMerge = {}
 			let lessonsMerge = {}
+
+			if (locale) viewMerge.locale = locale
 
 			if (feedLocation) feedsMerge.feedLocation = feedLocation
 			if (feedSources) feedsMerge.feedSources = feedSources
@@ -49,6 +53,13 @@ export const syncDb = () => async (dispatch, getState) => {
 			if (checklistsCustom) checklistsMerge.checklistsCustom = checklistsCustom
 
 			if (lessonCardsFavorites) lessonsMerge.lessonCardsFavorites = lessonCardsFavorites
+
+			if (Object.keys(viewMerge).length) {
+				await dispatch({
+					type: viewTypes.SYNC_VIEW, 
+					payload: merge(state.view, viewMerge)
+				})
+			}
 
 			if (Object.keys(feedsMerge).length) {
 				await dispatch({

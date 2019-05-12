@@ -11,6 +11,11 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import Divider from '@material-ui/core/Divider'
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
 import Layout from '../components/layout'
 import Loading from '../components/common/Loading'
@@ -19,8 +24,18 @@ import FormControlInput from '../components/common/FormControlInput'
 
 import { contentStyles, buttonWrapperStyles } from '../utils/view'
 
-import { checkPassword, savePassword } from '../store/actions/account'
 import { clearDb } from '../store/actions/db'
+import { setLocale } from '../store/actions/view'
+import { checkPassword, savePassword } from '../store/actions/account'
+
+const localeMap = {
+	'en': 'English',
+	'es': 'Spanish',
+	'ar': 'Arabic',
+	'fa': 'Persian',
+	'ru': 'Russian',
+	'zh-Hant': 'Chinese - Traditional',
+}
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -31,12 +46,27 @@ const styles = theme => ({
 	settingsRow: {
 		display: 'flex',
 		alignItems: 'center',
+		margin: '1.5rem 0',
 	},
 	settingsColumnLeft: {
 		width: '40%',
 	},
 	settingsColumnRight: {
 		width: '60%',
+	},
+	settingsLocale: {
+		display: 'flex',
+		alignItems: 'center',
+		marginBottom: '.5rem',
+		paddingLeft: '1rem',
+	},
+	settingsLocaleIcon: {
+		display: 'inline-block',
+		width: '2rem',
+		marginRight: '1rem',
+	},
+	settingsLocaleMenuIcon: {
+		alignItems: 'center',
 	},
 	description: {
 		marginBottom: '2rem',
@@ -62,6 +92,7 @@ const styles = theme => ({
 class Account extends React.Component {
 	state = {
 		expanded: 0,
+		localeMenuAnchorEl: null,
 		password: '',
 		passwordConfirm: '',
 		passwordError: null,
@@ -80,12 +111,23 @@ class Account extends React.Component {
 		}
 	}
 
-	clearDb = () => {
-		this.props.dispatch(clearDb())
-	}
-
 	handlePanelToggle = i => (e, expanded) => {
 		this.setState({expanded: expanded ? i : false})
+	}
+
+	clearDb = () => {
+		if (confirm('Are you sure you want to delete your cache? It will remove all data, including your password.')) {
+			this.props.dispatch(clearDb())
+		}
+	}
+
+	handleLocaleMenuOpen = e => this.setState({ anchorEl: e.currentTarget })
+
+	handleLocaleMenuClose = () => this.setState({ anchorEl: null })
+
+	setLocale = locale => () => {
+		this.props.dispatch(setLocale(locale))
+		this.handleLocaleMenuClose()
 	}
 
 	handlePasswordChange = type => e => {
@@ -215,10 +257,58 @@ class Account extends React.Component {
 	}
 
 	renderSettings = () => {
-		const { classes, checkPasswordLoading, checkPasswordError, passwordExists, password } = this.props
+		const { classes, locale, checkPasswordLoading, checkPasswordError, passwordExists, password } = this.props
+		const { anchorEl } = this.state
 
 		if (password) return (
-			<React.Fragment>
+			<div>
+				<div className={classes.settingsRow}>
+					<div className={classes.settingsColumnLeft}>
+						<div className={classes.settingsLocale}>
+							<img
+								className={classes.settingsLocaleIcon}
+								src={`/static/assets/images/${locale}.png`}
+								alt={`Umbrella settings locale ${locale} icon`}
+							/>
+							<Typography>{localeMap[locale]}</Typography>
+						</div>
+
+						<Button
+							color="primary"
+							aria-owns={anchorEl ? 'locale-menu' : undefined}
+							aria-haspopup="true"
+							onClick={this.handleLocaleMenuOpen}
+						>Select Language</Button>
+
+						<Menu
+							id="locale-menu"
+							anchorEl={anchorEl}
+							open={Boolean(anchorEl)}
+							onClose={this.handleLocaleMenuClose}
+						>
+							{Object.keys(localeMap).map((locale, i) => (
+								<MenuItem key={i} onClick={this.setLocale(locale)}>
+									<ListItemIcon className={classes.settingsLocaleMenuIcon}>
+										<img
+											className={classes.settingsLocaleIcon}
+											src={`/static/assets/images/${locale}.png`}
+											alt={`Umbrella settings locale ${locale} icon`}
+										/>
+									</ListItemIcon>
+									<ListItemText inset primary={localeMap[locale]} />
+								</MenuItem>
+							))}
+						</Menu>
+					</div>
+					<div className={classes.settingsColumnRight}>
+						<Typography variant="caption">
+							Change your system and content language preference.
+						</Typography>
+					</div>
+				</div>
+
+				<Divider/>
+
 				<div className={classes.settingsRow}>
 					<div className={classes.settingsColumnLeft}>
 						<Button color="primary" onClick={this.clearDb}>Delete Cache</Button>
@@ -229,7 +319,7 @@ class Account extends React.Component {
 						</Typography>
 					</div>
 				</div>
-			</React.Fragment>
+			</div>
 		)
 
 		if (checkPasswordLoading) return <Loading />
@@ -305,6 +395,7 @@ class Account extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.view,
 	...state.account,
 })
 
