@@ -106,9 +106,8 @@ class Account extends React.Component {
 		const { query } = this.props.router
 		if (query && query.setpassword) this.setState({expanded: 1})
 
-		if (typeof window !== 'undefined') {
-			this.props.dispatch(checkPassword())
-		}
+		// check if password exists in DB, not just logged in
+		this.props.dispatch(checkPassword())
 	}
 
 	handlePanelToggle = i => (e, expanded) => {
@@ -191,69 +190,25 @@ class Account extends React.Component {
 		) {
 			if (password !== passwordConfirm) return alert('Passwords do not match. Please try again.')
 
-			this.props.dispatch(savePassword(password, router))
-			this.setState({
-				password: '',
-				passwordConfirm: '',
-				passwordError: null,
-				passwordErrorMessage: '',
-				passwordConfirmError: null,
-				passwordConfirmErrorMessage: '',
-				passwordSuccessMessage: 'Your password has been saved!'
-			}, () => {
-				setTimeout(() => {
-					this.setState({passwordSuccessMessage: ''})
-				}, 3000)
-			})
+			this.props.dispatch(savePassword(password, () => {
+				if (router.pathname.indexOf('account') === -1) router.back()
+				else {
+					this.setState({
+						password: '',
+						passwordConfirm: '',
+						passwordError: null,
+						passwordErrorMessage: '',
+						passwordConfirmError: null,
+						passwordConfirmErrorMessage: '',
+						passwordSuccessMessage: 'Your password has been saved!'
+					}, () => {
+						setTimeout(() => {
+							this.setState({passwordSuccessMessage: ''})
+						}, 3000)
+					})
+				}
+			}))
 		}
-	}
-
-	renderPasswordForm() {
-		const { classes } = this.props
-		const { 
-			password, 
-			passwordConfirm, 
-			passwordError, 
-			passwordErrorMessage,
-			passwordConfirmError, 
-			passwordConfirmErrorMessage,
-			passwordSuccessMessage,
-		} = this.state
-
-		return (
-			<form onSubmit={this.savePassword}>
-				<FormControlInput
-					id="account-password"
-					className={classes.input}
-					type="password"
-					label="Password"
-					value={password}
-					error={passwordError}
-					errorMessage={passwordErrorMessage}
-					onChange={this.handlePasswordChange('password')}
-					inputProps={{
-						onBlur: this.clearPasswordErrors
-					}}
-				/>
-				<FormControlInput
-					id="account-passwordConfirm"
-					className={classes.input}
-					type="password"
-					label="Password Confirm"
-					value={passwordConfirm}
-					error={passwordConfirmError}
-					errorMessage={passwordConfirmErrorMessage}
-					onChange={this.handlePasswordChange('passwordConfirm')}
-					inputProps={{
-						onBlur: this.clearPasswordErrors
-					}}
-				/>
-				<div className={classes.buttonWrapper}>
-					<Typography color="primary">{passwordSuccessMessage}</Typography>
-					<Button color="secondary" onClick={this.savePassword}>Confirm</Button>
-				</div>
-			</form>
-		)
 	}
 
 	renderSettings = () => {
@@ -335,6 +290,54 @@ class Account extends React.Component {
 			<Typography>
 				You do not have a password set. Create a password to save your app preferences and data.
 			</Typography>
+		)
+	}
+
+	renderPasswordForm() {
+		const { classes } = this.props
+		const { 
+			password, 
+			passwordConfirm, 
+			passwordError, 
+			passwordErrorMessage,
+			passwordConfirmError, 
+			passwordConfirmErrorMessage,
+			passwordSuccessMessage,
+		} = this.state
+
+		return (
+			<form onSubmit={this.savePassword}>
+				<FormControlInput
+					id="reg-password"
+					className={classes.input}
+					type="password"
+					label="Password"
+					value={password}
+					error={passwordError}
+					errorMessage={passwordErrorMessage}
+					onChange={this.handlePasswordChange('password')}
+					inputProps={{
+						onBlur: this.clearPasswordErrors
+					}}
+				/>
+				<FormControlInput
+					id="reg-passwordConfirm"
+					className={classes.input}
+					type="password"
+					label="Password Confirm"
+					value={passwordConfirm}
+					error={passwordConfirmError}
+					errorMessage={passwordConfirmErrorMessage}
+					onChange={this.handlePasswordChange('passwordConfirm')}
+					inputProps={{
+						onBlur: this.clearPasswordErrors
+					}}
+				/>
+				<div className={classes.buttonWrapper}>
+					<Typography color="primary">{passwordSuccessMessage}</Typography>
+					<Button color="secondary" onClick={this.savePassword}>Confirm</Button>
+				</div>
+			</form>
 		)
 	}
 

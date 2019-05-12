@@ -35,7 +35,7 @@ const styles = theme => ({
 		display: 'flex',
 		justifyContent: 'left',
 		alignItems: 'center',
-		width: '100%',
+		width: '97%',
 		margin: '.5rem 0',
 		padding: '.75rem 1.5rem',
 		backgroundColor: theme.palette.common.white,
@@ -82,7 +82,7 @@ const styles = theme => ({
 	},
 	panelActionButton: {
 		position: 'absolute',
-		left: '101%',
+		left: '98%',
 		top: '50%',
     	transform: 'translateY(-50%)',
 	},

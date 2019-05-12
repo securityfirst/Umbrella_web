@@ -38,3 +38,5 @@ export const setLocale = (locale, successCb) => (dispatch, getState) => {
 		dispatch(rejected(viewTypes.SET_LOCALE, e))
 	}
 }
+
+export const clearView = () => ({type: viewTypes.CLEAR_VIEW})
