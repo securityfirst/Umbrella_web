@@ -26,6 +26,14 @@ class ClientDB {
 
 						return resolve()
 					})
+
+				this.store
+					.getItem('locale')
+					.then(val => {
+						if (!val) this.store.setItem('locale', 'en')
+
+						return resolve()
+					})
 			} catch (e) {
 				console.error('[ClientDB] init() exception: \n', e)
 				return reject(e)

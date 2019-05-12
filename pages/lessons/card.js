@@ -1,5 +1,4 @@
 import React from 'react'
-import atob from 'atob'
 import Link from 'next/link'
 import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
@@ -78,8 +77,8 @@ class LessonCard extends React.Component {
 	}
 
 	renderNavigation = () => {
-		const { classes, content, locale, router } = this.props
-		const { category, level, sha } = router.query
+		const { router, classes, content } = this.props
+		const { locale, category, level, sha } = router.query
 		const { anchorEl } = this.state
 
 		const cats = category.split('.')
@@ -88,7 +87,10 @@ class LessonCard extends React.Component {
 
 		const open = Boolean(anchorEl)
 
-		const lessons = content[locale][cat][subcat][level].content.filter(l => l.filename.indexOf('s_') === 0)
+		const lessons = cat === 'glossary'
+			? content[locale].glossary.content.filter(l => l.filename.indexOf('s_') === 0)
+			: content[locale][cat][subcat][level].content.filter(l => l.filename.indexOf('s_') === 0)
+
 		const lessonIndex = lessons.findIndex(l => l.sha === sha)
 		const isLast = lessonIndex === lessons.length - 1
 		const isFirst = lessonIndex === 0
@@ -120,7 +122,7 @@ class LessonCard extends React.Component {
 							onClose={this.handleClose}
 						>
 							{lessons.map((lesson, i) => (
-								<Link key={i} href={`/lessons/${category}/${level}/${lesson.sha}`}>
+								<Link key={i} href={`/lessons/${locale}/${category}/${level}/${lesson.sha}`}>
 									<MenuItem 
 										className={classes.menuItem}
 										onClick={this.handleClose}
@@ -134,7 +136,7 @@ class LessonCard extends React.Component {
 					
 					{isLast
 						? <div className={classes.grow}>
-							<Link href={`/lessons/${category}/${level}`}>
+							<Link href={`/lessons/${locale}/${category}/${level}`}>
 								<Button color="inherit">
 									Finish
 									<DoneOutlineIcon className={classes.buttonRightIcon} />
@@ -143,14 +145,14 @@ class LessonCard extends React.Component {
 						</div>
 						: <div className={classes.grow}>
 							{!isFirst &&
-								<Link href={`/lessons/${category}/${level}/${lessons[lessonIndex - 1].sha}`}>
+								<Link href={`/lessons/${locale}/${category}/${level}/${lessons[lessonIndex - 1].sha}`}>
 									<Button color="inherit">
 										<ChevronLeftIcon className={classes.buttonLeftIcon} />
 										Prev
 									</Button>
 								</Link>
 							}
-							<Link href={`/lessons/${category}/${level}/${lessons[lessonIndex + 1].sha}`}>
+							<Link href={`/lessons/${locale}/${category}/${level}/${lessons[lessonIndex + 1].sha}`}>
 								<Button color="inherit">
 									Next
 									<ChevronRightIcon className={classes.buttonRightIcon} />
@@ -159,7 +161,7 @@ class LessonCard extends React.Component {
 						</div>
 					}
 
-					<Link href={`/lessons/${category}/${level}`}>
+					<Link href={`/lessons/${locale}/${category}/${level}`}>
 						<IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
 							<DoneAllIcon />
 						</IconButton>
@@ -178,7 +180,11 @@ class LessonCard extends React.Component {
 	}
 
 	render() {
-		const { classes } = this.props
+		const { router, classes } = this.props
+		const { category } = router.query
+
+		const cats = category.split('.')
+		const cat = cats[0]
 
 		return (
 			<Layout title="Umbrella | Lesson Card" description="Umbrella web application">
@@ -186,7 +192,8 @@ class LessonCard extends React.Component {
 					<LessonsMenu />
 
 					<div className={classes.content}>
-						{this.renderNavigation()}
+						{/* Don't render navigation if it's a single lesson card (e.g. About) */}
+						{cat !== '-' && this.renderNavigation()}
 
 						<Paper className={'lessons-card ' + classes.paper} square>
 							{this.renderContent()}

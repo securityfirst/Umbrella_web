@@ -86,7 +86,7 @@ class LessonsMenu extends React.Component {
 		if (keys.length === 1 && keys[0] === 'content') {
 			const file = content[locale][category].content.find(file => file.filename.indexOf('.md') > -1)
 
-			Router.push(`/lessons/default/default/${file.sha}`)
+			Router.push(`/lessons/${locale}/-/-/${file.sha}`)
 		} else {
 			if (category == this.state.categorySelected) this.setState({categorySelected: null})
 			else this.setState({categorySelected: category})
@@ -94,14 +94,14 @@ class LessonsMenu extends React.Component {
 	}
 
 	renderMenuSubcategories = (subcategories, isSelected) => {
-		const { classes } = this.props
+		const { classes, locale } = this.props
 		const { categorySelected } = this.state
 
 		return (
 			<Collapse in={isSelected} timeout="auto" unmountOnExit>
 				<List component="div" disablePadding>
 					{subcategories.map((subcategory, i) => (
-						<Link key={i} href={`/lessons/${categorySelected}.${subcategory}`}>
+						<Link key={i} href={`/lessons/${locale}/${categorySelected}.${subcategory}`}>
 							<ListItem button className={classes.menuListSubItem}>
 								<ListItemText 
 									className={classes.menuListItemText} 
@@ -178,7 +178,7 @@ class LessonsMenu extends React.Component {
 
 				{/* Glossary menu item */}
 				<div className={categorySelected == "glossary" ? classes.menuListItemSelected : ''}>
-					<Link href="/lessons/glossary">
+					<Link href={`/lessons/${locale}/glossary`}>
 						<ListItem button>
 							<ListItemIcon className={classes.menuListItemIcon}>
 								<img 

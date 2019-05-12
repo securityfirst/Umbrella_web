@@ -59,6 +59,7 @@ export const viewTypes = {
 	SET_APPBAR_TITLE: 'SET_APPBAR_TITLE',
 	TOGGLE_LESSONS_MENU: 'TOGGLE_LESSONS_MENU',
 	SET_LOCALE: 'SET_LOCALE',
+	SYNC_VIEW: 'SYNC_VIEW',
 }
 
 export const dbTypes = {

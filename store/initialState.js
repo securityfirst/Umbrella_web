@@ -93,6 +93,8 @@ const view = {
 	mainMenuOpened: false,
 	appbarTitle: null,
 	lessonsMenuOpened: 0,
+	setLocaleLoading: false,
+	setLocaleError: null,
 	locale: 'en',
 }
 

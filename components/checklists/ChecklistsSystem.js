@@ -19,6 +19,7 @@ import ErrorMessage from '../common/ErrorMessage'
 import { deleteChecklistSystem } from '../../store/actions/checklists'
 
 import { contentStyles } from '../../utils/view'
+import { decodeBlob } from '../../utils/github'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -107,7 +108,7 @@ class ChecklistsSystem extends React.Component {
 			if (item.filename === 'c_checklist.yml') {
 				const res = await fetch(`${process.env.ROOT}/api/github/content/${item.sha}`)
 				const encoded = await res.text()
-				const checklist = YAML.parse(atob(encoded))
+				const checklist = YAML.parse(decodeBlob(encoded))
 
 				if (checklist) {
 					checklists.push(checklist)
@@ -156,12 +157,12 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	renderPanelLink = (title, percentage, index) => {
-		const { classes } = this.props
+		const { classes, locale } = this.props
 		const level = title.split(' > ')[1]
 
 		return (
 			<div className={classes.panelWrapper} key={index}>
-				<Link href={`/lessons/${title.replace(/ > /, '/')}`}>
+				<Link href={`/lessons/${locale}/${title.replace(/ > /, '/')}`}>
 					<Button
 						className={classes.panel}
 						classes={{label: classes.panelButtonInner}}

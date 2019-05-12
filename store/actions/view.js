@@ -18,6 +18,23 @@ export const toggleLessonsMenu = opened => {
 	return {type: viewTypes.TOGGLE_LESSONS_MENU, payload: opened}
 }
 
-export const setLocale = localeCode => {
-	return {type: viewTypes.SET_LOCALE, payload: localeCode}
+export const setLocale = (locale, successCb) => (dispatch, getState) => {
+	dispatch(pending(viewTypes.SET_LOCALE))
+
+	try {
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.set('locale', locale)
+			.then(() => {
+				dispatch(fulfilled(viewTypes.SET_LOCALE, locale))
+				!!successCb && successCb()
+			})
+			.catch(err => {
+				dispatch(rejected(viewTypes.SET_LOCALE, err))
+			})
+	} catch (e) {
+		console.error('[ACTION] setLocale exception: ', e)
+		dispatch(rejected(viewTypes.SET_LOCALE, e))
+	}
 }
