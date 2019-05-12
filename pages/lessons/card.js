@@ -87,7 +87,10 @@ class LessonCard extends React.Component {
 
 		const open = Boolean(anchorEl)
 
-		const lessons = content[locale][cat][subcat][level].content.filter(l => l.filename.indexOf('s_') === 0)
+		const lessons = cat === 'glossary'
+			? content[locale].glossary.content.filter(l => l.filename.indexOf('s_') === 0)
+			: content[locale][cat][subcat][level].content.filter(l => l.filename.indexOf('s_') === 0)
+
 		const lessonIndex = lessons.findIndex(l => l.sha === sha)
 		const isLast = lessonIndex === lessons.length - 1
 		const isFirst = lessonIndex === 0
@@ -177,7 +180,11 @@ class LessonCard extends React.Component {
 	}
 
 	render() {
-		const { classes } = this.props
+		const { router, classes } = this.props
+		const { category } = router.query
+
+		const cats = category.split('.')
+		const cat = cats[0]
 
 		return (
 			<Layout title="Umbrella | Lesson Card" description="Umbrella web application">
@@ -185,7 +192,8 @@ class LessonCard extends React.Component {
 					<LessonsMenu />
 
 					<div className={classes.content}>
-						{this.renderNavigation()}
+						{/* Don't render navigation if it's a single lesson card (e.g. About) */}
+						{cat !== '-' && this.renderNavigation()}
 
 						<Paper className={'lessons-card ' + classes.paper} square>
 							{this.renderContent()}

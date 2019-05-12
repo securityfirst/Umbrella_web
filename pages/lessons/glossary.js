@@ -65,6 +65,7 @@ class LessonsGlossary extends React.Component {
 									index={i} 
 									file={file} 
 									locale={locale}
+									category="glossary"
 								/>
 							))}
 						</div>
