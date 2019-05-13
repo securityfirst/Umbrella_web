@@ -16,21 +16,25 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Modal from '@material-ui/core/Modal'
 
 import Layout from '../components/layout'
 import Loading from '../components/common/Loading'
 import ErrorMessage from '../components/common/ErrorMessage'
 import FormControlInput from '../components/common/FormControlInput'
+import FeedsEditLocation from '../components/feeds/FeedsEditLocation'
+import FeedsEditSources from '../components/feeds/FeedsEditSources'
 
 import { contentStyles, buttonWrapperStyles } from '../utils/view'
 
 import { clearDb } from '../store/actions/db'
 import { setLocale } from '../store/actions/view'
+import { setFeedLocation, setFeedSources } from '../store/actions/feeds'
 import { checkPassword, savePassword } from '../store/actions/account'
 
 const localeMap = {
 	'en': 'English',
-	'es': 'Spanish',
+	'es': 'SPANISH',
 	'ar': 'Arabic',
 	'fa': 'Persian',
 	'ru': 'Russian',
@@ -46,7 +50,7 @@ const styles = theme => ({
 	settingsRow: {
 		display: 'flex',
 		alignItems: 'center',
-		margin: '1.5rem 0',
+		margin: '1rem 0',
 	},
 	settingsColumnLeft: {
 		width: '40%',
@@ -57,8 +61,7 @@ const styles = theme => ({
 	settingsLocale: {
 		display: 'flex',
 		alignItems: 'center',
-		marginBottom: '.5rem',
-		paddingLeft: '1rem',
+		marginBottom: '1rem',
 	},
 	settingsLocaleIcon: {
 		display: 'inline-block',
@@ -66,6 +69,11 @@ const styles = theme => ({
 		marginRight: '1rem',
 	},
 	settingsLocaleMenuIcon: {
+		alignItems: 'center',
+	},
+	modal: {
+		display: 'flex',
+		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	description: {
@@ -93,6 +101,8 @@ class Account extends React.Component {
 	state = {
 		expanded: 0,
 		localeMenuAnchorEl: null,
+		feedsModalOpen: false,
+		feedsModalContent: null,
 		password: '',
 		passwordConfirm: '',
 		passwordError: null,
@@ -104,7 +114,7 @@ class Account extends React.Component {
 
 	componentDidMount() {
 		const { query } = this.props.router
-		if (query && query.setpassword) this.setState({expanded: 1})
+		if (query && query.setpassword) this.setState({expanded: 2})
 
 		// check if password exists in DB, not just logged in
 		this.props.dispatch(checkPassword())
@@ -127,6 +137,32 @@ class Account extends React.Component {
 	setLocale = locale => () => {
 		this.props.dispatch(setLocale(locale))
 		this.handleLocaleMenuClose()
+	}
+
+	setLocation = location => {
+		this.props.dispatch(setFeedLocation(location))
+	}
+
+	setSources = sources => {
+		this.props.dispatch(setFeedSources(sources))
+	}
+
+	handleModalClose = () => this.setState({feedsModalOpen: false})
+
+	handleFormOpen = type => () => {
+		let state = {feedsModalOpen: true}
+
+		// set modal inner content
+		switch (type) {
+			case 'location': 
+				state.feedsModalContent = <FeedsEditLocation closeModal={this.handleModalClose} onSubmit={this.setLocation} />
+				break
+			case 'sources': 
+				state.feedsModalContent = <FeedsEditSources closeModal={this.handleModalClose} onSubmit={this.setSources} />
+				break
+		}
+
+		this.setState(state)
 	}
 
 	handlePasswordChange = type => e => {
@@ -212,22 +248,13 @@ class Account extends React.Component {
 	}
 
 	renderSettings = () => {
-		const { classes, locale, checkPasswordLoading, checkPasswordError, passwordExists, password } = this.props
+		const { classes, locale } = this.props
 		const { anchorEl } = this.state
 
-		if (password) return (
+		return (
 			<div>
 				<div className={classes.settingsRow}>
 					<div className={classes.settingsColumnLeft}>
-						<div className={classes.settingsLocale}>
-							<img
-								className={classes.settingsLocaleIcon}
-								src={`/static/assets/images/${locale}.png`}
-								alt={`Umbrella settings locale ${locale} icon`}
-							/>
-							<Typography>{localeMap[locale]}</Typography>
-						</div>
-
 						<Button
 							color="primary"
 							aria-owns={anchorEl ? 'locale-menu' : undefined}
@@ -256,6 +283,14 @@ class Account extends React.Component {
 						</Menu>
 					</div>
 					<div className={classes.settingsColumnRight}>
+						<div className={classes.settingsLocale}>
+							<img
+								className={classes.settingsLocaleIcon}
+								src={`/static/assets/images/${locale}.png`}
+								alt={`Umbrella settings locale ${locale} icon`}
+							/>
+							<Typography>{localeMap[locale]}</Typography>
+						</div>
 						<Typography variant="caption">
 							Change your system and content language preference.
 						</Typography>
@@ -276,20 +311,52 @@ class Account extends React.Component {
 				</div>
 			</div>
 		)
+	}
 
-		if (checkPasswordLoading) return <Loading />
-		if (checkPasswordError) return <ErrorMessage error={checkPasswordError} />
-
-		if (passwordExists) return (
-			<Typography>
-				Login to view and make changes to your app settings.
-			</Typography>
-		)
+	renderFeedSettings = () => {
+		const { classes, locale, feedLocation, feedSources } = this.props
 
 		return (
-			<Typography>
-				You do not have a password set. Create a password to save your app preferences and data.
-			</Typography>
+			<div style={{width:'100%'}}>
+				<div className={classes.settingsRow}>
+					<div className={classes.settingsColumnLeft}>
+						<Button color="primary" onClick={this.handleFormOpen('location')}>Set Location</Button>
+					</div>
+					<div className={classes.settingsColumnRight}>
+						<Typography>{
+							feedLocation 
+								? feedLocation.place_name 
+								: 'Location not set'
+						}</Typography>
+					</div>
+				</div>
+
+				<Divider/>
+
+				<div className={classes.settingsRow}>
+					<div className={classes.settingsColumnLeft}>
+						<Button color="primary" onClick={this.handleFormOpen('sources')}>Set Sources</Button>
+					</div>
+					<div className={classes.settingsColumnRight}>
+						<Typography>{
+							feedSources.length 
+								? `${feedSources.length} source${feedSources.length > 1 ? 's' : ''}` 
+								: 'Set sources'
+						}</Typography>
+					</div>
+				</div>
+
+				<Modal
+					className={classes.modal}
+					aria-labelledby="simple-modal-title"
+					aria-describedby="simple-modal-description"
+					open={this.state.feedsModalOpen}
+					onClose={this.handleModalClose}
+					disableAutoFocus
+				>
+					{this.state.feedsModalContent}
+				</Modal>
+			</div>
 		)
 	}
 
@@ -375,6 +442,7 @@ class Account extends React.Component {
 		return (
 			<Layout title="Umbrella | Account" description="Umbrella web application">
 				<div className={classes.content}>
+					{/* Settings */}
 					<ExpansionPanel expanded={this.state.expanded === 0} onChange={this.handlePanelToggle(0)}>
 						<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 							<Typography className={classes.heading} variant="h6">Settings</Typography>
@@ -383,7 +451,19 @@ class Account extends React.Component {
 							{this.renderSettings()}
 						</ExpansionPanelDetails>
 					</ExpansionPanel>
+
+					{/* Feed Settings */}
 					<ExpansionPanel expanded={this.state.expanded === 1} onChange={this.handlePanelToggle(1)}>
+						<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+							<Typography className={classes.heading} variant="h6">Feed Settings</Typography>
+						</ExpansionPanelSummary>
+						<ExpansionPanelDetails>
+							{this.renderFeedSettings()}
+						</ExpansionPanelDetails>
+					</ExpansionPanel>
+
+					{/* Password */}
+					<ExpansionPanel expanded={this.state.expanded === 2} onChange={this.handlePanelToggle(2)}>
 						<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 							<Typography className={classes.heading} variant="h6">Set password</Typography>
 						</ExpansionPanelSummary>
@@ -400,6 +480,7 @@ class Account extends React.Component {
 const mapStateToProps = state => ({
 	...state.view,
 	...state.account,
+	...state.feeds,
 })
 
 export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Account)))
