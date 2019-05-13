@@ -1,5 +1,5 @@
 export const formatError = err => {
-	console.error('formatError() err: ', err)
+	console.error(err)
 
 	if (!err) return {status: 400, message: 'Something went wrong'}
 	if (typeof err === 'string') return {status: 400, message: err}
@@ -22,7 +22,7 @@ export const formatError = err => {
 
 		return error
 	} catch (e) {
-		console.error('formatError() exception: ', e)
+		console.error(e)
 		return {status: 400, message: 'Something went wrong.'}
 	}
 }

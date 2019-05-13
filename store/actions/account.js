@@ -54,23 +54,17 @@ export const checkPassword = () => async (dispatch, getState) => {
 
 	try {
 		const ClientDB = require('../../db')
-		const Account = require('../../account')
 
 		ClientDB.default
 			.get('h')
-			.then(async hash => {
-				const password = await Account.default.password()
-				const loggedIn = !!hash && password === hash
-
-				dispatch(fulfilled(accountTypes.CHECK_PASSWORD, loggedIn))
-			})
+			.then(hash => dispatch(fulfilled(accountTypes.CHECK_PASSWORD, !!hash)))
 			.catch(err => dispatch(rejected(accountTypes.CHECK_PASSWORD, err)))
 	} catch (e) {
 		dispatch(rejected(accountTypes.CHECK_PASSWORD, e))
 	}
 }
 
-export const savePassword = (password, router) => (dispatch, getState) => {
+export const savePassword = (password, cb) => (dispatch, getState) => {
 	dispatch(pending(accountTypes.SAVE_PASSWORD))
 
 	const ClientDB = require('../../db')
@@ -89,7 +83,7 @@ export const savePassword = (password, router) => (dispatch, getState) => {
 				.then(() => {
 					Account.default.login(password)
 					dispatch(fulfilled(accountTypes.SAVE_PASSWORD, password))
-					!!router && router.back()
+					!!cb && cb()
 				})
 				.catch(err => dispatch(rejected(accountTypes.SAVE_PASSWORD, err)))
 		})

@@ -85,7 +85,7 @@ class Login extends React.Component {
 
 		this.props.dispatch(login(password, () => {
 			alert('You are now logged in!')
-			router.back()
+			if (router.pathname.indexOf('account') === -1) router.back()
 		}))
 	}
 

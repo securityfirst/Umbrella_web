@@ -39,6 +39,7 @@ export const lessonsTypes = {
 	REMOVE_LESSON_CARD_FAVORITE: 'REMOVE_LESSON_CARD_FAVORITE',
 	RESET_LESSONS: 'RESET_LESSONS',
 	SYNC_LESSONS: 'SYNC_LESSONS',
+	CLEAR_LESSONS: 'CLEAR_LESSONS',
 }
 
 export const checklistsTypes = {
@@ -60,6 +61,7 @@ export const viewTypes = {
 	TOGGLE_LESSONS_MENU: 'TOGGLE_LESSONS_MENU',
 	SET_LOCALE: 'SET_LOCALE',
 	SYNC_VIEW: 'SYNC_VIEW',
+	CLEAR_VIEW: 'CLEAR_VIEW',
 }
 
 export const dbTypes = {

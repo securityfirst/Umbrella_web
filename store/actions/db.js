@@ -9,6 +9,7 @@ import { clearFeeds } from './feeds'
 import { clearForms } from './forms'
 import { clearChecklists } from './checklists'
 import { clearLessons } from './lessons'
+import { clearView } from './view'
 
 export const syncDb = () => async (dispatch, getState) => {
 	await dispatch(pending(dbTypes.SYNC_DB))
@@ -113,6 +114,7 @@ export const clearDb = () => async (dispatch, getState) => {
 		await dispatch(clearForms())
 		await dispatch(clearChecklists())
 		await dispatch(clearLessons())
+		await dispatch(clearView())
 		
 		await dispatch(fulfilled(dbTypes.CLEAR_DB))
 	} catch (e) {
