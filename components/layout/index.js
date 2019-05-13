@@ -5,6 +5,7 @@ import { withRouter } from 'next/router'
 
 import { withStyles } from '@material-ui/core/styles'
 
+import Alert from '../common/Alert'
 import Appbar from './Appbar'
 import Menu from './Menu'
 
@@ -24,10 +25,6 @@ const styles = theme => ({
 })
 
 class Layout extends React.Component {
-	state = {
-		drawerToggled: false,
-	}
-
 	render() {
 		const { router, classes, theme } = this.props
 
@@ -49,6 +46,8 @@ class Layout extends React.Component {
 				<main className={classes.main}>
 					{this.props.children}
 				</main>
+
+				<Alert />
 			</div>
 		)
 	}

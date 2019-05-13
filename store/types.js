@@ -62,6 +62,9 @@ export const viewTypes = {
 	SET_LOCALE: 'SET_LOCALE',
 	SYNC_VIEW: 'SYNC_VIEW',
 	CLEAR_VIEW: 'CLEAR_VIEW',
+	OPEN_ALERT: 'OPEN_ALERT',
+	CLOSE_ALERT: 'CLOSE_ALERT',
+	UNSET_ALERT_TYPE: 'UNSET_ALERT_TYPE',
 }
 
 export const dbTypes = {

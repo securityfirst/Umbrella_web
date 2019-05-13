@@ -46,6 +46,30 @@ export default function reducer(state = initialState, action) {
 				locale: action.payload,
 			}
 
+		/* OPEN_ALERT */
+		case viewTypes.OPEN_ALERT:
+			return {
+				...state,
+				alertOpen: true,
+				alertType: action.payload.type,
+				alertMessage: action.payload.message,
+			}
+
+		/* CLOSE_ALERT */
+		case viewTypes.CLOSE_ALERT:
+			return {
+				...state,
+				alertOpen: false,
+				alertMessage: null,
+			}
+
+		/* UNSET_ALERT_TYPE */
+		case viewTypes.UNSET_ALERT_TYPE:
+			return {
+				...state,
+				alertType: null,
+			}
+
 		/* SYNC_VIEW */
 		case viewTypes.SYNC_VIEW: return action.payload
 

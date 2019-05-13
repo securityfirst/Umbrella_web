@@ -39,4 +39,19 @@ export const setLocale = (locale, successCb) => (dispatch, getState) => {
 	}
 }
 
+export const openAlert = (type, message) => ({
+	type: viewTypes.OPEN_ALERT,
+	payload: {type, message},
+})
+
+export const closeAlert = () => (dispatch) => {
+	setTimeout(() => {
+		dispatch(unsetAlertType())
+	}, 300)
+
+	dispatch({type: viewTypes.CLOSE_ALERT})
+}
+
+export const unsetAlertType = () => ({type: viewTypes.UNSET_ALERT_TYPE})
+
 export const clearView = () => ({type: viewTypes.CLEAR_VIEW})

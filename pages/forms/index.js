@@ -12,6 +12,8 @@ import Loading from '../../components/common/Loading'
 import ErrorMessage from '../../components/common/ErrorMessage'
 
 import { getForm, deleteForm } from '../../store/actions/forms'
+import { openAlert } from '../../store/actions/view'
+
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { generateForm } from '../../utils/forms'
 import { download } from '../../utils/dom'
@@ -39,20 +41,41 @@ const styles = theme => ({
 })
 
 class Forms extends React.Component {
+	checkLogin = e => {
+		const { dispatch } = this.props
+		const Account = require('../../account')
+
+		if (!Account.default.isLoggedIn()) {
+			e.preventDefault()
+
+			dispatch(openAlert('error', 'Please login to continue'))
+		}
+	}
+
 	handleShare = formSaved => () => {
-		alert('Share ' + formSaved.id)
+		const { dispatch } = this.props
+
+		dispatch(openAlert('info', 'Sharing form...'))
 	}
 
 	handleDownload = formSaved => async () => {
-		await this.props.dispatch(getForm(formSaved.sha))
-		const html = generateForm(this.props.form, formSaved)
+		const { dispatch, form } = this.props
+
+		await dispatch(openAlert('info', 'Your form is downloading...'))
+		
+		await dispatch(getForm(formSaved.sha))
+		
+		const html = generateForm(form, formSaved)
+
 		download(formSaved.filename, html)
 	}
 
 	handleDelete = formSaved => () => {
+		const { dispatch } = this.props
+
 		if (confirm('Are you sure you want to delete this form?')) {
-			this.props.dispatch(deleteForm(formSaved, () => {
-				alert('Your form has been deleted')
+			dispatch(deleteForm(formSaved, () => {
+				dispatch(openAlert('success', 'Your form has been deleted'))
 			}))
 		}
 	}
@@ -86,7 +109,9 @@ class Forms extends React.Component {
 				</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
-					<Link href={`/forms/${form.sha}`}><Button color="primary">New</Button></Link>
+					<Link href={`/forms/${form.sha}`}>
+						<Button color="primary" onClick={this.checkLogin}>New</Button>
+					</Link>
 				</div>
 			</Paper>
 		)
