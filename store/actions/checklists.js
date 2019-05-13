@@ -3,6 +3,8 @@ import 'isomorphic-unfetch'
 import { checklistsTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
+import { openAlert } from './view'
+
 import Crypto from '../../utils/crypto'
 
 export const getChecklistsSystem = () => async (dispatch, getState) => {
@@ -36,7 +38,7 @@ export const updateChecklistsSystem = (itemName, category, level) => (dispatch, 
 	const state = getState()
 
 	if (!state.account.password) {
-		return alert('Login or set a password to update lesson checklists.')
+		return dispatch(openAlert('warning', 'Login or set a password to update lesson checklists.'))
 	}
 
 	try {
@@ -75,7 +77,7 @@ export const deleteChecklistSystem = listKey => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		return alert('Login or set a password to delete lesson checklists.')
+		return dispatch(openAlert('warning', 'Login or set a password to delete lesson checklists.'))
 	}
 
 	try {
@@ -103,7 +105,7 @@ export const getChecklistsCustom = () => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		return alert('Login or set a password to create a custom checklist.')
+		return dispatch(openAlert('warning', 'Login or set a password to create a custom checklist.'))
 	}
 
 	try {
@@ -128,11 +130,11 @@ export const addChecklistCustom = (name, successCb) => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		return alert('Login or set a password to create a custom checklist.')
+		return dispatch(openAlert('warning', 'Login or set a password to create a custom checklist.'))
 	}
 
 	if (!name) {
-		return alert('A name is required to make a new checklist.')
+		return dispatch(openAlert('warning', 'A name is required to make a new checklist.'))
 	}
 
 	try {
@@ -161,7 +163,7 @@ export const updateChecklistCustom = (checklist, i) => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		alert('You must be logged in to update your custom checklist')
+		dispatch(openAlert('warning', 'You must be logged in to update your custom checklist'))
 		return window.reload()
 	}
 
@@ -190,7 +192,7 @@ export const deleteChecklistCustom = i => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		alert('You must be logged in to update your custom checklist')
+		dispatch(openAlert('warning', 'You must be logged in to update your custom checklist'))
 		return window.reload()
 	}
 
@@ -219,7 +221,7 @@ export const toggleChecklistFavorite = (category, level) => (dispatch, getState)
 	const state = getState()
 
 	if (!state.account.password) {
-		return alert('You must be logged in to save your favorite checklists')
+		return dispatch(openAlert('warning', 'You must be logged in to save your favorite checklists'))
 	}
 
 	try {
