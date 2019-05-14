@@ -25,9 +25,11 @@ export const getChecklistsSystem = () => async (dispatch, getState) => {
 				dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, checklists || {}))
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(checklistsTypes.GET_CHECKLISTS_SYSTEM, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(checklistsTypes.GET_CHECKLISTS_SYSTEM, e))
 	}
 }
@@ -38,7 +40,9 @@ export const updateChecklistsSystem = (itemName, category, level) => (dispatch, 
 	const state = getState()
 
 	if (!state.account.password) {
-		return dispatch(openAlert('warning', 'Login or set a password to update lesson checklists.'))
+		const message = 'Login or set a password to update lesson checklists'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, message))
 	}
 
 	try {
@@ -61,12 +65,15 @@ export const updateChecklistsSystem = (itemName, category, level) => (dispatch, 
 		ClientDB.default
 			.set('ch_s', newChecklists, state.account.password)
 			.then(() => {
+				// NOTE: Don't alert here, it will trigger for every checkbox
 				dispatch(fulfilled(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, newChecklists))
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, e))
 	}
 }
@@ -77,7 +84,9 @@ export const deleteChecklistSystem = listKey => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		return dispatch(openAlert('warning', 'Login or set a password to delete lesson checklists.'))
+		const message = 'Login or set a password to delete lesson checklists'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_SYSTEM, message))
 	}
 
 	try {
@@ -89,12 +98,15 @@ export const deleteChecklistSystem = listKey => (dispatch, getState) => {
 		ClientDB.default
 			.set('ch_s', newChecklists, state.account.password)
 			.then(() => {
+				dispatch(openAlert('success', 'Checklist removed'))
 				dispatch(fulfilled(checklistsTypes.DELETE_CHECKLIST_SYSTEM, newChecklists))
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_SYSTEM, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_SYSTEM, e))
 	}
 }
@@ -105,7 +117,9 @@ export const getChecklistsCustom = () => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		return dispatch(openAlert('warning', 'Login or set a password to create a custom checklist.'))
+		const message = 'Login or set a password to create a custom checklist'
+		dispatch(openAlert('warning', message))
+		return dispatch(rejected(checklistsTypes.GET_CHECKLISTS_CUSTOM, message))
 	}
 
 	try {
@@ -117,9 +131,11 @@ export const getChecklistsCustom = () => (dispatch, getState) => {
 				dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_CUSTOM, checklists || []))
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(checklistsTypes.GET_CHECKLISTS_CUSTOM, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(checklistsTypes.GET_CHECKLISTS_CUSTOM, e))
 	}
 }
@@ -130,11 +146,15 @@ export const addChecklistCustom = (name, successCb) => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		return dispatch(openAlert('warning', 'Login or set a password to create a custom checklist.'))
+		const message = 'Login or set a password to create a custom checklist'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(checklistsTypes.ADD_CHECKLIST_CUSTOM, message))
 	}
 
 	if (!name) {
-		return dispatch(openAlert('warning', 'A name is required to make a new checklist.'))
+		const message = 'A name is required to make a new checklist'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(checklistsTypes.ADD_CHECKLIST_CUSTOM, message))
 	}
 
 	try {
@@ -146,13 +166,16 @@ export const addChecklistCustom = (name, successCb) => (dispatch, getState) => {
 		ClientDB.default
 			.set('ch_c', checklists, state.account.password)
 			.then(() => {
+				dispatch(openAlert('success', 'Checklist added'))
 				dispatch(fulfilled(checklistsTypes.ADD_CHECKLIST_CUSTOM, checklists))
 				!!successCb && successCb()
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(checklistsTypes.ADD_CHECKLIST_CUSTOM, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(checklistsTypes.ADD_CHECKLIST_CUSTOM, e))
 	}
 }
@@ -176,12 +199,15 @@ export const updateChecklistCustom = (checklist, i) => (dispatch, getState) => {
 		ClientDB.default
 			.set('ch_c', checklists, state.account.password)
 			.then(() => {
+				dispatch(openAlert('success', 'Checklist updated'))
 				dispatch(fulfilled(checklistsTypes.UPDATE_CHECKLIST_CUSTOM, checklists))
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(checklistsTypes.UPDATE_CHECKLIST_CUSTOM, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(checklistsTypes.UPDATE_CHECKLIST_CUSTOM, e))
 	}
 }
@@ -192,7 +218,7 @@ export const deleteChecklistCustom = i => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		dispatch(openAlert('warning', 'You must be logged in to update your custom checklist'))
+		dispatch(openAlert('error', 'You must be logged in to update your custom checklist'))
 		return window.reload()
 	}
 
@@ -205,12 +231,15 @@ export const deleteChecklistCustom = i => (dispatch, getState) => {
 		ClientDB.default
 			.set('ch_c', checklists, state.account.password)
 			.then(() => {
+				dispatch(openAlert('success', 'Checklist deleted'))
 				dispatch(fulfilled(checklistsTypes.DELETE_CHECKLIST_CUSTOM, checklists))
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_CUSTOM, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_CUSTOM, e))
 	}
 }
@@ -221,7 +250,9 @@ export const toggleChecklistFavorite = (category, level) => (dispatch, getState)
 	const state = getState()
 
 	if (!state.account.password) {
-		return dispatch(openAlert('warning', 'You must be logged in to save your favorite checklists'))
+		const message = 'You must be logged in to save your favorite checklists'
+		dispatch(openAlert('warning', message))
+		return dispatch(rejected(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE, message))
 	}
 
 	try {
@@ -238,12 +269,15 @@ export const toggleChecklistFavorite = (category, level) => (dispatch, getState)
 		ClientDB.default
 			.set('ch_s', newChecklists, state.account.password)
 			.then(() => {
+				dispatch(openAlert('success', `${newChecklists[listKey].isFavorited ? 'Added to' : 'Removed from'} favorites`))
 				dispatch(fulfilled(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE, newChecklists))
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE, e))
 	}
 }

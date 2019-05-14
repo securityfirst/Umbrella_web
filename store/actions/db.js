@@ -9,7 +9,7 @@ import { clearFeeds } from './feeds'
 import { clearForms } from './forms'
 import { clearChecklists } from './checklists'
 import { clearLessons } from './lessons'
-import { clearView } from './view'
+import { clearView, openAlert } from './view'
 
 export const syncDb = () => async (dispatch, getState) => {
 	await dispatch(pending(dbTypes.SYNC_DB))
@@ -107,7 +107,7 @@ export const clearDb = () => async (dispatch, getState) => {
 
 		await ClientDB.default.clear()
 
-		alert('Database has been cleared.')
+		await dispatch(openAlert('success', 'Database has been cleared'))
 
 		await dispatch(clearPassword())
 		await dispatch(clearFeeds())

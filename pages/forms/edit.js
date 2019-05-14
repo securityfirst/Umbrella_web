@@ -23,6 +23,8 @@ import FormControlRadios from '../../components/common/FormControlRadios'
 import teal from '@material-ui/core/colors/teal'
 
 import { getForm, getFormSaved, saveForm, resetSaveForm } from '../../store/actions/forms'
+import { openAlert } from '../../store/actions/view'
+
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { ID } from '../../utils/id'
 
@@ -74,7 +76,9 @@ class FormEdit extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.dispatch(getFormSaved(this.props.router.query.id, formSaved => {
+		const { dispatch, router } = this.props
+
+		dispatch(getFormSaved(router.query.id, formSaved => {
 			this.setState({formState: formSaved.state})
 		}))
 	}
@@ -135,35 +139,38 @@ class FormEdit extends React.Component {
 	}
 
 	onSave = () => {
-		const { formSaved } = this.props
+		const { dispatch, formSaved } = this.props
+		const { formState } = this.state
 
 		const date = new Date()
 
 		const formUpdated = {
 			...formSaved,
-			state: this.state.formState,
+			state: formState,
 			dateModified: date.valueOf(),
 		}
 
-		this.props.dispatch(saveForm(formUpdated, () => {
-			alert('Your form has been saved.')
+		dispatch(saveForm(formUpdated, () => {
+			dispatch(openAlert('success', 'Your form has been saved'))
 		}))
 	}
 
 	onFinish = () => {
-		const { formSaved } = this.props
+		const { dispatch, formSaved } = this.props
+		const { formState } = this.state
 
 		const date = new Date()
 
 		const formUpdated = {
 			...formSaved,
-			state: this.state.formState,
+			state: formState,
 			dateModified: date.valueOf(),
 		}
 
-		this.props.dispatch(saveForm(formUpdated, () => {
-			this.props.dispatch(resetSaveForm())
-			alert('Your form has been saved.')
+		dispatch(saveForm(formUpdated, () => {
+			dispatch(resetSaveForm())
+			dispatch(openAlert('success', 'Your form has been saved'))
+
 			Router.push('/forms')
 		}))
 	}

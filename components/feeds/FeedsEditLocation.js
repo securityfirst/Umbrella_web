@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
@@ -39,12 +40,13 @@ class FeedsEditLocation extends React.Component {
 	handleSubmit = e => {
 		!!e && e.preventDefault()
 
+		const { dispatch, onSubmit, closeModal } = this.props
 		const { location } = this.state
 
-		if (!location) return alert('No location was selected.')
+		if (!location) return dispatch(openAlert('error', 'No location was selected'))
 
-		this.props.onSubmit(location)
-		this.props.closeModal()
+		onSubmit(location)
+		closeModal()
 	}
 
 	handleCancel = () => {

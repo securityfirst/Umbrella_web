@@ -46,12 +46,12 @@ export const openAlert = (type, message) => ({
 
 export const closeAlert = () => (dispatch) => {
 	setTimeout(() => {
-		dispatch(unsetAlertType())
+		dispatch(unsetAlert())
 	}, 300)
 
 	dispatch({type: viewTypes.CLOSE_ALERT})
 }
 
-export const unsetAlertType = () => ({type: viewTypes.UNSET_ALERT_TYPE})
+export const unsetAlert = () => ({type: viewTypes.UNSET_ALERT})
 
 export const clearView = () => ({type: viewTypes.CLEAR_VIEW})

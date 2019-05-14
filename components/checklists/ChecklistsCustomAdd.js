@@ -15,6 +15,7 @@ import IconModalContent from '../common/IconModalContent'
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
 import { addChecklistCustom } from '../../store/actions/checklists'
+import { openAlert } from '../../store/actions/view'
 
 const styles = theme => ({
 	iconFontSize: {
@@ -46,7 +47,9 @@ class ChecklistsCustomAdd extends React.Component {
 		const { dispatch, closeModal } = this.props
 		const { name } = this.state
 
-		if (!name || !name.length) return alert('Name is required.')
+		if (!name || !name.length) {
+			return dispatch(openAlert('error', 'Name is required'))
+		}
 
 		dispatch(addChecklistCustom(name.trim(), closeModal))
 	}

@@ -48,7 +48,7 @@ class Forms extends React.Component {
 		if (!Account.default.isLoggedIn()) {
 			e.preventDefault()
 
-			dispatch(openAlert('error', 'Please login to continue'))
+			return dispatch(openAlert('error', 'Please login to continue'))
 		}
 	}
 

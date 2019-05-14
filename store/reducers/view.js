@@ -60,14 +60,14 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				alertOpen: false,
-				alertMessage: null,
 			}
 
-		/* UNSET_ALERT_TYPE */
-		case viewTypes.UNSET_ALERT_TYPE:
+		/* UNSET_ALERT */
+		case viewTypes.UNSET_ALERT:
 			return {
 				...state,
 				alertType: null,
+				alertMessage: null,
 			}
 
 		/* SYNC_VIEW */

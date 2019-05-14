@@ -21,6 +21,7 @@ import cyan from '@material-ui/core/colors/cyan'
 import { paperStyles } from '../../utils/view'
 
 import { updateChecklistCustom, deleteChecklistCustom } from '../../store/actions/checklists'
+import { openAlert } from '../../store/actions/view'
 
 const styles = theme => ({
 	header: {
@@ -102,7 +103,9 @@ class ChecklistsPanel extends React.Component {
 		const { dispatch, checklist, index } = this.props
 		const { itemText } = this.state
 
-		if (!itemText || !itemText.length) return alert('Item text is required.')
+		if (!itemText || !itemText.length) {
+			return dispatch(openAlert('error', 'Item text is required'))
+		}
 
 		const item = {text: itemText.trim(), done: false}
 		const newChecklist = {...checklist, items: checklist.items.concat([item])}

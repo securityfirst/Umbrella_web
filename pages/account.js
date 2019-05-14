@@ -25,12 +25,12 @@ import FormControlInput from '../components/common/FormControlInput'
 import FeedsEditLocation from '../components/feeds/FeedsEditLocation'
 import FeedsEditSources from '../components/feeds/FeedsEditSources'
 
-import { contentStyles, buttonWrapperStyles } from '../utils/view'
-
 import { clearDb } from '../store/actions/db'
-import { setLocale } from '../store/actions/view'
+import { setLocale, openAlert } from '../store/actions/view'
 import { setFeedLocation, setFeedSources } from '../store/actions/feeds'
 import { checkPassword, savePassword } from '../store/actions/account'
+
+import { contentStyles, buttonWrapperStyles } from '../utils/view'
 
 const localeMap = {
 	'en': 'English',
@@ -109,7 +109,6 @@ class Account extends React.Component {
 		passwordErrorMessage: '',
 		passwordConfirmError: null,
 		passwordConfirmErrorMessage: '',
-		passwordSuccessMessage: '',
 	}
 
 	componentDidMount() {
@@ -217,14 +216,16 @@ class Account extends React.Component {
 	savePassword = e => {
 		!!e && e.preventDefault()
 
-		const { router } = this.props
+		const { dispatch, router } = this.props
 		const { password, passwordConfirm } = this.state
 
 		if (
 			this.checkPassword('password') && 
 			this.checkPassword('passwordConfirm')
 		) {
-			if (password !== passwordConfirm) return alert('Passwords do not match. Please try again.')
+			if (password !== passwordConfirm) {
+				return dispatch(openAlert('error', 'Passwords do not match - please try again'))
+			}
 
 			this.props.dispatch(savePassword(password, () => {
 				if (router.pathname.indexOf('account') === -1) router.back()
@@ -236,11 +237,6 @@ class Account extends React.Component {
 						passwordErrorMessage: '',
 						passwordConfirmError: null,
 						passwordConfirmErrorMessage: '',
-						passwordSuccessMessage: 'Your password has been saved!'
-					}, () => {
-						setTimeout(() => {
-							this.setState({passwordSuccessMessage: ''})
-						}, 3000)
 					})
 				}
 			}))
@@ -369,7 +365,6 @@ class Account extends React.Component {
 			passwordErrorMessage,
 			passwordConfirmError, 
 			passwordConfirmErrorMessage,
-			passwordSuccessMessage,
 		} = this.state
 
 		return (
@@ -401,7 +396,6 @@ class Account extends React.Component {
 					}}
 				/>
 				<div className={classes.buttonWrapper}>
-					<Typography color="primary">{passwordSuccessMessage}</Typography>
 					<Button color="secondary" onClick={this.savePassword}>Confirm</Button>
 				</div>
 			</form>

@@ -14,7 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
-import { toggleMainMenu } from '../../store/actions/view'
+import { toggleMainMenu, openAlert } from '../../store/actions/view'
 
 import { viewConstants } from '../../utils/view'
 
@@ -58,6 +58,7 @@ const styles = theme => ({
 
 class Appbar extends React.Component {
 	logout = () => {
+		this.props.dispatch(openAlert('success', 'You have been logged out'))
 		const Account = require('../../account')
 		Account.default.logout()
 	}

@@ -94,7 +94,7 @@ class LessonCardTile extends React.Component {
 				</Link>
 				<CardActions classes={{root: classes.cardActions}}>
 					<FavoriteShareIcons
-						//onFavoriteRemove={this.onFavoriteRemove}
+						onFavoriteRemove={this.onFavoriteRemove}
 						name={title.replace(/ /g, '')}
 						sha={file.sha}
 						url={`${process.env.ROOT}${href}`}

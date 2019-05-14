@@ -14,6 +14,7 @@ import FeedsEditSources from './FeedsEditSources'
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
 import { getFeeds, setFeedLocation, setFeedSources } from '../../store/actions/feeds'
+import { openAlert } from '../../store/actions/view'
 
 const styles = theme => ({
 	panel: {
@@ -72,7 +73,9 @@ class FeedsEdit extends React.Component {
 	handleSubmit = () => {
 		const { dispatch, toggleEdit, feedLocation, feedSources } = this.props
 
-		if (!feedLocation || !feedSources.length) return alert('Location and sources are required.')
+		if (!feedLocation || !feedSources.length) {
+			return dispatch(openAlert('error', 'Location and sources are required'))
+		}
 
 		dispatch(getFeeds())
 

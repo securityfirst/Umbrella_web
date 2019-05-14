@@ -55,8 +55,7 @@ class ChecklistsCustom extends React.Component {
 		const { dispatch, password } = this.props
 
 		if (!password) {
-			dispatch(openAlert('error', 'Login or set a password to create a custom checklist'))
-			return
+			return dispatch(openAlert('error', 'Login or set a password to create a custom checklist'))
 		}
 
 		this.setState({modalOpen: true})

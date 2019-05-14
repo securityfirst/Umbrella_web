@@ -18,6 +18,7 @@ import FormControlInput from '../components/common/FormControlInput'
 import { contentStyles } from '../utils/view'
 
 import { checkPassword, login } from '../store/actions/account'
+import { openAlert } from '../store/actions/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -73,7 +74,7 @@ class Login extends React.Component {
 	handleLoginSubmit = e => {
 		!!e && e.preventDefault()
 
-		const { router } = this.props
+		const { dispatch, router } = this.props
 		const { password } = this.state
 
 		if (!password || !password.length) {
@@ -83,8 +84,8 @@ class Login extends React.Component {
 			})
 		}
 
-		this.props.dispatch(login(password, () => {
-			alert('You are now logged in!')
+		dispatch(login(password, () => {
+			dispatch(openAlert('success', 'You are now logged in!'))
 			if (router.pathname.indexOf('account') === -1) router.back()
 		}))
 	}

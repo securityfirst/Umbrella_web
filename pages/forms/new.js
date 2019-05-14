@@ -23,6 +23,8 @@ import FormControlRadios from '../../components/common/FormControlRadios'
 import teal from '@material-ui/core/colors/teal'
 
 import { getForm, saveForm, resetSaveForm } from '../../store/actions/forms'
+import { openAlert } from '../../store/actions/view'
+
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { ID } from '../../utils/id'
 
@@ -152,6 +154,9 @@ class FormsNew extends React.Component {
 	}
 
 	onFinish = () => {
+		const { dispatch, router, form } = this.props
+		const { formState } = this.state
+
 		this.setState({
 			activeStep: 0,
 			progress: 0,
@@ -161,15 +166,16 @@ class FormsNew extends React.Component {
 
 		const form = {
 			id: ID(),
-			sha: this.props.router.query.sha,
-			filename: this.props.form.title,
-			state: this.state.formState,
+			sha: router.query.sha,
+			filename: form.title,
+			state: formState,
 			dateCreated: date.valueOf()
 		}
 
-		this.props.dispatch(saveForm(form, () => {
-			this.props.dispatch(resetSaveForm())
-			alert('Your form has been saved')
+		dispatch(saveForm(form, () => {
+			dispatch(resetSaveForm())
+			dispatch(openAlert('success', 'Your form has been saved'))
+
 			Router.push('/forms')
 		}))
 	}
