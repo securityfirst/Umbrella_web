@@ -15,6 +15,7 @@ import AddButton from '../common/AddButton'
 import { contentStyles, paperStyles } from '../../utils/view'
 
 import { getChecklistsCustom } from '../../store/actions/checklists'
+import { openAlert } from '../../store/actions/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -51,9 +52,11 @@ class ChecklistsCustom extends React.Component {
 	}
 	
 	handleModalOpen = () => {
-		const { password } = this.props
+		const { dispatch, password } = this.props
 
-		if (!password) return alert('Login or set a password to create a custom checklist.')
+		if (!password) {
+			return dispatch(openAlert('error', 'Login or set a password to create a custom checklist'))
+		}
 
 		this.setState({modalOpen: true})
 	}

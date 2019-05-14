@@ -96,6 +96,9 @@ const view = {
 	setLocaleLoading: false,
 	setLocaleError: null,
 	locale: 'en',
+	alertOpen: false,
+	alertType: null,
+	alertMessage: null,
 }
 
 const db = {

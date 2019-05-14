@@ -141,7 +141,7 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	deleteChecklist = title => () => {
-		if (confirm('Are you sure you want to delete this checklist?')) {
+		if (confirm('Are you sure you want to remove this checklist?')) {
 			this.props.dispatch(deleteChecklistSystem(title))
 		}
 	}

@@ -15,6 +15,7 @@ import IconModalContent from '../common/IconModalContent'
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
 import { addRssSource } from '../../store/actions/feeds'
+import { openAlert } from '../../store/actions/view'
 
 const styles = theme => ({
 	iconFontSize: {
@@ -46,7 +47,7 @@ class RssSourceAdd extends React.Component {
 		const { dispatch, closeModal } = this.props
 		const { source } = this.state
 
-		if (!isUrl(source)) return alert('Input is not a valid URL.')
+		if (!isUrl(source)) return dispatch(openAlert('error', 'Input is not a valid URL'))
 
 		dispatch(addRssSource(source, closeModal))
 	}

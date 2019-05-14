@@ -4,7 +4,7 @@ import YAML from 'yaml'
 import { formsTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
-import { setAppbarTitle } from './view'
+import { setAppbarTitle, openAlert } from './view'
 
 import { decodeBlob } from '../../utils/github'
 
@@ -32,7 +32,9 @@ export const getFormSaved = (id, successCb) => async (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		return dispatch(rejected(formsTypes.GET_FORM_SAVED, 'Please login to edit your saved form'))
+		const message = 'Please login to edit your saved form'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(formsTypes.GET_FORM_SAVED, message))
 	}
 
 	try {
@@ -46,9 +48,11 @@ export const getFormSaved = (id, successCb) => async (dispatch, getState) => {
 				!!successCb && successCb(form)
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(formsTypes.GET_FORM_SAVED, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(formsTypes.GET_FORM_SAVED, e))
 	}
 }
@@ -59,8 +63,9 @@ export const saveForm = (form, successCb) => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		alert('Please login to save your form')
-		return dispatch(rejected(formsTypes.SAVE_FORM, 'Please login to save your form'))
+		const message = 'Please login to save your form'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(formsTypes.SAVE_FORM, message))
 	}
 
 	try {
@@ -75,14 +80,16 @@ export const saveForm = (form, successCb) => (dispatch, getState) => {
 		ClientDB.default
 			.set('fo_s', forms, state.account.password)
 			.then(() => {
+				dispatch(openAlert('success', 'Form saved'))
 				dispatch(fulfilled(formsTypes.SAVE_FORM, forms))
 				!!successCb && successCb()
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(formsTypes.SAVE_FORM, err))
 			})
 	} catch (e) {
-		console.error('[ACTION] saveForm exception: ', e)
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(formsTypes.SAVE_FORM, e))
 	}
 }
@@ -94,7 +101,7 @@ export const deleteForm = (form, successCb) => (dispatch, getState) => {
 
 	if (!state.account.password) {
 		const message = 'Please login to delete forms'
-		alert(message)
+		dispatch(openAlert('error', message))
 		return dispatch(rejected(formsTypes.DELETE_FORM, message))
 	}
 
@@ -103,7 +110,7 @@ export const deleteForm = (form, successCb) => (dispatch, getState) => {
 
 		if (index === -1) {
 			const message = 'Something went wrong - the form was not found'
-			alert(message)
+			dispatch(openAlert('error', message))
 			return dispatch(rejected(formsTypes.DELETE_FORM, message))
 		}
 
@@ -115,14 +122,16 @@ export const deleteForm = (form, successCb) => (dispatch, getState) => {
 		ClientDB.default
 			.set('fo_s', forms, state.account.password)
 			.then(() => {
+				dispatch(openAlert('success', 'Form deleted'))
 				dispatch(fulfilled(formsTypes.DELETE_FORM, forms))
 				!!successCb && successCb()
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(formsTypes.DELETE_FORM, err))
 			})
 	} catch (e) {
-		console.error('[ACTION] deleteForm exception: ', e)
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(formsTypes.DELETE_FORM, e))
 	}
 }

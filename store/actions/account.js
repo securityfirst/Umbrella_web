@@ -3,7 +3,9 @@ import Router from 'next/router'
 
 import { accountTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
+
 import { syncDb } from './db'
+import { openAlert } from './view'
 
 export const login = (password, cb) => (dispatch, getState) => {
 	dispatch(pending(accountTypes.LOGIN))
@@ -42,9 +44,11 @@ export const login = (password, cb) => (dispatch, getState) => {
 					})
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				return dispatch(rejected(accountTypes.LOGIN, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(accountTypes.LOGIN, e))
 	}
 }
@@ -57,9 +61,15 @@ export const checkPassword = () => async (dispatch, getState) => {
 
 		ClientDB.default
 			.get('h')
-			.then(hash => dispatch(fulfilled(accountTypes.CHECK_PASSWORD, !!hash)))
-			.catch(err => dispatch(rejected(accountTypes.CHECK_PASSWORD, err)))
+			.then(hash => {
+				dispatch(fulfilled(accountTypes.CHECK_PASSWORD, !!hash))
+			})
+			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
+				dispatch(rejected(accountTypes.CHECK_PASSWORD, err))
+			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(accountTypes.CHECK_PASSWORD, e))
 	}
 }
@@ -81,14 +91,22 @@ export const savePassword = (password, cb) => (dispatch, getState) => {
 			ClientDB.default
 				.set('h', password, key)
 				.then(() => {
+					dispatch(openAlert('sucess', 'Password saved'))
+
 					Account.default.login(password)
+
 					dispatch(fulfilled(accountTypes.SAVE_PASSWORD, password))
+					
 					!!cb && cb()
 				})
-				.catch(err => dispatch(rejected(accountTypes.SAVE_PASSWORD, err)))
+				.catch(err => {
+					dispatch(openAlert('error', 'Something went wrong'))
+					dispatch(rejected(accountTypes.SAVE_PASSWORD, err))
+				})
 		})
 		.catch(err => {
-			return dispatch(rejected(accountTypes.SAVE_PASSWORD, err))
+			dispatch(openAlert('error', 'Something went wrong'))
+			dispatch(rejected(accountTypes.SAVE_PASSWORD, err))
 		})
 }
 

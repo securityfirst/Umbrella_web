@@ -25,17 +25,43 @@ export default function reducer(state = initialState, action) {
 			}
 
 		/* SET_FEED_LOCATION */
-		case (feedsTypes.SET_FEED_LOCATION):
+		case pending(feedsTypes.SET_FEED_LOCATION):
 			return {
 				...state,
-				feedLocation: action.payload
+				setFeedLocationLoading: true,
+			}
+		case rejected(feedsTypes.SET_FEED_LOCATION):
+			return {
+				...state,
+				setFeedLocationLoading: false,
+				setFeedLocationError: action.payload,
+			}
+		case fulfilled(feedsTypes.SET_FEED_LOCATION):
+			return {
+				...state,
+				setFeedLocationLoading: false,
+				setFeedLocationError: null,
+				feedLocation: action.payload,
 			}
 
 		/* SET_FEED_SOURCES */
-		case (feedsTypes.SET_FEED_SOURCES):
+		case pending(feedsTypes.SET_FEED_SOURCES):
 			return {
 				...state,
-				feedSources: action.payload || []
+				setFeedSourcesLoading: true,
+			}
+		case rejected(feedsTypes.SET_FEED_SOURCES):
+			return {
+				...state,
+				setFeedSourcesLoading: false,
+				setFeedSourcesError: action.payload,
+			}
+		case fulfilled(feedsTypes.SET_FEED_SOURCES):
+			return {
+				...state,
+				setFeedSourcesLoading: false,
+				setFeedSourcesError: null,
+				feedSources: action.payload || [],
 			}
 
 		/* GET_RSS */

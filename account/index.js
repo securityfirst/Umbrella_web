@@ -32,7 +32,6 @@ class Account {
 		}
 
 		window.sessionStorage.removeItem('um_p')
-		alert('You have been logged out.')
 		window.location.reload()
 	}
 

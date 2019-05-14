@@ -2,6 +2,7 @@ import 'isomorphic-unfetch'
 import React from 'react'
 import atob from 'atob'
 import marked from 'marked'
+import { connect } from 'react-redux'
 
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
@@ -20,6 +21,8 @@ import LinkIcon from '@material-ui/icons/Link'
 
 import teal from '@material-ui/core/colors/teal'
 import yellow from '@material-ui/core/colors/yellow'
+
+import { openAlert } from '../../store/actions/view'
 
 import { download } from '../../utils/dom'
 import { decodeBlob } from '../../utils/github'
@@ -53,7 +56,7 @@ class FavoriteShareIcon extends React.Component {
 	handleClose = () => this.setState({ anchorEl: null })
 
 	handleDownload = () => {
-		const { name, sha } = this.props
+		const { dispatch, name, sha } = this.props
 
 		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
 			.then(res => {
@@ -65,15 +68,17 @@ class FavoriteShareIcon extends React.Component {
 			})
 			.catch(err => {
 				console.error('FavoriteShareIcons handleDownload error: ', err)
-				alert('Something went wrong. Please refresh the page and try again.')
+				dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
 			})
 	}
 
 	handleCopyLink = () => {
+		const { dispatch } = this.props
+
 		if (typeof document === 'undefined') return false
 
 		if (!document.queryCommandSupported('copy')) {
-			alert('This is not supported by your browser.')
+			dispatch(openAlert('error', 'This is not supported by your browser.'))
 			return false
 		}
 
@@ -180,4 +185,4 @@ class FavoriteShareIcon extends React.Component {
 	}
 }
 
-export default withStyles(styles)(FavoriteShareIcon)
+export default connect()(withStyles(styles)(FavoriteShareIcon))

@@ -3,6 +3,8 @@ import 'isomorphic-unfetch'
 import { lessonsTypes, viewTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
+import { openAlert } from './view'
+
 export const getLessonChecklist = sha => async (dispatch, getState) => {
 	dispatch(pending(lessonsTypes.GET_LESSON_CHECKLIST))
 
@@ -15,6 +17,7 @@ export const getLessonChecklist = sha => async (dispatch, getState) => {
 			dispatch(fulfilled(lessonsTypes.GET_LESSON_CHECKLIST, content))
 		})
 		.catch(err => {
+			dispatch(openAlert('error', 'Something went wrong'))
 			dispatch(rejected(lessonsTypes.GET_LESSON_CHECKLIST, err))
 		})
 }
@@ -33,6 +36,7 @@ export const getLessonFile = sha => async (dispatch, getState) => {
 			dispatch(fulfilled(lessonsTypes.GET_LESSON_FILE, content))
 		})
 		.catch(err => {
+			dispatch(openAlert('error', 'Something went wrong'))
 			dispatch(rejected(lessonsTypes.GET_LESSON_FILE, err))
 		})
 }
@@ -55,9 +59,11 @@ export const getLessonCardsFavorites = () => async (dispatch, getState) => {
 				await dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES, lessons || []))
 			})
 			.catch(async err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				await dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		await dispatch(rejected(lessonsTypes.GET_LESSON_CARDS_FAVORITES, e))
 	}
 }
@@ -68,15 +74,21 @@ export const addLessonCardFavorite = (file, level) => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		return alert('You need to login to save favorite lessons.')
+		const message = 'You need to login to save favorite lessons'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE, message))
 	}
 
 	if (!file) {
-		return dispatch(rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE, 'Something went wrong.'))
+		const message = 'Something went wrong'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE, message))
 	}
 
 	if (state.lessons.lessonCardsFavorites.find(item => item.name === file.name)) {
-		return alert('This lesson already exists in your Favorites list.')
+		const message = 'This lesson already exists in your Favorites list'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE, message))
 	}
 
 	const favorites = state.lessons.lessonCardsFavorites.concat([{...file, level}])
@@ -87,12 +99,15 @@ export const addLessonCardFavorite = (file, level) => (dispatch, getState) => {
 		ClientDB.default
 			.set('le_f', favorites, state.account.password)
 			.then(() => {
+				dispatch(openAlert('success', 'Lesson added to favorites'))
 				return dispatch(fulfilled(lessonsTypes.ADD_LESSON_CARD_FAVORITE, favorites))
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE, e))
 	}
 }
@@ -103,15 +118,21 @@ export const removeLessonCardFavorite = file => (dispatch, getState) => {
 	const state = getState()
 
 	if (!state.account.password) {
-		return alert('Please login to save favorite lessons.')
+		const message = 'Please login to save favorite lessons'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, message))
 	}
 
 	if (!file) {
-		return dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, 'Something went wrong.'))
+		const message = 'Something went wrong.'
+		dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, message))
+		return dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, message))
 	}
 
 	if (!state.lessons.lessonCardsFavorites.find(item => item.name === file.name)) {
-		return alert('This lesson does not exist in your favorites list.')
+		const message = 'This lesson does not exist in your favorites list'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, message))
 	}
 
 	const favorites = state.lessons.lessonCardsFavorites.filter(item => item.name !== file.name)
@@ -122,13 +143,15 @@ export const removeLessonCardFavorite = file => (dispatch, getState) => {
 		ClientDB.default
 			.set('le_f', favorites, state.account.password)
 			.then(() => {
-				alert('Lesson has been removed from favorites.')
+				dispatch(openAlert('success', 'Lesson removed from favorites'))
 				return dispatch(fulfilled(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, favorites))
 			})
 			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
 				dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, err))
 			})
 	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, e))
 	}
 }
