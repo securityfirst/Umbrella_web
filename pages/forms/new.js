@@ -164,7 +164,7 @@ class FormsNew extends React.Component {
 
 		const date = new Date()
 
-		const form = {
+		const newForm = {
 			id: ID(),
 			sha: router.query.sha,
 			filename: form.title,
@@ -172,7 +172,7 @@ class FormsNew extends React.Component {
 			dateCreated: date.valueOf()
 		}
 
-		dispatch(saveForm(form, () => {
+		dispatch(saveForm(newForm, () => {
 			dispatch(resetSaveForm())
 			dispatch(openAlert('success', 'Your form has been saved'))
 
