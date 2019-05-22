@@ -59,7 +59,7 @@ const styles = theme => ({
 
 class LessonCardTile extends React.Component {
 	onFavoriteToggle = () => {
-		this.props.dispatch(addLessonCardFavorite(this.props.file, this.props.level))
+		this.props.dispatch(addLessonCardFavorite(this.props.file, this.props.category, this.props.level))
 	}
 
 	/* TODO: Remove this and change add to toggle */
@@ -110,6 +110,7 @@ class LessonCardTile extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.view,
 	...state.lessons,
 })
 

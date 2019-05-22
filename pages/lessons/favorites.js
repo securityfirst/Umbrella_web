@@ -73,6 +73,7 @@ class LessonsFavorites extends React.Component {
 										key={i} 
 										index={i} 
 										file={file} 
+										category={file.category}
 										level={file.level} 
 										isFavorited 
 									/>

@@ -68,7 +68,7 @@ export const getLessonCardsFavorites = () => async (dispatch, getState) => {
 	}
 }
 
-export const addLessonCardFavorite = (file, level) => (dispatch, getState) => {
+export const addLessonCardFavorite = (file, category, level) => (dispatch, getState) => {
 	dispatch(pending(lessonsTypes.ADD_LESSON_CARD_FAVORITE))
 
 	const state = getState()
@@ -91,7 +91,7 @@ export const addLessonCardFavorite = (file, level) => (dispatch, getState) => {
 		return dispatch(rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE, message))
 	}
 
-	const favorites = state.lessons.lessonCardsFavorites.concat([{...file, level}])
+	const favorites = state.lessons.lessonCardsFavorites.concat([{...file, category, level}])
 
 	try {
 		const ClientDB = require('../../db')
