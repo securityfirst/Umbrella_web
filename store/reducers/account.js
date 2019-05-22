@@ -70,6 +70,27 @@ export default function reducer(state = initialState, action) {
 				password: action.payload,
 			}
 
+		/* RESET_PASSWORD */
+		case pending(accountTypes.RESET_PASSWORD):
+			return {
+				...state,
+				resetPasswordLoading: true,
+				resetPasswordError: null,
+			}
+		case rejected(accountTypes.RESET_PASSWORD):
+			return {
+				...state,
+				resetPasswordLoading: false,
+				resetPasswordError: action.payload,
+			}
+		case fulfilled(accountTypes.RESET_PASSWORD):
+			return {
+				...state,
+				resetPasswordLoading: false,
+				resetPasswordError: null,
+				password: action.payload,
+			}
+
 		/* CLEAR_PASSWORD */
 		case accountTypes.CLEAR_PASSWORD:
 			return {

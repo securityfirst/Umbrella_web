@@ -14,6 +14,8 @@ const account = {
 	savePasswordLoading: false,
 	savePasswordError: null,
 	savePasswordSuccess: false,
+	resetPasswordLoading: false,
+	resetPasswordError: null,
 }
 
 const feeds = {

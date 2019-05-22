@@ -70,9 +70,6 @@ export default function reducer(state = initialState, action) {
 				alertMessage: null,
 			}
 
-		/* SYNC_VIEW */
-		case viewTypes.SYNC_VIEW: return action.payload
-
 		/* CLEAR_VIEW */
 		case viewTypes.CLEAR_VIEW:
 			return {

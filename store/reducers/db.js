@@ -23,6 +23,25 @@ export default function reducer(state = initialState, action) {
 				error: null,
 			}
 
+		/* RESET_DB_ENCRYPTION */
+		case pending(dbTypes.RESET_DB_ENCRYPTION):
+			return {
+				...state,
+				loading: true,
+			}
+		case rejected(dbTypes.RESET_DB_ENCRYPTION):
+			return {
+				...state,
+				loading: false,
+				error: action.payload,
+			}
+		case fulfilled(dbTypes.RESET_DB_ENCRYPTION):
+			return {
+				...state,
+				loading: false,
+				error: null,
+			}
+
 		/* CLEAR_DB */
 		case pending(dbTypes.CLEAR_DB):
 			return {

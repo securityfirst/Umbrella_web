@@ -58,9 +58,14 @@ const styles = theme => ({
 
 class Appbar extends React.Component {
 	logout = () => {
-		this.props.dispatch(openAlert('success', 'You have been logged out'))
+		const { dispatch } = this.props
 		const Account = require('../../account')
+
 		Account.default.logout()
+
+		dispatch(openAlert('success', 'You have been logged out'))
+
+		window.location.reload()
 	}
 
 	renderRightContent() {
