@@ -12,7 +12,7 @@ export const getChecklistsSystem = () => async (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		return dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, {}))
 	}
 
@@ -39,7 +39,7 @@ export const updateChecklistsSystem = (itemName, category, level) => (dispatch, 
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		const message = 'Login or set a password to update lesson checklists'
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, message))
@@ -83,7 +83,7 @@ export const deleteChecklistSystem = listKey => (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		const message = 'Login or set a password to delete lesson checklists'
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_SYSTEM, message))
@@ -116,7 +116,7 @@ export const getChecklistsCustom = () => (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		const message = 'Login or set a password to create a custom checklist'
 		dispatch(openAlert('warning', message))
 		return dispatch(rejected(checklistsTypes.GET_CHECKLISTS_CUSTOM, message))
@@ -145,7 +145,7 @@ export const addChecklistCustom = (name, successCb) => (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		const message = 'Login or set a password to create a custom checklist'
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(checklistsTypes.ADD_CHECKLIST_CUSTOM, message))
@@ -185,7 +185,7 @@ export const updateChecklistCustom = (checklist, i) => (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		dispatch(openAlert('warning', 'You must be logged in to update your custom checklist'))
 		return window.reload()
 	}
@@ -217,7 +217,7 @@ export const deleteChecklistCustom = i => (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		dispatch(openAlert('error', 'You must be logged in to update your custom checklist'))
 		return window.reload()
 	}
@@ -249,7 +249,7 @@ export const toggleChecklistFavorite = (category, level) => (dispatch, getState)
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		const message = 'You must be logged in to save your favorite checklists'
 		dispatch(openAlert('warning', message))
 		return dispatch(rejected(checklistsTypes.TOGGLE_CHECKLIST_FAVORITE, message))

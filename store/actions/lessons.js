@@ -46,7 +46,7 @@ export const getLessonCardsFavorites = () => async (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		return dispatch(fulfilled(lessonsTypes.GET_LESSON_CARDS_FAVORITES, []))
 	}
 
@@ -73,7 +73,7 @@ export const addLessonCardFavorite = (file, category, level) => (dispatch, getSt
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		const message = 'You need to login to save favorite lessons'
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(lessonsTypes.ADD_LESSON_CARD_FAVORITE, message))
@@ -117,7 +117,7 @@ export const removeLessonCardFavorite = file => (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		const message = 'Please login to save favorite lessons'
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, message))

@@ -128,8 +128,8 @@ class FeedsEdit extends React.Component {
 	}
 }
 
-const mapStateToProps = store => ({
-	...store.feeds
+const mapStateToProps = state => ({
+	...state.feeds
 })
 
 export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(FeedsEdit))

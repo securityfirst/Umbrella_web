@@ -25,6 +25,27 @@ export default function reducer(state = initialState, action) {
 				password: action.payload,
 			}
 
+		/* CHECK_PROTECTED */
+		case pending(accountTypes.CHECK_PROTECTED):
+			return {
+				...state,
+				checkProtectedLoading: true,
+				checkProtectedError: null,
+			}
+		case rejected(accountTypes.CHECK_PROTECTED):
+			return {
+				...state,
+				checkProtectedLoading: false,
+				checkProtectedError: action.payload,
+			}
+		case fulfilled(accountTypes.CHECK_PROTECTED):
+			return {
+				...state,
+				checkProtectedLoading: false,
+				checkProtectedError: null,
+				isProtected: action.payload,
+			}
+
 		/* CHECK_PASSWORD */
 		case pending(accountTypes.CHECK_PASSWORD):
 			return {

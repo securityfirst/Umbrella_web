@@ -20,11 +20,11 @@ export const syncDb = () => async (dispatch, getState) => {
 		const ClientDB = require('../../db')
 		const Account = require('../../account')
 
-		const enabled = await ClientDB.default.get('enabled')
+		const isProtected = await ClientDB.default.get('protected')
 		const hash = await ClientDB.default.get('h')
 		const password = await Account.default.password()
 
-		if (!enabled || !hash || !password) return await dispatch(rejected(dbTypes.SYNC_DB, 'DB sync failed to authenticate'))
+		if (isProtected && (!hash || !password)) return await dispatch(rejected(dbTypes.SYNC_DB, 'DB sync failed to authenticate'))
 
 		let feedLocation = await ClientDB.default.get('fe_l', password, true)
 		let feedSources = await ClientDB.default.get('fe_s', password, true)
@@ -136,6 +136,8 @@ export const clearDb = () => async (dispatch, getState) => {
 		await dispatch(clearView())
 		
 		await dispatch(fulfilled(dbTypes.CLEAR_DB))
+
+		window.location.reload()
 	} catch (e) {
 		await dispatch(rejected(dbTypes.CLEAR_DB, e))
 	}

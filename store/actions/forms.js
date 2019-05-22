@@ -31,7 +31,7 @@ export const getFormSaved = (id, successCb) => async (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		const message = 'Please login to edit your saved form'
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(formsTypes.GET_FORM_SAVED, message))
@@ -62,7 +62,7 @@ export const saveForm = (form, successCb) => (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		const message = 'Please login to save your form'
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(formsTypes.SAVE_FORM, message))
@@ -99,7 +99,7 @@ export const deleteForm = (form, successCb) => (dispatch, getState) => {
 
 	const state = getState()
 
-	if (!state.account.password) {
+	if (state.account.isProtected && !state.account.password) {
 		const message = 'Please login to delete forms'
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(formsTypes.DELETE_FORM, message))
