@@ -26,13 +26,7 @@ class Account {
 	logout() {
 		if (!this.window()) return false
 
-		if (!this.isLoggedIn()) {
-			alert('You are already logged out.')
-			return false
-		}
-
 		window.sessionStorage.removeItem('um_p')
-		window.location.reload()
 	}
 
 	async password() {

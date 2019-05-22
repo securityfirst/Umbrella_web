@@ -28,7 +28,7 @@ import FeedsEditSources from '../components/feeds/FeedsEditSources'
 import { clearDb } from '../store/actions/db'
 import { setLocale, openAlert } from '../store/actions/view'
 import { setFeedLocation, setFeedSources } from '../store/actions/feeds'
-import { checkPassword, savePassword } from '../store/actions/account'
+import { checkPassword, savePassword, resetPassword } from '../store/actions/account'
 
 import { contentStyles, buttonWrapperStyles } from '../utils/view'
 
@@ -77,7 +77,9 @@ const styles = theme => ({
 		alignItems: 'center',
 	},
 	description: {
-		marginBottom: '2rem',
+		margin: '1rem 0',
+		fontSize: '.75rem',
+		color: theme.palette.grey[600],
 	},
 	disclaimerLarge: {
 		textTransform: 'uppercase',
@@ -105,6 +107,7 @@ class Account extends React.Component {
 		feedsModalContent: null,
 		password: '',
 		passwordConfirm: '',
+		passwordOld: '',
 		passwordError: null,
 		passwordErrorMessage: '',
 		passwordConfirmError: null,
@@ -216,8 +219,8 @@ class Account extends React.Component {
 	savePassword = e => {
 		!!e && e.preventDefault()
 
-		const { dispatch, router } = this.props
-		const { password, passwordConfirm } = this.state
+		const { dispatch, router, passwordExists } = this.props
+		const { password, passwordConfirm, passwordOld } = this.state
 
 		if (
 			this.checkPassword('password') && 
@@ -227,19 +230,33 @@ class Account extends React.Component {
 				return dispatch(openAlert('error', 'Passwords do not match - please try again'))
 			}
 
-			this.props.dispatch(savePassword(password, () => {
-				if (router.pathname.indexOf('account') === -1) router.back()
-				else {
+			if (passwordExists) {
+				dispatch(resetPassword(password, passwordOld, () => {
 					this.setState({
 						password: '',
 						passwordConfirm: '',
+						passwordOld: '',
 						passwordError: null,
 						passwordErrorMessage: '',
 						passwordConfirmError: null,
 						passwordConfirmErrorMessage: '',
 					})
-				}
-			}))
+				}))
+			} else {
+				dispatch(savePassword(password, () => {
+					if (router.pathname.indexOf('account') === -1) router.back()
+					else {
+						this.setState({
+							password: '',
+							passwordConfirm: '',
+							passwordError: null,
+							passwordErrorMessage: '',
+							passwordConfirmError: null,
+							passwordConfirmErrorMessage: '',
+						})
+					}
+				}))
+			}
 		}
 	}
 
@@ -357,10 +374,11 @@ class Account extends React.Component {
 	}
 
 	renderPasswordForm() {
-		const { classes } = this.props
+		const { classes, passwordExists } = this.props
 		const { 
 			password, 
-			passwordConfirm, 
+			passwordConfirm,
+			passwordOld, 
 			passwordError, 
 			passwordErrorMessage,
 			passwordConfirmError, 
@@ -369,11 +387,24 @@ class Account extends React.Component {
 
 		return (
 			<form onSubmit={this.savePassword}>
+				{passwordExists && <FormControlInput
+					id="old-password"
+					className={classes.input}
+					type="password"
+					label="Old Password"
+					value={passwordOld}
+					error={passwordError}
+					errorMessage={passwordErrorMessage}
+					onChange={this.handlePasswordChange('passwordOld')}
+					inputProps={{
+						onBlur: this.clearPasswordErrors
+					}}
+				/>}
 				<FormControlInput
 					id="reg-password"
 					className={classes.input}
 					type="password"
-					label="Password"
+					label={passwordExists ? 'New Password' : 'Password'}
 					value={password}
 					error={passwordError}
 					errorMessage={passwordErrorMessage}
@@ -386,7 +417,7 @@ class Account extends React.Component {
 					id="reg-passwordConfirm"
 					className={classes.input}
 					type="password"
-					label="Password Confirm"
+					label={passwordExists ? 'Confirm New Password' : 'Confirm Password'}
 					value={passwordConfirm}
 					error={passwordConfirmError}
 					errorMessage={passwordConfirmErrorMessage}
@@ -395,6 +426,13 @@ class Account extends React.Component {
 						onBlur: this.clearPasswordErrors
 					}}
 				/>
+				<Typography className={classes.description} paragraph>
+					* Your password must be at least 8 characters long and must contain at least one digit 
+					and one capital letter.
+				</Typography>
+				{passwordExists && <Typography className={classes.description} paragraph>
+					** Enter your old password to retain your saved data.
+				</Typography>}
 				<div className={classes.buttonWrapper}>
 					<Button color="secondary" onClick={this.savePassword}>Confirm</Button>
 				</div>
@@ -408,22 +446,14 @@ class Account extends React.Component {
 		if (checkPasswordLoading) return <Loading />
 		if (checkPasswordError) return <ErrorMessage error={checkPasswordError} />
 
-		// TODO: Add toggle to reset password and re-encrypt database
 		return (
 			<React.Fragment>
-				<Typography><strong>Status: </strong>{passwordExists ? 'Already Set' : 'Not Set'}</Typography>
-				<Typography className={classes.description} paragraph>
-					Your password must be at least 8 characters long and must contain at least one digit 
-					and one capital letter.
-				</Typography>
-				<Typography className={classes.disclaimerLarge} paragraph>
+				<Typography paragraph><strong>Status: </strong>{passwordExists ? 'Already Set' : 'Not Set'}</Typography>
+				<Typography className={classes.disclaimerLarge}>
 					<strong>DISCLAIMER: </strong> We do not store any data on our servers during your 
-					usage, including your password. Your password is encrypted and stored on your browser, 
-					and it is used to decrypt other information you choose to store. Please do not use a 
+					usage, including your password. Your password is encoded and stored on your browser, 
+					and it is used to decode other information you choose to store. Please do not use a 
 					sensitive password combination in case it is compromised.
-				</Typography>
-				<Typography className={classes.disclaimerSmall} paragraph>
-					For more information, visit <Link href="/about"><a>this page</a></Link>.
 				</Typography>
 				{this.renderPasswordForm()}
 			</React.Fragment>
@@ -431,7 +461,7 @@ class Account extends React.Component {
 	}
 
 	render() {
-		const { classes } = this.props
+		const { classes, passwordExists } = this.props
 
 		return (
 			<Layout title="Umbrella | Account" description="Umbrella web application">
@@ -459,7 +489,7 @@ class Account extends React.Component {
 					{/* Password */}
 					<ExpansionPanel expanded={this.state.expanded === 2} onChange={this.handlePanelToggle(2)}>
 						<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-							<Typography className={classes.heading} variant="h6">Set password</Typography>
+							<Typography className={classes.heading} variant="h6">{`${passwordExists ? 'Reset' : 'Set'} password`}</Typography>
 						</ExpansionPanelSummary>
 						<ExpansionPanelDetails className={classes.formWrapper}>
 							{this.renderPassword()}

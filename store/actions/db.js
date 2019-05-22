@@ -26,76 +26,95 @@ export const syncDb = () => async (dispatch, getState) => {
 
 		if (!enabled || !hash || !password) return await dispatch(rejected(dbTypes.SYNC_DB, 'DB sync failed to authenticate'))
 
-		try {
-			let locale = await ClientDB.default.get('locale')
-			let feedLocation = await ClientDB.default.get('fe_l', password, true)
-			let feedSources = await ClientDB.default.get('fe_s', password, true)
-			let rssSources = await ClientDB.default.get('rs_s', password, true)
-			let formsSaved = await ClientDB.default.get('fo_s', password, true)
-			let checklistsSystem = await ClientDB.default.get('ch_s', password, true)
-			let checklistsCustom = await ClientDB.default.get('ch_c', password, true)
-			let lessonCardsFavorites = await ClientDB.default.get('le_f', password, true)
+		let feedLocation = await ClientDB.default.get('fe_l', password, true)
+		let feedSources = await ClientDB.default.get('fe_s', password, true)
+		let rssSources = await ClientDB.default.get('rs_s', password, true)
+		let formsSaved = await ClientDB.default.get('fo_s', password, true)
+		let checklistsSystem = await ClientDB.default.get('ch_s', password, true)
+		let checklistsCustom = await ClientDB.default.get('ch_c', password, true)
+		let lessonCardsFavorites = await ClientDB.default.get('le_f', password, true)
 
-			let viewMerge = {}
-			let feedsMerge = {}
-			let formsMerge = {}
-			let checklistsMerge = {}
-			let lessonsMerge = {}
+		let feedsMerge = {}
+		let formsMerge = {}
+		let checklistsMerge = {}
+		let lessonsMerge = {}
 
-			if (locale) viewMerge.locale = locale
+		if (feedLocation) feedsMerge.feedLocation = feedLocation
+		if (feedSources) feedsMerge.feedSources = feedSources
+		if (rssSources) feedsMerge.rssSources = rssSources
 
-			if (feedLocation) feedsMerge.feedLocation = feedLocation
-			if (feedSources) feedsMerge.feedSources = feedSources
-			if (rssSources) feedsMerge.rssSources = rssSources
+		if (formsSaved) formsMerge.formsSaved = formsSaved
 
-			if (formsSaved) formsMerge.formsSaved = formsSaved
+		if (checklistsSystem) checklistsMerge.checklistsSystem = checklistsSystem
+		if (checklistsCustom) checklistsMerge.checklistsCustom = checklistsCustom
 
-			if (checklistsSystem) checklistsMerge.checklistsSystem = checklistsSystem
-			if (checklistsCustom) checklistsMerge.checklistsCustom = checklistsCustom
+		if (lessonCardsFavorites) lessonsMerge.lessonCardsFavorites = lessonCardsFavorites
 
-			if (lessonCardsFavorites) lessonsMerge.lessonCardsFavorites = lessonCardsFavorites
-
-			if (Object.keys(viewMerge).length) {
-				await dispatch({
-					type: viewTypes.SYNC_VIEW, 
-					payload: merge(state.view, viewMerge)
-				})
-			}
-
-			if (Object.keys(feedsMerge).length) {
-				await dispatch({
-					type: feedsTypes.SYNC_FEEDS, 
-					payload: merge(state.feeds, feedsMerge)
-				})
-			}
-
-			if (Object.keys(formsMerge).length) {
-				await dispatch({
-					type: formsTypes.SYNC_FORMS, 
-					payload: merge(state.forms, formsMerge)
-				})
-			}
-
-			if (Object.keys(checklistsMerge).length) {
-				await dispatch({
-					type: checklistsTypes.SYNC_CHECKLISTS, 
-					payload: merge(state.checklists, checklistsMerge)
-				})
-			}
-
-			if (Object.keys(lessonsMerge).length) {
-				await dispatch({
-					type: lessonsTypes.SYNC_LESSONS, 
-					payload: merge(state.lessons, lessonsMerge)
-				})
-			}
-
-			return await dispatch(fulfilled(dbTypes.SYNC_DB))
-		} catch (e) {
-			return await dispatch(rejected(dbTypes.SYNC_DB, e))
+		if (Object.keys(feedsMerge).length) {
+			await dispatch({
+				type: feedsTypes.SYNC_FEEDS, 
+				payload: merge(state.feeds, feedsMerge)
+			})
 		}
+
+		if (Object.keys(formsMerge).length) {
+			await dispatch({
+				type: formsTypes.SYNC_FORMS, 
+				payload: merge(state.forms, formsMerge)
+			})
+		}
+
+		if (Object.keys(checklistsMerge).length) {
+			await dispatch({
+				type: checklistsTypes.SYNC_CHECKLISTS, 
+				payload: merge(state.checklists, checklistsMerge)
+			})
+		}
+
+		if (Object.keys(lessonsMerge).length) {
+			await dispatch({
+				type: lessonsTypes.SYNC_LESSONS, 
+				payload: merge(state.lessons, lessonsMerge)
+			})
+		}
+
+		return await dispatch(fulfilled(dbTypes.SYNC_DB))
 	} catch (e) {
 		return await dispatch(rejected(dbTypes.SYNC_DB, e))
+	}
+}
+
+export const resetDbEncryption = (key, newPassword) => async (dispatch, getState) => {
+	await dispatch(pending(dbTypes.RESET_DB_ENCRYPTION))
+
+	try {
+		const state = getState()
+
+		const ClientDB = require('../../db')
+
+		const password = await ClientDB.default.get('h', key)
+
+		if (!password) return await dispatch(rejected(dbTypes.RESET_DB_ENCRYPTION, 'DB failed to reset'))
+
+		let feedLocation = await ClientDB.default.get('fe_l', password, true)
+		let feedSources = await ClientDB.default.get('fe_s', password, true)
+		let rssSources = await ClientDB.default.get('rs_s', password, true)
+		let formsSaved = await ClientDB.default.get('fo_s', password, true)
+		let checklistsSystem = await ClientDB.default.get('ch_s', password, true)
+		let checklistsCustom = await ClientDB.default.get('ch_c', password, true)
+		let lessonCardsFavorites = await ClientDB.default.get('le_f', password, true)
+
+		if (feedLocation) await ClientDB.default.set('fe_l', feedLocation, newPassword)
+		if (feedSources) await ClientDB.default.set('fe_s', feedSources, newPassword)
+		if (rssSources) await ClientDB.default.set('rs_s', rssSources, newPassword)
+		if (formsSaved) await ClientDB.default.set('fo_s', formsSaved, newPassword)
+		if (checklistsSystem) await ClientDB.default.set('ch_s', checklistsSystem, newPassword)
+		if (checklistsCustom) await ClientDB.default.set('ch_c', checklistsCustom, newPassword)
+		if (lessonCardsFavorites) await ClientDB.default.set('le_f', lessonCardsFavorites, newPassword)
+
+		return await dispatch(fulfilled(dbTypes.RESET_DB_ENCRYPTION))
+	} catch (e) {
+		return await dispatch(rejected(dbTypes.RESET_DB_ENCRYPTION, e))
 	}
 }
 
