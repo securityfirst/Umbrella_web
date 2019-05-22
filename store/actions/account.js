@@ -54,6 +54,27 @@ export const login = (password, cb) => (dispatch, getState) => {
 	}
 }
 
+export const checkProtected = () => async (dispatch, getState) => {
+	dispatch(pending(accountTypes.CHECK_PROTECTED))
+
+	try {
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+		.get('protected')
+		.then(isProtected => {
+			dispatch(fulfilled(accountTypes.CHECK_PROTECTED, !!isProtected))
+		})
+		.catch(err => {
+			dispatch(openAlert('error', 'Something went wrong'))
+			dispatch(rejected(accountTypes.CHECK_PROTECTED, err))
+		})
+	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(rejected(accountTypes.CHECK_PROTECTED, e))
+	}
+}
+
 export const checkPassword = () => async (dispatch, getState) => {
 	dispatch(pending(accountTypes.CHECK_PASSWORD))
 
@@ -87,12 +108,12 @@ export const savePassword = (password, cb) => (dispatch, getState) => {
 		return res.text()
 	})
 	.then(key => {
-		ClientDB.default.set('enabled', true)
+		ClientDB.default.set('protected', true)
 
 		ClientDB.default
 		.set('h', password, key)
 		.then(() => {
-			dispatch(openAlert('sucess', 'Password saved'))
+			dispatch(openAlert('success', 'Password saved'))
 
 			Account.default.login(password)
 

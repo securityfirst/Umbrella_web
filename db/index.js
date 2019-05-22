@@ -5,35 +5,32 @@ class ClientDB {
 	constructor() {
 		if (typeof window === 'undefined') throw new Error('[ClientDB] Cannot initialize serverside')
 
-		this.store = null
+		this.db = null
 	}
 
 	init() {
-		return new Promise((resolve, reject) => {
-			if (this.store) return resolve()
+		return new Promise(async (resolve, reject) => {
+			if (this.db) return resolve()
 
 			try {
-				this.store = localforage.createInstance({
+				this.db = localforage.createInstance({
 					name: 'umbrella',
 					storeName: 'store',
 					description: 'Local data store',
 				})
 
-				this.store
-					.getItem('enabled')
-					.then(val => {
-						if (!val) this.store.setItem('enabled', false)
+				const isProtected = await this.db.getItem('protected')
 
-						return resolve()
-					})
+				if (isProtected === null) {
+					const hash = await this.db.getItem('h')
+					this.db.setItem('protected', hash !== null)
+				}
 
-				this.store
-					.getItem('locale')
-					.then(val => {
-						if (!val) this.store.setItem('locale', 'en')
+				const locale = await this.db.getItem('locale')
 
-						return resolve()
-					})
+				if (locale === null) this.db.setItem('locale', 'en')
+
+				return resolve()
 			} catch (e) {
 				console.error('[ClientDB] init() exception: \n', e)
 				return reject(e)
@@ -43,12 +40,12 @@ class ClientDB {
 
 	get(key, encryptionKey, expectsObject = false) {
 		return new Promise(async (resolve, reject) => {
-			if (!this.store) await this.init()
+			if (!this.db) await this.init()
 
-			this.store
+			this.db
 				.ready()
 				.then(() => {
-					this.store
+					this.db
 						.getItem(key)
 						.then(data => {
 							if (!data) return resolve()
@@ -67,9 +64,9 @@ class ClientDB {
 
 	set(key, value, encryptionKey) {
 		return new Promise(async (resolve, reject) => {
-			if (!this.store) await this.init()
+			if (!this.db) await this.init()
 
-			this.store
+			this.db
 				.ready()
 				.then(() => {
 					if (encryptionKey) {
@@ -77,7 +74,7 @@ class ClientDB {
 						value = crypto.encrypt(value)
 					}
 
-					this.store
+					this.db
 						.setItem(key, value)
 						.then(resolve)
 						.catch(reject)
@@ -87,27 +84,27 @@ class ClientDB {
 	}
 
 	clear() {
-		return this.store.clear()
+		return this.db.clear()
 	}
 
-	enable() {
-		return this.store.setItem('enabled', true)
-	}
+	// enable() {
+	// 	return this.db.setItem('protected', true)
+	// }
 
-	disable(clear) {
-		return new Promise((resolve, reject) => {
-			try {
-				this.store
-					.setItem('enabled', false)
-					.then(resolve)
+	// disable(clear) {
+	// 	return new Promise((resolve, reject) => {
+	// 		try {
+	// 			this.db
+	// 				.setItem('protected', false)
+	// 				.then(resolve)
 
-				if (clear) this.store.clear()
-			} catch (e) {
-				console.error('[ClientDB] clearAll() exception: \n', e)
-				reject(e)
-			}
-		})
-	}
+	// 			if (clear) this.db.clear()
+	// 		} catch (e) {
+	// 			console.error('[ClientDB] clearAll() exception: \n', e)
+	// 			reject(e)
+	// 		}
+	// 	})
+	// }
 }
 
 export default new ClientDB()

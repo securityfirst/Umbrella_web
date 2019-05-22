@@ -28,7 +28,7 @@ import FeedsEditSources from '../components/feeds/FeedsEditSources'
 import { clearDb } from '../store/actions/db'
 import { setLocale, openAlert } from '../store/actions/view'
 import { setFeedLocation, setFeedSources } from '../store/actions/feeds'
-import { checkPassword, savePassword, resetPassword } from '../store/actions/account'
+import { savePassword, resetPassword } from '../store/actions/account'
 
 import { contentStyles, buttonWrapperStyles } from '../utils/view'
 
@@ -117,9 +117,6 @@ class Account extends React.Component {
 	componentDidMount() {
 		const { query } = this.props.router
 		if (query && query.setpassword) this.setState({expanded: 2})
-
-		// check if password exists in DB, not just logged in
-		this.props.dispatch(checkPassword())
 	}
 
 	handlePanelToggle = i => (e, expanded) => {

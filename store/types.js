@@ -4,6 +4,7 @@ export const contentTypes = {
 
 export const accountTypes = {
 	LOGIN: 'LOGIN',
+	CHECK_PROTECTED: 'CHECK_PROTECTED',
 	CHECK_PASSWORD: 'CHECK_PASSWORD',
 	SAVE_PASSWORD: 'SAVE_PASSWORD',
 	RESET_PASSWORD: 'RESET_PASSWORD',

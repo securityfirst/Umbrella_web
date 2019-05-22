@@ -42,10 +42,9 @@ const styles = theme => ({
 
 class Forms extends React.Component {
 	checkLogin = e => {
-		const { dispatch } = this.props
-		const Account = require('../../account')
+		const { dispatch, isProtected, password } = this.props
 
-		if (!Account.default.isLoggedIn()) {
+		if (isProtected && !password) {
 			e.preventDefault()
 
 			return dispatch(openAlert('error', 'Please login to continue'))
@@ -193,6 +192,7 @@ class Forms extends React.Component {
 
 const mapStateToProps = state => ({
 	...state.view,
+	...state.account,
 	...state.content,
 	...state.forms,
 })

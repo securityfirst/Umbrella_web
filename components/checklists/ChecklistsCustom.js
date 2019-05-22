@@ -52,9 +52,9 @@ class ChecklistsCustom extends React.Component {
 	}
 	
 	handleModalOpen = () => {
-		const { dispatch, password } = this.props
+		const { dispatch, isProtected, password } = this.props
 
-		if (!password) {
+		if (isProtected && !password) {
 			return dispatch(openAlert('error', 'Login or set a password to create a custom checklist'))
 		}
 
@@ -94,10 +94,10 @@ class ChecklistsCustom extends React.Component {
 	}
 
 	render() {
-		const { classes, password, getChecklistsCustomLoading, getChecklistsCustomError } = this.props
+		const { classes, isProtected, password, getChecklistsCustomLoading, getChecklistsCustomError } = this.props
 		const { modalOpen } = this.state
 
-		if (!password) return (
+		if (isProtected && !password) return (
 			<div className={classes.content}>
 				<Paper className={classes.panel} square>
 					<Typography className={classes.text} paragraph>
