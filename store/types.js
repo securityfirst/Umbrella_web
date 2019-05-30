@@ -9,6 +9,7 @@ export const accountTypes = {
 	SAVE_PASSWORD: 'SAVE_PASSWORD',
 	RESET_PASSWORD: 'RESET_PASSWORD',
 	CLEAR_PASSWORD: 'CLEAR_PASSWORD',
+	UNSET_PASSWORD: 'UNSET_PASSWORD',
 }
 
 export const feedsTypes = {
@@ -70,6 +71,7 @@ export const viewTypes = {
 
 export const dbTypes = {
 	SYNC_DB: 'SYNC_DB',
+	ENCRYPT_DB: 'ENCRYPT_DB',
 	RESET_DB_ENCRYPTION: 'RESET_DB_ENCRYPTION',
 	CLEAR_DB: 'CLEAR_DB',
 }

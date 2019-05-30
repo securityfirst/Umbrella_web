@@ -10,8 +10,6 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Switch from '@material-ui/core/Switch'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Divider from '@material-ui/core/Divider'
 import Menu from '@material-ui/core/Menu'
@@ -30,7 +28,7 @@ import FeedsEditSources from '../components/feeds/FeedsEditSources'
 import { clearDb } from '../store/actions/db'
 import { setLocale, openAlert } from '../store/actions/view'
 import { setFeedLocation, setFeedSources } from '../store/actions/feeds'
-import { savePassword, resetPassword, skipPassword } from '../store/actions/account'
+import { savePassword, resetPassword, unsetPassword } from '../store/actions/account'
 
 import { contentStyles, buttonWrapperStyles } from '../utils/view'
 
@@ -79,7 +77,7 @@ const styles = theme => ({
 		alignItems: 'center',
 	},
 	description: {
-		margin: '1rem 0',
+		margin: '0',
 		fontSize: '.75rem',
 		color: theme.palette.grey[600],
 	},
@@ -92,12 +90,14 @@ const styles = theme => ({
 		flexDirection: 'column',
 	},
 	input: {
-		marginTop: '1rem',
+		display: 'block',
+		margin: '1rem 0',
 	},
 	buttonWrapper: {
-		...buttonWrapperStyles(theme),
-		justifyContent: 'space-between',
 		marginTop: '2rem',
+	},
+	skipButton: {
+		marginLeft: '1rem',
 	},
 })
 
@@ -174,14 +174,6 @@ class Account extends React.Component {
 			passwordConfirmError: null,
 			passwordConfirmErrorMessage: '',
 		})
-	}
-
-	handleSkipPassword = e => {
-		const { dispatch, passwordExists, isProtected } = this.props
-
-		if (!e.target.checked && !passwordExists) return dispatch(openAlert('warning', 'You don\'t have a password set.'))
-
-		dispatch(skipPassword())
 	}
 
 	clearPasswordErrors = () => {
@@ -265,6 +257,16 @@ class Account extends React.Component {
 				}))
 			}
 		}
+	}
+
+	unsetPassword = e => {
+		const { dispatch, passwordExists, isProtected } = this.props
+
+		if (!passwordExists || !isProtected) {
+			return dispatch(openAlert('warning', 'You don\'t have a password set.'))
+		}
+
+		dispatch(unsetPassword())
 	}
 
 	renderSettings = () => {
@@ -440,21 +442,11 @@ class Account extends React.Component {
 				{passwordExists && <Typography className={classes.description} paragraph>
 					** Enter your old password to retain your saved data.
 				</Typography>}
-				{(passwordExists && isProtected) && <div className={classes.checkboxWrapper}>
-					<FormControlLabel
-						control={
-							<Switch
-								checked={!isProtected}
-								onChange={this.handleSkipPassword}
-								value="checkedB"
-								color="primary"
-							/>
-						}
-						label="Skip Password"
-					/>
-				</div>}
 				<div className={classes.buttonWrapper}>
-					<Button color="secondary" onClick={this.savePassword}>Confirm</Button>
+					<Button color="primary" variant="contained" onClick={this.savePassword}>Confirm</Button>
+					{(passwordExists && isProtected) && 
+						<Button className={classes.skipButton} color="primary" onClick={this.unsetPassword}>Unset Password</Button>
+					}
 				</div>
 			</form>
 		)

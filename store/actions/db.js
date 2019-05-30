@@ -24,7 +24,9 @@ export const syncDb = () => async (dispatch, getState) => {
 		const hash = await ClientDB.default.get('h')
 		const password = await Account.default.password()
 
-		if (isProtected && (!hash || !password)) return await dispatch(rejected(dbTypes.SYNC_DB, 'DB sync failed to authenticate'))
+		if (isProtected && (!hash || !password)) {
+			return await dispatch(rejected(dbTypes.SYNC_DB, 'DB sync failed to authenticate'))
+		}
 
 		let feedLocation = await ClientDB.default.get('fe_l', password, true)
 		let feedSources = await ClientDB.default.get('fe_s', password, true)
@@ -81,6 +83,42 @@ export const syncDb = () => async (dispatch, getState) => {
 		return await dispatch(fulfilled(dbTypes.SYNC_DB))
 	} catch (e) {
 		return await dispatch(rejected(dbTypes.SYNC_DB, e))
+	}
+}
+
+export const encryptDb = (key, password) => async (dispatch, getState) => {
+	await dispatch(pending(dbTypes.ENCRYPT_DB))
+
+	try {
+		const state = getState()
+
+		const ClientDB = require('../../db')
+
+		const currentPassword = await ClientDB.default.get('h', key)
+
+		if (currentPassword) {
+			return await dispatch(rejected(dbTypes.ENCRYPT_DB, 'DB is already encrypted'))
+		}
+
+		let feedLocation = await ClientDB.default.get('fe_l', null, true)
+		let feedSources = await ClientDB.default.get('fe_s', null, true)
+		let rssSources = await ClientDB.default.get('rs_s', null, true)
+		let formsSaved = await ClientDB.default.get('fo_s', null, true)
+		let checklistsSystem = await ClientDB.default.get('ch_s', null, true)
+		let checklistsCustom = await ClientDB.default.get('ch_c', null, true)
+		let lessonCardsFavorites = await ClientDB.default.get('le_f', null, true)
+
+		if (feedLocation) await ClientDB.default.set('fe_l', feedLocation, password)
+		if (feedSources) await ClientDB.default.set('fe_s', feedSources, password)
+		if (rssSources) await ClientDB.default.set('rs_s', rssSources, password)
+		if (formsSaved) await ClientDB.default.set('fo_s', formsSaved, password)
+		if (checklistsSystem) await ClientDB.default.set('ch_s', checklistsSystem, password)
+		if (checklistsCustom) await ClientDB.default.set('ch_c', checklistsCustom, password)
+		if (lessonCardsFavorites) await ClientDB.default.set('le_f', lessonCardsFavorites, password)
+
+		return await dispatch(fulfilled(dbTypes.ENCRYPT_DB))
+	} catch (e) {
+		return await dispatch(rejected(dbTypes.ENCRYPT_DB, e))
 	}
 }
 
