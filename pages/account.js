@@ -12,10 +12,10 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Divider from '@material-ui/core/Divider'
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
 import Modal from '@material-ui/core/Modal'
 
 import Layout from '../components/layout'
@@ -28,7 +28,7 @@ import FeedsEditSources from '../components/feeds/FeedsEditSources'
 import { clearDb } from '../store/actions/db'
 import { setLocale, openAlert } from '../store/actions/view'
 import { setFeedLocation, setFeedSources } from '../store/actions/feeds'
-import { savePassword, resetPassword } from '../store/actions/account'
+import { savePassword, resetPassword, unsetPassword } from '../store/actions/account'
 
 import { contentStyles, buttonWrapperStyles } from '../utils/view'
 
@@ -77,7 +77,7 @@ const styles = theme => ({
 		alignItems: 'center',
 	},
 	description: {
-		margin: '1rem 0',
+		margin: '0',
 		fontSize: '.75rem',
 		color: theme.palette.grey[600],
 	},
@@ -90,12 +90,14 @@ const styles = theme => ({
 		flexDirection: 'column',
 	},
 	input: {
-		marginTop: '1rem',
+		display: 'block',
+		margin: '1rem 0',
 	},
 	buttonWrapper: {
-		...buttonWrapperStyles(theme),
-		justifyContent: 'space-between',
 		marginTop: '2rem',
+	},
+	skipButton: {
+		marginLeft: '1rem',
 	},
 })
 
@@ -257,6 +259,16 @@ class Account extends React.Component {
 		}
 	}
 
+	unsetPassword = e => {
+		const { dispatch, passwordExists, isProtected } = this.props
+
+		if (!passwordExists || !isProtected) {
+			return dispatch(openAlert('warning', 'You don\'t have a password set.'))
+		}
+
+		dispatch(unsetPassword())
+	}
+
 	renderSettings = () => {
 		const { classes, locale } = this.props
 		const { anchorEl } = this.state
@@ -371,7 +383,7 @@ class Account extends React.Component {
 	}
 
 	renderPasswordForm() {
-		const { classes, passwordExists } = this.props
+		const { classes, passwordExists, isProtected } = this.props
 		const { 
 			password, 
 			passwordConfirm,
@@ -431,7 +443,10 @@ class Account extends React.Component {
 					** Enter your old password to retain your saved data.
 				</Typography>}
 				<div className={classes.buttonWrapper}>
-					<Button color="secondary" onClick={this.savePassword}>Confirm</Button>
+					<Button color="primary" variant="contained" onClick={this.savePassword}>Confirm</Button>
+					{(passwordExists && isProtected) && 
+						<Button className={classes.skipButton} color="primary" onClick={this.unsetPassword}>Unset Password</Button>
+					}
 				</div>
 			</form>
 		)

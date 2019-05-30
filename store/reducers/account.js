@@ -112,6 +112,20 @@ export default function reducer(state = initialState, action) {
 				password: action.payload,
 			}
 
+		/* UNSET_PASSWORD */
+		case pending(accountTypes.UNSET_PASSWORD):
+			return {
+				...state,
+				unsetPasswordLoading: true,
+				unsetPasswordError: null,
+			}
+		case rejected(accountTypes.UNSET_PASSWORD):
+			return {
+				...state,
+				unsetPasswordLoading: false,
+				unsetPasswordError: action.payload,
+			}
+
 		/* CLEAR_PASSWORD */
 		case accountTypes.CLEAR_PASSWORD:
 			return {

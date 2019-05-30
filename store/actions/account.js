@@ -4,7 +4,7 @@ import Router from 'next/router'
 import { accountTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
-import { syncDb, clearDb, resetDbEncryption } from './db'
+import { syncDb, encryptDb, clearDb, resetDbEncryption } from './db'
 import { openAlert, setLocale } from './view'
 
 export const login = (password, cb) => (dispatch, getState) => {
@@ -107,7 +107,10 @@ export const savePassword = (password, cb) => (dispatch, getState) => {
 		if (!res.ok) throw res
 		return res.text()
 	})
-	.then(key => {
+	.then(async key => {
+		// First encrypt DB
+		await dispatch(encryptDb(key, password))
+
 		ClientDB.default.set('protected', true)
 
 		ClientDB.default
@@ -136,7 +139,9 @@ export const resetPassword = (newPassword, oldPassword, cb) => async (dispatch, 
 	dispatch(pending(accountTypes.RESET_PASSWORD))
 
 	if (!oldPassword) {
-		if (!confirm('Are you sure you want to reset your password? All saved data will be lost.')) return
+		if (!confirm('Are you sure you want to reset your password? All saved data will be lost.')) {
+			return dispatch(rejected(accountTypes.RESET_PASSWORD, 'Action cancelled'))
+		}
 
 		try {
 			const state = getState()
@@ -146,6 +151,7 @@ export const resetPassword = (newPassword, oldPassword, cb) => async (dispatch, 
 			await dispatch(setLocale(locale))
 			await dispatch(savePassword(newPassword))
 			await dispatch(checkPassword())
+
 			return dispatch(fulfilled(accountTypes.RESET_PASSWORD, newPassword))
 		} catch (e) {
 			return dispatch(rejected(accountTypes.RESET_PASSWORD, e))
@@ -182,7 +188,7 @@ export const resetPassword = (newPassword, oldPassword, cb) => async (dispatch, 
 					// login with new password
 					await Account.default.login(newPassword)
 
-					dispatch(openAlert('sucess', 'Password reset'))
+					dispatch(openAlert('success', 'Password reset'))
 
 					dispatch(fulfilled(accountTypes.RESET_PASSWORD, newPassword))
 					
@@ -198,8 +204,39 @@ export const resetPassword = (newPassword, oldPassword, cb) => async (dispatch, 
 				dispatch(rejected(accountTypes.RESET_PASSWORD, err))
 			})
 		} catch (e) {
+			dispatch(openAlert('error', 'Something went wrong'))
 			dispatch(rejected(accountTypes.RESET_PASSWORD))
 		}
+	}
+}
+
+export const unsetPassword = () => async (dispatch, getState) => {
+	dispatch(pending(accountTypes.UNSET_PASSWORD))
+
+	try {
+		const state = getState()
+		const { passwordExists, isProtected } = state.account
+
+		if (!isProtected) return dispatch(fulfilled(accountTypes.UNSET_PASSWORD))
+
+		if (!confirm('Are you sure you want to unset your password? All saved data will be lost.')) {
+			return dispatch(rejected(accountTypes.UNSET_PASSWORD, 'Action cancelled'))
+		}
+
+		const { locale } = state.view
+
+		await dispatch(clearDb())
+		await dispatch(setLocale(locale))
+		await dispatch(checkPassword())
+
+		// logout
+		await Account.default.logout()
+		await dispatch(openAlert('success', 'Password reset'))
+
+		setTimeout(() => window.location.reload(), 1000)
+	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(rejected(accountTypes.UNSET_PASSWORD))
 	}
 }
 

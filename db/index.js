@@ -83,28 +83,25 @@ class ClientDB {
 		})
 	}
 
+	remove(key) {
+		return new Promise(async (resolve, reject) => {
+			if (!this.db) await this.init()
+
+			this.db
+				.ready()
+				.then(() => {
+					this.db
+						.removeItem(key)
+						.then(resolve)
+						.catch(reject)
+				})
+				.catch(reject)
+		})
+	}
+
 	clear() {
 		return this.db.clear()
 	}
-
-	// enable() {
-	// 	return this.db.setItem('protected', true)
-	// }
-
-	// disable(clear) {
-	// 	return new Promise((resolve, reject) => {
-	// 		try {
-	// 			this.db
-	// 				.setItem('protected', false)
-	// 				.then(resolve)
-
-	// 			if (clear) this.db.clear()
-	// 		} catch (e) {
-	// 			console.error('[ClientDB] clearAll() exception: \n', e)
-	// 			reject(e)
-	// 		}
-	// 	})
-	// }
 }
 
 export default new ClientDB()
