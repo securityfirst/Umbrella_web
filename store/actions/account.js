@@ -198,8 +198,29 @@ export const resetPassword = (newPassword, oldPassword, cb) => async (dispatch, 
 				dispatch(rejected(accountTypes.RESET_PASSWORD, err))
 			})
 		} catch (e) {
+			dispatch(openAlert('error', 'Something went wrong'))
 			dispatch(rejected(accountTypes.RESET_PASSWORD))
 		}
+	}
+}
+
+export const skipPassword = () => async (dispatch, getState) => {
+	dispatch(pending(accountTypes.SKIP_PASSWORD))
+
+	try {
+		const state = getState()
+		const { isProtected } = state
+
+		if (isProtected) {
+			if (!confirm('Are you sure you want to skip password? All saved data will be decoded and become human readable.')) return
+
+
+		} else {
+			return dispatch(fulfilled())
+		}
+	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(rejected(accountTypes.SKIP_PASSWORD))
 	}
 }
 

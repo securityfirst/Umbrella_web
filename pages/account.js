@@ -10,12 +10,14 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Divider from '@material-ui/core/Divider'
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
 import Modal from '@material-ui/core/Modal'
 
 import Layout from '../components/layout'
@@ -28,7 +30,7 @@ import FeedsEditSources from '../components/feeds/FeedsEditSources'
 import { clearDb } from '../store/actions/db'
 import { setLocale, openAlert } from '../store/actions/view'
 import { setFeedLocation, setFeedSources } from '../store/actions/feeds'
-import { savePassword, resetPassword } from '../store/actions/account'
+import { savePassword, resetPassword, skipPassword } from '../store/actions/account'
 
 import { contentStyles, buttonWrapperStyles } from '../utils/view'
 
@@ -172,6 +174,14 @@ class Account extends React.Component {
 			passwordConfirmError: null,
 			passwordConfirmErrorMessage: '',
 		})
+	}
+
+	handleSkipPassword = e => {
+		const { dispatch, passwordExists, isProtected } = this.props
+
+		if (!e.target.checked && !passwordExists) return dispatch(openAlert('warning', 'You don\'t have a password set.'))
+
+		dispatch(skipPassword())
 	}
 
 	clearPasswordErrors = () => {
@@ -371,7 +381,7 @@ class Account extends React.Component {
 	}
 
 	renderPasswordForm() {
-		const { classes, passwordExists } = this.props
+		const { classes, passwordExists, isProtected } = this.props
 		const { 
 			password, 
 			passwordConfirm,
@@ -430,6 +440,19 @@ class Account extends React.Component {
 				{passwordExists && <Typography className={classes.description} paragraph>
 					** Enter your old password to retain your saved data.
 				</Typography>}
+				{(passwordExists && isProtected) && <div className={classes.checkboxWrapper}>
+					<FormControlLabel
+						control={
+							<Switch
+								checked={!isProtected}
+								onChange={this.handleSkipPassword}
+								value="checkedB"
+								color="primary"
+							/>
+						}
+						label="Skip Password"
+					/>
+				</div>}
 				<div className={classes.buttonWrapper}>
 					<Button color="secondary" onClick={this.savePassword}>Confirm</Button>
 				</div>
