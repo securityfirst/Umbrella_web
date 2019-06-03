@@ -11,6 +11,7 @@ import { getPageContext } from '../lib/mui'
 
 import { getContent } from '../store/actions/content'
 import { checkProtected, checkPassword, login } from '../store/actions/account'
+import { syncView } from '../store/actions/view'
 
 import './index.css'
 
@@ -55,6 +56,7 @@ class MyApp extends App {
 
 			dispatch(checkProtected())
 			dispatch(checkPassword())
+			dispatch(syncView())
 		}
 	}
 

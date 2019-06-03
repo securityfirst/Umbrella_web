@@ -18,7 +18,7 @@ export const toggleLessonsMenu = opened => {
 	return {type: viewTypes.TOGGLE_LESSONS_MENU, payload: opened}
 }
 
-export const setLocale = (locale, successCb) => (dispatch, getState) => {
+export const setLocale = locale => (dispatch, getState) => {
 	dispatch(pending(viewTypes.SET_LOCALE))
 
 	try {
@@ -28,7 +28,6 @@ export const setLocale = (locale, successCb) => (dispatch, getState) => {
 			.set('locale', locale)
 			.then(() => {
 				dispatch(fulfilled(viewTypes.SET_LOCALE, locale))
-				!!successCb && successCb()
 			})
 			.catch(err => {
 				dispatch(rejected(viewTypes.SET_LOCALE, err))
@@ -55,3 +54,12 @@ export const closeAlert = () => (dispatch) => {
 export const unsetAlert = () => ({type: viewTypes.UNSET_ALERT})
 
 export const clearView = () => ({type: viewTypes.CLEAR_VIEW})
+
+// Separate from syncDb, since view is not dependent on password
+export const syncView = () => async (dispatch, getState) => {
+	const ClientDB = require('../../db')
+
+	let locale = await ClientDB.default.get('locale')
+
+	dispatch(setLocale(locale))
+}
