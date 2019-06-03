@@ -131,7 +131,7 @@ class LessonsMenu extends React.Component {
 					<ListItemIcon className={classes.menuListItemIcon}>
 						<img 
 							className={classes.menuListItemIconImg} 
-							src={`/static/assets/content/${locale}/${category}/${category}.png`} 
+							src={`/static/assets/content/en/${category}/${category}.png`} 
 						/>
 					</ListItemIcon>
 					<ListItemText className={classes.menuListItemText} inset primary={category.replace(/-/g, ' ')} />
@@ -183,7 +183,7 @@ class LessonsMenu extends React.Component {
 							<ListItemIcon className={classes.menuListItemIcon}>
 								<img 
 									className={classes.menuListItemIconImg} 
-									src={`/static/assets/content/${locale}/glossary/glossary.png`} 
+									src={`/static/assets/content/en/glossary/glossary.png`} 
 								/>
 							</ListItemIcon>
 							<ListItemText className={classes.menuListItemText} inset primary="Glossary" />
