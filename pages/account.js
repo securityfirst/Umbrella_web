@@ -27,7 +27,6 @@ import FeedsEditSources from '../components/feeds/FeedsEditSources'
 
 import { clearDb } from '../store/actions/db'
 import { setLocale, openAlert } from '../store/actions/view'
-import { setFeedLocation, setFeedSources } from '../store/actions/feeds'
 import { savePassword, resetPassword, unsetPassword } from '../store/actions/account'
 
 import { contentStyles, buttonWrapperStyles } from '../utils/view'
@@ -140,14 +139,6 @@ class Account extends React.Component {
 		this.handleLocaleMenuClose()
 	}
 
-	setLocation = location => {
-		this.props.dispatch(setFeedLocation(location))
-	}
-
-	setSources = sources => {
-		this.props.dispatch(setFeedSources(sources))
-	}
-
 	handleModalClose = () => this.setState({feedsModalOpen: false})
 
 	handleFormOpen = type => () => {
@@ -156,10 +147,10 @@ class Account extends React.Component {
 		// set modal inner content
 		switch (type) {
 			case 'location': 
-				state.feedsModalContent = <FeedsEditLocation closeModal={this.handleModalClose} onSubmit={this.setLocation} />
+				state.feedsModalContent = <FeedsEditLocation closeModal={this.handleModalClose} />
 				break
 			case 'sources': 
-				state.feedsModalContent = <FeedsEditSources closeModal={this.handleModalClose} onSubmit={this.setSources} />
+				state.feedsModalContent = <FeedsEditSources closeModal={this.handleModalClose} />
 				break
 		}
 

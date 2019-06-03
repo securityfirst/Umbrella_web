@@ -4,7 +4,7 @@ import Router from 'next/router'
 import { accountTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
-import { syncDb, encryptDb, clearDb, resetDbEncryption } from './db'
+import { encryptDb, clearDb, resetDbEncryption } from './db'
 import { openAlert, setLocale } from './view'
 
 export const login = (password, cb) => (dispatch, getState) => {
@@ -38,7 +38,6 @@ export const login = (password, cb) => (dispatch, getState) => {
 				Account.default.login(password, async () => {
 					await dispatch(fulfilled(accountTypes.LOGIN, password))
 					await dispatch(checkPassword())
-					await dispatch(syncDb())
 
 					!!cb && cb()
 				})

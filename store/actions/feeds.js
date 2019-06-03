@@ -59,19 +59,22 @@ export const setFeedLocation = location => (dispatch, getState) => {
 
 	const state = getState()
 
+	if (state.account.isProtected && !state.account.password) {
+		const message = 'Login to update the feed location'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(feedsTypes.SET_FEED_LOCATION, message))
+	}
+
 	try {
-		if (state.account.password) {
-			const ClientDB = require('../../db')
+		const ClientDB = require('../../db')
 
-			ClientDB.default.set('fe_l', location, state.account.password)
+		ClientDB.default.set('fe_l', location, state.account.password)
 
-			dispatch(openAlert('success', 'Location saved'))
-		}
-
-		return dispatch(fulfilled(feedsTypes.SET_FEED_LOCATION, location))
+		dispatch(openAlert('success', 'Location saved'))
+		dispatch(fulfilled(feedsTypes.SET_FEED_LOCATION, location))
 	} catch (e) {
 		dispatch(openAlert('error', 'Something went wrong'))
-		return dispatch(rejected(feedsTypes.SET_FEED_LOCATION, e))
+		dispatch(rejected(feedsTypes.SET_FEED_LOCATION, e))
 	}
 }
 
@@ -80,19 +83,22 @@ export const setFeedSources = sources => (dispatch, getState) => {
 
 	const state = getState()
 
+	if (state.account.isProtected && !state.account.password) {
+		const message = 'Login to update the feed sources'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(feedsTypes.SET_FEED_SOURCES, message))
+	}
+
 	try {
-		if (state.account.password) {
-			const ClientDB = require('../../db')
+		const ClientDB = require('../../db')
 
-			ClientDB.default.set('fe_s', sources, state.account.password)
+		ClientDB.default.set('fe_s', sources, state.account.password)
 
-			dispatch(openAlert('success', 'Sources saved'))
-		}
-
-		return dispatch(fulfilled(feedsTypes.SET_FEED_SOURCES, sources))
+		dispatch(openAlert('success', 'Sources saved'))
+		dispatch(fulfilled(feedsTypes.SET_FEED_SOURCES, sources))
 	} catch (e) {
 		dispatch(openAlert('error', 'Something went wrong'))
-		return dispatch(rejected(feedsTypes.SET_FEED_SOURCES, e))
+		dispatch(rejected(feedsTypes.SET_FEED_SOURCES, e))
 	}
 }
 
@@ -137,6 +143,12 @@ export const addRssSource = (source, successCb) => (dispatch, getState) => {
 
 	const state = getState()
 
+	if (state.account.isProtected && !state.account.password) {
+		const message = 'Login to update the RSS sources'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(feedsTypes.ADD_RSS_SOURCE, message))
+	}
+
 	if (state.feeds.rssSources.includes(source)) {
 		const message = 'This RSS source is already added to your list'
 		dispatch(openAlert('error', message))
@@ -164,11 +176,9 @@ export const addRssSource = (source, successCb) => (dispatch, getState) => {
 				const sources = state.feeds.rssSources.concat([source])
 				const rss = state.feeds.rss.concat([data])
 
-				if (state.account.password) {
-					const ClientDB = require('../../db')
+				const ClientDB = require('../../db')
 
-					ClientDB.default.set('rs_s', sources, state.account.password)
-				}
+				ClientDB.default.set('rs_s', sources, state.account.password)
 
 				dispatch(openAlert('success', 'RSS source saved'))
 				dispatch(fulfilled(feedsTypes.ADD_RSS_SOURCE, {sources, rss}))
@@ -190,6 +200,12 @@ export const removeRssSource = index => (dispatch, getState) => {
 	const state = getState()
 	const source = state.feeds.rssSources[index]
 
+	if (state.account.isProtected && !state.account.password) {
+		const message = 'Login to update the RSS sources'
+		dispatch(openAlert('error', message))
+		return dispatch(rejected(feedsTypes.REMOVE_RSS_SOURCE, message))
+	}
+
 	if (!source) {
 		const message = 'This RSS source does not exist on your list'
 		dispatch(openAlert('error', message))
@@ -200,14 +216,11 @@ export const removeRssSource = index => (dispatch, getState) => {
 		const sources = state.feeds.rssSources.filter(s => s !== source)
 		const rss = state.feeds.rss.filter((r, i) => i !== index)
 
-		if (state.account.password) {
-			const ClientDB = require('../../db')
+		const ClientDB = require('../../db')
 
-			ClientDB.default.set('rs_s', sources, state.account.password)
+		ClientDB.default.set('rs_s', sources, state.account.password)
 
-			dispatch(openAlert('success', 'RSS source has been removed'))
-		}
-		
+		dispatch(openAlert('success', 'RSS source has been removed'))		
 		dispatch(fulfilled(feedsTypes.REMOVE_RSS_SOURCE, {sources, rss}))
 	} catch (e) {
 		dispatch(openAlert('error', 'Something went wrong'))

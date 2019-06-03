@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -12,6 +11,8 @@ import FormControlLocation from '../common/FormControlLocation'
 import IconModalContent from '../common/IconModalContent'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
+
+import { setFeedLocation } from '../../store/actions/feeds'
 
 const styles = theme => ({
 	iconFontSize: {
@@ -33,6 +34,10 @@ class FeedsEditLocation extends React.Component {
 		errorMessage: null,
 	}
 
+	componentDidMount() {
+		this.setState({location: this.props.feedLocation})
+	}
+
 	handleSelect = location => {
 		this.setState({location})
 	}
@@ -40,12 +45,12 @@ class FeedsEditLocation extends React.Component {
 	handleSubmit = e => {
 		!!e && e.preventDefault()
 
-		const { dispatch, onSubmit, closeModal } = this.props
+		const { dispatch, closeModal } = this.props
 		const { location } = this.state
 
 		if (!location) return dispatch(openAlert('error', 'No location was selected'))
 
-		onSubmit(location)
+		dispatch(setFeedLocation(location))
 		closeModal()
 	}
 
@@ -89,4 +94,8 @@ class FeedsEditLocation extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(FeedsEditLocation)
+const mapStateToProps = state => ({
+	...state.feeds,
+})
+
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(FeedsEditLocation))

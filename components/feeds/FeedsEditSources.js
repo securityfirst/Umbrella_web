@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -17,6 +16,8 @@ import teal from '@material-ui/core/colors/teal'
 import FormControlCheckbox from '../common/FormControlCheckbox'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
+
+import { setFeedSources } from '../../store/actions/feeds'
 
 const styles = theme => ({
 	checkboxControl: {
@@ -59,13 +60,21 @@ class FeedsEditSources extends React.Component {
 		else this.setState({sourcesSelected: sourcesSelected.concat([sourceValue])})
 	}
 
+	handleSelectAll = () => {
+		const { sourcesSelected } = this.state
+
+		if (sourcesSelected.length === sources.length) this.setState({sourcesSelected: []})
+		else this.setState({sourcesSelected: sources.map(s => s.value)})
+	}
+
 	handleSubmit = e => {
 		!!e && e.preventDefault()
 
+		const { dispatch, closeModal } = this.props
 		const { sourcesSelected } = this.state
 
-		this.props.onSubmit(sourcesSelected)
-		this.props.closeModal()
+		dispatch(setFeedSources(sourcesSelected))
+		closeModal()
 	}
 
 	handleCancel = () => {
@@ -86,6 +95,12 @@ class FeedsEditSources extends React.Component {
 					<Typography variant="h6">Select the feed sources</Typography>
 					<FormControl required error={error} component="fieldset" className={classes.checkboxControl}>
 						<FormGroup>
+							<FormControlCheckbox
+								name="Select All"
+								value="all"
+								checked={sourcesSelected.length === sources.length} 
+								onChange={this.handleSelectAll} 
+							/>
 							{sources.map((source, i) => (
 								<FormControlCheckbox
 									key={i}
