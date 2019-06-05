@@ -100,6 +100,7 @@ const view = {
 	mainMenuOpened: false,
 	appbarTitle: null,
 	lessonsMenuOpened: 0,
+	pathwayModalOpened: true,
 	setLocaleLoading: false,
 	setLocaleError: null,
 	locale: 'en',

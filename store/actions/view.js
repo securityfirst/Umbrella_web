@@ -18,6 +18,10 @@ export const toggleLessonsMenu = opened => {
 	return {type: viewTypes.TOGGLE_LESSONS_MENU, payload: opened}
 }
 
+export const togglePathwayModal = opened => {
+	return {type: viewTypes.TOGGLE_PATHWAY_MODAL, payload: opened}
+}
+
 export const setLocale = locale => (dispatch, getState) => {
 	dispatch(pending(viewTypes.SET_LOCALE))
 

@@ -12,7 +12,6 @@ import DeleteIcon from '@material-ui/icons/Delete'
 
 import cyan from '@material-ui/core/colors/cyan'
 
-import ChecklistsPanel from './ChecklistsPanel'
 import Loading from '../common/Loading'
 import ErrorMessage from '../common/ErrorMessage'
 

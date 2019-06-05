@@ -25,6 +25,13 @@ export default function reducer(state = initialState, action) {
 				lessonsMenuOpened: action.payload,
 			}
 
+		/* TOGGLE_PATHWAY_MODAL */
+		case viewTypes.TOGGLE_PATHWAY_MODAL:
+			return {
+				...state,
+				pathwayModalOpened: action.payload,
+			}
+
 		/* SET_LOCALE */
 		case pending(viewTypes.SET_LOCALE):
 			return {
