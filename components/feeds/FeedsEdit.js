@@ -13,7 +13,7 @@ import FeedsEditSources from './FeedsEditSources'
 
 import { paperStyles, buttonWrapperStyles } from '../../utils/view'
 
-import { getFeeds, setFeedLocation, setFeedSources } from '../../store/actions/feeds'
+import { getFeeds } from '../../store/actions/feeds'
 import { openAlert } from '../../store/actions/view'
 
 const styles = theme => ({
@@ -44,14 +44,6 @@ class FeedsEdit extends React.Component {
 		modalContent: null,
 	}
 
-	setLocation = location => {
-		this.props.dispatch(setFeedLocation(location))
-	}
-
-	setSources = sources => {
-		this.props.dispatch(setFeedSources(sources))
-	}
-
 	handleModalClose = () => this.setState({modalOpen: false})
 
 	handleFormOpen = type => () => {
@@ -60,10 +52,10 @@ class FeedsEdit extends React.Component {
 		// set modal inner content
 		switch (type) {
 			case 'location': 
-				state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} onSubmit={this.setLocation} />
+				state.modalContent = <FeedsEditLocation closeModal={this.handleModalClose} />
 				break
 			case 'sources': 
-				state.modalContent = <FeedsEditSources closeModal={this.handleModalClose} onSubmit={this.setSources} />
+				state.modalContent = <FeedsEditSources closeModal={this.handleModalClose} />
 				break
 		}
 

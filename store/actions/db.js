@@ -27,7 +27,7 @@ export const syncDb = () => async (dispatch, getState) => {
 		if (isProtected && (!hash || !password)) {
 			return await dispatch(rejected(dbTypes.SYNC_DB, 'DB sync failed to authenticate'))
 		}
-
+		
 		let feedLocation = await ClientDB.default.get('fe_l', password, true)
 		let feedSources = await ClientDB.default.get('fe_s', password, true)
 		let rssSources = await ClientDB.default.get('rs_s', password, true)

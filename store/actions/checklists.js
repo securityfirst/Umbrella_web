@@ -40,7 +40,7 @@ export const updateChecklistsSystem = (itemName, category, level) => (dispatch, 
 	const state = getState()
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Login or set a password to update lesson checklists'
+		const message = 'Login to update lesson checklists'
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM, message))
 	}
@@ -84,7 +84,7 @@ export const deleteChecklistSystem = listKey => (dispatch, getState) => {
 	const state = getState()
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Login or set a password to delete lesson checklists'
+		const message = 'Login to delete lesson checklists'
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(checklistsTypes.DELETE_CHECKLIST_SYSTEM, message))
 	}
@@ -117,7 +117,7 @@ export const getChecklistsCustom = () => (dispatch, getState) => {
 	const state = getState()
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Login or set a password to create a custom checklist'
+		const message = 'Login to create a custom checklist'
 		dispatch(openAlert('warning', message))
 		return dispatch(rejected(checklistsTypes.GET_CHECKLISTS_CUSTOM, message))
 	}
@@ -146,7 +146,7 @@ export const addChecklistCustom = (name, successCb) => (dispatch, getState) => {
 	const state = getState()
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Login or set a password to create a custom checklist'
+		const message = 'Login to create a custom checklist'
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(checklistsTypes.ADD_CHECKLIST_CUSTOM, message))
 	}
