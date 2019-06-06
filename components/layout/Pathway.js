@@ -15,12 +15,12 @@ import StarIcon from '@material-ui/icons/Star'
 import StarBorderIcon from '@material-ui/icons/StarBorder'
 import Button from '@material-ui/core/Button'
 
-import { togglePathwayModal, openAlert } from '../../store/actions/view'
+import { dismissPathwayModal, openAlert } from '../../store/actions/view'
 
 import { paperStyles } from '../../utils/view'
 
 const pathways = [
-	{name: 'Security Planning', uri: '/'},
+	{name: 'Security Planning', uri: '/assess-your-risk.security-planning'},
 	{name: 'Digital Basics', uri: '/'},
 	{name: 'Physical Basics', uri: '/'},
 	{name: 'Digital Crisis', uri: '/'},
@@ -111,12 +111,8 @@ const styles = theme => ({
 })
 
 class Pathway extends React.Component {
-	// componentDidMount() {
-	// 	// check for don't show again cookie here
-	// }
-
-	handleModalClose = () => {
-		this.props.dispatch(togglePathwayModal(false))
+	handleDismiss = () => {
+		this.props.dispatch(dismissPathwayModal(false))
 	}
 
 	handleFavorite = e => {
@@ -124,10 +120,6 @@ class Pathway extends React.Component {
 	}
 
 	handleShowMe = () => {
-
-	}
-
-	handleDismiss = () => {
 
 	}
 
@@ -163,10 +155,10 @@ class Pathway extends React.Component {
 				aria-labelledby="pathway-modal-title"
 				aria-describedby="pathway-modal-description"
 				open={pathwayModalOpened}
-				onClose={this.handleModalClose}
+				onClose={this.handleDismiss}
 			>
 				<Paper className={classes.modalContent} elevation={1}>
-					<IconButton aria-label="Close" className={classes.closeButton} onClick={this.handleModalClose}>
+					<IconButton aria-label="Close" className={classes.closeButton} onClick={this.handleDismiss}>
 						<CloseIcon />
 					</IconButton>
 
@@ -180,8 +172,7 @@ class Pathway extends React.Component {
 						className={classes.showMeButton}
 						component="button" 
 						variant="contained" 
-						color="secondary" 
-						//size="small" 
+						color="secondary"
 						onClick={this.handleShowMe}
 					>
 						Show Me

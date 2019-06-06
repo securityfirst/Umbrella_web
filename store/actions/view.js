@@ -22,6 +22,27 @@ export const togglePathwayModal = opened => {
 	return {type: viewTypes.TOGGLE_PATHWAY_MODAL, payload: opened}
 }
 
+export const dismissPathwayModal = opened => (dispatch, getState) => {
+	dispatch(pending(viewTypes.DISMISS_PATHWAY_MODAL))
+
+	try {
+		const ClientDB = require('../../db')
+
+		ClientDB.default
+			.set('hidePathway', true)
+			.then(() => {
+				dispatch(fulfilled(viewTypes.DISMISS_PATHWAY_MODAL))
+			})
+			.catch(err => {
+				dispatch(openAlert('error', 'Something went wrong'))
+				dispatch(rejected(viewTypes.DISMISS_PATHWAY_MODAL, err))
+			})
+	} catch (e) {
+		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(rejected(viewTypes.DISMISS_PATHWAY_MODAL, e))
+	}
+}
+
 export const setLocale = locale => (dispatch, getState) => {
 	dispatch(pending(viewTypes.SET_LOCALE))
 
@@ -37,7 +58,7 @@ export const setLocale = locale => (dispatch, getState) => {
 				dispatch(rejected(viewTypes.SET_LOCALE, err))
 			})
 	} catch (e) {
-		console.error('[ACTION] setLocale exception: ', e)
+		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(viewTypes.SET_LOCALE, e))
 	}
 }
@@ -63,7 +84,9 @@ export const clearView = () => ({type: viewTypes.CLEAR_VIEW})
 export const syncView = () => async (dispatch, getState) => {
 	const ClientDB = require('../../db')
 
-	let locale = await ClientDB.default.get('locale')
+	const locale = await ClientDB.default.get('locale')
+	const hidePathway = await ClientDB.default.get('hidePathway')
 
 	dispatch(setLocale(locale))
+	dispatch({type: viewTypes.SYNC_PATHWAY, payload: !hidePathway})
 }

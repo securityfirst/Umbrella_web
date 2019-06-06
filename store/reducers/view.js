@@ -25,8 +25,29 @@ export default function reducer(state = initialState, action) {
 				lessonsMenuOpened: action.payload,
 			}
 
-		/* TOGGLE_PATHWAY_MODAL */
-		case viewTypes.TOGGLE_PATHWAY_MODAL:
+		/* DISMISS_PATHWAY_MODAL */
+		case pending(viewTypes.DISMISS_PATHWAY_MODAL):
+			return {
+				...state,
+				dismissPathywayModalLoading: true,
+				dismissPathywayModalError: null,
+			}
+		case rejected(viewTypes.DISMISS_PATHWAY_MODAL):
+			return {
+				...state,
+				dismissPathywayModalLoading: false,
+				dismissPathywayModalError: action.payload,
+			}
+		case fulfilled(viewTypes.DISMISS_PATHWAY_MODAL):
+			return {
+				...state,
+				dismissPathywayModalLoading: false,
+				dismissPathywayModalError: null,
+				pathwayModalOpened: false,
+			}
+
+		/* SYNC_PATHWAY */
+		case viewTypes.SYNC_PATHWAY:
 			return {
 				...state,
 				pathwayModalOpened: action.payload,
