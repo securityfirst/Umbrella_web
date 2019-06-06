@@ -23,7 +23,7 @@ class Checklists extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.dispatch(getChecklistsSystem(true))
+		this.props.dispatch(getChecklistsSystem())
 	}
 
 	handleTabSelect = (e, v) => this.setState({tabIndex: v})

@@ -14,6 +14,7 @@ import cyan from '@material-ui/core/colors/cyan'
 
 import Loading from '../common/Loading'
 import ErrorMessage from '../common/ErrorMessage'
+import PathwayPanel from '../pathways/PathwayPanel'
 
 import { deleteChecklistSystem } from '../../store/actions/checklists'
 
@@ -242,7 +243,13 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	renderPathways = () => {
-		const { classes, pathwaysFavorited }
+		const { classes, pathwaysSaved } = this.props
+
+		return (
+			<React.Fragment>
+				{pathwaysSaved.map((pathway, i) => <PathwayPanel key={i} pathway={pathway} />)}
+			</React.Fragment>
+		)
 	}
 
 	render() {

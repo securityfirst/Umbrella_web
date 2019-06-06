@@ -7,8 +7,9 @@ import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js
 import { clearPassword } from './account'
 import { clearFeeds } from './feeds'
 import { clearForms } from './forms'
-import { clearChecklists } from './checklists'
 import { clearLessons } from './lessons'
+import { clearChecklists } from './checklists'
+import { clearPathways } from './pathways'
 import { clearView, openAlert } from './view'
 
 export const syncDb = () => async (dispatch, getState) => {
@@ -169,8 +170,9 @@ export const clearDb = () => async (dispatch, getState) => {
 		await dispatch(clearPassword())
 		await dispatch(clearFeeds())
 		await dispatch(clearForms())
-		await dispatch(clearChecklists())
 		await dispatch(clearLessons())
+		await dispatch(clearChecklists())
+		await dispatch(clearPathways())
 		await dispatch(clearView())
 		
 		await dispatch(fulfilled(dbTypes.CLEAR_DB))

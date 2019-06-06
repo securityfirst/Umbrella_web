@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Alert from '../common/Alert'
 import Appbar from './Appbar'
 import Menu from './Menu'
-import Pathway from './Pathway'
+import PathwayModal from '../pathways/PathwayModal'
 
 const styles = theme => ({
 	root: {
@@ -50,7 +50,7 @@ class Layout extends React.Component {
 
 				<Alert />
 
-				<Pathway />
+				<PathwayModal />
 			</div>
 		)
 	}

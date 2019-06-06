@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'next/router'
-import Link from 'next/link'
 
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
@@ -11,20 +10,18 @@ import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import StarIcon from '@material-ui/icons/Star'
-import StarBorderIcon from '@material-ui/icons/StarBorder'
 import Button from '@material-ui/core/Button'
+
+import PathwayPanel from './PathwayPanel'
 
 import { dismissPathwayModal, openAlert } from '../../store/actions/view'
 
-import { paperStyles } from '../../utils/view'
-
 const pathways = [
-	{name: 'Security Planning', uri: '/assess-your-risk.security-planning'},
-	{name: 'Digital Basics', uri: '/'},
-	{name: 'Physical Basics', uri: '/'},
-	{name: 'Digital Crisis', uri: '/'},
-	{name: 'Physical Crisis', uri: '/'},
+	{name: 'Security Planning', uri: 'assess-your-risk.security-planning'},
+	{name: 'Digital Basics', uri: ''},
+	{name: 'Physical Basics', uri: ''},
+	{name: 'Digital Crisis', uri: ''},
+	{name: 'Physical Crisis', uri: ''},
 ]
 
 const styles = theme => ({
@@ -72,10 +69,6 @@ const styles = theme => ({
 		fontWeight: 'normal',
 		textTransform: 'capitalize',
 	},
-	panelIcon: {
-		width: '2.5rem',
-		marginRight: '1rem',
-	},
 	modalContentTitle: {
 		paddingLeft: '1rem',
 		fontSize: '1.25rem',
@@ -110,40 +103,13 @@ const styles = theme => ({
 	},
 })
 
-class Pathway extends React.Component {
+class PathwayModal extends React.Component {
 	handleDismiss = () => {
 		this.props.dispatch(dismissPathwayModal(false))
 	}
 
-	handleFavorite = e => {
-		e.preventDefault()
-	}
-
 	handleShowMe = () => {
 
-	}
-
-	renderPanelLink = (pathway, index) => {
-		const { classes, locale } = this.props
-		const isFavorited = false
-
-		return (
-			<div className={classes.panelWrapper} key={index}>
-				<Link href={`/lessons/${locale}/${pathway.uri}`}>
-					<Button
-						className={classes.panel}
-						classes={{label: classes.panelButtonInner}}
-						variant="contained"
-					>
-						<Typography className={classes.panelTitle}>{pathway.name}</Typography>
-
-						<IconButton aria-label="Close" onClick={this.handleFavorite}>
-							{isFavorited ? <StarIcon /> : <StarBorderIcon />}
-						</IconButton>
-					</Button>
-				</Link>
-			</div>
-		)
 	}
 
 	render() {
@@ -165,7 +131,7 @@ class Pathway extends React.Component {
 					<div className={classes.panelsWrapper}>
 						<Typography className={classes.modalContentTitle}>What do you need most?</Typography>
 						<Typography className={classes.modalContentDescription}>Select a guide to start your security journey, or bookmark any guide for later.</Typography>
-						{pathways.map(this.renderPanelLink)}
+						{pathways.map((pathway, i) => <PathwayPanel key={i} pathway={pathway} />)}
 					</div>
 
 					<Button 
@@ -194,4 +160,4 @@ const mapStateToProps = state => ({
 	...state.view,
 })
 
-export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Pathway)))
+export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(PathwayModal)))
