@@ -96,6 +96,14 @@ const checklists = {
 	checklistFavorites: [],
 }
 
+const pathways = {
+	getPathwaysSavedLoading: true,
+	getPathwaysSavedError: null,
+	pathwaysSaved: [],
+	updatePathwaysSavedLoading: false,
+	updatePathwaysSavedError: null,
+}
+
 const view = {
 	mainMenuOpened: false,
 	appbarTitle: null,

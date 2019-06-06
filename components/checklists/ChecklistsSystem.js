@@ -241,6 +241,10 @@ class ChecklistsSystem extends React.Component {
 		)
 	}
 
+	renderPathways = () => {
+		const { classes, pathwaysFavorited }
+	}
+
 	render() {
 		const { classes, getChecklistsSystemLoading, getChecklistsSystemError, checklistsSystem } = this.props
 		const { expanded, checklistCount } = this.state
@@ -276,6 +280,10 @@ class ChecklistsSystem extends React.Component {
 				<Typography className={classes.label} variant="subtitle1">My Checklists</Typography>
 
 				{this.renderLessonChecklists()}
+
+				<Typography className={classes.label} variant="subtitle1">Top tips</Typography>
+
+				{this.renderPathways()}
 			</div>
 		)
 	}
@@ -285,6 +293,7 @@ const mapStateToProps = state => ({
 	...state.view,
 	...state.content,
 	...state.checklists,
+	...state.pathways,
 })
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(ChecklistsSystem))

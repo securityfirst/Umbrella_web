@@ -147,7 +147,7 @@ class Pathway extends React.Component {
 	}
 
 	render() {
-		const { classes, pathwayModalOpened } = this.props
+		const { classes, content, pathwayModalOpened } = this.props
 
 		return (
 			<Dialog
@@ -190,6 +190,7 @@ class Pathway extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.content,
 	...state.view,
 })
 

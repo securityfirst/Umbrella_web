@@ -1,38 +1,38 @@
 import 'isomorphic-unfetch'
 
-import { checklistsTypes } from '../types.js'
+import { pathwaysTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
 import { openAlert } from './view'
 
-export const getChecklistsSystem = () => async (dispatch, getState) => {
-	dispatch(pending(checklistsTypes.GET_CHECKLISTS_SYSTEM))
+export const getPathwaysSaved = () => async (dispatch, getState) => {
+	dispatch(pending(pathwaysTypes.GET_PATHWAYS_SAVED))
 
 	const state = getState()
 
 	if (state.account.isProtected && !state.account.password) {
-		return dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, {}))
+		return dispatch(fulfilled(pathwaysTypes.GET_PATHWAYS_SAVED, {}))
 	}
 
 	try {
 		const ClientDB = require('../../db')
 
 		await ClientDB.default
-			.get('ch_s', state.account.password, true)
-			.then(checklists => {
-				dispatch(fulfilled(checklistsTypes.GET_CHECKLISTS_SYSTEM, checklists || {}))
+			.get('pa_s', state.account.password, true)
+			.then(pathwaysSaved => {
+				dispatch(fulfilled(pathwaysTypes.GET_PATHWAYS_SAVED, pathwaysSaved || {}))
 			})
 			.catch(err => {
 				dispatch(openAlert('error', 'Something went wrong'))
-				dispatch(rejected(checklistsTypes.GET_CHECKLISTS_SYSTEM, err))
+				dispatch(rejected(pathwaysTypes.GET_PATHWAYS_SAVED, err))
 			})
 	} catch (e) {
 		dispatch(openAlert('error', 'Something went wrong'))
-		dispatch(rejected(checklistsTypes.GET_CHECKLISTS_SYSTEM, e))
+		dispatch(rejected(pathwaysTypes.GET_PATHWAYS_SAVED, e))
 	}
 }
 
-export const updateChecklistsSystem = (itemName, category, level) => (dispatch, getState) => {
+export const updatePathwaysSaved = (pathway) => (dispatch, getState) => {
 	dispatch(pending(checklistsTypes.UPDATE_CHECKLISTS_SYSTEM))
 
 	const state = getState()
