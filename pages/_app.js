@@ -46,8 +46,8 @@ class MyApp extends App {
 		if (typeof window !== 'undefined') {
 			const { dispatch } = this.props.reduxStore
 
-			await dispatch(syncDb())
-			
+			dispatch(syncDb())
+
 			const Account = require('../account')
 			const ClientDB = require('../db')
 			

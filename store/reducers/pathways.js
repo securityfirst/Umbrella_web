@@ -45,7 +45,11 @@ export default function reducer(state = initialState, action) {
 			}
 
 		/* SYNC_PATHWAYS_SAVED */
-		case pathwaysTypes.SYNC_PATHWAYS_SAVED: return action.payload
+		case pathwaysTypes.SYNC_PATHWAYS_SAVED:
+			return {
+				...state,
+				...action.payload,
+			}
 
 		/* CLEAR_PATHWAYS_SAVED */
 		case pathwaysTypes.CLEAR_PATHWAYS_SAVED:

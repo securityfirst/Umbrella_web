@@ -165,7 +165,11 @@ export default function reducer(state = initialState, action) {
 			}
 
 		/* SYNC_CHECKLISTS */
-		case checklistsTypes.SYNC_CHECKLISTS: return action.payload
+		case checklistsTypes.SYNC_CHECKLISTS: 
+			return {
+				...state,
+				...action.payload,
+			}
 
 		/* CLEAR_CHECKLISTS */
 		case checklistsTypes.CLEAR_CHECKLISTS:
