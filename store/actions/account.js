@@ -37,7 +37,6 @@ export const login = (password, cb) => (dispatch, getState) => {
 				// Success and sync database to store
 				Account.default.login(password, async () => {
 					await dispatch(fulfilled(accountTypes.LOGIN, password))
-					await dispatch(checkPassword())
 
 					!!cb && cb()
 				})

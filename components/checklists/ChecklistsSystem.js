@@ -12,9 +12,9 @@ import DeleteIcon from '@material-ui/icons/Delete'
 
 import cyan from '@material-ui/core/colors/cyan'
 
-import ChecklistsPanel from './ChecklistsPanel'
 import Loading from '../common/Loading'
 import ErrorMessage from '../common/ErrorMessage'
+import PathwayPanel from '../pathways/PathwayPanel'
 
 import { deleteChecklistSystem } from '../../store/actions/checklists'
 
@@ -242,6 +242,16 @@ class ChecklistsSystem extends React.Component {
 		)
 	}
 
+	renderPathways = () => {
+		const { classes, pathwaysSaved } = this.props
+
+		return (
+			<React.Fragment>
+				{pathwaysSaved.map((pathway, i) => <PathwayPanel key={i} pathway={pathway} />)}
+			</React.Fragment>
+		)
+	}
+
 	render() {
 		const { classes, getChecklistsSystemLoading, getChecklistsSystemError, checklistsSystem } = this.props
 		const { expanded, checklistCount } = this.state
@@ -277,6 +287,10 @@ class ChecklistsSystem extends React.Component {
 				<Typography className={classes.label} variant="subtitle1">My Checklists</Typography>
 
 				{this.renderLessonChecklists()}
+
+				<Typography className={classes.label} variant="subtitle1">Top tips</Typography>
+
+				{this.renderPathways()}
 			</div>
 		)
 	}
@@ -286,6 +300,7 @@ const mapStateToProps = state => ({
 	...state.view,
 	...state.content,
 	...state.checklists,
+	...state.pathways,
 })
 
 export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(ChecklistsSystem))

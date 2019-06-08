@@ -1,5 +1,5 @@
 const content = {
-	getContentLoading: true,
+	getContentLoading: false,
 	getContentError: null,
 	content: null,
 }
@@ -24,12 +24,12 @@ const account = {
 }
 
 const feeds = {
-	loading: true,
+	loading: false,
 	error: null,
 	feeds: [],
 	feedLocation: null,
 	feedSources: [],
-	getRssLoading: true,
+	getRssLoading: false,
 	getRssError: null,
 	rss: [],
 	rssSources: [
@@ -44,10 +44,10 @@ const feeds = {
 }
 
 const forms = {
-	getFormLoading: true,
+	getFormLoading: false,
 	getFormError: null,
 	form: null,
-	getFormSavedLoading: true,
+	getFormSavedLoading: false,
 	getFormSavedError: null,
 	formSaved: null,
 	saveFormLoading: false,
@@ -64,10 +64,10 @@ const lessons = {
 	getLessonChecklistLoading: false,
 	getLessonChecklistError: null,
 	currentLessonChecklist: null,
-	getLessonFileLoading: true,
+	getLessonFileLoading: false,
 	getLessonFileError: null,
 	currentLessonFile: null,
-	getLessonCardsFavorites: true,
+	getLessonCardsFavorites: false,
 	getLessonCardsError: null,
 	lessonCardsFavorites: [],
 	addLessonCardFavoriteLoading: false,
@@ -77,17 +77,17 @@ const lessons = {
 }
 
 const checklists = {
-	getChecklistsSystemLoading: true,
+	getChecklistsSystemLoading: false,
 	getChecklistsSystemError: null,
 	checklistsSystem: {},
 	updateChecklistsSystemLoading: false,
 	updateChecklistsSystemError: null,
 	deleteChecklistSystemLoading: false,
 	deleteChecklistSystemError: null,
-	getChecklistsSystemFavoritesLoading: true,
+	getChecklistsSystemFavoritesLoading: false,
 	getChecklistsSystemFavoritesError: null,
 	checklistsSystemFavorites: [],
-	getChecklistsCustomLoading: true,
+	getChecklistsCustomLoading: false,
 	getChecklistsCustomError: null,
 	getChecklistsCustomSuccess: false,
 	checklistsCustom: [],
@@ -96,10 +96,21 @@ const checklists = {
 	checklistFavorites: [],
 }
 
+const pathways = {
+	getPathwaysSavedLoading: false,
+	getPathwaysSavedError: null,
+	pathwaysSaved: [],
+	updatePathwaysSavedLoading: false,
+	updatePathwaysSavedError: null,
+}
+
 const view = {
 	mainMenuOpened: false,
 	appbarTitle: null,
 	lessonsMenuOpened: 0,
+	dismissPathywayModalLoading: false,
+	dismissPathywayModaError: null,
+	pathwayModalOpened: false,
 	setLocaleLoading: false,
 	setLocaleError: null,
 	locale: 'en',
@@ -109,7 +120,7 @@ const view = {
 }
 
 const db = {
-	loading: true,
+	loading: false,
 	error: null,
 }
 
@@ -120,6 +131,7 @@ export default {
 	forms,
 	lessons,
 	checklists,
+	pathways,
 	view,
 	db,
 }

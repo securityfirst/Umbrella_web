@@ -150,7 +150,7 @@ class LessonsLevel extends React.Component {
 
 		if (checklist) {
 			dispatch(getLessonChecklist(checklist.sha))
-			dispatch(getChecklistsSystem())
+			// dispatch(getChecklistsSystem())
 		}
 
 		this.setState({files, checklist})
@@ -189,15 +189,13 @@ class LessonsLevel extends React.Component {
 			getLessonChecklistLoading, 
 			getLessonChecklistError, 
 			currentLessonChecklist, 
-			getChecklistsSystemLoading,
-			getChecklistsSystemError,
 			checklistsSystem, 
 		} = this.props
 
 		const { locale, category, level } = router.query
 
-		if (getLessonChecklistLoading || getChecklistsSystemLoading) return <Loading />
-		else if (getLessonChecklistError || getChecklistsSystemError) return <ErrorMessage error={getLessonChecklistError || getChecklistsSystemError} />
+		if (getLessonChecklistLoading) return <Loading />
+		else if (getLessonChecklistError) return <ErrorMessage error={getLessonChecklistError || getChecklistsSystemError} />
 		else if (!currentLessonChecklist) return null
 		else if (!checklistsSystem) return null
 

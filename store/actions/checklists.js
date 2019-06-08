@@ -5,8 +5,6 @@ import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js
 
 import { openAlert } from './view'
 
-import Crypto from '../../utils/crypto'
-
 export const getChecklistsSystem = () => async (dispatch, getState) => {
 	dispatch(pending(checklistsTypes.GET_CHECKLISTS_SYSTEM))
 

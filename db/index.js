@@ -20,15 +20,16 @@ class ClientDB {
 				})
 
 				const isProtected = await this.db.getItem('protected')
+				const locale = await this.db.getItem('locale')
+				const hidePathway = await this.db.getItem('hidePathway')
 
 				if (isProtected === null) {
 					const hash = await this.db.getItem('h')
 					this.db.setItem('protected', hash !== null)
 				}
 
-				const locale = await this.db.getItem('locale')
-
 				if (locale === null) this.db.setItem('locale', 'en')
+				if (hidePathway === null) this.db.setItem('hidePathway', true)
 
 				return resolve()
 			} catch (e) {

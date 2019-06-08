@@ -9,7 +9,7 @@ import Layout from '../components/layout'
 import ChecklistsCustom from '../components/checklists/ChecklistsCustom'
 import ChecklistsSystem from '../components/checklists/ChecklistsSystem'
 
-import { getChecklistsSystem } from '../store/actions/checklists'
+// import { getChecklistsSystem } from '../store/actions/checklists'
 
 const styles = theme => ({
 	tabs: {
@@ -22,9 +22,9 @@ class Checklists extends React.Component {
 		tabIndex: 0
 	}
 
-	componentDidMount() {
-		this.props.dispatch(getChecklistsSystem(true))
-	}
+	// componentDidMount() {
+	// 	this.props.dispatch(getChecklistsSystem())
+	// }
 
 	handleTabSelect = (e, v) => this.setState({tabIndex: v})
 

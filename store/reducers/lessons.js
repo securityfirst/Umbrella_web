@@ -122,7 +122,11 @@ export default function reducer(state = initialState, action) {
 			}
 
 		/* SYNC_LESSONS */
-		case lessonsTypes.SYNC_LESSONS: return action.payload
+		case lessonsTypes.SYNC_LESSONS:
+			return {
+				...state,
+				...action.payload,
+			}
 
 		/* CLEAR_LESSONS */
 		case lessonsTypes.CLEAR_LESSONS:

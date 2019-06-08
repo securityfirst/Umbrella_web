@@ -45,6 +45,9 @@ class MyApp extends App {
 
 		if (typeof window !== 'undefined') {
 			const { dispatch } = this.props.reduxStore
+
+			dispatch(syncDb())
+
 			const Account = require('../account')
 			const ClientDB = require('../db')
 			
@@ -57,7 +60,6 @@ class MyApp extends App {
 
 			dispatch(checkProtected())
 			dispatch(checkPassword())
-			dispatch(syncDb())
 			dispatch(syncView())
 		}
 	}

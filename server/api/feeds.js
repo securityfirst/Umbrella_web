@@ -25,7 +25,9 @@ router.post('/', (req, res) => {
 		let since = new Date()
 		since = since.valueOf() - 2592000000 // 30 days ago
 
-		fetch(`${process.env.API_HOST}v3/feed?since=${since}&country=${location}&sources=${sources.join(',')}`)
+		const url = `${process.env.API_HOST}v3/feed?country=${location.toUpperCase()}&sources=${sources.join(',')}`
+
+		fetch(url)
 			.then(resp => {
 				if (!resp.ok) {
 					console.error('[API] /feeds response error: ', resp)

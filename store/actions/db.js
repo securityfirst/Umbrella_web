@@ -1,4 +1,3 @@
-import merge from 'lodash.merge'
 import Crypto from '../../utils/crypto'
 
 import { accountTypes, feedsTypes, formsTypes, checklistsTypes, lessonsTypes, viewTypes, dbTypes } from '../types.js'
@@ -7,16 +6,15 @@ import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js
 import { clearPassword } from './account'
 import { clearFeeds } from './feeds'
 import { clearForms } from './forms'
-import { clearChecklists } from './checklists'
 import { clearLessons } from './lessons'
+import { clearChecklists } from './checklists'
+import { clearPathways } from './pathways'
 import { clearView, openAlert } from './view'
 
 export const syncDb = () => async (dispatch, getState) => {
 	await dispatch(pending(dbTypes.SYNC_DB))
 
 	try {
-		const state = getState()
-
 		const ClientDB = require('../../db')
 		const Account = require('../../account')
 
@@ -55,28 +53,28 @@ export const syncDb = () => async (dispatch, getState) => {
 		if (Object.keys(feedsMerge).length) {
 			await dispatch({
 				type: feedsTypes.SYNC_FEEDS, 
-				payload: merge(state.feeds, feedsMerge)
+				payload: feedsMerge
 			})
 		}
 
 		if (Object.keys(formsMerge).length) {
 			await dispatch({
 				type: formsTypes.SYNC_FORMS, 
-				payload: merge(state.forms, formsMerge)
+				payload: formsMerge
 			})
 		}
 
 		if (Object.keys(checklistsMerge).length) {
 			await dispatch({
 				type: checklistsTypes.SYNC_CHECKLISTS, 
-				payload: merge(state.checklists, checklistsMerge)
+				payload: checklistsMerge
 			})
 		}
 
 		if (Object.keys(lessonsMerge).length) {
 			await dispatch({
 				type: lessonsTypes.SYNC_LESSONS, 
-				payload: merge(state.lessons, lessonsMerge)
+				payload: lessonsMerge
 			})
 		}
 
@@ -169,8 +167,9 @@ export const clearDb = () => async (dispatch, getState) => {
 		await dispatch(clearPassword())
 		await dispatch(clearFeeds())
 		await dispatch(clearForms())
-		await dispatch(clearChecklists())
 		await dispatch(clearLessons())
+		await dispatch(clearChecklists())
+		await dispatch(clearPathways())
 		await dispatch(clearView())
 		
 		await dispatch(fulfilled(dbTypes.CLEAR_DB))

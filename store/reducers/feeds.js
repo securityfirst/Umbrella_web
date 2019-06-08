@@ -127,7 +127,11 @@ export default function reducer(state = initialState, action) {
 			}
 
 		/* SYNC_FEEDS */
-		case feedsTypes.SYNC_FEEDS: return action.payload
+		case feedsTypes.SYNC_FEEDS: 
+			return {
+				...state,
+				...action.payload,
+			}
 
 		/* CLEAR_FEEDS */
 		case feedsTypes.CLEAR_FEEDS:

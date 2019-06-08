@@ -31,6 +31,9 @@ const styles = theme => ({
 	location: {
 		color: red[800],
 	},
+	locationPanel: {
+		marginBottom: '1rem',
+	},
 	locationPanelDetails: {
 		display: 'block',
 	},
@@ -43,11 +46,23 @@ const styles = theme => ({
 		...buttonWrapperStyles(theme),
 		marginTop: '2rem',
 	},
-	feed: {
-		margin: '.75rem 0',
-		...paperStyles(theme),
+	panelWrapper: {
+		position: 'relative',
+		display: 'block',
+		textDecoration: 'none',
+	},
+	panel: {
+		width: '100%',
+		margin: '.25rem 0',
+		padding: '0 1rem',
+		backgroundColor: theme.palette.common.white,
+	},
+	panelButtonInner: {
+		display: 'block',
+		textAlign: 'left',
 	},
 	feedTitle: {
+		marginTop: '1rem',
 		fontSize: '1.125rem',
 	},
 	feedSite: {
@@ -81,7 +96,7 @@ class FeedsAll extends React.Component {
 
 		return (
 			<React.Fragment>
-				<ExpansionPanel expanded={expanded === true} onChange={this.handleChange}>
+				<ExpansionPanel className={classes.locationPanel} expanded={expanded === true} onChange={this.handleChange}>
 					<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
 						<Typography className={classes.heading}>Location: 
 							{!expanded && <span className={classes.headingLocation}>{feedLocation.place_name}</span>}
@@ -103,14 +118,20 @@ class FeedsAll extends React.Component {
 					</Paper>
 					: feeds.map((feed, i) => {
 						return (
-							<Paper key={i} className={classes.feed} square>
-								<Typography className={classes.feedTitle} variant="h6">{feed.title}</Typography>
-								<Typography paragraph>
-									<span className={classes.feedSite}>Via {(feed.site || "").toUpperCase()}</span>
-									<span className={classes.feedDate}>{new Date(feed.timestamp).toLocaleString()}</span>
-								</Typography>
-								<Typography className={classes.feedContent} paragraph>{feed.content}</Typography>
-							</Paper>
+							<a key={i} className={classes.panelWrapper} href={feed.url} target="_blank">
+								<Button
+									className={classes.panel}
+									classes={{label: classes.panelButtonInner}}
+									variant="contained"
+								>
+									<Typography className={classes.feedTitle} variant="h6">{feed.title}</Typography>
+									<Typography paragraph>
+										{/*<span className={classes.feedSite}>Via {(feed.site || "").toUpperCase()}</span>*/}
+										<span className={classes.feedDate}>{new Date(feed.updated_at * 1000).toLocaleString()}</span>
+									</Typography>
+									<Typography className={classes.feedContent} paragraph>{feed.description}</Typography>
+								</Button>
+							</a>
 						)
 					})
 				}
