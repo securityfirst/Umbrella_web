@@ -72,7 +72,7 @@ class Checklists extends React.Component {
 											.find(checkedItem => checkedItem === item.check)
 
 							return (
-								<Paper className={classes.itemPaper} square>
+								<Paper key={i} className={classes.itemPaper} square>
 									<FormControlCheckbox
 										key={i}
 										name={<Marked content={item.check} />}
