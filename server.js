@@ -74,6 +74,7 @@ app.prepare().then(() => {
 	server.get('/forms/:sha', forms.new(app))
 	server.get('/forms/:sha/:id', forms.edit(app))
 	server.get('/checklists', checklists.index(app))
+	server.get('/checklists/pathway/:sha', checklists.pathway(app))
 	server.get('/lessons', lessons.index(app))
 	server.get('/lessons/favorites', lessons.favorites(app))
 	server.get('/lessons/:locale/glossary', lessons.glossary(app))

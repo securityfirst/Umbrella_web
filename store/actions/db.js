@@ -42,6 +42,7 @@ export const syncDb = () => async (dispatch, getState) => {
 		let formsSaved = await ClientDB.default.get('fo_s', password, true)
 		let checklistsSystem = await ClientDB.default.get('ch_s', password, true)
 		let checklistsCustom = await ClientDB.default.get('ch_c', password, true)
+		let pathwaysChecked = await ClientDB.default.get('pa_c', password, true)
 		let pathwaysSaved = await ClientDB.default.get('pa_s', password, true)
 		let lessonCardsFavorites = await ClientDB.default.get('le_f', password, true)
 
@@ -57,6 +58,7 @@ export const syncDb = () => async (dispatch, getState) => {
 		if (formsSaved) formsMerge.formsSaved = formsSaved
 		if (checklistsSystem) checklistsMerge.checklistsSystem = checklistsSystem
 		if (checklistsCustom) checklistsMerge.checklistsCustom = checklistsCustom
+		if (pathwaysChecked) pathwaysMerge.pathwaysChecked = pathwaysChecked
 		if (pathwaysSaved) pathwaysMerge.pathwaysSaved = pathwaysSaved
 		if (lessonCardsFavorites) lessonsMerge.lessonCardsFavorites = lessonCardsFavorites
 
@@ -83,7 +85,7 @@ export const syncDb = () => async (dispatch, getState) => {
 
 		if (Object.keys(pathwaysMerge).length) {
 			await dispatch({
-				type: pathwaysTypes.SYNC_PATHWAYS_SAVED, 
+				type: pathwaysTypes.SYNC_PATHWAYS, 
 				payload: pathwaysMerge
 			})
 		}

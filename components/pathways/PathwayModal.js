@@ -16,14 +16,6 @@ import PathwayPanel from './PathwayPanel'
 
 import { dismissPathwayModal, openAlert } from '../../store/actions/view'
 
-const pathways = [
-	{name: 'Security Planning', uri: 'assess-your-risk.security-planning'},
-	{name: 'Digital Basics', uri: ''},
-	{name: 'Physical Basics', uri: ''},
-	{name: 'Digital Crisis', uri: ''},
-	{name: 'Physical Crisis', uri: ''},
-]
-
 const styles = theme => ({
 	modal: {
 		display: 'flex',
@@ -113,7 +105,7 @@ class PathwayModal extends React.Component {
 	}
 
 	render() {
-		const { classes, content, pathwayModalOpened } = this.props
+		const { classes, content, locale, pathwayModalOpened } = this.props
 
 		return (
 			<Dialog
@@ -131,7 +123,11 @@ class PathwayModal extends React.Component {
 					<div className={classes.panelsWrapper}>
 						<Typography className={classes.modalContentTitle}>What do you need most?</Typography>
 						<Typography className={classes.modalContentDescription}>Select a guide to start your security journey, or bookmark any guide for later.</Typography>
-						{pathways.map((pathway, i) => <PathwayPanel key={i} pathway={pathway} />)}
+						{content[locale].pathways.content.reverse().map((pathway, i) => {
+							if (pathway.filename === '.category.yml') return null
+
+							return <PathwayPanel key={i} pathway={pathway} />
+						})}
 					</div>
 
 					<Button 

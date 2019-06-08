@@ -97,6 +97,12 @@ const checklists = {
 }
 
 const pathways = {
+	updatePathwaysCheckedLoading: false,
+	updatePathwaysCheckedError: null,
+	pathwaysChecked: {},
+	getPathwayFileLoading: false,
+	getPathwayFileError: null,
+	currentPathwayFile: null,
 	getPathwaysSavedLoading: false,
 	getPathwaysSavedError: null,
 	pathwaysSaved: [],
