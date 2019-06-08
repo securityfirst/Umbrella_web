@@ -25,12 +25,11 @@ import ErrorMessage from '../../components/common/ErrorMessage'
 import Marked from '../../components/common/Marked'
 import LessonsMenu from '../../components/lessons/LessonsMenu'
 
-import { contentStyles, paperStyles } from '../../utils/view'
-
 import { setAppbarTitle } from '../../store/actions/view'
 import { getLessonFile } from '../../store/actions/lessons'
 
-import { decodeBlob, getNameFromFilename } from '../../utils/github'
+import { contentStyles, paperStyles } from '../../utils/view'
+import { decodeBlob, getNameFromFilenameMd } from '../../utils/github'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -127,7 +126,7 @@ class LessonCard extends React.Component {
 										className={classes.menuItem}
 										onClick={this.handleClose}
 									>
-										{getNameFromFilename(lesson.filename)}
+										{getNameFromFilenameMd(lesson.filename)}
 									</MenuItem>
 								</Link>
 							))}

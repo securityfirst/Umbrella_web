@@ -99,6 +99,7 @@ const styles = theme => ({
 	},
 	pathwaySeeAll: {
 		width: '97%',
+		marginTop: '.5rem',
 		color: cyan[500],
 		textAlign: 'right',
 		cursor: 'pointer',
@@ -274,7 +275,7 @@ class ChecklistsSystem extends React.Component {
 			<React.Fragment>
 				{!pathwaysSaved.length 
 					? <Paper className={classes.panel}>
-						<Typography className={classes.pathwayTitle} variant="h6">You do not have any tips saved</Typography>
+						<Typography className={classes.pathwayTitle} variant="h6">You did not favorite any tips yet</Typography>
 					</Paper>
 					: pathwaysSaved.map((pathway, i) => (
 						<div className={classes.pathwaySavedWrapper}>

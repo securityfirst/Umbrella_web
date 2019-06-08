@@ -120,8 +120,6 @@ class LessonsMenu extends React.Component {
 		const { classes, content, locale } = this.props
 		const { categorySelected } = this.state
 
-		if (category == 'content' || category == 'forms') return null
-
 		const isSelected = categorySelected == category
 		const subcategories = Object.keys(content[locale][category]).filter(subcategory => subcategory != 'content')
 
@@ -174,7 +172,11 @@ class LessonsMenu extends React.Component {
 					</Link>
 				</div>
 
-				{Object.keys(content[locale]).filter(category => category !== 'glossary').map(this.renderMenuCategory)}
+				{Object
+					.keys(content[locale])
+					.filter(category => !['content', 'glossary', 'pathways', 'forms'].includes(category))
+					.map(this.renderMenuCategory)
+				}
 
 				{/* Glossary menu item */}
 				<div className={categorySelected == "glossary" ? classes.menuListItemSelected : ''}>

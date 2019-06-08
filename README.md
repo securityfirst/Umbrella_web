@@ -208,6 +208,9 @@ npm run build // builds the next js app
 npm run start // for production builds
 ```
 
+If you'd like to use a different branch for Umbrella content, in your terminal change directory to `/static/assets/content` (root dir for content git) and run `git checkout YOUR_BRANCH`. You will also need to change the branch in the repo fetch in `/server/api/github`.
+
+
 ---
 
 ### Contributors

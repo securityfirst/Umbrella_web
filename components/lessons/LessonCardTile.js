@@ -16,7 +16,7 @@ import FavoriteShareIcons from '../common/FavoriteShareIcons'
 
 import { getLessonFile, addLessonCardFavorite, removeLessonCardFavorite } from '../../store/actions/lessons'
 
-import { getNameFromFilename } from '../../utils/github'
+import { getNameFromFilenameMd } from '../../utils/github'
 
 const styles = theme => ({
 	card: {
@@ -67,15 +67,10 @@ class LessonCardTile extends React.Component {
 		this.props.dispatch(removeLessonCardFavorite(this.props.file))
 	}
 
-	/* TODO */
-	onShare = () => {
-
-	}
-
 	render() {
 		const { classes, lessonCardsFavorites, index, file, locale, category, level, isFavorited } = this.props
 
-		const title = getNameFromFilename(file.name)
+		const title = getNameFromFilenameMd(file.name)
 		const isFavoriteAdded = !!lessonCardsFavorites.find(item => item.name === file.name)
 		const href = category === 'glossary'
 			? `/lessons/${locale}/glossary/-/${file.sha}`
@@ -99,7 +94,6 @@ class LessonCardTile extends React.Component {
 						sha={file.sha}
 						url={`${process.env.ROOT}${href}`}
 						onFavoriteToggle={this.onFavoriteToggle}
-						onShare={this.onShare}
 						isFavorited={isFavorited}
 						isFavoriteAdded={isFavoriteAdded}
 					/>

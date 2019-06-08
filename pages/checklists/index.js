@@ -5,11 +5,9 @@ import { withStyles } from '@material-ui/core/styles'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 
-import Layout from '../components/layout'
-import ChecklistsCustom from '../components/checklists/ChecklistsCustom'
-import ChecklistsSystem from '../components/checklists/ChecklistsSystem'
-
-// import { getChecklistsSystem } from '../store/actions/checklists'
+import Layout from '../../components/layout'
+import ChecklistsCustom from '../../components/checklists/ChecklistsCustom'
+import ChecklistsSystem from '../../components/checklists/ChecklistsSystem'
 
 const styles = theme => ({
 	tabs: {
@@ -21,10 +19,6 @@ class Checklists extends React.Component {
 	state = {
 		tabIndex: 0
 	}
-
-	// componentDidMount() {
-	// 	this.props.dispatch(getChecklistsSystem())
-	// }
 
 	handleTabSelect = (e, v) => this.setState({tabIndex: v})
 
