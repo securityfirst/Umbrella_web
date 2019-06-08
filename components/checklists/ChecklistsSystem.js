@@ -17,6 +17,7 @@ import ErrorMessage from '../common/ErrorMessage'
 import PathwayPanel from '../pathways/PathwayPanel'
 
 import { deleteChecklistSystem } from '../../store/actions/checklists'
+import { togglePathwayModal } from '../../store/actions/view'
 
 import { contentStyles } from '../../utils/view'
 import { decodeBlob } from '../../utils/github'
@@ -86,6 +87,26 @@ const styles = theme => ({
 		top: '50%',
     	transform: 'translateY(-50%)',
 	},
+	pathwaySavedWrapper: {
+		width: '97%',
+	},
+	pathwayTitle: {
+		display: 'inline-block',
+		margin: '.5rem 0',
+		color: theme.palette.grey[500],
+		fontSize: '1rem',
+		fontWeight: 'normal',
+	},
+	pathwaySeeAll: {
+		width: '97%',
+		color: cyan[500],
+		textAlign: 'right',
+		cursor: 'pointer',
+		transition: '200ms opacity linear',
+		'&:hover': {
+			opacity: '.7',
+		},
+	},
 })
 
 class ChecklistsSystem extends React.Component {
@@ -144,6 +165,10 @@ class ChecklistsSystem extends React.Component {
 		if (confirm('Are you sure you want to remove this checklist?')) {
 			this.props.dispatch(deleteChecklistSystem(title))
 		}
+	}
+
+	openPathwaysModal = () => {
+		this.props.dispatch(togglePathwayModal(true))
 	}
 
 	renderPanel = title => {
@@ -247,7 +272,17 @@ class ChecklistsSystem extends React.Component {
 
 		return (
 			<React.Fragment>
-				{pathwaysSaved.map((pathway, i) => <PathwayPanel key={i} pathway={pathway} />)}
+				{!pathwaysSaved.length 
+					? <Paper className={classes.panel}>
+						<Typography className={classes.pathwayTitle} variant="h6">You do not have any tips saved</Typography>
+					</Paper>
+					: pathwaysSaved.map((pathway, i) => (
+						<div className={classes.pathwaySavedWrapper}>
+							<PathwayPanel key={i} pathway={pathway} />
+						</div>
+					))
+				}
+				<Typography className={classes.pathwaySeeAll} onClick={this.openPathwaysModal}>See All</Typography>
 			</React.Fragment>
 		)
 	}

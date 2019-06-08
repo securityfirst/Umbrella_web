@@ -44,19 +44,19 @@ export const updatePathwaysSaved = pathway => (dispatch, getState) => {
 	}
 
 	try {
-		const savedPathway = state.pathways.find(p => p.name === pathway.name)
+		const savedPathway = state.pathways.pathwaysSaved.find(p => p.name === pathway.name)
 
 		let newPathwaysSaved = [...state.pathways.pathwaysSaved]
 
 		if (!savedPathway) newPathwaysSaved.push(pathway)
-		else newPathwaysSaved = newPathwaysSaved.filter(p => p.name === pathway.name)
+		else newPathwaysSaved = newPathwaysSaved.filter(p => p.name !== pathway.name)
 
 		const ClientDB = require('../../db')
 
 		ClientDB.default
 			.set('pa_s', newPathwaysSaved, state.account.password)
 			.then(() => {
-				dispatch(openAlert('error', 'Updated saved pathways'))
+				dispatch(openAlert('success', 'Updated saved pathways'))
 				dispatch(fulfilled(pathwaysTypes.UPDATE_PATHWAYS_SAVED, newPathwaysSaved))
 			})
 			.catch(err => {

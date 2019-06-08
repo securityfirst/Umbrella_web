@@ -1,6 +1,16 @@
 import Crypto from '../../utils/crypto'
 
-import { accountTypes, feedsTypes, formsTypes, checklistsTypes, lessonsTypes, viewTypes, dbTypes } from '../types.js'
+import { 
+	accountTypes, 
+	feedsTypes, 
+	formsTypes, 
+	checklistsTypes, 
+	pathwaysTypes, 
+	lessonsTypes, 
+	viewTypes, 
+	dbTypes 
+} from '../types.js'
+
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
 import { clearPassword } from './account'
@@ -32,22 +42,22 @@ export const syncDb = () => async (dispatch, getState) => {
 		let formsSaved = await ClientDB.default.get('fo_s', password, true)
 		let checklistsSystem = await ClientDB.default.get('ch_s', password, true)
 		let checklistsCustom = await ClientDB.default.get('ch_c', password, true)
+		let pathwaysSaved = await ClientDB.default.get('pa_s', password, true)
 		let lessonCardsFavorites = await ClientDB.default.get('le_f', password, true)
 
 		let feedsMerge = {}
 		let formsMerge = {}
 		let checklistsMerge = {}
+		let pathwaysMerge = {}
 		let lessonsMerge = {}
 
 		if (feedLocation) feedsMerge.feedLocation = feedLocation
 		if (feedSources) feedsMerge.feedSources = feedSources
 		if (rssSources) feedsMerge.rssSources = rssSources
-
 		if (formsSaved) formsMerge.formsSaved = formsSaved
-
 		if (checklistsSystem) checklistsMerge.checklistsSystem = checklistsSystem
 		if (checklistsCustom) checklistsMerge.checklistsCustom = checklistsCustom
-
+		if (pathwaysSaved) pathwaysMerge.pathwaysSaved = pathwaysSaved
 		if (lessonCardsFavorites) lessonsMerge.lessonCardsFavorites = lessonCardsFavorites
 
 		if (Object.keys(feedsMerge).length) {
@@ -68,6 +78,13 @@ export const syncDb = () => async (dispatch, getState) => {
 			await dispatch({
 				type: checklistsTypes.SYNC_CHECKLISTS, 
 				payload: checklistsMerge
+			})
+		}
+
+		if (Object.keys(pathwaysMerge).length) {
+			await dispatch({
+				type: pathwaysTypes.SYNC_PATHWAYS_SAVED, 
+				payload: pathwaysMerge
 			})
 		}
 
