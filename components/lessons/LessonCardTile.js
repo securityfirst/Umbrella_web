@@ -67,11 +67,6 @@ class LessonCardTile extends React.Component {
 		this.props.dispatch(removeLessonCardFavorite(this.props.file))
 	}
 
-	/* TODO */
-	onShare = () => {
-
-	}
-
 	render() {
 		const { classes, lessonCardsFavorites, index, file, locale, category, level, isFavorited } = this.props
 
@@ -99,7 +94,6 @@ class LessonCardTile extends React.Component {
 						sha={file.sha}
 						url={`${process.env.ROOT}${href}`}
 						onFavoriteToggle={this.onFavoriteToggle}
-						onShare={this.onShare}
 						isFavorited={isFavorited}
 						isFavoriteAdded={isFavoriteAdded}
 					/>

@@ -99,6 +99,7 @@ const styles = theme => ({
 	},
 	pathwaySeeAll: {
 		width: '97%',
+		marginTop: '.5rem',
 		color: cyan[500],
 		textAlign: 'right',
 		cursor: 'pointer',
