@@ -277,11 +277,13 @@ class ChecklistsSystem extends React.Component {
 					? <Paper className={classes.panel}>
 						<Typography className={classes.pathwayTitle} variant="h6">You did not favorite any tips yet</Typography>
 					</Paper>
-					: pathwaysSaved.map((pathway, i) => (
-						<div className={classes.pathwaySavedWrapper}>
-							<PathwayPanel key={i} pathway={pathway} />
-						</div>
-					))
+					: pathwaysSaved
+						.sort(pathway => pathway.filename)
+						.map((pathway, i) => (
+							<div className={classes.pathwaySavedWrapper}>
+								<PathwayPanel key={i} pathway={pathway} />
+							</div>
+						))
 				}
 				<Typography className={classes.pathwaySeeAll} onClick={this.openPathwaysModal}>See All</Typography>
 			</React.Fragment>
