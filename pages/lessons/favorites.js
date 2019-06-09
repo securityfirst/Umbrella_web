@@ -45,8 +45,11 @@ const styles = theme => ({
 
 class LessonsFavorites extends React.Component {
 	static async getInitialProps({reduxStore}) {
-		await reduxStore.dispatch(getLessonCardsFavorites())
 		await reduxStore.dispatch(setAppbarTitle('Lessons / Favorites'))
+	}
+
+	componentDidMount() {
+		this.props.dispatch(getLessonCardsFavorites())
 	}
 
 	render() {

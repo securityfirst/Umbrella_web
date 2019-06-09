@@ -5,25 +5,6 @@ import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js
 
 import { openAlert } from './view'
 
-export const getLessonChecklist = sha => async (dispatch, getState) => {
-	dispatch(pending(lessonsTypes.GET_LESSON_CHECKLIST))
-
-	await fetch(`${process.env.ROOT}/api/github/content/${sha}`)
-		.then(res => {
-			if (!res.ok) throw res
-			return res.text()
-		})
-		.then(content => {
-			dispatch(fulfilled(lessonsTypes.GET_LESSON_CHECKLIST, content))
-		})
-		.catch(err => {
-			dispatch(openAlert('error', 'Something went wrong'))
-			dispatch(rejected(lessonsTypes.GET_LESSON_CHECKLIST, err))
-		})
-}
-
-export const unsetLessonChecklist = () => ({type: lessonsTypes.UNSET_LESSON_CHECKLIST})
-
 export const getLessonFile = sha => async (dispatch, getState) => {
 	dispatch(pending(lessonsTypes.GET_LESSON_FILE))
 
@@ -155,5 +136,24 @@ export const removeLessonCardFavorite = file => (dispatch, getState) => {
 		dispatch(rejected(lessonsTypes.REMOVE_LESSON_CARD_FAVORITE, e))
 	}
 }
+
+export const getLessonChecklist = sha => async (dispatch, getState) => {
+	dispatch(pending(lessonsTypes.GET_LESSON_CHECKLIST))
+
+	await fetch(`${process.env.ROOT}/api/github/content/${sha}`)
+		.then(res => {
+			if (!res.ok) throw res
+			return res.text()
+		})
+		.then(content => {
+			dispatch(fulfilled(lessonsTypes.GET_LESSON_CHECKLIST, content))
+		})
+		.catch(err => {
+			dispatch(openAlert('error', 'Something went wrong'))
+			dispatch(rejected(lessonsTypes.GET_LESSON_CHECKLIST, err))
+		})
+}
+
+export const unsetLessonChecklist = () => ({type: lessonsTypes.UNSET_LESSON_CHECKLIST})
 
 export const clearLessons = () => ({type: lessonsTypes.CLEAR_LESSONS})
