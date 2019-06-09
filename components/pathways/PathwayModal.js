@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { connect } from 'react-redux'
 import { withRouter } from 'next/router'
 
@@ -100,10 +101,6 @@ class PathwayModal extends React.Component {
 		this.props.dispatch(dismissPathwayModal(false))
 	}
 
-	handleShowMe = () => {
-
-	}
-
 	render() {
 		const { classes, content, locale, pathwayModalOpened } = this.props
 
@@ -133,15 +130,17 @@ class PathwayModal extends React.Component {
 						}
 					</div>
 
-					<Button 
-						className={classes.showMeButton}
-						component="button" 
-						variant="contained" 
-						color="secondary"
-						onClick={this.handleShowMe}
-					>
-						Show Me
-					</Button>
+					<Link href={'/checklists'}>
+						<Button 
+							className={classes.showMeButton}
+							component="button" 
+							variant="contained" 
+							color="secondary"
+							onClick={this.handleDismiss}
+						>
+							Show Me
+						</Button>
+					</Link>
 
 					<Typography
 						className={classes.bottomText}

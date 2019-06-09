@@ -280,7 +280,7 @@ class ChecklistsSystem extends React.Component {
 					: pathwaysSaved
 						.sort(pathway => pathway.filename)
 						.map((pathway, i) => (
-							<div className={classes.pathwaySavedWrapper}>
+							<div key={i} className={classes.pathwaySavedWrapper}>
 								<PathwayPanel key={i} pathway={pathway} />
 							</div>
 						))
