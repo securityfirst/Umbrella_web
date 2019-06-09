@@ -19,7 +19,7 @@ class GithubContent {
 	}
 
 	pull() {
-		console.log('[CRON] GITHUB_CONTENT: Pulling from master...')
+		console.log('[CRON] GITHUB_CONTENT: Pulling from master branch...')
 
 		git(this.directory).pull(
 			'origin', 

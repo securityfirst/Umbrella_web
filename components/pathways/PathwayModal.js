@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { connect } from 'react-redux'
 import { withRouter } from 'next/router'
 
@@ -100,10 +101,6 @@ class PathwayModal extends React.Component {
 		this.props.dispatch(dismissPathwayModal(false))
 	}
 
-	handleShowMe = () => {
-
-	}
-
 	render() {
 		const { classes, content, locale, pathwayModalOpened } = this.props
 
@@ -123,22 +120,27 @@ class PathwayModal extends React.Component {
 					<div className={classes.panelsWrapper}>
 						<Typography className={classes.modalContentTitle}>What do you need most?</Typography>
 						<Typography className={classes.modalContentDescription}>Select a guide to start your security journey, or bookmark any guide for later.</Typography>
-						{content[locale].pathways.content.reverse().map((pathway, i) => {
-							if (pathway.filename === '.category.yml') return null
+						{content[locale].pathways.content
+							.sort(pathway => pathway.filename)
+							.map((pathway, i) => {
+								if (pathway.filename === '.category.yml') return null
 
-							return <PathwayPanel key={i} pathway={pathway} />
-						})}
+								return <PathwayPanel key={i} pathway={pathway} />
+							})
+						}
 					</div>
 
-					<Button 
-						className={classes.showMeButton}
-						component="button" 
-						variant="contained" 
-						color="secondary"
-						onClick={this.handleShowMe}
-					>
-						Show Me
-					</Button>
+					<Link href={'/checklists'}>
+						<Button 
+							className={classes.showMeButton}
+							component="button" 
+							variant="contained" 
+							color="secondary"
+							onClick={this.handleDismiss}
+						>
+							Show Me
+						</Button>
+					</Link>
 
 					<Typography
 						className={classes.bottomText}
