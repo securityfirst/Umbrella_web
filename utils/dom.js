@@ -35,3 +35,11 @@ export const download = (name, html) => {
 		throw e
 	}
 }
+
+export const downloadHtml = () => {
+
+}
+
+export const downloadDocx = () => {
+	
+}
