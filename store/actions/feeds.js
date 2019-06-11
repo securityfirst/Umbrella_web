@@ -39,7 +39,7 @@ export const getFeeds = () => async (dispatch, getState) => {
 				sources: store.feeds.feedSources,
 			}),
 		})
-			.then(async res => {
+			.then(res => {
 				if (!res.ok) throw res
 				return res.json()
 			})

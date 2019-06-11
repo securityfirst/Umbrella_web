@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import Link from 'next/link'
 import Router, { withRouter } from 'next/router'
 import { connect } from 'react-redux'
+import YAML from 'yaml'
 
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -23,6 +24,8 @@ import { contentStyles, paperStyles } from '../../utils/view'
 
 import { setAppbarTitle } from '../../store/actions/view'
 import { getLessonCardsFavorites } from '../../store/actions/lessons'
+
+import { decodeBlob } from '../../utils/github'
 
 const menuWidth = 300
 
@@ -77,6 +80,53 @@ class LessonsMenu extends React.Component {
 			? this.props.router.query.category.split('.')[0] 
 			: this.props.router.pathname,
 		lessonSelected: null,
+		map: {},
+	}
+
+	generateMap = locale => {
+		const { classes, content } = this.props
+
+		try {
+			const categories = Object
+				.keys(content[locale])
+				.filter(category => !['content', 'glossary', 'pathways', 'forms'].includes(category))
+
+			let map = {}
+
+			categories.forEach(async category => {
+				const sha = content[locale][category].content[0].sha
+				const res = await fetch(`${process.env.ROOT}/api/github/content/${sha}`)
+				let data = await res.text()
+				data = YAML.parse(decodeBlob(data))
+
+				map[category] = data.title
+
+				const subcategories = Object.keys(content[locale][category]).filter(sub => sub != 'content')
+
+				subcategories.forEach(async sub => {
+					const sha = content[locale][category][sub].content[0].sha
+					const res = await fetch(`${process.env.ROOT}/api/github/content/${sha}`)
+					let data = await res.text()
+					data = YAML.parse(decodeBlob(data))
+
+					map[sub] = data.title
+				})
+			})
+
+			this.setState({map})
+		} catch (e) {
+			console.error(e)
+		}
+	}
+
+	componentDidMount() {
+		this.generateMap(this.props.locale)
+	}
+
+	componentWillUpdate(props, nextProps) {
+		if (!!nextProps.locale && props.locale !== nextProps.locale) {
+			this.generateMap(nextProps.locale)
+		}
 	}
 
 	handleCategorySelect = category => e => {
@@ -95,7 +145,7 @@ class LessonsMenu extends React.Component {
 
 	renderMenuSubcategories = (subcategories, isSelected) => {
 		const { classes, locale } = this.props
-		const { categorySelected } = this.state
+		const { categorySelected, map } = this.state
 
 		return (
 			<Collapse in={isSelected} timeout="auto" unmountOnExit>
@@ -105,7 +155,7 @@ class LessonsMenu extends React.Component {
 							<ListItem button className={classes.menuListSubItem}>
 								<ListItemText 
 									className={classes.menuListItemText} 
-									primary={subcategory.replace(/-/g, ' ')}
+									primary={map[subcategory]}
 									inset 
 								/>
 							</ListItem>
@@ -118,7 +168,7 @@ class LessonsMenu extends React.Component {
 
 	renderMenuCategory = (category, i) => {
 		const { classes, content, locale } = this.props
-		const { categorySelected } = this.state
+		const { categorySelected, map } = this.state
 
 		const isSelected = categorySelected == category
 		const subcategories = Object.keys(content[locale][category]).filter(subcategory => subcategory != 'content')
@@ -132,7 +182,7 @@ class LessonsMenu extends React.Component {
 							src={`/static/assets/content/en/${category}/${category}.png`} 
 						/>
 					</ListItemIcon>
-					<ListItemText className={classes.menuListItemText} inset primary={category.replace(/-/g, ' ')} />
+					<ListItemText className={classes.menuListItemText} inset primary={map[category]} />
 
 					{!!subcategories.length
 						? isSelected ? <ExpandLess /> : <ExpandMore />
