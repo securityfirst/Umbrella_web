@@ -7,11 +7,16 @@ import { connect } from 'react-redux'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Tooltip from '@material-ui/core/Tooltip';
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import Tooltip from '@material-ui/core/Tooltip'
+import Collapse from '@material-ui/core/Collapse'
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
 
 import BookmarkIcon from '@material-ui/icons/Bookmark'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -49,28 +54,12 @@ class FavoriteShareIcon extends React.Component {
 	state = {
 		anchorEl: null,
 		tooltipOpen: false,
+		downloadOpen: false,
 	}
 
 	handleClick = e => this.setState({ anchorEl: e.currentTarget })
 
 	handleClose = () => this.setState({ anchorEl: null })
-
-	handleDownload = () => {
-		const { dispatch, name, sha } = this.props
-
-		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
-			.then(res => {
-				if (!res.ok) throw res
-				return res.text()
-			})
-			.then(content => {
-				download(name, marked(decodeBlob(content)))
-			})
-			.catch(err => {
-				console.error('FavoriteShareIcons handleDownload error: ', err)
-				dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
-			})
-	}
 
 	handleCopyLink = () => {
 		const { dispatch } = this.props
@@ -93,10 +82,77 @@ class FavoriteShareIcon extends React.Component {
 			})
 		}
 	}
+	
+	toggleDownloadList = () => {
+		this.setState({downloadOpen: !this.state.downloadOpen})
+	}
+
+	downloadHtml = () => {
+		const { dispatch, name, sha } = this.props
+
+		dispatch(openAlert('warning', 'Downloading PDF...'))
+
+		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
+			.then(res => {
+				if (!res.ok) throw res
+				return res.text()
+			})
+			.then(content => {
+				download(name, marked(decodeBlob(content)))
+				dispatch(openAlert('success', 'Downloaded'))
+				this.handleClose()
+			})
+			.catch(err => {
+				console.error('FavoriteShareIcons handleDownload error: ', err)
+				dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+			})
+	}
+
+	downloadPdf = () => {
+		const { dispatch, name, sha } = this.props
+
+		dispatch(openAlert('info', 'Downloading PDF...'))
+
+		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
+			.then(res => {
+				if (!res.ok) throw res
+				return res.text()
+			})
+			.then(content => {
+				download(name, marked(decodeBlob(content)))
+				dispatch(openAlert('success', 'Downloaded'))
+				this.handleClose()
+			})
+			.catch(err => {
+				console.error('FavoriteShareIcons handleDownload error: ', err)
+				dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+			})
+	}
+
+	downloadDocx = () => {
+		const { dispatch, name, sha } = this.props
+
+		dispatch(openAlert('info', 'Downloading PDF...'))
+
+		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
+			.then(res => {
+				if (!res.ok) throw res
+				return res.text()
+			})
+			.then(content => {
+				download(name, marked(decodeBlob(content)))
+				dispatch(openAlert('success', 'Downloaded'))
+				this.handleClose()
+			})
+			.catch(err => {
+				console.error('FavoriteShareIcons handleDownload error: ', err)
+				dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+			})		
+	}
 
 	render() {
 		const { classes, isFavorited, isFavoriteAdded, isLight, url, onFavoriteToggle, onFavoriteRemove } = this.props
-		const { anchorEl, tooltipOpen } = this.state
+		const { anchorEl, tooltipOpen, downloadOpen } = this.state
 
 		return (
 			<React.Fragment>
@@ -152,18 +208,35 @@ class FavoriteShareIcon extends React.Component {
 					open={Boolean(anchorEl)}
 					onClose={this.handleClose}
 				>
-					<MenuItem onClick={this.handleDownload}>
-						<ListItemIcon>
+					<ListItem button onClick={this.toggleDownloadList}>
+						<ListItemIcon className={classes.menuListItemIcon}>
 							<GetAppIcon />
 						</ListItemIcon>
-						<ListItemText inset primary="Download" />
-					</MenuItem>
+						<ListItemText className={classes.menuListItemText} inset primary="Download" />
+
+						{downloadOpen ? <ExpandLess /> : <ExpandMore />}
+					</ListItem>
+
+					<Collapse in={downloadOpen} timeout="auto" unmountOnExit>
+						<List component="div" disablePadding>
+							<ListItem button onClick={this.downloadHtml}>
+								<ListItemText primary="HTML" />
+							</ListItem>
+							<ListItem button onClick={this.downloadPdf}>
+								<ListItemText primary="PDF" />
+							</ListItem>
+							<ListItem button onClick={this.downloadDoc}>
+								<ListItemText primary=".docx" />
+							</ListItem>
+						</List>
+					</Collapse>
+
 					{Boolean(url) && <Tooltip
 						open={tooltipOpen}
 						title="Copied!"
 						placement="right"
 					>
-						<MenuItem onClick={this.handleCopyLink}>
+						<ListItem onClick={this.handleCopyLink}>
 							<ListItemIcon>
 								<LinkIcon />
 							</ListItemIcon>
@@ -176,7 +249,7 @@ class FavoriteShareIcon extends React.Component {
 								aria-hidden="true" 
 								defaultValue={url}
 							/>
-						</MenuItem>
+						</ListItem>
 					</Tooltip>}
 				</Menu>
 
