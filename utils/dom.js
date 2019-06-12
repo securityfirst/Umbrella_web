@@ -1,3 +1,6 @@
+import htmlDocx from 'html-docx-js/dist/html-docx'
+import 'html-docx-js/test/vendor/Blob'
+
 export const download = (name, html) => {
 	if (typeof window === 'undefined') return false
 
@@ -40,6 +43,12 @@ export const downloadHtml = () => {
 
 }
 
-export const downloadDocx = () => {
-	
+export const downloadDocx = async (name, marked) => {
+	const saveAs = require('html-docx-js/test/vendor/FileSaver')
+	const html = `<!DOCTYPE html><html><body>${marked}</body></html>`
+	console.log("html: ", html);
+	const converted = htmlDocx.asBlob(html, {orientation: 'portrait'})
+	console.log("converted: ", converted);
+
+	saveAs(converted, `${name}.docx`)
 }
