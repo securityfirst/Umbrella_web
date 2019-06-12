@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { withRouter } from 'next/router'
+import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
 
@@ -27,7 +28,7 @@ const styles = theme => ({
 
 class Layout extends React.Component {
 	render() {
-		const { router, classes, theme } = this.props
+		const { router, content, locale, classes, theme } = this.props
 
 		return (
 		
@@ -50,7 +51,7 @@ class Layout extends React.Component {
 
 				<Alert />
 
-				<PathwayModal />
+				{!!content[locale].pathways && <PathwayModal />}
 			</div>
 		)
 	}
@@ -62,4 +63,9 @@ Layout.propTypes = {
 	theme: PropTypes.object.isRequired,
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(Layout))
+const mapStateToProps = state => ({
+	...state.content,
+	...state.view,
+})
+
+export default connect(mapStateToProps)(withRouter(withStyles(styles, { withTheme: true })(Layout)))
