@@ -90,7 +90,7 @@ class FavoriteShareIcon extends React.Component {
 	downloadHtml = () => {
 		const { dispatch, name, sha } = this.props
 
-		dispatch(openAlert('warning', 'Downloading HTML...'))
+		dispatch(openAlert('info', 'Downloading HTML...'))
 
 		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
 			.then(res => {
@@ -98,7 +98,7 @@ class FavoriteShareIcon extends React.Component {
 				return res.text()
 			})
 			.then(content => {
-				download(name, marked(decodeBlob(content)))
+				downloadHtml(name, marked(decodeBlob(content)))
 				dispatch(openAlert('success', 'Downloaded'))
 				this.handleClose()
 			})

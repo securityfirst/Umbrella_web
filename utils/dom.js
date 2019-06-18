@@ -1,10 +1,10 @@
 import htmlDocx from 'html-docx-js/dist/html-docx'
 import 'html-docx-js/test/vendor/Blob'
 
-export const download = (name, html) => {
+export const download = (name, marked) => {
 	if (typeof window === 'undefined') return false
 
-	if (!name || !html) {
+	if (!name || !marked) {
 		alert('Something went wrong. Please refresh the page and try again.')
 		return false
 	}
@@ -20,7 +20,7 @@ export const download = (name, html) => {
 		placeholder.id = id
 		placeholder.className += 'markdown-body'
 		placeholder.setAttribute('style', 'position:absolute;z-index:-1;width:100vw;margin:1rem;')
-		placeholder.innerHTML = html
+		placeholder.innerHTML = marked
 		document.body.appendChild(placeholder)
 
 		html2canvas(placeholder, {
@@ -39,16 +39,18 @@ export const download = (name, html) => {
 	}
 }
 
-export const downloadHtml = () => {
+export const downloadHtml = (name, marked) => {
+	const saveAs = require('html-docx-js/test/vendor/FileSaver')
+	const html = `<!doctype html><html><head></head><body>${marked}</body></html>`
+	const blob = new Blob([html], {type : 'application/html'})
 
+	saveAs(blob, `${name}.html`)
 }
 
 export const downloadDocx = async (name, marked) => {
 	const saveAs = require('html-docx-js/test/vendor/FileSaver')
-	const html = `<!DOCTYPE html><html><body>${marked}</body></html>`
-	console.log("html: ", html);
-	const converted = htmlDocx.asBlob(html, {orientation: 'portrait'})
-	console.log("converted: ", converted);
+	const html = `<!doctype html><html><head></head><body>${marked}</body></html>`
+	const blob = htmlDocx.asBlob(html)
 
-	saveAs(converted, `${name}.docx`)
+	saveAs(blob, `${name}.docx`)
 }
