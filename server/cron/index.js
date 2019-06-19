@@ -1,4 +1,5 @@
 const githubContentJob = require('./githubContent')
+const githubLocaleJob = require('./githubLocale')
 
 class Cron {
 	constructor() {
@@ -7,6 +8,7 @@ class Cron {
 
 	start() {
 		this.jobsRunning.set('github_content', githubContentJob.start())
+		this.jobsRunning.set('github_locale', githubLocaleJob.start())
 	}
 
 	stop() {
