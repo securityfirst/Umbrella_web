@@ -16,6 +16,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import WarningIcon from '@material-ui/icons/Warning'
 
 import green from '@material-ui/core/colors/green'
+import blue from '@material-ui/core/colors/blue'
 import amber from '@material-ui/core/colors/amber'
 
 import { closeAlert } from '../../store/actions/view'
@@ -37,7 +38,7 @@ const styles1 = theme => ({
 		backgroundColor: theme.palette.error.dark,
 	},
 	info: {
-		backgroundColor: theme.palette.primary.dark,
+		backgroundColor: blue[600],
 	},
 	warning: {
 		backgroundColor: amber[700],

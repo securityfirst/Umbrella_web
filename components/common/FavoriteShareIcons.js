@@ -29,7 +29,7 @@ import yellow from '@material-ui/core/colors/yellow'
 
 import { openAlert } from '../../store/actions/view'
 
-import { download } from '../../utils/dom'
+import { download, downloadHtml, downloadDocx } from '../../utils/dom'
 import { decodeBlob } from '../../utils/github'
 
 const styles = theme => ({
@@ -90,7 +90,7 @@ class FavoriteShareIcon extends React.Component {
 	downloadHtml = () => {
 		const { dispatch, name, sha } = this.props
 
-		dispatch(openAlert('warning', 'Downloading PDF...'))
+		dispatch(openAlert('info', 'Downloading HTML...'))
 
 		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
 			.then(res => {
@@ -98,7 +98,7 @@ class FavoriteShareIcon extends React.Component {
 				return res.text()
 			})
 			.then(content => {
-				download(name, marked(decodeBlob(content)))
+				downloadHtml(name, marked(decodeBlob(content)))
 				dispatch(openAlert('success', 'Downloaded'))
 				this.handleClose()
 			})
@@ -132,7 +132,7 @@ class FavoriteShareIcon extends React.Component {
 	downloadDocx = () => {
 		const { dispatch, name, sha } = this.props
 
-		dispatch(openAlert('info', 'Downloading PDF...'))
+		dispatch(openAlert('info', 'Downloading DOCX...'))
 
 		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
 			.then(res => {
@@ -140,7 +140,7 @@ class FavoriteShareIcon extends React.Component {
 				return res.text()
 			})
 			.then(content => {
-				download(name, marked(decodeBlob(content)))
+				downloadDocx(name, marked(decodeBlob(content)))
 				dispatch(openAlert('success', 'Downloaded'))
 				this.handleClose()
 			})
@@ -225,8 +225,8 @@ class FavoriteShareIcon extends React.Component {
 							<ListItem button onClick={this.downloadPdf}>
 								<ListItemText primary="PDF" />
 							</ListItem>
-							<ListItem button onClick={this.downloadDoc}>
-								<ListItemText primary=".docx" />
+							<ListItem button onClick={this.downloadDocx}>
+								<ListItemText primary="DOCX" />
 							</ListItem>
 						</List>
 					</Collapse>

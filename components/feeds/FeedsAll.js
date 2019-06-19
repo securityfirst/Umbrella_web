@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Link from 'next/link'
 
+import Marked from '../../components/common/Marked'
+
 import { withStyles } from '@material-ui/core/styles'
 import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
@@ -60,6 +62,9 @@ const styles = theme => ({
 	panelButtonInner: {
 		display: 'block',
 		textAlign: 'left',
+	},
+	feed: {
+		padding: '1.5rem 1.5rem 1rem',
 	},
 	feedTitle: {
 		marginTop: '1rem',
@@ -129,7 +134,10 @@ class FeedsAll extends React.Component {
 										{/*<span className={classes.feedSite}>Via {(feed.site || "").toUpperCase()}</span>*/}
 										<span className={classes.feedDate}>{new Date(feed.updated_at * 1000).toLocaleString()}</span>
 									</Typography>
-									<Typography className={classes.feedContent} paragraph>{feed.description}</Typography>
+									{/*<Typography className={classes.feedContent} paragraph>{feed.description}</Typography>*/}
+									<Typography className={classes.feedContent} paragraph>
+										<Marked content={feed.description} />
+									</Typography>
 								</Button>
 							</a>
 						)
