@@ -1,3 +1,5 @@
+import 'isomorphic-fetch'
+
 import { viewTypes } from '../types.js'
 import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
 
@@ -60,6 +62,27 @@ export const setLocale = locale => (dispatch, getState) => {
 	} catch (e) {
 		dispatch(openAlert('error', 'Something went wrong'))
 		dispatch(rejected(viewTypes.SET_LOCALE, e))
+	}
+}
+
+export const getLocaleMap = () => async (dispatch, getState) => {
+	await dispatch(pending(viewTypes.GET_LOCALE_MAP))
+
+	try {
+		await fetch(`${process.env.ROOT}/api/github/locale`)
+		.then(res => {
+			if (!res.ok) throw res
+			return res.json()
+		})
+		.then(async map => {
+			await dispatch(fulfilled(viewTypes.GET_LOCALE_MAP, map))
+		})
+		.catch(async err => {
+			await dispatch(rejected(viewTypes.GET_LOCALE_MAP, err))
+		})
+	} catch (e) {
+		// no alert
+		await dispatch(rejected(viewTypes.GET_LOCALE_MAP, e))
 	}
 }
 
