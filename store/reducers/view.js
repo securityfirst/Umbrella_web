@@ -81,6 +81,27 @@ export default function reducer(state = initialState, action) {
 				locale: action.payload,
 			}
 
+		/* GET_LOCALE_MAP */
+		case pending(viewTypes.GET_LOCALE_MAP):
+			return {
+				...state,
+				getLocaleMapLoading: true,
+				getLocaleMapError: null,
+			}
+		case rejected(viewTypes.GET_LOCALE_MAP):
+			return {
+				...state,
+				getLocaleMapLoading: false,
+				getLocaleMapError: action.payload,
+			}
+		case fulfilled(viewTypes.GET_LOCALE_MAP):
+			return {
+				...state,
+				getLocaleMapLoading: false,
+				getLocaleMapError: null,
+				localeMap: action.payload,
+			}
+
 		/* OPEN_ALERT */
 		case viewTypes.OPEN_ALERT:
 			return {

@@ -3,11 +3,12 @@ require('isomorphic-unfetch')
 const express = require('express')
 const router = express.Router()
 const apicache = require('apicache')
+const fs = require('fs')
 
 const set = require('lodash.set')
 const get = require('lodash.get')
 
-router.use(apicache.middleware('60 minutes'))
+// router.use(apicache.middleware('60 minutes'))
 
 router.get('/tree', async (req, res) => {
 	let lessons
@@ -85,6 +86,19 @@ router.get('/content/:sha', async (req, res) => {
 	}
 
 	return res.status(200).send(content.content)
+})
+
+router.get('/locale', (req, res) => {
+	try {
+		const file = fs.readFileSync(appRoot + '/static/assets/locale/github-locale.json')
+		const json = JSON.parse(file)
+
+		return res.status(200).send(JSON.stringify(json))
+	} catch (err) {
+		console.error('[API] /github/locale - File retrieval error: ', err)
+		res.statusMessage = 'Failed to retrieve content'
+		return res.status(500).end()
+	}
 })
 
 module.exports = router

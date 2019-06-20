@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import Link from 'next/link'
 import Router, { withRouter } from 'next/router'
 import { connect } from 'react-redux'
+import YAML from 'yaml'
 
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -23,6 +24,8 @@ import { contentStyles, paperStyles } from '../../utils/view'
 
 import { setAppbarTitle } from '../../store/actions/view'
 import { getLessonCardsFavorites } from '../../store/actions/lessons'
+
+import { decodeBlob } from '../../utils/github'
 
 const menuWidth = 300
 
@@ -94,7 +97,7 @@ class LessonsMenu extends React.Component {
 	}
 
 	renderMenuSubcategories = (subcategories, isSelected) => {
-		const { classes, locale } = this.props
+		const { classes, locale, localeMap } = this.props
 		const { categorySelected } = this.state
 
 		return (
@@ -105,7 +108,7 @@ class LessonsMenu extends React.Component {
 							<ListItem button className={classes.menuListSubItem}>
 								<ListItemText 
 									className={classes.menuListItemText} 
-									primary={subcategory.replace(/-/g, ' ')}
+									primary={localeMap[locale][subcategory]}
 									inset 
 								/>
 							</ListItem>
@@ -117,7 +120,7 @@ class LessonsMenu extends React.Component {
 	}
 
 	renderMenuCategory = (category, i) => {
-		const { classes, content, locale } = this.props
+		const { classes, content, locale, localeMap } = this.props
 		const { categorySelected } = this.state
 
 		const isSelected = categorySelected == category
@@ -132,7 +135,7 @@ class LessonsMenu extends React.Component {
 							src={`/static/assets/content/en/${category}/${category}.png`} 
 						/>
 					</ListItemIcon>
-					<ListItemText className={classes.menuListItemText} inset primary={category.replace(/-/g, ' ')} />
+					<ListItemText className={classes.menuListItemText} inset primary={localeMap[locale][category]} />
 
 					{!!subcategories.length
 						? isSelected ? <ExpandLess /> : <ExpandMore />
@@ -146,11 +149,21 @@ class LessonsMenu extends React.Component {
 	}
 
 	render() {
-		const { classes, locale, content, getContentLoading, getContentError, lessonsMenuOpened } = this.props
+		const { 
+			classes, 
+			locale, 
+			getLocaleMapLoading, 
+			getLocaleMapError, 
+			localeMap,
+			content, 
+			getContentLoading, 
+			getContentError, 
+			lessonsMenuOpened 
+		} = this.props
 		const { categorySelected } = this.state
 
-		if (getContentLoading) return <Loading />
-		else if (getContentError) return <ErrorMessage error={getContentError} />
+		if (getContentLoading || getLocaleMapLoading) return <Loading />
+		else if (getContentError || getLocaleMapError) return <ErrorMessage error={getContentError || getLocaleMapError} />
 
 		return (
 			<List

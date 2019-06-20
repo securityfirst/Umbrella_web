@@ -14,8 +14,8 @@ class GithubContent {
 		git(appRoot).clone(
 			`https://github.com/${process.env.GITHUB_CONTENT_REPO}.git`, 
 			this.directory, 
-			() => console.log('[CRON] GITHUB_CONTENT: Finished.'
-		))
+			() => console.log('[CRON] GITHUB_CONTENT: Finished.')
+		)
 	}
 
 	pull() {
@@ -25,8 +25,8 @@ class GithubContent {
 			'origin', 
 			'master', 
 			null, 
-			() => console.log('[CRON] GITHUB_CONTENT: Updated.'
-		))
+			() => console.log('[CRON] GITHUB_CONTENT: Updated.')
+		)
 	}
 
 	start() {
