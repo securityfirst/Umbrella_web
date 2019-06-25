@@ -8,7 +8,6 @@ import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -29,7 +28,7 @@ import yellow from '@material-ui/core/colors/yellow'
 
 import { openAlert } from '../../store/actions/view'
 
-import { download, downloadHtml, downloadDocx } from '../../utils/dom'
+import { downloadPdf, downloadHtml, downloadDocx } from '../../utils/dom'
 import { decodeBlob } from '../../utils/github'
 
 const styles = theme => ({
@@ -119,7 +118,7 @@ class FavoriteShareIcon extends React.Component {
 				return res.text()
 			})
 			.then(content => {
-				download(name, marked(decodeBlob(content)))
+				downloadPdf(name, marked(decodeBlob(content)))
 				dispatch(openAlert('success', 'Downloaded'))
 				this.handleClose()
 			})
@@ -147,7 +146,7 @@ class FavoriteShareIcon extends React.Component {
 			.catch(err => {
 				console.error('FavoriteShareIcons handleDownload error: ', err)
 				dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
-			})		
+			})
 	}
 
 	render() {

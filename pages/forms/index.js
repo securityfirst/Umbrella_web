@@ -6,6 +6,9 @@ import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
+import Menu from '@material-ui/core/Menu'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 
 import Layout from '../../components/layout'
 import Loading from '../../components/common/Loading'
@@ -16,7 +19,7 @@ import { openAlert } from '../../store/actions/view'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { generateForm } from '../../utils/forms'
-import { download } from '../../utils/dom'
+import { downloadPdf, downloadHtml, downloadDocx } from '../../utils/dom'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -41,6 +44,10 @@ const styles = theme => ({
 })
 
 class Forms extends React.Component {
+	state = {
+		anchorEl: null,
+	}
+
 	checkLogin = e => {
 		const { dispatch, isProtected, password } = this.props
 
@@ -51,22 +58,64 @@ class Forms extends React.Component {
 		}
 	}
 
-	handleShare = formSaved => () => {
-		const { dispatch } = this.props
+	handleClick = e => this.setState({ anchorEl: e.currentTarget })
 
-		dispatch(openAlert('info', 'Sharing form...'))
-	}
+	handleClose = () => this.setState({ anchorEl: null })
 
-	handleDownload = formSaved => async () => {
+	downloadHtml = formSaved => async () => {
 		const { dispatch, form } = this.props
 
-		await dispatch(openAlert('info', 'Your form is downloading...'))
-		
-		await dispatch(getForm(formSaved.sha))
-		
-		const html = generateForm(form, formSaved)
+		try {
+			await dispatch(openAlert('info', 'Your form is downloading...'))
+			await dispatch(getForm(formSaved.sha))
+			
+			const html = generateForm(form, formSaved)
 
-		download(formSaved.filename, html)
+			downloadHtml(formSaved.filename, html)
+
+			dispatch(openAlert('success', 'Downloaded'))
+		} catch (e) {
+			console.error('Download HTML error: ', e)
+			dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+		}
+	}
+
+	downloadPdf = formSaved => async () => {
+		const { dispatch, form } = this.props
+
+		try {
+			await dispatch(openAlert('info', 'Your form is downloading...'))
+			
+			await dispatch(getForm(formSaved.sha))
+			
+			const html = generateForm(form, formSaved)
+
+			downloadPdf(formSaved.filename, html)
+
+			dispatch(openAlert('success', 'Downloaded'))
+		} catch (e) {
+			console.error('Download PDF error: ', e)
+			dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+		}
+	}
+
+	downloadDocx = formSaved => async () => {
+		const { dispatch, form } = this.props
+
+		try {
+			await dispatch(openAlert('info', 'Your form is downloading...'))
+			
+			await dispatch(getForm(formSaved.sha))
+			
+			const html = generateForm(form, formSaved)
+
+			downloadDocx(formSaved.filename, html)
+
+			dispatch(openAlert('success', 'Downloaded'))
+		} catch (e) {
+			console.error('Download DOCX error: ', e)
+			dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+		}
 	}
 
 	handleDelete = formSaved => () => {
@@ -81,6 +130,7 @@ class Forms extends React.Component {
 
 	renderActivePanel = (formSaved, i) => {
 		const { classes } = this.props
+		const { anchorEl } = this.state
 
 		return (
 			<Paper key={i} className={classes.formPanel} square>
@@ -90,9 +140,30 @@ class Forms extends React.Component {
 
 				<div className={classes.formPanelButtonsWrapper}>
 					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">Edit</Button></Link>
-					<Button component="button" onClick={this.handleShare(formSaved)}>Share</Button>
-					<Button component="button" onClick={this.handleDownload(formSaved)}>Download</Button>
+					<Button 
+						component="button" 
+						aria-owns={anchorEl ? 'active-download-menu' : undefined}
+						aria-haspopup="true"
+						onClick={this.handleClick}
+					>Download</Button>
 					<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>Delete</Button>
+
+					<Menu
+						id={`active-download-menu-${i}`}
+						anchorEl={anchorEl}
+						open={Boolean(anchorEl)}
+						onClose={this.handleClose}
+					>
+						<ListItem button onClick={this.downloadHtml(formSaved)}>
+							<ListItemText primary="HTML" />
+						</ListItem>
+						<ListItem button onClick={this.downloadPdf(formSaved)}>
+							<ListItemText primary="PDF" />
+						</ListItem>
+						<ListItem button onClick={this.downloadDocx(formSaved)}>
+							<ListItemText primary="DOCX" />
+						</ListItem>
+					</Menu>
 				</div>
 			</Paper>
 		)
@@ -118,6 +189,7 @@ class Forms extends React.Component {
 
 	renderFilledPanel = (formSaved, i) => {
 		const { dispatch, classes } = this.props
+		const { anchorEl } = this.state
 
 		const date = new Date(formSaved.dateCompleted)
 
@@ -130,9 +202,30 @@ class Forms extends React.Component {
 
 				<div className={classes.formPanelButtonsWrapper}>
 					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">Edit</Button></Link>
-					<Button component="button" onClick={this.handleShare(formSaved)}>Share</Button>
-					<Button component="button" onClick={this.handleDownload(formSaved)}>Download</Button>
+					<Button 
+						component="button" 
+						aria-owns={anchorEl ? 'saved-download-menu' : undefined}
+						aria-haspopup="true"
+						onClick={this.handleClick}
+					>Download</Button>
 					<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>Delete</Button>
+
+					<Menu
+						id={`saved-download-menu-${i}`}
+						anchorEl={anchorEl}
+						open={Boolean(anchorEl)}
+						onClose={this.handleClose}
+					>
+						<ListItem button onClick={this.downloadHtml(formSaved)}>
+							<ListItemText primary="HTML" />
+						</ListItem>
+						<ListItem button onClick={this.downloadPdf(formSaved)}>
+							<ListItemText primary="PDF" />
+						</ListItem>
+						<ListItem button onClick={this.downloadDocx(formSaved)}>
+							<ListItemText primary="DOCX" />
+						</ListItem>
+					</Menu>
 				</div>
 			</Paper>
 		)
