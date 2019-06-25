@@ -67,19 +67,21 @@ class GithubLocale {
 
 							// Set up cards
 							content[locale][category][subcategory][level].content
-							.filter(lesson => !['.category.yml', 'c_checklist.yml'].includes(lesson.filename))
+							.filter(lesson => lesson.filename.substr(0, 2) === 's_')
 							.forEach(async lesson => {
-								if (!fs.existsSync(localeDir + `${category}/${subcategory}/${level}/${lesson.filename}`)) return
+								try {
+									if (!fs.existsSync(localeDir + `${category}/${subcategory}/${level}/${lesson.filename}`)) return
 
-								const jsonML = MT(fs.readFileSync(localeDir + `${category}/${subcategory}/${level}/${lesson.filename}`).toString())
+									const mdBlob = fs.readFileSync(localeDir + `${category}/${subcategory}/${level}/${lesson.filename}`)
+									if (!mdBlob) return
 
-								if (
-									!localeMap[lesson] && 
-									!!jsonML && 
-									!!jsonML.meta && 
-									!!jsonML.meta.title
-								) {
-									localeMap[lesson] = jsonML.meta.title
+									const jsonML = MT(mdBlob.toString())
+									if (!jsonML || !jsonML.meta || !jsonML.meta.title) return
+
+									localeMap[lesson.sha] = jsonML.meta.title
+								} catch (e) {
+									console.error(`[CRON] GITHUB_LOCALE: Error parsing ${lesson.filename}`, e)
+									localeMap[lesson.sha] = lesson.filename.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
 								}
 							})
 						})

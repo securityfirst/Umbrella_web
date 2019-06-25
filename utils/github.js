@@ -8,10 +8,6 @@ export const decodeBlob = content => {
 	}).join(''))
 }
 
-export const getNameFromFilenameMd = filename => {
-	return !!filename ? filename.slice(2).replace(/\.md/, '').replace(/-/g, ' ') : ''
-}
-
 export const getNameFromFilenameYml = filename => {
 	return !!filename ? filename.slice(2).replace(/\.yml/, '').replace(/-/g, ' ') : ''
 }

@@ -29,7 +29,7 @@ import { setAppbarTitle } from '../../store/actions/view'
 import { getLessonFile } from '../../store/actions/lessons'
 
 import { contentStyles, paperStyles } from '../../utils/view'
-import { decodeBlob, getNameFromFilenameMd } from '../../utils/github'
+import { decodeBlob } from '../../utils/github'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -76,7 +76,7 @@ class LessonCard extends React.Component {
 	}
 
 	renderNavigation = () => {
-		const { router, classes, content } = this.props
+		const { router, classes, content, localeMap } = this.props
 		const { locale, category, level, sha } = router.query
 		const { anchorEl } = this.state
 
@@ -126,7 +126,7 @@ class LessonCard extends React.Component {
 										className={classes.menuItem}
 										onClick={this.handleClose}
 									>
-										{getNameFromFilenameMd(lesson.filename)}
+										{localeMap[locale][lesson.sha]}
 									</MenuItem>
 								</Link>
 							))}

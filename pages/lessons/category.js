@@ -75,13 +75,17 @@ const styles = theme => ({
 })
 
 class LessonsCategory extends React.Component {
-	static async getInitialProps({reduxStore, query}) {
-		await reduxStore.dispatch(setAppbarTitle(`Lessons / ${query.category.replace(/-/g, ' ').split('.').join(' / ')}`))
-	}
-
 	render() {
-		const { router, classes, content } = this.props
+		const { router, classes, content, localeMap } = this.props
 		const { locale, category } = router.query
+
+		let breadcrumb = router.query.category.split('.')
+
+		for (let i=0; i<breadcrumb.length; i++) {
+			breadcrumb[i] = localeMap[locale][breadcrumb[i]].replace(/-/g, ' ')
+		}
+
+		breadcrumb = breadcrumb.join(' > ')
 
 		let levels = get(content, `${locale}.${category}`)
 
@@ -99,7 +103,7 @@ class LessonsCategory extends React.Component {
 					<LessonsMenu />
 
 					<div className={classes.content}>
-						<Typography className={classes.breadcrumb} variant="subtitle1">{category.split('.').join(' > ').replace(/-/g, ' ')}</Typography>
+						<Typography className={classes.breadcrumb} variant="subtitle1">{breadcrumb}</Typography>
 
 						{levels.map((level, i) => {
 							if (level === 'content') return null
@@ -111,7 +115,7 @@ class LessonsCategory extends React.Component {
 										classes={{label: classes.panelTitle}}
 										variant="contained"
 									>
-										{level}
+										{localeMap[locale][level]}
 									</Button>
 								</Link>
 							)
