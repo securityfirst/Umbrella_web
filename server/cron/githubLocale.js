@@ -1,6 +1,7 @@
 const CronJob = require('cron').CronJob
 const fs = require('fs')
 const YAML = require('yaml')
+const MT = require('mark-twain')
 
 class GithubLocale {
 	constructor() {
@@ -38,7 +39,7 @@ class GithubLocale {
 					const yml = fs.readFileSync(localeDir + `${category}/.category.yml`, 'utf8')
 					const data = YAML.parse(yml)
 
-					localeMap[category] = data.title
+					if (!localeMap[category]) localeMap[category] = data.title
 
 					// Set up subcategories...
 					Object
@@ -50,7 +51,40 @@ class GithubLocale {
 						const yml = fs.readFileSync(localeDir + `${category}/${subcategory}/.category.yml`, 'utf8')
 						const data = YAML.parse(yml)
 
-						localeMap[subcategory] = data.title
+						if (!localeMap[subcategory]) localeMap[subcategory] = data.title
+
+						// Set up levels
+						Object
+						.keys(content[locale][category][subcategory])
+						.filter(level => level != 'content')
+						.forEach(async level => {
+							if (!fs.existsSync(localeDir + `${category}/${subcategory}/${level}/.category.yml`)) return
+
+							const yml = fs.readFileSync(localeDir + `${category}/${subcategory}/${level}/.category.yml`, 'utf8')
+							const data = YAML.parse(yml)
+
+							if (!localeMap[level]) localeMap[level] = data.title
+
+							// Set up cards
+							content[locale][category][subcategory][level].content
+							.filter(lesson => lesson.filename.substr(0, 2) === 's_')
+							.forEach(async lesson => {
+								try {
+									if (!fs.existsSync(localeDir + `${category}/${subcategory}/${level}/${lesson.filename}`)) return
+
+									const mdBlob = fs.readFileSync(localeDir + `${category}/${subcategory}/${level}/${lesson.filename}`)
+									if (!mdBlob) return
+
+									const jsonML = MT(mdBlob.toString())
+									if (!jsonML || !jsonML.meta || !jsonML.meta.title) return
+
+									localeMap[lesson.sha] = jsonML.meta.title
+								} catch (e) {
+									console.error(`[CRON] GITHUB_LOCALE: Error parsing ${lesson.filename}`, e)
+									localeMap[lesson.sha] = lesson.filename.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
+								}
+							})
+						})
 					})
 				})
 

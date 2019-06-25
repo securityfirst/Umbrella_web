@@ -117,11 +117,6 @@ const styles = theme => ({
 })
 
 class LessonsLevel extends React.Component {
-	static async getInitialProps({reduxStore, query}) {
-		const category = query.category.replace(/-/g, ' ').split('.').join(' / ')
-		await reduxStore.dispatch(setAppbarTitle(`Lessons / ${category} / ${query.level}`))
-	}
-
 	state = {
 		files: [],
 		checklist: null,
@@ -257,12 +252,12 @@ class LessonsLevel extends React.Component {
 	}
 
 	render() {
-		const { router, classes } = this.props
+		const { router, classes, localeMap } = this.props
 		const { locale, category, level } = router.query
 		const { files } = this.state
 
 		return (
-			<Layout title="Umbrella | Lessons Cards" description="Umbrella web application">
+			<Layout title="Umbrella | Lessons" description="Umbrella web application">
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 
@@ -274,6 +269,7 @@ class LessonsLevel extends React.Component {
 									index={i} 
 									file={file} 
 									locale={locale}
+									localeMap={localeMap}
 									category={category}
 									level={level}
 								/>
