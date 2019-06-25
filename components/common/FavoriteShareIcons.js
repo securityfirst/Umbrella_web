@@ -29,7 +29,7 @@ import yellow from '@material-ui/core/colors/yellow'
 
 import { openAlert } from '../../store/actions/view'
 
-import { download, downloadHtml, downloadDocx } from '../../utils/dom'
+import { downloadPdf, downloadHtml, downloadDocx } from '../../utils/dom'
 import { decodeBlob } from '../../utils/github'
 
 const styles = theme => ({
@@ -119,7 +119,7 @@ class FavoriteShareIcon extends React.Component {
 				return res.text()
 			})
 			.then(content => {
-				download(name, marked(decodeBlob(content)))
+				downloadPdf(name, marked(decodeBlob(content)))
 				dispatch(openAlert('success', 'Downloaded'))
 				this.handleClose()
 			})

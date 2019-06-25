@@ -1,7 +1,6 @@
-import htmlDocx from 'html-docx-js/dist/html-docx'
-import 'html-docx-js/test/vendor/Blob'
+import * as Blob from 'blob'
 
-export const download = (name, marked) => {
+export const downloadPdf = (name = 'download', marked) => {
 	if (typeof window === 'undefined') return false
 
 	if (!name || !marked) {
@@ -35,22 +34,74 @@ export const download = (name, marked) => {
 			placeholder.remove()
 		})
 	} catch (e) {
+		console.error(e)
 		throw e
 	}
 }
 
-export const downloadHtml = (name, marked) => {
-	const saveAs = require('html-docx-js/test/vendor/FileSaver')
-	const html = `<!doctype html><html><head></head><body>${marked}</body></html>`
-	const blob = new Blob([html], {type : 'application/html'})
+export const downloadHtml = (name = 'download', marked) => {
+	if (typeof window === 'undefined') return false
 
-	saveAs(blob, `${name}.html`)
+	if (!marked) {
+		alert('Something went wrong. Please refresh the page and try again.')
+		return false
+	}
+
+	try {
+		const html = `<!doctype html><html><head></head><body>${marked}</body></html>`
+		const blob = new Blob([html], {type : 'application/html'})
+		const url = 'data:text/html;charset=utf-8,,' + encodeURIComponent(html)
+
+		save(blob, url, name + '.html')
+	} catch (e) {
+		console.error(`Failed to download ${name}.html: `, e)
+		throw e
+	}
 }
 
-export const downloadDocx = async (name, marked) => {
-	const saveAs = require('html-docx-js/test/vendor/FileSaver')
-	const html = `<!doctype html><html><head></head><body>${marked}</body></html>`
-	const blob = htmlDocx.asBlob(html)
+export const downloadDocx = async (name = 'download', marked) => {
+	if (typeof window === 'undefined') return false
 
-	saveAs(blob, `${name}.docx`)
+	if (!marked) {
+		alert('Something went wrong. Please refresh the page and try again.')
+		return false
+	}
+
+	try {
+		const html = `
+			<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+				<head><meta charset='utf-8'><title>${name}</title></head>
+				<body>${marked}</body>
+			</html>
+		`
+		const blob = new Blob(['\ufeff', html], {type: 'application/msword'})
+		const url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html)
+		
+		save(blob, url, name + '.docx')
+	} catch (e) {
+		console.error(`Failed to download ${name}.docx: `, e)
+		throw e
+	}
+}
+
+function save(blob, url, filename) {
+	// Create download link element
+	const downloadLink = document.createElement('a')
+
+	document.body.appendChild(downloadLink)
+	
+	if (navigator.msSaveOrOpenBlob) {
+		navigator.msSaveOrOpenBlob(blob, filename)
+	} else {
+		// Create a link to the file
+		downloadLink.href = url
+		
+		// Setting the file name
+		downloadLink.download = filename
+		
+		//triggering the function
+		downloadLink.click()
+	}
+	
+	document.body.removeChild(downloadLink)
 }

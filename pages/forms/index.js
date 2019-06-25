@@ -16,7 +16,7 @@ import { openAlert } from '../../store/actions/view'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { generateForm } from '../../utils/forms'
-import { download } from '../../utils/dom'
+import { downloadPdf } from '../../utils/dom'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -66,7 +66,7 @@ class Forms extends React.Component {
 		
 		const html = generateForm(form, formSaved)
 
-		download(formSaved.filename, html)
+		downloadPdf(formSaved.filename, html)
 	}
 
 	handleDelete = formSaved => () => {
