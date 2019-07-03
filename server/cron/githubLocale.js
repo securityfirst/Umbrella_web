@@ -93,8 +93,6 @@ class GithubLocale {
 
 			const json = JSON.stringify(map)
 
-			if (!this.existsLocale) fs.mkdirSync(this.localeDirectory)
-
 			const success = fs.writeFileSync(this.localeDirectory + 'github-locale.json', json, 'utf8')
 			
 			console.log('[CRON] GITHUB_LOCALE: Finished.')
@@ -104,6 +102,8 @@ class GithubLocale {
 	}
 
 	start() {
+		if (!this.existsLocale) fs.mkdirSync(this.localeDirectory)
+
 		// Every hour = 0 0 0/1 1/1 * * *
 		const job = new CronJob('0 0 0/1 1/1 * * *', () => {
 			console.log('[CRON] GITHUB_LOCALE: Starting job at', new Date())
