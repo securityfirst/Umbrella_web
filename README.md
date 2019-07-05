@@ -203,6 +203,7 @@ Setup environment file based upon the README.env environment file and use the fo
 
 ```
 npm install
+npm install forever -g
 npm run dev // runs development server with nodemon listening for server changes
 npm run build // builds the next js app
 npm run start // for production builds
