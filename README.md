@@ -206,7 +206,8 @@ npm install
 npm install forever -g
 npm run dev // runs development server with nodemon listening for server changes
 npm run build // builds the next js app
-npm run start // for production builds
+npm run start // to run production on local
+forever start -a -o out.log -e err.log server.js // for production instances
 ```
 
 If you'd like to use a different branch for Umbrella content, in your terminal change directory to `/static/assets/content` (root dir for content git) and run `git checkout YOUR_BRANCH`. You will also need to change the branch in the repo fetch in `/server/api/github`.

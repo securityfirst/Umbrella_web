@@ -21,7 +21,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "build": "next build",
-    "start": "forever start -a -o out.log -e err.log server.js"
+    "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@material-ui/core": "^3.6.2",
