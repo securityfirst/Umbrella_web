@@ -1,4 +1,7 @@
 // Environment variable config see README.env for example
+process = process || {}
+process.env = process.env || {}
+
 require('dotenv').config()
 // Server setup
 const cluster = require('cluster')
