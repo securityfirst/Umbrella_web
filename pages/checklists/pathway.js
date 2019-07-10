@@ -75,7 +75,7 @@ class Pathway extends React.Component {
 
 		const { dispatch, content, locale } = this.props
 
-		dispatch(updatePathwaysSaved(this.findMatchingPathway(content[locale].pathways.content)))
+		dispatch(updatePathwaysSaved(this.findMatchingPathway(content[locale || 'en'].pathways.content)))
 	}
 
 	handleChecked = (item) => () => {
