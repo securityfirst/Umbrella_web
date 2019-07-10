@@ -78,7 +78,7 @@ export default function reducer(state = initialState, action) {
 				...state,
 				setLocaleLoading: false,
 				setLocaleError: null,
-				locale: action.payload,
+				locale: action.payload || 'en',
 			}
 
 		/* GET_LOCALE_MAP */

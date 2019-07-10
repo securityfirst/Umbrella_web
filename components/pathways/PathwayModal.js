@@ -120,7 +120,7 @@ class PathwayModal extends React.Component {
 					<div className={classes.panelsWrapper}>
 						<Typography className={classes.modalContentTitle}>What do you need most?</Typography>
 						<Typography className={classes.modalContentDescription}>Select a guide to start your security journey, or bookmark any guide for later.</Typography>
-						{content[locale || 'en'].pathways.content
+						{content[locale].pathways.content
 							.sort(pathway => pathway.filename)
 							.map((pathway, i) => {
 								if (pathway.filename === '.category.yml') return null
