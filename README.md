@@ -205,6 +205,7 @@ Setup environment file based upon the README.env environment file and use the fo
 npm install
 npm install forever -g
 npm run dev // runs development server with nodemon listening for server changes
+// export all environment variables here in command line before building, for production instances
 npm run build // builds the next js app
 npm run start // to run production on local
 forever start -a -o out.log -e err.log server.js // for production instances
