@@ -51,7 +51,7 @@ class Layout extends React.Component {
 
 				<Alert />
 
-				{!!content[locale || 'en'].pathways && <PathwayModal />}
+				{(!!content && !!content[locale || 'en'].pathways) && <PathwayModal />}
 			</div>
 		)
 	}
