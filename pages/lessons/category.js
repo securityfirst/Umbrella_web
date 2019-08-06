@@ -19,7 +19,7 @@ import LessonsMenu from '../../components/lessons/LessonsMenu'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
-import { setAppbarTitle } from '../../store/actions/view'
+import { setAppbarTitle, toggleLessonsMenu } from '../../store/actions/view'
 import { getLessonCardsFavorites } from '../../store/actions/lessons'
 
 const levelsOrder = ['beginner', 'advanced', 'expert']
@@ -80,6 +80,10 @@ const styles = theme => ({
 })
 
 class LessonsCategory extends React.Component {
+	componentWillUnmount() {
+		this.props.dispatch(toggleLessonsMenu(false))
+	}
+
 	render() {
 		const { router, classes, content, localeMap } = this.props
 		const { locale, category } = router.query

@@ -15,7 +15,7 @@ import LessonsMenu from '../../components/lessons/LessonsMenu'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
-import { setAppbarTitle } from '../../store/actions/view'
+import { setAppbarTitle, toggleLessonsMenu } from '../../store/actions/view'
 import { getLessonCardsFavorites } from '../../store/actions/lessons'
 
 const styles = theme => ({
@@ -56,6 +56,10 @@ class LessonsFavorites extends React.Component {
 
 	componentDidMount() {
 		this.props.dispatch(getLessonCardsFavorites())
+	}
+
+	componentWillUnmount() {
+		this.props.dispatch(toggleLessonsMenu(false))
 	}
 
 	render() {
