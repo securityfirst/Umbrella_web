@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
@@ -19,6 +20,11 @@ import { getLessonCardsFavorites } from '../../store/actions/lessons'
 
 const styles = theme => ({
 	...contentStyles(theme),
+	contentAdditional: {
+		[theme.breakpoints.down('sm')]: {
+			paddingTop: '50px',
+		},
+	},
 	wrapper: {
 		position: 'relative',
 		display: 'flex',
@@ -63,7 +69,7 @@ class LessonsFavorites extends React.Component {
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 
-					<div className={classes.content}>
+					<div className={classNames(classes.content, classes.contentAdditional)}>
 						<Typography className={classes.label} variant="subtitle1">Lesson Favorites</Typography>
 
 						{!lessonCardsFavorites.length

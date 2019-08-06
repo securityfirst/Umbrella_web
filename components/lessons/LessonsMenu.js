@@ -22,7 +22,7 @@ import ErrorMessage from '../common/ErrorMessage'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
-import { setAppbarTitle } from '../../store/actions/view'
+import { setAppbarTitle, toggleLessonsMenu } from '../../store/actions/view'
 import { getLessonCardsFavorites } from '../../store/actions/lessons'
 
 import { decodeBlob } from '../../utils/github'
@@ -31,25 +31,47 @@ const menuWidth = 300
 
 const styles = theme => ({
 	...contentStyles(theme),
-	menuList: {
+	menuWrapper: {
 		width: menuWidth,
 		maxHeight: 'calc(100vh - 48px)',
+		overflow: 'hidden',
+		transition: theme.transitions.create(['height'], {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.leavingScreen * 1.5,
+		}),
+		[theme.breakpoints.down('sm')]: {
+			position: 'absolute',
+			width: '100%',
+			height: '35px',
+			zIndex: 1,
+			boxShadow: theme.shadows[1],
+		},
+	},
+	menuWrapperOpened: {
+		height: '100%',
+		overflow: 'scroll',
+		transition: theme.transitions.create(['height'], {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.enteringScreen * 1.5,
+		}),
+	},
+	menuToggleMobile: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '35px',
+		backgroundColor: theme.palette.background.paper,
+		[theme.breakpoints.up('sm')]: {
+			display: 'none',
+		},
+	},
+	menuList: {
+		height: '100%',
 		flexShrink: 0,
 		whiteSpace: 'nowrap',
 		backgroundColor: theme.palette.background.paper,
-		transition: theme.transitions.create(['width'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.leavingScreen * 5,
-		}),
 		overflow: 'scroll',
 		'-webkit-overflow-scrolling': 'touch',
-	},
-	menuListOpened: {
-		width: menuWidth,
-		transition: theme.transitions.create(['width'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen * 5,
-		}),
 	},
 	menuListItemSelected: {
 		borderTop: '1px solid ' + theme.palette.grey[300],
@@ -80,6 +102,11 @@ class LessonsMenu extends React.Component {
 			? this.props.router.query.category.split('.')[0] 
 			: this.props.router.pathname,
 		lessonSelected: null,
+	}
+
+	toggleMenuMobile = e => {
+		e.preventDefault()
+		this.props.dispatch(toggleLessonsMenu(!this.props.lessonsMenuOpened)) 
 	}
 
 	handleCategorySelect = category => e => {
@@ -166,46 +193,46 @@ class LessonsMenu extends React.Component {
 		else if (getContentError || getLocaleMapError) return <ErrorMessage error={getContentError || getLocaleMapError} />
 
 		return (
-			<List
-				component="nav"
-				className={classes.menuList}
-				className={classNames(classes.menuList, {
-					[classes.menuListOpened]: lessonsMenuOpened,
-				})}
-			>
-				{/* Favorites menu item */}
-				<div className={categorySelected == "favorites" ? classes.menuListItemSelected : ''}>
-					<Link href="/lessons/favorites">
-						<ListItem button>
-							<ListItemIcon className={classes.menuListItemIcon}>
-								<BookmarkIcon className={classes.menuListItemMUIIcon} />
-							</ListItemIcon>
-							<ListItemText className={classes.menuListItemText} inset primary="Favorites" />
-						</ListItem>
-					</Link>
+			<div className={classNames(classes.menuWrapper, {[classes.menuWrapperOpened]: lessonsMenuOpened})}>
+				<div className={classes.menuToggleMobile} onClick={this.toggleMenuMobile}>
+					<Typography>Lessons Menu</Typography>
+					{lessonsMenuOpened ? <ExpandLess /> : <ExpandMore />}
 				</div>
+				<List component="nav" className={classes.menuList}>
+					{/* Favorites menu item */}
+					<div className={categorySelected == "favorites" ? classes.menuListItemSelected : ''}>
+						<Link href="/lessons/favorites">
+							<ListItem button>
+								<ListItemIcon className={classes.menuListItemIcon}>
+									<BookmarkIcon className={classes.menuListItemMUIIcon} />
+								</ListItemIcon>
+								<ListItemText className={classes.menuListItemText} inset primary="Favorites" />
+							</ListItem>
+						</Link>
+					</div>
 
-				{Object
-					.keys(content[locale])
-					.filter(category => !['content', 'glossary', 'pathways', 'forms'].includes(category))
-					.map(this.renderMenuCategory)
-				}
+					{Object
+						.keys(content[locale])
+						.filter(category => !['content', 'glossary', 'pathways', 'forms'].includes(category))
+						.map(this.renderMenuCategory)
+					}
 
-				{/* Glossary menu item */}
-				<div className={categorySelected == "glossary" ? classes.menuListItemSelected : ''}>
-					<Link href={`/lessons/${locale}/glossary`}>
-						<ListItem button>
-							<ListItemIcon className={classes.menuListItemIcon}>
-								<img 
-									className={classes.menuListItemIconImg} 
-									src={`/static/assets/content/en/glossary/glossary.png`} 
-								/>
-							</ListItemIcon>
-							<ListItemText className={classes.menuListItemText} inset primary="Glossary" />
-						</ListItem>
-					</Link>
-				</div>
-			</List>
+					{/* Glossary menu item */}
+					<div className={categorySelected == "glossary" ? classes.menuListItemSelected : ''}>
+						<Link href={`/lessons/${locale}/glossary`}>
+							<ListItem button>
+								<ListItemIcon className={classes.menuListItemIcon}>
+									<img 
+										className={classes.menuListItemIconImg} 
+										src={`/static/assets/content/en/glossary/glossary.png`} 
+									/>
+								</ListItemIcon>
+								<ListItemText className={classes.menuListItemText} inset primary="Glossary" />
+							</ListItem>
+						</Link>
+					</div>
+				</List>
+			</div>
 		)
 	}
 }

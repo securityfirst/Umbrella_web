@@ -1,5 +1,6 @@
 import React from 'react'
 
+import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
@@ -13,6 +14,11 @@ import { contentStyles, paperStyles } from '../../utils/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
+	contentAdditional: {
+		[theme.breakpoints.down('sm')]: {
+			paddingTop: '50px',
+		},
+	},
 	wrapper: {
 		position: 'relative',
 		display: 'flex',
@@ -32,6 +38,16 @@ const styles = theme => ({
 			fontSize: '1.5rem',
 		},
 	},
+	descriptionMobile: {
+		[theme.breakpoints.up('sm')]: {
+			display: 'none',
+		},
+	},
+	descriptionDesktop: {
+		[theme.breakpoints.down('sm')]: {
+			display: 'none',
+		},
+	},
 })
 
 class Lessons extends React.Component {
@@ -43,10 +59,10 @@ class Lessons extends React.Component {
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 
-					<div className={classes.content}>
+					<div className={classNames(classes.content, classes.contentAdditional)}>
 						<Paper className={classes.intro}>
 							<Typography className={classes.introTitle} variant="h2">Lessons</Typography>
-							<Typography paragraph>Use the menu panel on the left to navigate lesson categories.</Typography>
+							<Typography paragraph>Use the menu panel on the <span className={classes.descriptionDesktop}>left</span><span className={classes.descriptionMobile}>top</span> to navigate lesson categories.</Typography>
 						</Paper>
 					</div>
 				</div>
