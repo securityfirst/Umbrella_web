@@ -26,6 +26,11 @@ const levelsOrder = ['beginner', 'advanced', 'expert']
 
 const styles = theme => ({
 	...contentStyles(theme),
+	contentAdditional: {
+		[theme.breakpoints.down('sm')]: {
+			paddingTop: '50px',
+		},
+	},
 	wrapper: {
 		position: 'relative',
 		display: 'flex',
@@ -102,7 +107,7 @@ class LessonsCategory extends React.Component {
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 
-					<div className={classes.content}>
+					<div className={classNames(classes.content, classes.contentAdditional)}>
 						<Typography className={classes.breadcrumb} variant="subtitle1">{breadcrumb}</Typography>
 
 						{levels.map((level, i) => {

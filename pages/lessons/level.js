@@ -35,6 +35,11 @@ import { decodeBlob } from '../../utils/github'
 
 const styles = theme => ({
 	...contentStyles(theme),
+	contentAdditional: {
+		[theme.breakpoints.down('sm')]: {
+			paddingTop: '50px',
+		},
+	},
 	wrapper: {
 		position: 'relative',
 		display: 'flex',
@@ -261,7 +266,7 @@ class LessonsLevel extends React.Component {
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 
-					<div className={classes.content}>
+					<div className={classNames(classes.content, classes.contentAdditional)}>
 						<div className={classes.cardsWrapper}>
 							{files.map((file, i) => (
 								<LessonCardTile 

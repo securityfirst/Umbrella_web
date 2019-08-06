@@ -24,7 +24,7 @@ import LocalLibraryIcon from '@material-ui/icons/LocalLibrary'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 
 import { setAppbarTitle } from '../../store/actions/view'
-import { toggleMainMenu, toggleLessonsMenu } from '../../store/actions/view'
+import { toggleMainMenu } from '../../store/actions/view'
 
 import { viewConstants } from '../../utils/view'
 
@@ -87,15 +87,7 @@ class Menu extends React.Component {
 	handleDrawerClose = () => this.props.dispatch(toggleMainMenu(false))
 
 	handleMenuClick = link => () => {
-		const { dispatch } = this.props
-
-		dispatch(setAppbarTitle(link.name))
-
-		switch (link.name) {
-			case 'Lessons': 
-				dispatch(toggleLessonsMenu(true)) 
-				break
-		}
+		this.props.dispatch(setAppbarTitle(link.name))
 	}
 
 	renderItems = () => {

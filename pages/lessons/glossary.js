@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
 
+import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 
 import Layout from '../../components/layout'
@@ -17,6 +18,11 @@ import { setAppbarTitle } from '../../store/actions/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
+	contentAdditional: {
+		[theme.breakpoints.down('sm')]: {
+			paddingTop: '50px',
+		},
+	},
 	wrapper: {
 		position: 'relative',
 		display: 'flex',
@@ -57,7 +63,7 @@ class LessonsGlossary extends React.Component {
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 
-					<div className={classes.content}>
+					<div className={classNames(classes.content, classes.contentAdditional)}>
 						<div className={classes.cardsWrapper}>
 							{files.map((file, i) => (
 								<LessonCardTile 

@@ -113,7 +113,7 @@ const pathways = {
 const view = {
 	mainMenuOpened: false,
 	appbarTitle: null,
-	lessonsMenuOpened: 0,
+	lessonsMenuOpened: false,
 	dismissPathywayModalLoading: false,
 	dismissPathywayModaError: null,
 	pathwayModalOpened: false,
