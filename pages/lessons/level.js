@@ -28,7 +28,7 @@ import LessonCardTile from '../../components/lessons/LessonCardTile'
 
 import { getLessonChecklist, unsetLessonChecklist } from '../../store/actions/lessons'
 import { getChecklistsSystem, updateChecklistsSystem, deleteChecklistSystem, toggleChecklistFavorite } from '../../store/actions/checklists'
-import { setAppbarTitle } from '../../store/actions/view'
+import { setAppbarTitle, toggleLessonsMenu } from '../../store/actions/view'
 
 import { contentStyles } from '../../utils/view'
 import { decodeBlob } from '../../utils/github'
@@ -154,6 +154,10 @@ class LessonsLevel extends React.Component {
 		}
 
 		this.setState({files, checklist})
+	}
+	
+	componentWillUnmount() {
+		this.props.dispatch(toggleLessonsMenu(false))
 	}
 
 	getChecklistKey = () => {

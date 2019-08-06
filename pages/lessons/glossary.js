@@ -14,7 +14,7 @@ import LessonsMenu from '../../components/lessons/LessonsMenu'
 
 import { contentStyles } from '../../utils/view'
 
-import { setAppbarTitle } from '../../store/actions/view'
+import { setAppbarTitle, toggleLessonsMenu } from '../../store/actions/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -41,6 +41,10 @@ const styles = theme => ({
 class LessonsGlossary extends React.Component {
 	static async getInitialProps({reduxStore, query}) {
 		await reduxStore.dispatch(setAppbarTitle(`Lessons / Glossary`))
+	}
+
+	componentWillUnmount() {
+		this.props.dispatch(toggleLessonsMenu(false))
 	}
 
 	render() {

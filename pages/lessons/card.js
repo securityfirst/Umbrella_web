@@ -25,7 +25,7 @@ import ErrorMessage from '../../components/common/ErrorMessage'
 import Marked from '../../components/common/Marked'
 import LessonsMenu from '../../components/lessons/LessonsMenu'
 
-import { setAppbarTitle } from '../../store/actions/view'
+import { setAppbarTitle, toggleLessonsMenu } from '../../store/actions/view'
 import { getLessonFile } from '../../store/actions/lessons'
 
 import { contentStyles, paperStyles } from '../../utils/view'
@@ -70,6 +70,10 @@ class LessonCard extends React.Component {
 
 	state = {
 		anchorEl: null,
+	}
+
+	componentWillUnmount() {
+		this.props.dispatch(toggleLessonsMenu(false))
 	}
 
 	handleMenu = event => {

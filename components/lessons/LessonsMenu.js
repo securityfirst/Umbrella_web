@@ -45,11 +45,12 @@ const styles = theme => ({
 			height: '35px',
 			zIndex: 1,
 			boxShadow: theme.shadows[1],
+			'-webkit-overflow-scrolling': 'touch',
 		},
 	},
 	menuWrapperOpened: {
 		height: '100%',
-		overflow: 'scroll',
+		overflow: 'hidden',
 		transition: theme.transitions.create(['height'], {
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.enteringScreen * 1.5,
@@ -72,6 +73,9 @@ const styles = theme => ({
 		backgroundColor: theme.palette.background.paper,
 		overflow: 'scroll',
 		'-webkit-overflow-scrolling': 'touch',
+		[theme.breakpoints.down('sm')]: {
+			height: 'calc(100% - 35px)',
+		},
 	},
 	menuListItemSelected: {
 		borderTop: '1px solid ' + theme.palette.grey[300],

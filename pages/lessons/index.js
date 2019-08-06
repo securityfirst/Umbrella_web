@@ -1,6 +1,7 @@
 import React from 'react'
-
+import { connect } from 'react-redux'
 import classNames from 'classnames'
+
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
@@ -11,6 +12,8 @@ import ErrorMessage from '../../components/common/ErrorMessage'
 import LessonsMenu from '../../components/lessons/LessonsMenu'
 
 import { contentStyles, paperStyles } from '../../utils/view'
+
+import { toggleLessonsMenu } from '../../store/actions/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -51,6 +54,10 @@ const styles = theme => ({
 })
 
 class Lessons extends React.Component {
+	componentWillUnmount() {
+		this.props.dispatch(toggleLessonsMenu(false))
+	}
+
 	render() {
 		const { classes } = this.props
 
@@ -71,4 +78,4 @@ class Lessons extends React.Component {
 	}
 }
 
-export default withStyles(styles, { withTheme: true })(Lessons)
+export default connect()(withStyles(styles, { withTheme: true })(Lessons))

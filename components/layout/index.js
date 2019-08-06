@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
+import classNames from 'classnames'
 
 import { withStyles } from '@material-ui/core/styles'
 
@@ -17,6 +18,10 @@ const styles = theme => ({
 		minHeight: '100vh',
 		backgroundColor: '#ececec',
 	},
+	rootHidden: {
+		overflow: 'hidden',
+		height: '100vh',
+	},
 	main: {
 		flexGrow: 1,
 		marginTop: 48,
@@ -28,11 +33,12 @@ const styles = theme => ({
 
 class Layout extends React.Component {
 	render() {
-		const { router, content, locale, classes, theme } = this.props
+		const { router, content, locale, classes, theme, lessonsMenuOpened } = this.props
 
 		return (
-		
-			<div className={classes.root}>
+			<div className={classNames(classes.root, {
+				[classes.rootHidden]: lessonsMenuOpened
+			})}>
 				<Head>
 					<title>{this.props.title}</title>
 					<meta charSet='utf-8' />
