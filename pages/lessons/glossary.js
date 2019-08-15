@@ -19,7 +19,7 @@ import { setAppbarTitle, toggleLessonsMenu } from '../../store/actions/view'
 const styles = theme => ({
 	...contentStyles(theme),
 	contentAdditional: {
-		[theme.breakpoints.down('sm')]: {
+		[theme.breakpoints.down('md')]: {
 			paddingTop: '50px',
 		},
 	},

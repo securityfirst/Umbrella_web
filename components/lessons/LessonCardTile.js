@@ -72,7 +72,9 @@ class LessonCardTile extends React.Component {
 		const isFavoriteAdded = !!lessonCardsFavorites.find(item => item.name === file.name)
 		const href = category === 'glossary'
 			? `/lessons/${locale}/glossary/-/${file.sha}`
-			: `/lessons/${locale}/${category}/${level}/${file.sha}`
+			: category === 'tools'
+				? `/lessons/${locale}/${category}/-/${file.sha}`
+				: `/lessons/${locale}/${category}/${level}/${file.sha}`
 
 		return (
 			<Card key={index} className={classes.card}>
