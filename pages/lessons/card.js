@@ -34,7 +34,7 @@ import { decodeBlob } from '../../utils/github'
 const styles = theme => ({
 	...contentStyles(theme),
 	contentAdditional: {
-		[theme.breakpoints.down('sm')]: {
+		[theme.breakpoints.down('md')]: {
 			paddingTop: '50px',
 		},
 	},
@@ -97,7 +97,9 @@ class LessonCard extends React.Component {
 
 		const lessons = cat === 'glossary'
 			? content[locale].glossary.content.filter(l => l.filename.indexOf('s_') === 0)
-			: content[locale][cat][subcat][level].content.filter(l => l.filename.indexOf('s_') === 0)
+			: level !== '-'
+				? content[locale][cat][subcat][level].content.filter(l => l.filename.indexOf('s_') === 0)
+				: content[locale][cat][subcat].content.filter(l => l.filename.indexOf('s_') === 0)
 
 		const lessonIndex = lessons.findIndex(l => l.sha === sha)
 		const isLast = lessonIndex === lessons.length - 1
@@ -129,16 +131,18 @@ class LessonCard extends React.Component {
 							open={open}
 							onClose={this.handleClose}
 						>
-							{lessons.map((lesson, i) => (
-								<Link key={i} href={`/lessons/${locale}/${category}/${level}/${lesson.sha}`}>
-									<MenuItem 
-										className={classes.menuItem}
-										onClick={this.handleClose}
-									>
-										{localeMap[locale][lesson.sha]}
-									</MenuItem>
-								</Link>
-							))}
+							{lessons.map((lesson, i) => {
+								return (
+									<Link key={i} href={`/lessons/${locale}/${category}/${level}/${lesson.sha}`}>
+										<MenuItem 
+											className={classes.menuItem}
+											onClick={this.handleClose}
+										>
+											{localeMap[locale][lesson.sha]}
+										</MenuItem>
+									</Link>
+								)
+							})}
 						</Menu>
 					</div>
 					
@@ -153,14 +157,14 @@ class LessonCard extends React.Component {
 						</div>
 						: <div className={classes.grow}>
 							{!isFirst &&
-								<Link href={`/lessons/${locale}/${category}/${level}/${lessons[lessonIndex - 1].sha}`}>
+								<Link href={`/lessons/${locale}/${category}/${level}/${(lessons[lessonIndex - 1] || {}).sha}`}>
 									<Button color="inherit">
 										<ChevronLeftIcon className={classes.buttonLeftIcon} />
 										Prev
 									</Button>
 								</Link>
 							}
-							<Link href={`/lessons/${locale}/${category}/${level}/${lessons[lessonIndex + 1].sha}`}>
+							<Link href={`/lessons/${locale}/${category}/${level}/${(lessons[lessonIndex + 1] || {}).sha}`}>
 								<Button color="inherit">
 									Next
 									<ChevronRightIcon className={classes.buttonRightIcon} />

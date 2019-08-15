@@ -27,7 +27,7 @@ const levelsOrder = ['beginner', 'advanced', 'expert']
 const styles = theme => ({
 	...contentStyles(theme),
 	contentAdditional: {
-		[theme.breakpoints.down('sm')]: {
+		[theme.breakpoints.down('md')]: {
 			paddingTop: '50px',
 		},
 	},

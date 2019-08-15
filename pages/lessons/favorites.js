@@ -21,7 +21,7 @@ import { getLessonCardsFavorites } from '../../store/actions/lessons'
 const styles = theme => ({
 	...contentStyles(theme),
 	contentAdditional: {
-		[theme.breakpoints.down('sm')]: {
+		[theme.breakpoints.down('md')]: {
 			paddingTop: '50px',
 		},
 	},

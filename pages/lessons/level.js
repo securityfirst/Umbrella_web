@@ -36,7 +36,7 @@ import { decodeBlob } from '../../utils/github'
 const styles = theme => ({
 	...contentStyles(theme),
 	contentAdditional: {
-		[theme.breakpoints.down('sm')]: {
+		[theme.breakpoints.down('md')]: {
 			paddingTop: '50px',
 		},
 	},
@@ -131,9 +131,9 @@ class LessonsLevel extends React.Component {
 		const { router, dispatch, content } = this.props
 		const { locale, category, level } = router.query
 
-		const paths = category.split('.').concat([level])
+		// const paths = category.split('.').concat([level])
 
-		const lesson = get(content, `${locale}.${category}.${level}`)
+		const lesson = get(content, level !== '-' ? `${locale}.${category}.${level}` : `${locale}.${category}`)
 
 		const files = lesson.content.reduce((list, c) => {
 			if (c.filename.indexOf('s_') === 0) {

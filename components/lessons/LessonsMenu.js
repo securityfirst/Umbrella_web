@@ -39,7 +39,7 @@ const styles = theme => ({
 			easing: theme.transitions.easing.sharp,
 			duration: theme.transitions.duration.leavingScreen * 1.5,
 		}),
-		[theme.breakpoints.down('sm')]: {
+		[theme.breakpoints.down('md')]: {
 			position: 'absolute',
 			width: '100%',
 			height: '35px',
@@ -62,7 +62,7 @@ const styles = theme => ({
 		alignItems: 'center',
 		height: '35px',
 		backgroundColor: theme.palette.background.paper,
-		[theme.breakpoints.up('sm')]: {
+		[theme.breakpoints.up('lg')]: {
 			display: 'none',
 		},
 	},
@@ -73,7 +73,7 @@ const styles = theme => ({
 		backgroundColor: theme.palette.background.paper,
 		overflow: 'scroll',
 		'-webkit-overflow-scrolling': 'touch',
-		[theme.breakpoints.down('sm')]: {
+		[theme.breakpoints.down('md')]: {
 			height: 'calc(100% - 35px)',
 		},
 	},
@@ -135,7 +135,13 @@ class LessonsMenu extends React.Component {
 			<Collapse in={isSelected} timeout="auto" unmountOnExit>
 				<List component="div" disablePadding>
 					{subcategories.map((subcategory, i) => (
-						<Link key={i} href={`/lessons/${locale}/${categorySelected}.${subcategory}`}>
+						<Link 
+							key={i} 
+							href={categorySelected === 'tools'
+								? `/lessons/${locale}/${categorySelected}.${subcategory}/-/`
+								: `/lessons/${locale}/${categorySelected}.${subcategory}`
+							}
+						>
 							<ListItem button className={classes.menuListSubItem}>
 								<ListItemText 
 									className={classes.menuListItemText} 
@@ -231,7 +237,7 @@ class LessonsMenu extends React.Component {
 										src={`/static/assets/content/en/glossary/glossary.png`} 
 									/>
 								</ListItemIcon>
-								<ListItemText className={classes.menuListItemText} inset primary="Glossary" />
+								<ListItemText className={classes.menuListItemText} inset primary={localeMap[locale]['glossary']} />
 							</ListItem>
 						</Link>
 					</div>

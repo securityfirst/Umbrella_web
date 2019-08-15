@@ -9,6 +9,7 @@ class GithubLocale {
 		this.localeDirectory = appRoot + '/static/assets/locale/'
 		this.existsContent = fs.existsSync(this.contentDirectory)
 		this.existsLocale = fs.existsSync(this.localeDirectory)
+		this.existsFileLocale = fs.existsSync(this.localeDirectory + 'github-locale.json')
 	}
 
 	async run(done) {
@@ -32,60 +33,114 @@ class GithubLocale {
 				// Set up categories...
 				Object
 				.keys(content[locale])
-				.filter(category => !['content', 'glossary', 'pathways', 'forms'].includes(category))
 				.forEach(async category => {
-					if (!fs.existsSync(localeDir + `${category}/.category.yml`)) return
-
-					const yml = fs.readFileSync(localeDir + `${category}/.category.yml`, 'utf8')
-					const data = YAML.parse(yml)
-
-					if (!localeMap[category]) localeMap[category] = data.title
-
-					// Set up subcategories...
-					Object
-					.keys(content[locale][category])
-					.filter(sub => sub != 'content')
-					.forEach(async subcategory => {
-						if (!fs.existsSync(localeDir + `${category}/${subcategory}/.category.yml`)) return
-
-						const yml = fs.readFileSync(localeDir + `${category}/${subcategory}/.category.yml`, 'utf8')
+					if (category === 'content') return
+					
+					if (fs.existsSync(localeDir + `${category}/.category.yml`)) {
+						const yml = fs.readFileSync(localeDir + `${category}/.category.yml`, 'utf8')
 						const data = YAML.parse(yml)
 
-						if (!localeMap[subcategory]) localeMap[subcategory] = data.title
+						if (!localeMap[category]) localeMap[category] = data.title
+					}
 
-						// Set up levels
-						Object
-						.keys(content[locale][category][subcategory])
-						.filter(level => level != 'content')
-						.forEach(async level => {
-							if (!fs.existsSync(localeDir + `${category}/${subcategory}/${level}/.category.yml`)) return
+					if (category === 'glossary') {
+						content[locale].glossary.content
+						.filter(lesson => lesson.filename.substr(0,2) === 's_')
+						.forEach(async lesson => {
+							try {
+								if (!fs.existsSync(localeDir + `${category}/${lesson.filename}`)) return
 
-							const yml = fs.readFileSync(localeDir + `${category}/${subcategory}/${level}/.category.yml`, 'utf8')
-							const data = YAML.parse(yml)
+								const mdBlob = fs.readFileSync(localeDir + `${category}/${lesson.filename}`)
+								if (!mdBlob) return
 
-							if (!localeMap[level]) localeMap[level] = data.title
+								const stringVal = mdBlob.toString()
+								if (!stringVal) return
 
-							// Set up cards
-							content[locale][category][subcategory][level].content
-							.filter(lesson => lesson.filename.substr(0, 2) === 's_')
-							.forEach(async lesson => {
-								try {
-									if (!fs.existsSync(localeDir + `${category}/${subcategory}/${level}/${lesson.filename}`)) return
+								const jsonML = MT(stringVal)
+								if (!jsonML || !jsonML.meta || !jsonML.meta.title) return
 
-									const mdBlob = fs.readFileSync(localeDir + `${category}/${subcategory}/${level}/${lesson.filename}`)
-									if (!mdBlob) return
-
-									const jsonML = MT(mdBlob.toString())
-									if (!jsonML || !jsonML.meta || !jsonML.meta.title) return
-
-									localeMap[lesson.sha] = jsonML.meta.title
-								} catch (e) {
-									console.error(`[CRON] GITHUB_LOCALE: Error parsing ${lesson.filename}`, e)
-									localeMap[lesson.sha] = lesson.filename.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
-								}
-							})
+								localeMap[lesson.sha] = jsonML.meta.title
+							} catch (e) {
+								console.error(`[CRON] GITHUB_LOCALE: Error parsing ${locale} ${lesson.filename}`, e)
+								localeMap[lesson.sha] = lesson.filename.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
+							}
 						})
-					})
+					} else {
+						// Set up subcategories...
+						Object
+						.keys(content[locale][category])
+						.filter(sub => sub != 'content')
+						.forEach(async subcategory => {
+							if (fs.existsSync(localeDir + `${category}/${subcategory}/.category.yml`)) {
+								const yml = fs.readFileSync(localeDir + `${category}/${subcategory}/.category.yml`, 'utf8')
+								const data = YAML.parse(yml)
+
+								if (!localeMap[subcategory]) localeMap[subcategory] = data.title
+							}
+
+							const levels = Object.keys(content[locale][category][subcategory])
+
+							if (levels.length === 1 && levels[0] === 'content') {
+								content[locale][category][subcategory].content
+								.filter(lesson => lesson.filename.substr(0,2) === 's_')
+								.forEach(async lesson => {
+									try {
+										if (!fs.existsSync(localeDir + `${category}/${subcategory}/${lesson.filename}`)) return
+
+										const mdBlob = fs.readFileSync(localeDir + `${category}/${subcategory}/${lesson.filename}`)
+										if (!mdBlob) return
+
+										const stringVal = mdBlob.toString()
+										if (!stringVal) return
+
+										const jsonML = MT(stringVal)
+										if (!jsonML || !jsonML.meta || !jsonML.meta.title) return
+
+										localeMap[lesson.sha] = jsonML.meta.title
+									} catch (e) {
+										console.error(`[CRON] GITHUB_LOCALE: Error parsing ${locale} ${lesson.filename}`, e)
+										localeMap[lesson.sha] = lesson.filename.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
+									}
+								})
+							} else {
+								// Set up levels
+								Object
+								.keys(content[locale][category][subcategory])
+								.filter(level => level != 'content')
+								.forEach(async level => {
+									if (fs.existsSync(localeDir + `${category}/${subcategory}/${level}/.category.yml`)) {
+										const yml = fs.readFileSync(localeDir + `${category}/${subcategory}/${level}/.category.yml`, 'utf8')
+										const data = YAML.parse(yml)
+
+										if (!localeMap[level]) localeMap[level] = data.title
+									}
+
+									// Set up cards
+									content[locale][category][subcategory][level].content
+									.filter(lesson => lesson.filename.substr(0,2) === 's_')
+									.forEach(async lesson => {
+										try {
+											if (!fs.existsSync(localeDir + `${category}/${subcategory}/${level}/${lesson.filename}`)) return
+
+											const mdBlob = fs.readFileSync(localeDir + `${category}/${subcategory}/${level}/${lesson.filename}`)
+											if (!mdBlob) return
+
+											const stringVal = mdBlob.toString()
+											if (!stringVal) return
+
+											const jsonML = MT(stringVal)
+											if (!jsonML || !jsonML.meta || !jsonML.meta.title) return
+
+											localeMap[lesson.sha] = jsonML.meta.title
+										} catch (e) {
+											console.error(`[CRON] GITHUB_LOCALE: Error parsing ${locale} ${lesson.filename}`, e)
+											localeMap[lesson.sha] = lesson.filename.slice(2).replace(/\.md/, '').replace(/-/g, ' ')
+										}
+									})
+								})
+							}
+						})
+					}
 				})
 
 				map[locale] = localeMap
@@ -103,6 +158,7 @@ class GithubLocale {
 
 	start() {
 		if (!this.existsLocale) fs.mkdirSync(this.localeDirectory)
+		if (!this.existsFileLocale) this.run()
 
 		// Every hour = 0 0 0/1 1/1 * * *
 		const job = new CronJob('0 0 0/1 1/1 * * *', () => {
