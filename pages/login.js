@@ -87,6 +87,10 @@ class Login extends React.Component {
 		dispatch(login(password, () => {
 			dispatch(openAlert('success', 'You are now logged in!'))
 			if (router.pathname.indexOf('account') === -1) router.back()
+
+			setTimeout(() => {
+				window.location.reload()
+			}, 1000)
 		}))
 	}
 

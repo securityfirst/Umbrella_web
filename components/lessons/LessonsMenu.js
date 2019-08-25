@@ -62,6 +62,7 @@ const styles = theme => ({
 		alignItems: 'center',
 		height: '35px',
 		backgroundColor: theme.palette.background.paper,
+		cursor: 'pointer',
 		[theme.breakpoints.up('lg')]: {
 			display: 'none',
 		},
@@ -71,7 +72,7 @@ const styles = theme => ({
 		flexShrink: 0,
 		whiteSpace: 'nowrap',
 		backgroundColor: theme.palette.background.paper,
-		overflow: 'scroll',
+		overflow: 'auto',
 		'-webkit-overflow-scrolling': 'touch',
 		[theme.breakpoints.down('md')]: {
 			height: 'calc(100% - 35px)',

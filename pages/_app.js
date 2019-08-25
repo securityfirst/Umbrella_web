@@ -56,7 +56,11 @@ class MyApp extends App {
 
 			if (!!Account.default.isLoggedIn()) {
 				const password = await Account.default.password()
-				dispatch(login(password))
+				dispatch(login(password), () => {
+					setTimeout(() => {
+						window.location.reload()
+					}, 1000)
+				})
 			}
 
 			dispatch(checkProtected())
