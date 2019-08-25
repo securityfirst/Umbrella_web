@@ -62,6 +62,7 @@ const styles = theme => ({
 		alignItems: 'center',
 		height: '35px',
 		backgroundColor: theme.palette.background.paper,
+		cursor: 'pointer',
 		[theme.breakpoints.up('lg')]: {
 			display: 'none',
 		},

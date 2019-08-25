@@ -189,7 +189,8 @@ class LessonsLevel extends React.Component {
 	renderChecklist = () => {
 		const { 
 			router,
-			classes, 
+			classes,
+			content,  
 			getLessonChecklistLoading, 
 			getLessonChecklistError, 
 			currentLessonChecklist, 
@@ -208,6 +209,11 @@ class LessonsLevel extends React.Component {
 		const savedChecklist = checklistsSystem[listKey]
 		const isFavorited = !!savedChecklist && savedChecklist.isFavorited
 
+		const cat = category.split('.')[0]
+		const subcat = category.split('.')[1]
+
+		const checklistFile = content[locale][cat][subcat][level].content.find(f => f.filename === 'c_checklist.yml')
+
 		return (
 			<Card className={classes.checklistCard}>
 				<CardContent className={classes.checklistCardHead}>
@@ -222,10 +228,14 @@ class LessonsLevel extends React.Component {
 							<DeleteIcon />
 						</Button>}
 						<FavoriteShareIcons
+							name={`${category}-${level}`}
+							sha={!!checklistFile ? checklistFile.sha : null}
 							url={`${process.env.ROOT}/lessons/${locale}/${category}/${level}`}
 							isLight
+							isFavorited={isFavorited}
 							isFavoriteAdded={isFavorited}
 							onFavoriteToggle={this.onChecklistFavoriteToggle(checklist)}
+							onFavoriteRemove={this.onChecklistFavoriteToggle(checklist)}
 						/>
 					</div>
 				</CardContent>
