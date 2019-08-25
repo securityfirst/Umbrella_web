@@ -33,7 +33,7 @@ import { contentStyles, buttonWrapperStyles } from '../utils/view'
 
 const localeMap = {
 	'en': 'English',
-	'es': 'SPANISH',
+	'es': 'Spanish',
 	'ar': 'Arabic',
 	'fa': 'Persian',
 	'ru': 'Russian',
@@ -245,6 +245,10 @@ class Account extends React.Component {
 							passwordConfirmErrorMessage: '',
 						})
 					}
+
+					setTimeout(() => {
+						window.location.reload()
+					}, 1000)
 				}))
 			}
 		}
