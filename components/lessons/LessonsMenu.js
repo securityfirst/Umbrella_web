@@ -72,7 +72,7 @@ const styles = theme => ({
 		flexShrink: 0,
 		whiteSpace: 'nowrap',
 		backgroundColor: theme.palette.background.paper,
-		overflow: 'scroll',
+		overflow: 'auto',
 		'-webkit-overflow-scrolling': 'touch',
 		[theme.breakpoints.down('md')]: {
 			height: 'calc(100% - 35px)',

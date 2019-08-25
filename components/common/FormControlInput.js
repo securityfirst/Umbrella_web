@@ -24,7 +24,7 @@ const styles = theme => ({
 	helperText: {
 		marginTop: 0,
 		lineHeight: '1.5rem',
-		overflow: 'visible',
+		overflow: 'auto',
 		'-webkit-overflow-scrolling': 'touch',
 	},
 })
