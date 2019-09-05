@@ -21,7 +21,7 @@ test/**/out
 
 # misc
 .DS_Store
-.env
+*.env
 
 # content directories
 static/assets/content/
