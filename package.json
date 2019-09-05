@@ -67,6 +67,7 @@
     "redux-thunk": "^2.3.0",
     "rss-parser": "^3.6.2",
     "simple-git": "^1.107.0",
+    "styled-jsx": "^3.2.2",
     "terser": "^3.14.1",
     "xhr": "^2.5.0",
     "yaml": "^1.2.1"

@@ -86,15 +86,13 @@ class MyApp extends App {
 					{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 					<CssBaseline />
 					
-					<Container>
-						<NProgress color="#fff" spinner={false} />
+					{/*<NProgress color="#fff" spinner={false} />*/}
 
-						<Provider store={reduxStore}>
-							{/* Pass pageContext to the _document though the renderPage enhancer
-							to render collected styles on server side. */}
-							<Component {...pageProps} pageContext={this.pageContext} />
-						</Provider>
-					</Container>
+					<Provider store={reduxStore}>
+						{/* Pass pageContext to the _document though the renderPage enhancer
+						to render collected styles on server side. */}
+						<Component {...pageProps} pageContext={this.pageContext} />
+					</Provider>
 				</MuiThemeProvider>
 			</JssProvider>
 		)
