@@ -81,25 +81,46 @@ export default function reducer(state = initialState, action) {
 				locale: action.payload || 'en',
 			}
 
-		/* GET_LOCALE_MAP */
-		case pending(viewTypes.GET_LOCALE_MAP):
+		/* GET_CONTENT_LOCALE_MAP */
+		case pending(viewTypes.GET_CONTENT_LOCALE_MAP):
 			return {
 				...state,
-				getLocaleMapLoading: true,
-				getLocaleMapError: null,
+				getContentLocaleMapLoading: true,
+				getContentLocaleMapError: null,
 			}
-		case rejected(viewTypes.GET_LOCALE_MAP):
+		case rejected(viewTypes.GET_CONTENT_LOCALE_MAP):
 			return {
 				...state,
-				getLocaleMapLoading: false,
-				getLocaleMapError: action.payload,
+				getContentLocaleMapLoading: false,
+				getContentLocaleMapError: action.payload,
 			}
-		case fulfilled(viewTypes.GET_LOCALE_MAP):
+		case fulfilled(viewTypes.GET_CONTENT_LOCALE_MAP):
 			return {
 				...state,
-				getLocaleMapLoading: false,
-				getLocaleMapError: null,
-				localeMap: action.payload,
+				getContentLocaleMapLoading: false,
+				getContentLocaleMapError: null,
+				contentLocaleMap: action.payload,
+			}
+
+		/* GET_SYSTEM_LOCALE_MAP */
+		case pending(viewTypes.GET_SYSTEM_LOCALE_MAP):
+			return {
+				...state,
+				getSystemLocaleMapLoading: true,
+				getSystemLocaleMapError: null,
+			}
+		case rejected(viewTypes.GET_SYSTEM_LOCALE_MAP):
+			return {
+				...state,
+				getSystemLocaleMapLoading: false,
+				getSystemLocaleMapError: action.payload,
+			}
+		case fulfilled(viewTypes.GET_SYSTEM_LOCALE_MAP):
+			return {
+				...state,
+				getSystemLocaleMapLoading: false,
+				getSystemLocaleMapError: null,
+				systemLocaleMap: action.payload,
 			}
 
 		/* OPEN_ALERT */

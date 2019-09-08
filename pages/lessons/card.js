@@ -85,7 +85,7 @@ class LessonCard extends React.Component {
 	}
 
 	renderNavigation = () => {
-		const { router, classes, content, localeMap } = this.props
+		const { router, classes, content, contentLocaleMap } = this.props
 		const { locale, category, level, sha } = router.query
 		const { anchorEl } = this.state
 
@@ -138,7 +138,7 @@ class LessonCard extends React.Component {
 											className={classes.menuItem}
 											onClick={this.handleClose}
 										>
-											{localeMap[locale][lesson.sha]}
+											{contentLocaleMap[locale][lesson.sha]}
 										</MenuItem>
 									</Link>
 								)

@@ -5,6 +5,7 @@ const cors = require('cors')
 const auth = require('./auth')
 const github = require('./github')
 const feeds = require('./feeds')
+const system = require('./system')
 
 const whitelist = [process.env.ROOT]
 
@@ -21,5 +22,6 @@ router.use(cors(corsOptions))
 router.use('/auth', auth)
 router.use('/github', github)
 router.use('/feeds', feeds)
+router.use('/system', system)
 
 module.exports = router

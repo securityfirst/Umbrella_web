@@ -66,9 +66,9 @@ class LessonCardTile extends React.Component {
 	}
 
 	render() {
-		const { classes, lessonCardsFavorites, index, file, locale, localeMap, category, level, isFavorited } = this.props
+		const { classes, lessonCardsFavorites, index, file, locale, contentLocaleMap, category, level, isFavorited } = this.props
 
-		const title = localeMap[locale][file.sha]
+		const title = contentLocaleMap[locale][file.sha]
 		const isFavoriteAdded = !!lessonCardsFavorites.find(item => item.name === file.name)
 		const href = category === 'glossary'
 			? `/lessons/${locale}/glossary/-/${file.sha}`
