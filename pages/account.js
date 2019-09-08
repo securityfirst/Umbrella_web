@@ -26,7 +26,7 @@ import FeedsEditLocation from '../components/feeds/FeedsEditLocation'
 import FeedsEditSources from '../components/feeds/FeedsEditSources'
 
 import { clearDb } from '../store/actions/db'
-import { setLocale, openAlert } from '../store/actions/view'
+import { setAppbarTitle, setLocale, openAlert } from '../store/actions/view'
 import { savePassword, resetPassword, unsetPassword } from '../store/actions/account'
 
 import { contentStyles, buttonWrapperStyles } from '../utils/view'
@@ -116,8 +116,10 @@ class Account extends React.Component {
 	}
 
 	componentDidMount() {
-		const { query } = this.props.router
+		const { dispatch, router, locale, systemLocaleMap } = this.props
+		const { query } = router
 		if (query && query.setpassword) this.setState({expanded: 2})
+		dispatch(setAppbarTitle(systemLocaleMap[locale].account_title))
 	}
 
 	handlePanelToggle = i => (e, expanded) => {
@@ -265,7 +267,7 @@ class Account extends React.Component {
 	}
 
 	renderSettings = () => {
-		const { classes, locale } = this.props
+		const { classes, locale, systemLocaleMap } = this.props
 		const { anchorEl } = this.state
 
 		return (
@@ -277,7 +279,7 @@ class Account extends React.Component {
 							aria-owns={anchorEl ? 'locale-menu' : undefined}
 							aria-haspopup="true"
 							onClick={this.handleLocaleMenuOpen}
-						>Select Language</Button>
+						>{systemLocaleMap[locale].settings_select_language}</Button>
 
 						<Menu
 							id="locale-menu"
@@ -308,9 +310,6 @@ class Account extends React.Component {
 							/>
 							<Typography>{localeMap[locale]}</Typography>
 						</div>
-						<Typography variant="caption">
-							Change your system and content language preference.
-						</Typography>
 					</div>
 				</div>
 
@@ -331,19 +330,19 @@ class Account extends React.Component {
 	}
 
 	renderFeedSettings = () => {
-		const { classes, locale, feedLocation, feedSources } = this.props
+		const { classes, locale, systemLocaleMap, feedLocation, feedSources } = this.props
 
 		return (
 			<div style={{width:'100%'}}>
 				<div className={classes.settingsRow}>
 					<div className={classes.settingsColumnLeft}>
-						<Button color="primary" onClick={this.handleFormOpen('location')}>Set Location</Button>
+						<Button color="primary" onClick={this.handleFormOpen('location')}>{systemLocaleMap[locale].feed_location_label}</Button>
 					</div>
 					<div className={classes.settingsColumnRight}>
 						<Typography>{
 							feedLocation 
 								? feedLocation.place_name 
-								: 'Location not set'
+								: '-'
 						}</Typography>
 					</div>
 				</div>
@@ -352,13 +351,13 @@ class Account extends React.Component {
 
 				<div className={classes.settingsRow}>
 					<div className={classes.settingsColumnLeft}>
-						<Button color="primary" onClick={this.handleFormOpen('sources')}>Set Sources</Button>
+						<Button color="primary" onClick={this.handleFormOpen('sources')}>{systemLocaleMap[locale].feed_source_label}</Button>
 					</div>
 					<div className={classes.settingsColumnRight}>
 						<Typography>{
 							feedSources.length 
 								? `${feedSources.length} source${feedSources.length > 1 ? 's' : ''}` 
-								: 'Set sources'
+								: '-'
 						}</Typography>
 					</div>
 				</div>
@@ -378,7 +377,7 @@ class Account extends React.Component {
 	}
 
 	renderPasswordForm() {
-		const { classes, passwordExists, isProtected } = this.props
+		const { classes, locale, systemLocaleMap, passwordExists, isProtected } = this.props
 		const { 
 			password, 
 			passwordConfirm,
@@ -408,7 +407,7 @@ class Account extends React.Component {
 					id="reg-password"
 					className={classes.input}
 					type="password"
-					label={passwordExists ? 'New Password' : 'Password'}
+					label={systemLocaleMap[locale].account_password_alert_password}
 					value={password}
 					error={passwordError}
 					errorMessage={passwordErrorMessage}
@@ -421,7 +420,7 @@ class Account extends React.Component {
 					id="reg-passwordConfirm"
 					className={classes.input}
 					type="password"
-					label={passwordExists ? 'Confirm New Password' : 'Confirm Password'}
+					label={passwordExists ? systemLocaleMap[locale].reset_password_title : systemLocaleMap[locale].account_password_alert_confirm}
 					value={passwordConfirm}
 					error={passwordConfirmError}
 					errorMessage={passwordConfirmErrorMessage}
@@ -431,16 +430,18 @@ class Account extends React.Component {
 					}}
 				/>
 				<Typography className={classes.description} paragraph>
-					* Your password must be at least 8 characters long and must contain at least one digit 
-					and one capital letter.
+					* {systemLocaleMap[locale].password_one_digit}
 				</Typography>
-				{passwordExists && <Typography className={classes.description} paragraph>
-					** Enter your old password to retain your saved data.
-				</Typography>}
+				<Typography className={classes.description} paragraph>
+					* {systemLocaleMap[locale].password_one_capital}
+				</Typography>
+				<Typography className={classes.description} paragraph>
+					* {systemLocaleMap[locale].password_one_small}
+				</Typography>
 				<div className={classes.buttonWrapper}>
-					<Button color="primary" variant="contained" onClick={this.savePassword}>Confirm</Button>
+					<Button color="primary" variant="contained" onClick={this.savePassword}>{systemLocaleMap[locale].account_password_alert_confirm}</Button>
 					{(passwordExists && isProtected) && 
-						<Button className={classes.skipButton} color="primary" onClick={this.unsetPassword}>Unset Password</Button>
+						<Button className={classes.skipButton} color="primary" onClick={this.unsetPassword}>{systemLocaleMap[locale].settings_title_skip_pw}</Button>
 					}
 				</div>
 			</form>
@@ -448,14 +449,16 @@ class Account extends React.Component {
 	}
 
 	renderPassword = () => {
-		const { classes, checkPasswordLoading, checkPasswordError, passwordExists } = this.props
+		const { classes, locale, systemLocaleMap, checkPasswordLoading, checkPasswordError, passwordExists } = this.props
 
 		if (checkPasswordLoading) return <Loading />
 		if (checkPasswordError) return <ErrorMessage error={checkPasswordError} />
 
 		return (
 			<React.Fragment>
-				<Typography paragraph><strong>Status: </strong>{passwordExists ? 'Already Set' : 'Not Set'}</Typography>
+				<Typography paragraph><strong>Status: </strong>{
+					passwordExists ? systemLocaleMap[locale].password_success : systemLocaleMap[locale].settings_title_skip_pw
+				}</Typography>
 				<Typography className={classes.disclaimerLarge}>
 					<strong>DISCLAIMER: </strong> We do not store any data on our servers during your 
 					usage, including your password. Your password is encoded and stored on your browser, 
@@ -468,15 +471,15 @@ class Account extends React.Component {
 	}
 
 	render() {
-		const { classes, passwordExists } = this.props
+		const { classes, locale, systemLocaleMap, passwordExists } = this.props
 
 		return (
-			<Layout title="Umbrella | Account" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].account_title}`} description="Umbrella web application">
 				<div className={classes.content}>
 					{/* Settings */}
 					<ExpansionPanel expanded={this.state.expanded === 0} onChange={this.handlePanelToggle(0)}>
 						<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-							<Typography className={classes.heading} variant="h6">Settings</Typography>
+							<Typography className={classes.heading} variant="h6">{systemLocaleMap[locale].account_settings}</Typography>
 						</ExpansionPanelSummary>
 						<ExpansionPanelDetails>
 							{this.renderSettings()}
@@ -486,7 +489,7 @@ class Account extends React.Component {
 					{/* Feed Settings */}
 					<ExpansionPanel expanded={this.state.expanded === 1} onChange={this.handlePanelToggle(1)}>
 						<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-							<Typography className={classes.heading} variant="h6">Feed Settings</Typography>
+							<Typography className={classes.heading} variant="h6">{systemLocaleMap[locale].set_your_feed}</Typography>
 						</ExpansionPanelSummary>
 						<ExpansionPanelDetails>
 							{this.renderFeedSettings()}
@@ -496,7 +499,9 @@ class Account extends React.Component {
 					{/* Password */}
 					<ExpansionPanel expanded={this.state.expanded === 2} onChange={this.handlePanelToggle(2)}>
 						<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-							<Typography className={classes.heading} variant="h6">{`${passwordExists ? 'Reset' : 'Set'} password`}</Typography>
+							<Typography className={classes.heading} variant="h6">{
+								passwordExists ? systemLocaleMap[locale].account_reset_password : systemLocaleMap[locale].account_set_password
+							}</Typography>
 						</ExpansionPanelSummary>
 						<ExpansionPanelDetails className={classes.formWrapper}>
 							{this.renderPassword()}
