@@ -17,6 +17,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 
+import HomeIcon from '@material-ui/icons/Home'
 import CalendarViewDayIcon from '@material-ui/icons/CalendarViewDay'
 import MapIcon from '@material-ui/icons/Map'
 import DoneAllIcon from '@material-ui/icons/DoneAll'
@@ -29,6 +30,7 @@ import { toggleMainMenu } from '../../store/actions/view'
 import { viewConstants } from '../../utils/view'
 
 const links = [
+	{name: 'Home', path: '/', icon: (color) => <HomeIcon color={color} />},
 	{name: 'Feeds', path: '/feeds', icon: (color) => <CalendarViewDayIcon color={color} />},
 	{name: 'Forms', path: '/forms', icon: (color) => <MapIcon color={color} />},
 	{name: 'Checklists', path: '/checklists', icon: (color) => <DoneAllIcon color={color} />},
@@ -95,22 +97,29 @@ class Menu extends React.Component {
 
 		return (
 			<List>
-				{links.map((link, i) => (
-					<Link key={i} href={link.path}>
-						<ListItem 
-							className={classes.drawerItem} 
-							title={link.name} 
-							onClick={this.handleMenuClick(link)}
-							button 
-						>
-							<ListItemIcon>
-								{link.icon(router.pathname.indexOf(link.path) === 0 ? 'secondary' : 'inherit')}
-							</ListItemIcon>
+				{links.map((link, i) => {
+					let iconColor = 'inherit'
 
-							<ListItemText primary={link.name} />
-						</ListItem>
-					</Link>
-				))}
+					if (
+						(link.path === '/' && router.pathname === '/') ||
+						(link.path !== '/' && router.pathname.indexOf(link.path) === 0)
+					) iconColor = 'secondary'
+
+					return (
+						<Link key={i} href={link.path}>
+							<ListItem 
+								className={classes.drawerItem} 
+								title={link.name} 
+								onClick={this.handleMenuClick(link)}
+								button 
+							>
+								<ListItemIcon>{link.icon(iconColor)}</ListItemIcon>
+
+								<ListItemText primary={link.name} />
+							</ListItem>
+						</Link>
+					)
+				})}
 			</List>
 		)
 	}
