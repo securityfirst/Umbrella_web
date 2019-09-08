@@ -27,6 +27,6 @@ export const buttonWrapperStyles = (theme) => ({
 })
 
 export const viewConstants = {
-	drawerWidth: 200,
+	drawerWidth: 280,
 	drawerIconWidth: theme => theme.spacing.unit * 7 + 1
 }

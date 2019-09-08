@@ -86,27 +86,6 @@ export const getContentLocaleMap = () => async (dispatch, getState) => {
 	}
 }
 
-export const getSystemLocaleMap = () => async (dispatch, getState) => {
-	await dispatch(pending(viewTypes.GET_SYSTEM_LOCALE_MAP))
-
-	try {
-		await fetch(`${process.env.ROOT}/api/system/locale`)
-		.then(res => {
-			if (!res.ok) throw res
-			return res.json()
-		})
-		.then(async map => {
-			await dispatch(fulfilled(viewTypes.GET_SYSTEM_LOCALE_MAP, map))
-		})
-		.catch(async err => {
-			await dispatch(rejected(viewTypes.GET_SYSTEM_LOCALE_MAP, err))
-		})
-	} catch (e) {
-		// no alert
-		await dispatch(rejected(viewTypes.GET_SYSTEM_LOCALE_MAP, e))
-	}
-}
-
 export const openAlert = (type, message) => ({
 	type: viewTypes.OPEN_ALERT,
 	payload: {type, message},

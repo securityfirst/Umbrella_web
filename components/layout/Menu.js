@@ -30,12 +30,12 @@ import { toggleMainMenu } from '../../store/actions/view'
 import { viewConstants } from '../../utils/view'
 
 const links = [
-	{name: 'Home', path: '/', icon: (color) => <HomeIcon color={color} />},
-	{name: 'Feeds', path: '/feeds', icon: (color) => <CalendarViewDayIcon color={color} />},
-	{name: 'Forms', path: '/forms', icon: (color) => <MapIcon color={color} />},
-	{name: 'Checklists', path: '/checklists', icon: (color) => <DoneAllIcon color={color} />},
-	{name: 'Lessons', path: '/lessons', icon: (color) => <LocalLibraryIcon color={color} />},
-	{name: 'Account', path: '/account', icon: (color) => <AccountBoxIcon color={color} />},
+	{key: 'app_name', path: '/', icon: (color) => <HomeIcon color={color} />},
+	{key: 'feed_title', path: '/feeds', icon: (color) => <CalendarViewDayIcon color={color} />},
+	{key: 'form_title', path: '/forms', icon: (color) => <MapIcon color={color} />},
+	{key: 'checklist_title', path: '/checklists', icon: (color) => <DoneAllIcon color={color} />},
+	{key: 'lesson_title', path: '/lessons', icon: (color) => <LocalLibraryIcon color={color} />},
+	{key: 'account_title', path: '/account', icon: (color) => <AccountBoxIcon color={color} />},
 ]
 
 const styles = theme => ({
@@ -93,7 +93,7 @@ class Menu extends React.Component {
 	}
 
 	renderItems = () => {
-		const { router, classes } = this.props
+		const { router, locale, systemLocaleMap, classes } = this.props
 
 		return (
 			<List>
@@ -115,7 +115,7 @@ class Menu extends React.Component {
 							>
 								<ListItemIcon>{link.icon(iconColor)}</ListItemIcon>
 
-								<ListItemText primary={link.name} />
+								<ListItemText primary={systemLocaleMap[locale][link.key]} />
 							</ListItem>
 						</Link>
 					)

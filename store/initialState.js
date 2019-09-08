@@ -1,3 +1,5 @@
+import systemLocaleMap from './systemLocaleMap'
+
 const content = {
 	getContentLoading: false,
 	getContentError: null,
@@ -125,9 +127,9 @@ const view = {
 	getContentLocaleMapLoading: true,
 	getContentLocaleMapError: null,
 	contentLocaleMap: {},
-	getSystemLocaleMapLoading: true,
-	getSystemLocaleMapError: null,
-	systemLocaleMap: {},
+	// getSystemLocaleMapLoading: true,
+	// getSystemLocaleMapError: null,
+	systemLocaleMap: systemLocaleMap,
 	alertOpen: false,
 	alertType: null,
 	alertMessage: null,

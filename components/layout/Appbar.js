@@ -69,23 +69,36 @@ class Appbar extends React.Component {
 	}
 
 	renderRightContent() {
-		if (this.props.password) {
-			return <Button classes={{root: this.props.classes.login}} component="button" color="inherit" onClick={this.logout}>Logout</Button>
+		const { classes, locale, systemLocaleMap, password } = this.props
+
+		if (password) {
+			return (
+				<Button 
+					classes={{root: classes.login}} 
+					component="button" 
+					color="inherit" 
+					onClick={this.logout}
+				>{systemLocaleMap[locale].logout}</Button>
+			)
 		}
 
 		return (
 			<Link href="/login">
-				<Button classes={{root: this.props.classes.login}} component="button" color="inherit">Login</Button>
+				<Button 
+					classes={{root: classes.login}} 
+					component="button" 
+					color="inherit"
+				>{systemLocaleMap[locale].login_message_button}</Button>
 			</Link>
 		)
 	}
 
 	renderLeftContent() {
-		const { router, classes, appbarTitle } = this.props
+		const { router, classes, locale, systemLocaleMap, appbarTitle } = this.props
 
 		let title = appbarTitle || (
 			router.pathname == '/'
-				? 'Umbrella'
+				? systemLocaleMap[locale].app_name
 				// Split all subroutes and print capitalized divided by hyphens
 				: router.pathname.split('/').slice(1).join(' / ')
 		)

@@ -102,27 +102,6 @@ export default function reducer(state = initialState, action) {
 				contentLocaleMap: action.payload,
 			}
 
-		/* GET_SYSTEM_LOCALE_MAP */
-		case pending(viewTypes.GET_SYSTEM_LOCALE_MAP):
-			return {
-				...state,
-				getSystemLocaleMapLoading: true,
-				getSystemLocaleMapError: null,
-			}
-		case rejected(viewTypes.GET_SYSTEM_LOCALE_MAP):
-			return {
-				...state,
-				getSystemLocaleMapLoading: false,
-				getSystemLocaleMapError: action.payload,
-			}
-		case fulfilled(viewTypes.GET_SYSTEM_LOCALE_MAP):
-			return {
-				...state,
-				getSystemLocaleMapLoading: false,
-				getSystemLocaleMapError: null,
-				systemLocaleMap: action.payload,
-			}
-
 		/* OPEN_ALERT */
 		case viewTypes.OPEN_ALERT:
 			return {

@@ -11,7 +11,7 @@ import { getPageContext } from '../lib/mui'
 
 import { getContent } from '../store/actions/content'
 import { checkProtected, checkPassword, login } from '../store/actions/account'
-import { getContentLocaleMap, getSystemLocaleMap, syncView } from '../store/actions/view'
+import { getContentLocaleMap, syncView } from '../store/actions/view'
 import { syncDb } from '../store/actions/db'
 
 import './index.css'
@@ -26,7 +26,6 @@ class MyApp extends App {
 		// global data
 		await ctx.reduxStore.dispatch(getContent())
 		await ctx.reduxStore.dispatch(getContentLocaleMap())
-		await ctx.reduxStore.dispatch(getSystemLocaleMap())
 
 		let pageProps = {}
 
