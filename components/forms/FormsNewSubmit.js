@@ -56,14 +56,14 @@ class FormsNewSubmit extends React.Component {
 	}
 
 	renderSuccess = () => {
-		const { classes } = this.props
+		const { classes, locale, systemLocaleMap } = this.props
 
 		return (
 			<div>
 				<Typography className={classes.copy} paragraph>Your form has been submitted.</Typography>
 
 				<div className={classes.buttonsWrapper}>
-					<Link href="/forms/new"><Button>Submit Another</Button></Link>
+					<Link href="/forms/new"><Button>{systemLocaleMap[locale].message_body_form_new}</Button></Link>
 					<Link href="/forms"><Button color="secondary">Finish</Button></Link>
 				</div>
 			</div>
@@ -90,6 +90,7 @@ class FormsNewSubmit extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.view,
 	...state.forms,
 })
 

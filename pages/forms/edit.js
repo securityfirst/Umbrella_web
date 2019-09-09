@@ -270,7 +270,7 @@ class FormEdit extends React.Component {
 	}
 
 	render() {
-		const { classes, getFormLoading, getFormError, getFormSavedLoading, getFormSavedError, form } = this.props
+		const { classes, locale, systemLocaleMap, getFormLoading, getFormError, getFormSavedLoading, getFormSavedError, form } = this.props
 		const { activeStep, progress, formState } = this.state
 
 		if (getFormLoading || getFormSavedLoading || !formState.length) return <Loading />
@@ -279,7 +279,7 @@ class FormEdit extends React.Component {
 		const screen = form.screens[activeStep]
 
 		return (
-			<Layout title="Umbrella | Edit Form" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].form_title}`} description="Umbrella web application">
 				<div className={classes.stepperWrapper}>
 					<Stepper className={classes.stepper} activeStep={activeStep}>
 						{form.screens.map((screen, i) => (
@@ -313,6 +313,7 @@ class FormEdit extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.view,
 	...state.forms
 })
 

@@ -271,7 +271,7 @@ class FormsNew extends React.Component {
 	}
 
 	render() {
-		const { classes, getFormLoading, getFormError, form } = this.props
+		const { classes, locale, systemLocaleMap, getFormLoading, getFormError, form } = this.props
 		const { activeStep, progress, formState } = this.state
 
 		if (getFormLoading || !formState.length) return <Loading />
@@ -280,7 +280,7 @@ class FormsNew extends React.Component {
 		const screen = form.screens[activeStep]
 
 		return (
-			<Layout title="Umbrella | New Form" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].form_title}`} description="Umbrella web application">
 				<div className={classes.stepperWrapper}>
 					<Stepper className={classes.stepper} activeStep={activeStep}>
 						{form.screens.map((screen, i) => (
@@ -314,7 +314,8 @@ class FormsNew extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	...state.forms
+	...state.view,
+	...state.forms,
 })
 
 export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(FormsNew)))
