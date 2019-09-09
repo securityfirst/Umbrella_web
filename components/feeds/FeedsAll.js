@@ -96,29 +96,29 @@ class FeedsAll extends React.Component {
 	refreshFeeds = () => this.props.dispatch(getFeeds())
 
 	render() {
-		const { classes, toggleEdit, feeds, feedLocation } = this.props
+		const { classes, locale, systemLocaleMap, toggleEdit, feeds, feedLocation } = this.props
 		const { expanded } = this.state
 
 		return (
 			<React.Fragment>
 				<ExpansionPanel className={classes.locationPanel} expanded={expanded === true} onChange={this.handleChange}>
 					<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-						<Typography className={classes.heading}>Location: 
+						<Typography className={classes.heading}>{systemLocaleMap[locale].location}: 
 							{!expanded && <span className={classes.headingLocation}>{feedLocation.place_name}</span>}
 						</Typography>
 					</ExpansionPanelSummary>
 					<ExpansionPanelDetails className={classes.locationPanelDetails}>
 						<Typography variant="body1"><span className={classes.location}>{feedLocation.place_name}</span></Typography>
-						<Typography variant="body1" className={classes.locationChangeLink} onClick={toggleEdit}>Change</Typography>
+						<Typography variant="body1" className={classes.locationChangeLink} onClick={toggleEdit}>{systemLocaleMap[locale].feed_change_header}</Typography>
 					</ExpansionPanelDetails>
 				</ExpansionPanel>
 
 				{!feeds.length
 					? <Paper className={classes.feed} square>
-						<Typography className={classes.feedContent}>There are no events to display for your location. We'll display them when they are available.</Typography>
+						<Typography className={classes.feedContent}>{systemLocaleMap[locale].dashboard_empty_text}</Typography>
 						
 						<div className={classes.buttonWrapper}>
-							<Button color="secondary" onClick={this.refreshFeeds}>Refresh</Button>
+							<Button color="secondary" onClick={this.refreshFeeds}>{systemLocaleMap[locale].settings_refresh_from_the_server}</Button>
 						</div>
 					</Paper>
 					: feeds.map((feed, i) => {
@@ -149,6 +149,7 @@ class FeedsAll extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.view,
 	...state.feeds,
 })
 

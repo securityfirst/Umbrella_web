@@ -86,7 +86,7 @@ class FeedsRss extends React.Component {
 	}
 
 	renderSource = (source, i) => {
-		const { classes } = this.props
+		const { classes, locale, systemLocaleMap } = this.props
 
 		return (
 			<Card key={i} className={classes.card} square>
@@ -97,7 +97,7 @@ class FeedsRss extends React.Component {
 					</CardContent>
 				</CardActionArea>
 				{i > 6 && <CardContent className={classes.cardRemoveWrapper}>
-					<Button component="button" size="small" onClick={this.handleSourceRemove(i)}>Remove</Button>
+					<Button component="button" size="small" onClick={this.handleSourceRemove(i)}>{systemLocaleMap[locale].delete}</Button>
 				</CardContent>}
 			</Card>
 		)
@@ -162,7 +162,8 @@ class FeedsRss extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	...state.feeds
+	...state.view,
+	...state.feeds,
 })
 
 export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(FeedsRss))

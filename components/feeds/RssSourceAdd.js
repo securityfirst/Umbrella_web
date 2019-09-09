@@ -61,7 +61,7 @@ class RssSourceAdd extends React.Component {
 	handleRemoveError = () => this.setState({error: null, errorMessage: null})
 
 	render() {
-		const { theme, classes, closeModal, confirm } = this.props
+		const { theme, classes, locale, systemLocaleMap, closeModal, confirm } = this.props
 		const { source, error, errorMessage } = this.state
 
 		return (
@@ -72,7 +72,7 @@ class RssSourceAdd extends React.Component {
 					<FormControlInput 
 						className={classes.formControlInput}
 						id="rss-source-form"
-						label="RSS source"
+						label={`${systemLocaleMap[locale].feed_source} (URL)`}
 						value={source}
 						type="string"
 						error={error}
@@ -83,9 +83,9 @@ class RssSourceAdd extends React.Component {
 					/>
 
 					<FormControl className={classes.buttonsWrapper} fullWidth>
-						<Button component="button" onClick={this.handleCancel}>Cancel</Button>
+						<Button component="button" onClick={this.handleCancel}>{systemLocaleMap[locale].cancel}</Button>
 						<ClickAwayListener onClickAway={this.handleRemoveError}>
-							<Button color="secondary" onClick={this.handleSubmit}>OK</Button>
+							<Button color="secondary" onClick={this.handleSubmit}>{systemLocaleMap[locale].ok}</Button>
 						</ClickAwayListener>
 					</FormControl>
 				</form>
@@ -94,4 +94,8 @@ class RssSourceAdd extends React.Component {
 	}
 }
 
-export default connect()(withStyles(styles, {withTheme: true})(RssSourceAdd))
+const mapStateToProps = state => ({
+	...state.view,
+})
+
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(RssSourceAdd))
