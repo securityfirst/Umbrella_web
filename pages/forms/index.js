@@ -15,7 +15,7 @@ import Loading from '../../components/common/Loading'
 import ErrorMessage from '../../components/common/ErrorMessage'
 
 import { getForm, deleteForm } from '../../store/actions/forms'
-import { openAlert } from '../../store/actions/view'
+import { setAppbarTitle, openAlert } from '../../store/actions/view'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { generateForm } from '../../utils/forms'
@@ -46,6 +46,11 @@ const styles = theme => ({
 class Forms extends React.Component {
 	state = {
 		anchorEl: null,
+	}
+
+	componentDidMount() {
+		const { dispatch, locale, systemLocaleMap } = this.props
+		dispatch(setAppbarTitle(systemLocaleMap[locale].form_title))
 	}
 
 	checkLogin = e => {

@@ -23,7 +23,7 @@ import FormControlRadios from '../../components/common/FormControlRadios'
 import teal from '@material-ui/core/colors/teal'
 
 import { getForm, getFormSaved, saveForm, resetSaveForm } from '../../store/actions/forms'
-import { openAlert } from '../../store/actions/view'
+import { setAppbarTitle, openAlert } from '../../store/actions/view'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { ID } from '../../utils/id'
@@ -76,8 +76,9 @@ class FormEdit extends React.Component {
 	}
 
 	componentDidMount() {
-		const { dispatch, router } = this.props
+		const { dispatch, router, locale, systemLocaleMap } = this.props
 
+		dispatch(setAppbarTitle(systemLocaleMap[locale].form_title))
 		dispatch(getFormSaved(router.query.id, formSaved => {
 			this.setState({formState: formSaved.state})
 		}))

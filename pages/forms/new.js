@@ -23,7 +23,7 @@ import FormControlRadios from '../../components/common/FormControlRadios'
 import teal from '@material-ui/core/colors/teal'
 
 import { getForm, saveForm, resetSaveForm } from '../../store/actions/forms'
-import { openAlert } from '../../store/actions/view'
+import { setAppbarTitle, openAlert } from '../../store/actions/view'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { ID } from '../../utils/id'
@@ -76,7 +76,9 @@ class FormsNew extends React.Component {
 	}
 
 	componentDidMount() {
-		const { form } = this.props
+		const { dispatch, locale, systemLocaleMap, form } = this.props
+
+		dispatch(setAppbarTitle(systemLocaleMap[locale].form_title))
 
 		this.setState({
 			formState: form.screens.map(screen => {
