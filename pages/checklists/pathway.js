@@ -55,7 +55,11 @@ const styles = theme => ({
 class Pathway extends React.Component {
 	static async getInitialProps({reduxStore, query}) {
 		await reduxStore.dispatch(getPathwayFile(query.sha))
-		await reduxStore.dispatch(setAppbarTitle(`Pathway Checklist`))
+	}
+
+	componentDidMount() {
+		const { dispatch, locale, systemLocaleMap } = this.props
+		dispatch(setAppbarTitle(systemLocaleMap[locale].checklist_title))
 	}
 
 	findMatchingPathway = pathways => {
@@ -89,7 +93,7 @@ class Pathway extends React.Component {
 		const isFavorited = !!this.findMatchingPathway(pathwaysSaved)
 
 		return (
-			<Layout title="Umbrella | Top Tips" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | Top Tips`} description="Umbrella web application">
 				<div className={classes.wrapper}>
 					<div className={classes.content}>
 						<Paper className={classes.header} square>

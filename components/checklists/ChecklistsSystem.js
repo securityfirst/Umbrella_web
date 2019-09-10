@@ -269,7 +269,7 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	renderPathways = () => {
-		const { classes, pathwaysSaved } = this.props
+		const { classes, locale, systemLocaleMap, pathwaysSaved } = this.props
 
 		return (
 			<React.Fragment>
@@ -285,7 +285,7 @@ class ChecklistsSystem extends React.Component {
 							</div>
 						))
 				}
-				<Typography className={classes.pathwaySeeAll} onClick={this.openPathwaysModal}>See All</Typography>
+				<Typography className={classes.pathwaySeeAll} onClick={this.openPathwaysModal}>{systemLocaleMap[locale].see_all}</Typography>
 			</React.Fragment>
 		)
 	}
@@ -326,7 +326,7 @@ class ChecklistsSystem extends React.Component {
 
 				{this.renderLessonChecklists()}
 
-				<Typography className={classes.label} variant="subtitle1">Top tips</Typography>
+				<Typography className={classes.label} variant="subtitle1">Top Tips</Typography>
 
 				{this.renderPathways()}
 			</div>

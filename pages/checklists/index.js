@@ -9,6 +9,8 @@ import Layout from '../../components/layout'
 import ChecklistsCustom from '../../components/checklists/ChecklistsCustom'
 import ChecklistsSystem from '../../components/checklists/ChecklistsSystem'
 
+import { setAppbarTitle } from '../../store/actions/view'
+
 const styles = theme => ({
 	tabs: {
 		backgroundColor: theme.palette.background.paper,
@@ -20,21 +22,26 @@ class Checklists extends React.Component {
 		tabIndex: 0
 	}
 
+	componentDidMount() {
+		const { dispatch, locale, systemLocaleMap } = this.props
+		dispatch(setAppbarTitle(systemLocaleMap[locale].checklist_title))
+	}
+
 	handleTabSelect = (e, v) => this.setState({tabIndex: v})
 
 	render() {
-		const { classes } = this.props
+		const { classes, locale, systemLocaleMap } = this.props
 		const { tabIndex } = this.state
 
 		return (
-			<Layout title="Umbrella | Checklists" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].checklist_title}`} description="Umbrella web application">
 				<Tabs 
 					className={classes.tabs}
 					value={tabIndex} 
 					onChange={this.handleTabSelect}
 				>
-					<Tab label="OVERVIEW" />
-					<Tab label="CUSTOM" />
+					<Tab label={systemLocaleMap[locale].checklist_title_tab} />
+					<Tab label={systemLocaleMap[locale].custom_checklist_title_tab} />
 				</Tabs>
 
 				{tabIndex === 1
@@ -46,4 +53,8 @@ class Checklists extends React.Component {
 	}
 }
 
-export default connect()(withStyles(styles, { withTheme: true })(Checklists))
+const mapStateToProps = state => ({
+	...state.view,
+})
+
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Checklists))

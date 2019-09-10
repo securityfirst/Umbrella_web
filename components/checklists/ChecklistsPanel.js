@@ -100,11 +100,11 @@ class ChecklistsPanel extends React.Component {
 	addItem = e => {
 		!!e && e.preventDefault()
 
-		const { dispatch, checklist, index } = this.props
+		const { dispatch, locale, systemLocaleMap, checklist, index } = this.props
 		const { itemText } = this.state
 
 		if (!itemText || !itemText.length) {
-			return dispatch(openAlert('error', 'Item text is required'))
+			return dispatch(openAlert('error', systemLocaleMap[locale].checklist_custom_empty_item_error_message))
 		}
 
 		const item = {text: itemText.trim(), done: false}
@@ -178,7 +178,7 @@ class ChecklistsPanel extends React.Component {
 								<FormControlInput 
 									className={classes.addItemInput}
 									id={`checklist-custom-form-${index}`}
-									label="Add new item"
+									label={systemLocaleMap[locale].checklist_add_item_title}
 									value={itemText}
 									type="string"
 									error={error}
@@ -187,7 +187,7 @@ class ChecklistsPanel extends React.Component {
 									autoFocus
 								/>
 
-								<Button component="button" size="small" onClick={this.addItem}>Add</Button>
+								<Button component="button" size="small" onClick={this.addItem}>{systemLocaleMap[locale].checklist_add_item_title}</Button>
 							</div>
 						}
 
@@ -200,7 +200,7 @@ class ChecklistsPanel extends React.Component {
 									size="small" 
 									onClick={this.deleteChecklist}
 								>
-									Delete List
+									{systemLocaleMap[locale].checklist_delete_item}
 								</Button>
 							</div>
 						}
@@ -211,4 +211,8 @@ class ChecklistsPanel extends React.Component {
 	}
 }
 
-export default connect()(withStyles(styles, { withTheme: true })(ChecklistsPanel))
+const mapStateToProps = (state) => ({
+	...state.view,
+})
+
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(ChecklistsPanel))

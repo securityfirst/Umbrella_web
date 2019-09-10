@@ -52,10 +52,10 @@ class ChecklistsCustom extends React.Component {
 	}
 	
 	handleModalOpen = () => {
-		const { dispatch, isProtected, password } = this.props
+		const { dispatch, locale, systemLocaleMap, isProtected, password } = this.props
 
 		if (isProtected && !password) {
-			return dispatch(openAlert('error', 'Login or set a password to create a custom checklist'))
+			return dispatch(openAlert('error', systemLocaleMap[locale].login_your_password))
 		}
 
 		this.setState({modalOpen: true})
@@ -132,6 +132,7 @@ class ChecklistsCustom extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.view,
 	...state.account,
 	...state.checklists,
 })
