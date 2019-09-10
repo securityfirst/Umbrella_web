@@ -15,7 +15,7 @@ import Loading from '../../components/common/Loading'
 import ErrorMessage from '../../components/common/ErrorMessage'
 
 import { getForm, deleteForm } from '../../store/actions/forms'
-import { openAlert } from '../../store/actions/view'
+import { setAppbarTitle, openAlert } from '../../store/actions/view'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { generateForm } from '../../utils/forms'
@@ -46,6 +46,11 @@ const styles = theme => ({
 class Forms extends React.Component {
 	state = {
 		anchorEl: null,
+	}
+
+	componentDidMount() {
+		const { dispatch, locale, systemLocaleMap } = this.props
+		dispatch(setAppbarTitle(systemLocaleMap[locale].form_title))
 	}
 
 	checkLogin = e => {
@@ -129,7 +134,7 @@ class Forms extends React.Component {
 	}
 
 	renderActivePanel = (formSaved, i) => {
-		const { classes } = this.props
+		const { classes, locale, systemLocaleMap } = this.props
 		const { anchorEl } = this.state
 
 		return (
@@ -139,14 +144,14 @@ class Forms extends React.Component {
 				</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
-					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">Edit</Button></Link>
+					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].message_body_form_new}</Button></Link>
 					<Button 
 						component="button" 
 						aria-owns={anchorEl ? 'active-download-menu' : undefined}
 						aria-haspopup="true"
 						onClick={this.handleClick}
 					>Download</Button>
-					<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>Delete</Button>
+					<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>{systemLocaleMap[locale].delete}</Button>
 
 					<Menu
 						id={`active-download-menu-${i}`}
@@ -155,13 +160,13 @@ class Forms extends React.Component {
 						onClose={this.handleClose}
 					>
 						<ListItem button onClick={this.downloadHtml(formSaved)}>
-							<ListItemText primary="HTML" />
+							<ListItemText primary={systemLocaleMap[locale].html_name} />
 						</ListItem>
 						<ListItem button onClick={this.downloadPdf(formSaved)}>
-							<ListItemText primary="PDF" />
+							<ListItemText primary={systemLocaleMap[locale].pdf_name} />
 						</ListItem>
 						<ListItem button onClick={this.downloadDocx(formSaved)}>
-							<ListItemText primary="DOCX" />
+							<ListItemText primary={systemLocaleMap[locale].docx_name} />
 						</ListItem>
 					</Menu>
 				</div>
@@ -170,7 +175,7 @@ class Forms extends React.Component {
 	}
 
 	renderAvailablePanel = (form, i) => {
-		const { classes } = this.props
+		const { classes, locale, systemLocaleMap } = this.props
 
 		return (
 			<Paper key={i} className={classes.formPanel} square>
@@ -180,7 +185,7 @@ class Forms extends React.Component {
 
 				<div className={classes.formPanelButtonsWrapper}>
 					<Link href={`/forms/${form.sha}`}>
-						<Button color="primary" onClick={this.checkLogin}>New</Button>
+						<Button color="primary" onClick={this.checkLogin}>{systemLocaleMap[locale].message_body_form_new}</Button>
 					</Link>
 				</div>
 			</Paper>
@@ -188,7 +193,7 @@ class Forms extends React.Component {
 	}
 
 	renderFilledPanel = (formSaved, i) => {
-		const { dispatch, classes } = this.props
+		const { dispatch, classes, locale, systemLocaleMap } = this.props
 		const { anchorEl } = this.state
 
 		const date = new Date(formSaved.dateCompleted)
@@ -201,14 +206,14 @@ class Forms extends React.Component {
 				<Typography paragraph>{date.toLocaleString()}</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
-					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">Edit</Button></Link>
+					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].form_menu_edit}</Button></Link>
 					<Button 
 						component="button" 
 						aria-owns={anchorEl ? 'saved-download-menu' : undefined}
 						aria-haspopup="true"
 						onClick={this.handleClick}
 					>Download</Button>
-					<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>Delete</Button>
+					<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>{systemLocaleMap[locale].delete}</Button>
 
 					<Menu
 						id={`saved-download-menu-${i}`}
@@ -217,13 +222,13 @@ class Forms extends React.Component {
 						onClose={this.handleClose}
 					>
 						<ListItem button onClick={this.downloadHtml(formSaved)}>
-							<ListItemText primary="HTML" />
+							<ListItemText primary={systemLocaleMap[locale].html_name} />
 						</ListItem>
 						<ListItem button onClick={this.downloadPdf(formSaved)}>
-							<ListItemText primary="PDF" />
+							<ListItemText primary={systemLocaleMap[locale].pdf_name} />
 						</ListItem>
 						<ListItem button onClick={this.downloadDocx(formSaved)}>
-							<ListItemText primary="DOCX" />
+							<ListItemText primary={systemLocaleMap[locale].docx_name} />
 						</ListItem>
 					</Menu>
 				</div>
@@ -235,6 +240,7 @@ class Forms extends React.Component {
 		const { 
 			classes, 
 			locale, 
+			systemLocaleMap, 
 			content, 
 			getContentLoading, 
 			getContentError, 
@@ -256,16 +262,16 @@ class Forms extends React.Component {
 		})
 
 		return (
-			<Layout title="Umbrella | Forms" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].form_title}`} description="Umbrella web application">
 				<div className={classes.content}>
 					{!!formsSorted.active.length &&
 						<React.Fragment>
-							<Typography className={classes.label} variant="subtitle1">Active Forms</Typography>
+							<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].form_title}</Typography>
 							{formsSorted.active.map(this.renderActivePanel)}
 						</React.Fragment>
 					}
 
-					<Typography className={classes.label} variant="subtitle1">Available Forms</Typography>
+					<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].message_title_all_forms}</Typography>
 					{content[locale].forms.content
 						.filter(form => form.filename.indexOf('f_') === 0)
 						.map(this.renderAvailablePanel)
@@ -273,7 +279,7 @@ class Forms extends React.Component {
 
 					{!!formsSorted.filled.length &&
 						<React.Fragment>
-							<Typography className={classes.label} variant="subtitle1">Active Forms</Typography>
+							<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].message_title_active_forms}</Typography>
 							{formsSorted.filled.map(this.renderActivePanel)}
 						</React.Fragment>
 					}

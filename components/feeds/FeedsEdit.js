@@ -63,10 +63,10 @@ class FeedsEdit extends React.Component {
 	}
 
 	handleSubmit = () => {
-		const { dispatch, toggleEdit, feedLocation, feedSources } = this.props
+		const { dispatch, locale, systemLocaleMap, toggleEdit, feedLocation, feedSources } = this.props
 
 		if (!feedLocation || !feedSources.length) {
-			return dispatch(openAlert('error', 'Location and sources are required'))
+			return dispatch(openAlert('error', systemLocaleMap[locale].set_your_feed_label))
 		}
 
 		dispatch(getFeeds())
@@ -75,35 +75,35 @@ class FeedsEdit extends React.Component {
 	}
 
 	render() {
-		const { classes, feedLocation, feedSources } = this.props
+		const { classes, locale, systemLocaleMap, feedLocation, feedSources } = this.props
 
 		return (
 			<div>
 				{/* Info panel */}
 				<Paper className={classes.panel} square>
-					<Typography className={classes.panelTitle} variant="h6">Set your feed</Typography>
-					<Typography className={classes.panelContent} paragraph>You haven't set the country and the sources for the feed yet. You have to do it in order for the feed to start displaying, and you can change it any time later in the settings.</Typography>
+					<Typography className={classes.panelTitle} variant="h6">{systemLocaleMap[locale].set_your_feed}</Typography>
+					<Typography className={classes.panelContent} paragraph>{systemLocaleMap[locale].set_your_feed_label}</Typography>
 				</Paper>
 
 				{/* Location panel */}
 				<Paper className={classes.panel} square>
-					<Typography className={classes.panelTitle} variant="h6">Location</Typography>
-					<Typography className={classes.panelContent} paragraph>{feedLocation ? feedLocation.place_name : 'Set location'}</Typography>
+					<Typography className={classes.panelTitle} variant="h6">{systemLocaleMap[locale].location}</Typography>
+					<Typography className={classes.panelContent} paragraph>{feedLocation ? feedLocation.place_name : systemLocaleMap[locale].feed_location_label}</Typography>
 					<div className={classes.changeButtonWrapper}>
-						<Button color="secondary" onClick={this.handleFormOpen('location')}>Set</Button>
+						<Button color="secondary" onClick={this.handleFormOpen('location')}>{systemLocaleMap[locale].feed_location_label}</Button>
 					</div>
 				</Paper>
 
 				{/* Sources panel */}
 				<Paper className={classes.panel} square>
-					<Typography className={classes.panelTitle} variant="h6">Set your feed</Typography>
-					<Typography className={classes.panelContent} paragraph>{feedSources.length ? `${feedSources.length} source${feedSources.length > 1 ? 's' : ''}` : 'Set sources'}</Typography>
+					<Typography className={classes.panelTitle} variant="h6">{systemLocaleMap[locale].feed_sources}</Typography>
+					<Typography className={classes.panelContent} paragraph>{feedSources.length ? `${feedSources.length} source${feedSources.length > 1 ? 's' : ''}` : systemLocaleMap[locale].feed_source_label}</Typography>
 					<div className={classes.changeButtonWrapper}>
-						<Button color="secondary" onClick={this.handleFormOpen('sources')}>Set</Button>
+						<Button color="secondary" onClick={this.handleFormOpen('sources')}>{systemLocaleMap[locale].feed_source_label}</Button>
 					</div>
 				</Paper>
 
-				<Button variant="contained" onClick={this.handleSubmit}>Done</Button>
+				<Button variant="contained" onClick={this.handleSubmit}>{systemLocaleMap[locale].set}</Button>
 
 				<Modal
 					className={classes.modal}
@@ -121,6 +121,7 @@ class FeedsEdit extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.view,
 	...state.feeds
 })
 

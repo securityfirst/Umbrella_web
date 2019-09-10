@@ -271,7 +271,7 @@ class LessonsLevel extends React.Component {
 	}
 
 	render() {
-		const { router, classes, localeMap } = this.props
+		const { router, classes, contentLocaleMap } = this.props
 		const { locale, category, level } = router.query
 		const { files } = this.state
 
@@ -288,7 +288,7 @@ class LessonsLevel extends React.Component {
 									index={i} 
 									file={file} 
 									locale={locale}
-									localeMap={localeMap}
+									contentLocaleMap={contentLocaleMap}
 									category={category}
 									level={level}
 								/>

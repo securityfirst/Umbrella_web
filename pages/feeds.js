@@ -17,6 +17,7 @@ import FeedsRss from '../components/feeds/FeedsRss'
 import { contentStyles } from '../utils/view'
 
 import { getFeeds } from '../store/actions/feeds'
+import { setAppbarTitle } from '../store/actions/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -38,6 +39,11 @@ class Feeds extends React.Component {
 	state = {
 		isEdit: (!this.props.feedLocation && !this.props.feedSources.length),
 		tabIndex: 0,
+	}
+
+	componentDidMount() {
+		const { dispatch, locale, systemLocaleMap } = this.props
+		dispatch(setAppbarTitle(systemLocaleMap[locale].feed_title))
 	}
 
 	handleTabSelect = (e, v) => {
@@ -68,18 +74,18 @@ class Feeds extends React.Component {
 	}
 
 	render() {
-		const { classes } = this.props
+		const { classes, locale, systemLocaleMap } = this.props
 		const { tabIndex } = this.state
 
 		return (
-			<Layout title="Umbrella | Feeds" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].feed_title}`} description="Umbrella web application">
 				<Tabs 
 					className={classes.tabs}
 					value={tabIndex} 
 					onChange={this.handleTabSelect}
 				>
-					<Tab label="FEED" />
-					<Tab label="RSS" />
+					<Tab label={systemLocaleMap[locale].feed_title_tab} />
+					<Tab label={systemLocaleMap[locale].rss_title_tab} />
 				</Tabs>
 
 				<div className={classes.content}>
@@ -91,7 +97,8 @@ class Feeds extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	...state.feeds
+	...state.view,
+	...state.feeds,
 })
 
 export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(Feeds))

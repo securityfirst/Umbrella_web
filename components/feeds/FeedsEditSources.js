@@ -31,14 +31,6 @@ const styles = theme => ({
 	},
 })
 
-const sources = [
-	{name: 'ReliefWeb / United Nations', value: '0,2'},
-	{name: 'United Kingdom Foreign and Commonwealth Office', value: '1'},
-	{name: 'Centres for Disease Control', value: '3'},
-	{name: 'Global Disaster Alert Coordination System', value: '4'},
-	{name: 'US State Department Country Warnings', value: '5'},
-]
-
 class FeedsEditSources extends React.Component {
 	state = {
 		sourcesSelected: [],
@@ -60,7 +52,7 @@ class FeedsEditSources extends React.Component {
 		else this.setState({sourcesSelected: sourcesSelected.concat([sourceValue])})
 	}
 
-	handleSelectAll = () => {
+	handleSelectAll = (sources) => {
 		const { sourcesSelected } = this.state
 
 		if (sourcesSelected.length === sources.length) this.setState({sourcesSelected: []})
@@ -86,20 +78,27 @@ class FeedsEditSources extends React.Component {
 	handleRemoveError = () => this.setState({error: null, errorMessage: null})
 
 	render() {
-		const { classes } = this.props
+		const { classes, locale, systemLocaleMap } = this.props
 		const { sourcesSelected, error, errorMessage } = this.state
+		const sources = [
+			{name: systemLocaleMap[locale].feed_source_un, value: '0,2'},
+			{name: 'United Kingdom Foreign and Commonwealth Office', value: '1'},
+			{name: systemLocaleMap[locale].feed_source_cdc, value: '3'},
+			{name: systemLocaleMap[locale].feed_source_global, value: '4'},
+			{name: systemLocaleMap[locale].feed_source_department, value: '5'},
+		]
 
 		return (
 			<Paper className={classes.container} square>
 				<form onSubmit={this.handleSubmit}>
-					<Typography variant="h6">Select the feed sources</Typography>
+					<Typography variant="h6">{systemLocaleMap[locale].feed_source_name}</Typography>
 					<FormControl required error={error} component="fieldset" className={classes.checkboxControl}>
 						<FormGroup>
 							<FormControlCheckbox
 								name="Select All"
 								value="all"
 								checked={sourcesSelected.length === sources.length} 
-								onChange={this.handleSelectAll} 
+								onChange={() => this.handleSelectAll(sources)} 
 							/>
 							{sources.map((source, i) => (
 								<FormControlCheckbox
@@ -115,9 +114,9 @@ class FeedsEditSources extends React.Component {
 					</FormControl>
 
 					<FormControl className={classes.buttonsWrapper} fullWidth>
-						<Button component="button" onClick={this.handleCancel}>Cancel</Button>
+						<Button component="button" onClick={this.handleCancel}>{systemLocaleMap[locale].account_cancel}</Button>
 						<ClickAwayListener onClickAway={this.handleRemoveError}>
-							<Button color="secondary" onClick={this.handleSubmit}>OK</Button>
+							<Button color="secondary" onClick={this.handleSubmit}>{systemLocaleMap[locale].account_ok}</Button>
 						</ClickAwayListener>
 					</FormControl>
 				</form>
@@ -127,6 +126,7 @@ class FeedsEditSources extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.view,
 	...state.feeds,
 })
 

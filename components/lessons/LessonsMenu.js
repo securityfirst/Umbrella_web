@@ -129,7 +129,7 @@ class LessonsMenu extends React.Component {
 	}
 
 	renderMenuSubcategories = (subcategories, isSelected) => {
-		const { classes, locale, localeMap } = this.props
+		const { classes, locale, contentLocaleMap } = this.props
 		const { categorySelected } = this.state
 
 		return (
@@ -146,7 +146,7 @@ class LessonsMenu extends React.Component {
 							<ListItem button className={classes.menuListSubItem}>
 								<ListItemText 
 									className={classes.menuListItemText} 
-									primary={localeMap[locale][subcategory]}
+									primary={contentLocaleMap[locale][subcategory]}
 									inset 
 								/>
 							</ListItem>
@@ -158,7 +158,7 @@ class LessonsMenu extends React.Component {
 	}
 
 	renderMenuCategory = (category, i) => {
-		const { classes, content, locale, localeMap } = this.props
+		const { classes, content, locale, contentLocaleMap } = this.props
 		const { categorySelected } = this.state
 
 		const isSelected = categorySelected == category
@@ -173,7 +173,7 @@ class LessonsMenu extends React.Component {
 							src={`/static/assets/content/en/${category}/${category}.png`} 
 						/>
 					</ListItemIcon>
-					<ListItemText className={classes.menuListItemText} inset primary={localeMap[locale][category]} />
+					<ListItemText className={classes.menuListItemText} inset primary={contentLocaleMap[locale][category]} />
 
 					{!!subcategories.length
 						? isSelected ? <ExpandLess /> : <ExpandMore />
@@ -190,9 +190,9 @@ class LessonsMenu extends React.Component {
 		const { 
 			classes, 
 			locale, 
-			getLocaleMapLoading, 
-			getLocaleMapError, 
-			localeMap,
+			getContentLocaleMapLoading, 
+			getContentLocaleMapError, 
+			contentLocaleMap,
 			content, 
 			getContentLoading, 
 			getContentError, 
@@ -200,8 +200,8 @@ class LessonsMenu extends React.Component {
 		} = this.props
 		const { categorySelected } = this.state
 
-		if (getContentLoading || getLocaleMapLoading) return <Loading />
-		else if (getContentError || getLocaleMapError) return <ErrorMessage error={getContentError || getLocaleMapError} />
+		if (getContentLoading || getContentLocaleMapLoading) return <Loading />
+		else if (getContentError || getContentLocaleMapError) return <ErrorMessage error={getContentError || getContentLocaleMapError} />
 
 		return (
 			<div className={classNames(classes.menuWrapper, {[classes.menuWrapperOpened]: lessonsMenuOpened})}>
@@ -238,7 +238,7 @@ class LessonsMenu extends React.Component {
 										src={`/static/assets/content/en/glossary/glossary.png`} 
 									/>
 								</ListItemIcon>
-								<ListItemText className={classes.menuListItemText} inset primary={localeMap[locale]['glossary']} />
+								<ListItemText className={classes.menuListItemText} inset primary={contentLocaleMap[locale]['glossary']} />
 							</ListItem>
 						</Link>
 					</div>

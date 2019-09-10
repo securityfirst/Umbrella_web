@@ -85,13 +85,13 @@ class LessonsCategory extends React.Component {
 	}
 
 	render() {
-		const { router, classes, content, localeMap } = this.props
+		const { router, classes, content, contentLocaleMap } = this.props
 		const { locale, category } = router.query
 
 		let breadcrumb = router.query.category.split('.')
 
 		for (let i=0; i<breadcrumb.length; i++) {
-			breadcrumb[i] = localeMap[locale][breadcrumb[i]].replace(/-/g, ' ')
+			breadcrumb[i] = contentLocaleMap[locale][breadcrumb[i]].replace(/-/g, ' ')
 		}
 
 		breadcrumb = breadcrumb.join(' > ')
@@ -124,7 +124,7 @@ class LessonsCategory extends React.Component {
 										classes={{label: classes.panelTitle}}
 										variant="contained"
 									>
-										{localeMap[locale][level]}
+										{contentLocaleMap[locale][level]}
 									</Button>
 								</Link>
 							)

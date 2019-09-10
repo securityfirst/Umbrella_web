@@ -1,3 +1,5 @@
+import systemLocaleMap from './systemLocaleMap'
+
 const content = {
 	getContentLoading: false,
 	getContentError: null,
@@ -122,9 +124,12 @@ const view = {
 	setLocaleLoading: false,
 	setLocaleError: null,
 	locale: 'en',
-	getLocaleMapLoading: true,
-	getLocaleMapError: null,
-	localeMap: {},
+	getContentLocaleMapLoading: true,
+	getContentLocaleMapError: null,
+	contentLocaleMap: {},
+	// getSystemLocaleMapLoading: true,
+	// getSystemLocaleMapError: null,
+	systemLocaleMap: systemLocaleMap,
 	alertOpen: false,
 	alertType: null,
 	alertMessage: null,

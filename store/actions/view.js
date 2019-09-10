@@ -65,8 +65,8 @@ export const setLocale = locale => (dispatch, getState) => {
 	}
 }
 
-export const getLocaleMap = () => async (dispatch, getState) => {
-	await dispatch(pending(viewTypes.GET_LOCALE_MAP))
+export const getContentLocaleMap = () => async (dispatch, getState) => {
+	await dispatch(pending(viewTypes.GET_CONTENT_LOCALE_MAP))
 
 	try {
 		await fetch(`${process.env.ROOT}/api/github/locale`)
@@ -75,14 +75,14 @@ export const getLocaleMap = () => async (dispatch, getState) => {
 			return res.json()
 		})
 		.then(async map => {
-			await dispatch(fulfilled(viewTypes.GET_LOCALE_MAP, map))
+			await dispatch(fulfilled(viewTypes.GET_CONTENT_LOCALE_MAP, map))
 		})
 		.catch(async err => {
-			await dispatch(rejected(viewTypes.GET_LOCALE_MAP, err))
+			await dispatch(rejected(viewTypes.GET_CONTENT_LOCALE_MAP, err))
 		})
 	} catch (e) {
 		// no alert
-		await dispatch(rejected(viewTypes.GET_LOCALE_MAP, e))
+		await dispatch(rejected(viewTypes.GET_CONTENT_LOCALE_MAP, e))
 	}
 }
 

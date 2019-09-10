@@ -17,6 +17,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 
+import HomeIcon from '@material-ui/icons/Home'
 import CalendarViewDayIcon from '@material-ui/icons/CalendarViewDay'
 import MapIcon from '@material-ui/icons/Map'
 import DoneAllIcon from '@material-ui/icons/DoneAll'
@@ -29,11 +30,12 @@ import { toggleMainMenu } from '../../store/actions/view'
 import { viewConstants } from '../../utils/view'
 
 const links = [
-	{name: 'Feeds', path: '/feeds', icon: (color) => <CalendarViewDayIcon color={color} />},
-	{name: 'Forms', path: '/forms', icon: (color) => <MapIcon color={color} />},
-	{name: 'Checklists', path: '/checklists', icon: (color) => <DoneAllIcon color={color} />},
-	{name: 'Lessons', path: '/lessons', icon: (color) => <LocalLibraryIcon color={color} />},
-	{name: 'Account', path: '/account', icon: (color) => <AccountBoxIcon color={color} />},
+	{key: 'app_name', path: '/', icon: (color) => <HomeIcon color={color} />},
+	{key: 'feed_title', path: '/feeds', icon: (color) => <CalendarViewDayIcon color={color} />},
+	{key: 'form_title', path: '/forms', icon: (color) => <MapIcon color={color} />},
+	{key: 'checklist_title', path: '/checklists', icon: (color) => <DoneAllIcon color={color} />},
+	{key: 'lesson_title', path: '/lessons', icon: (color) => <LocalLibraryIcon color={color} />},
+	{key: 'account_title', path: '/account', icon: (color) => <AccountBoxIcon color={color} />},
 ]
 
 const styles = theme => ({
@@ -91,26 +93,33 @@ class Menu extends React.Component {
 	}
 
 	renderItems = () => {
-		const { router, classes } = this.props
+		const { router, locale, systemLocaleMap, classes } = this.props
 
 		return (
 			<List>
-				{links.map((link, i) => (
-					<Link key={i} href={link.path}>
-						<ListItem 
-							className={classes.drawerItem} 
-							title={link.name} 
-							onClick={this.handleMenuClick(link)}
-							button 
-						>
-							<ListItemIcon>
-								{link.icon(router.pathname.indexOf(link.path) === 0 ? 'secondary' : 'inherit')}
-							</ListItemIcon>
+				{links.map((link, i) => {
+					let iconColor = 'inherit'
 
-							<ListItemText primary={link.name} />
-						</ListItem>
-					</Link>
-				))}
+					if (
+						(link.path === '/' && router.pathname === '/') ||
+						(link.path !== '/' && router.pathname.indexOf(link.path) === 0)
+					) iconColor = 'secondary'
+
+					return (
+						<Link key={i} href={link.path}>
+							<ListItem 
+								className={classes.drawerItem} 
+								title={link.name} 
+								onClick={this.handleMenuClick(link)}
+								button 
+							>
+								<ListItemIcon>{link.icon(iconColor)}</ListItemIcon>
+
+								<ListItemText primary={systemLocaleMap[locale][link.key]} />
+							</ListItem>
+						</Link>
+					)
+				})}
 			</List>
 		)
 	}

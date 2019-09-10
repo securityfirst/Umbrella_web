@@ -44,11 +44,11 @@ class ChecklistsCustomAdd extends React.Component {
 	handleSubmit = e => {
 		!!e && e.preventDefault()
 
-		const { dispatch, closeModal } = this.props
+		const { dispatch, locale, systemLocaleMap, closeModal } = this.props
 		const { name } = this.state
 
 		if (!name || !name.length) {
-			return dispatch(openAlert('error', 'Name is required'))
+			return dispatch(openAlert('error', systemLocaleMap[locale].invalid_name_custom_checklist_messenge))
 		}
 
 		dispatch(addChecklistCustom(name.trim(), closeModal))
@@ -63,7 +63,7 @@ class ChecklistsCustomAdd extends React.Component {
 	handleRemoveError = () => this.setState({error: null, errorMessage: null})
 
 	render() {
-		const { theme, classes, closeModal, confirm } = this.props
+		const { theme, classes, locale, systemLocaleMap, closeModal, confirm } = this.props
 		const { name, error, errorMessage } = this.state
 
 		return (
@@ -74,7 +74,7 @@ class ChecklistsCustomAdd extends React.Component {
 					<FormControlInput 
 						className={classes.formControlInput}
 						id="checklist-custom-form"
-						label="Custom checklist name"
+						label={systemLocaleMap[locale].name_your_checklist}
 						value={name}
 						type="string"
 						error={error}
@@ -85,9 +85,9 @@ class ChecklistsCustomAdd extends React.Component {
 					/>
 
 					<FormControl className={classes.buttonsWrapper} fullWidth>
-						<Button component="button" onClick={this.handleCancel}>Cancel</Button>
+						<Button component="button" onClick={this.handleCancel}>{systemLocaleMap[locale].cancel}</Button>
 						<ClickAwayListener onClickAway={this.handleRemoveError}>
-							<Button color="secondary" onClick={this.handleSubmit}>OK</Button>
+							<Button color="secondary" onClick={this.handleSubmit}>{systemLocaleMap[locale].ok}</Button>
 						</ClickAwayListener>
 					</FormControl>
 				</form>
@@ -96,4 +96,8 @@ class ChecklistsCustomAdd extends React.Component {
 	}
 }
 
-export default connect()(withStyles(styles, {withTheme: true})(ChecklistsCustomAdd))
+const mapStateToProps = (state) => ({
+	...state.view,
+})
+
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(ChecklistsCustomAdd))

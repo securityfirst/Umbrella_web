@@ -23,7 +23,7 @@ import FormControlRadios from '../../components/common/FormControlRadios'
 import teal from '@material-ui/core/colors/teal'
 
 import { getForm, getFormSaved, saveForm, resetSaveForm } from '../../store/actions/forms'
-import { openAlert } from '../../store/actions/view'
+import { setAppbarTitle, openAlert } from '../../store/actions/view'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { ID } from '../../utils/id'
@@ -76,8 +76,9 @@ class FormEdit extends React.Component {
 	}
 
 	componentDidMount() {
-		const { dispatch, router } = this.props
+		const { dispatch, router, locale, systemLocaleMap } = this.props
 
+		dispatch(setAppbarTitle(systemLocaleMap[locale].form_title))
 		dispatch(getFormSaved(router.query.id, formSaved => {
 			this.setState({formState: formSaved.state})
 		}))
@@ -270,7 +271,7 @@ class FormEdit extends React.Component {
 	}
 
 	render() {
-		const { classes, getFormLoading, getFormError, getFormSavedLoading, getFormSavedError, form } = this.props
+		const { classes, locale, systemLocaleMap, getFormLoading, getFormError, getFormSavedLoading, getFormSavedError, form } = this.props
 		const { activeStep, progress, formState } = this.state
 
 		if (getFormLoading || getFormSavedLoading || !formState.length) return <Loading />
@@ -279,7 +280,7 @@ class FormEdit extends React.Component {
 		const screen = form.screens[activeStep]
 
 		return (
-			<Layout title="Umbrella | Edit Form" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].form_title}`} description="Umbrella web application">
 				<div className={classes.stepperWrapper}>
 					<Stepper className={classes.stepper} activeStep={activeStep}>
 						{form.screens.map((screen, i) => (
@@ -313,6 +314,7 @@ class FormEdit extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.view,
 	...state.forms
 })
 

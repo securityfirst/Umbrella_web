@@ -45,10 +45,10 @@ class FeedsEditLocation extends React.Component {
 	handleSubmit = e => {
 		!!e && e.preventDefault()
 
-		const { dispatch, closeModal } = this.props
+		const { dispatch, locale, systemLocaleMap, closeModal } = this.props
 		const { location } = this.state
 
-		if (!location) return dispatch(openAlert('error', 'No location was selected'))
+		if (!location) return dispatch(openAlert('error', systemLocaleMap[locale].feed_location_label))
 
 		dispatch(setFeedLocation(location))
 		closeModal()
@@ -63,7 +63,7 @@ class FeedsEditLocation extends React.Component {
 	handleRemoveError = () => this.setState({error: null, errorMessage: null})
 
 	render() {
-		const { theme, classes, closeModal, confirm } = this.props
+		const { theme, classes, locale, systemLocaleMap, closeModal, confirm } = this.props
 		const { location, error, errorMessage } = this.state
 
 		return (
@@ -74,7 +74,7 @@ class FeedsEditLocation extends React.Component {
 					<FormControlLocation 
 						id="feeds-edit-location"
 						className={classes.formControlInput}
-						label="Set location"
+						label={systemLocaleMap[locale].feed_location_label}
 						types={'country'}
 						error={error}
 						errorMessage={errorMessage}
@@ -83,9 +83,9 @@ class FeedsEditLocation extends React.Component {
 					/>
 
 					<FormControl className={classes.buttonsWrapper} fullWidth>
-						<Button component="button" onClick={this.handleCancel}>Cancel</Button>
+						<Button component="button" onClick={this.handleCancel}>{systemLocaleMap[locale].account_cancel}</Button>
 						<ClickAwayListener onClickAway={this.handleRemoveError}>
-							<Button color="secondary" onClick={this.handleSubmit}>OK</Button>
+							<Button color="secondary" onClick={this.handleSubmit}>{systemLocaleMap[locale].account_ok}</Button>
 						</ClickAwayListener>
 					</FormControl>
 				</form>
@@ -95,6 +95,7 @@ class FeedsEditLocation extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.view,
 	...state.feeds,
 })
 
