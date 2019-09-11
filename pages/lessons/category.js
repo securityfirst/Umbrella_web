@@ -80,12 +80,17 @@ const styles = theme => ({
 })
 
 class LessonsCategory extends React.Component {
+	componentDidMount() {
+		const { dispatch, locale, systemLocaleMap } = this.props
+		dispatch(setAppbarTitle(systemLocaleMap[locale].lesson_title))
+	}
+
 	componentWillUnmount() {
 		this.props.dispatch(toggleLessonsMenu(false))
 	}
 
 	render() {
-		const { router, classes, content, contentLocaleMap } = this.props
+		const { router, classes, content, contentLocaleMap, systemLocaleMap } = this.props
 		const { locale, category } = router.query
 
 		let breadcrumb = router.query.category.split('.')
@@ -107,7 +112,7 @@ class LessonsCategory extends React.Component {
 		})
 
 		return (
-			<Layout title="Umbrella | Lesson Category" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].lesson_title}`} description="Umbrella web application">
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 

@@ -128,10 +128,10 @@ class LessonsLevel extends React.Component {
 	}
 
 	componentDidMount() {
-		const { router, dispatch, content } = this.props
+		const { router, dispatch, content, locale, systemLocaleMap } = this.props
 		const { locale, category, level } = router.query
 
-		// const paths = category.split('.').concat([level])
+		dispatch(setAppbarTitle(systemLocaleMap[locale].lesson_title))
 
 		const lesson = get(content, level !== '-' ? `${locale}.${category}.${level}` : `${locale}.${category}`)
 
@@ -148,10 +148,7 @@ class LessonsLevel extends React.Component {
 
 		const checklist = lesson.content.find(c => c.filename.indexOf('c_') > -1)
 
-		if (checklist) {
-			dispatch(getLessonChecklist(checklist.sha))
-			// dispatch(getChecklistsSystem())
-		}
+		if (checklist) dispatch(getLessonChecklist(checklist.sha))
 
 		this.setState({files, checklist})
 	}
@@ -271,12 +268,12 @@ class LessonsLevel extends React.Component {
 	}
 
 	render() {
-		const { router, classes, contentLocaleMap } = this.props
+		const { router, classes, contentLocaleMap, systemLocaleMap } = this.props
 		const { locale, category, level } = router.query
 		const { files } = this.state
 
 		return (
-			<Layout title="Umbrella | Lessons" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].lesson_title}`} description="Umbrella web application">
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 
