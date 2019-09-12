@@ -18,7 +18,7 @@ import FormControlInput from '../components/common/FormControlInput'
 import { contentStyles } from '../utils/view'
 
 import { checkPassword, login } from '../store/actions/account'
-import { openAlert } from '../store/actions/view'
+import { setAppbarTitle, openAlert } from '../store/actions/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -63,12 +63,12 @@ class Login extends React.Component {
 	}
 
 	componentDidMount() {
-		const { query } = this.props.router
-		if (query && query.setpassword) this.setState({expanded: 1})
+		const { dispatch, router, locale, systemLocaleMap } = this.props
+		const { query } = router
 
-		if (typeof window !== 'undefined') {
-			this.props.dispatch(checkPassword())
-		}
+		dispatch(setAppbarTitle(systemLocaleMap[locale].login_message_button))
+		if (query && query.setpassword) this.setState({expanded: 1})
+		if (typeof window !== 'undefined') dispatch(checkPassword())
 	}
 
 	handleLoginSubmit = e => {
@@ -97,21 +97,21 @@ class Login extends React.Component {
 	removeError = () => this.setState({error: false, errorMessage: null})
 
 	render() {
-		const { classes, loginLoading, loginError, checkPassword } = this.props
+		const { classes, locale, systemLocaleMap, loginLoading, loginError, checkPassword } = this.props
 		const { password, error, errorMessage } = this.state
 
 		return (
-			<Layout title="Umbrella | Login" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].login_message_button}`} description="Umbrella web application">
 				<div className={classes.content}>
 					<Paper className={classes.paper} elevation={1}>
 						<img className={classes.logo} src="/static/assets/images/umbrella_logo.png" alt="Umbrella logo"/>
 						
-						<Typography className={classes.description} variant="h6" align="center">Log in with your password</Typography>
+						<Typography className={classes.description} variant="h6" align="center">{systemLocaleMap[locale].login_your_password}</Typography>
 
 						<form onSubmit={this.handleLoginSubmit}>
 							<FormControlInput 
 								id="login-password"
-								label="Password*"
+								label={`${systemLocaleMap[locale].account_password_alert_password}*`}
 								value={password}
 								type="password"
 								error={error || !!loginError}
@@ -133,7 +133,7 @@ class Login extends React.Component {
 											color="secondary"
 											onClick={this.handleLoginSubmit}
 										>
-											Login
+											{systemLocaleMap[locale].login_message_button}
 										</Button>
 									}
 								</ClickAwayListener>
@@ -145,7 +145,7 @@ class Login extends React.Component {
 											component="button" 
 											color="primary"
 										>
-											Set Password
+											{systemLocaleMap[locale].account_set_password}
 										</Button>
 									</Link>
 								}
@@ -159,7 +159,8 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	...state.account
+	...state.view,
+	...state.account,
 })
 
 export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Login)))

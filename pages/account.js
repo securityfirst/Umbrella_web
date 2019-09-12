@@ -430,13 +430,7 @@ class Account extends React.Component {
 					}}
 				/>
 				<Typography className={classes.description} paragraph>
-					* {systemLocaleMap[locale].password_one_digit}
-				</Typography>
-				<Typography className={classes.description} paragraph>
-					* {systemLocaleMap[locale].password_one_capital}
-				</Typography>
-				<Typography className={classes.description} paragraph>
-					* {systemLocaleMap[locale].password_one_small}
+					* {systemLocaleMap[locale].account_password_alert_description}
 				</Typography>
 				<div className={classes.buttonWrapper}>
 					<Button color="primary" variant="contained" onClick={this.savePassword}>{systemLocaleMap[locale].account_password_alert_confirm}</Button>

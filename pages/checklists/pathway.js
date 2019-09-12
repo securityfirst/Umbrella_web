@@ -89,7 +89,7 @@ class Pathway extends React.Component {
 	}
 
 	render() {
-		const { classes, locale, currentPathwayFile, pathwaysChecked, pathwaysSaved } = this.props
+		const { classes, locale, systemLocaleMap, currentPathwayFile, pathwaysChecked, pathwaysSaved } = this.props
 		const isFavorited = !!this.findMatchingPathway(pathwaysSaved)
 
 		return (

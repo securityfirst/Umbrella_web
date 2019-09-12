@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -72,10 +73,10 @@ class Index extends React.Component {
 	}
 
 	render() {
-		const { classes } = this.props
+		const { classes, locale, systemLocaleMap } = this.props
 
 		return (
-			<Layout title="Umbrella | Home" description="Umbrella web application">
+			<Layout title={systemLocaleMap[locale].app_name} description="Umbrella web application">
 				<div className={classes.content}>
 					<Paper className={classes.paper} elevation={1}>
 						<div className={classes.headerWrapper}>
@@ -147,4 +148,8 @@ class Index extends React.Component {
 	}
 }
 
-export default withStyles(styles, {withTheme: true})(Index)
+const mapStateToProps = (state) => ({
+	...state.view,
+})
+
+export default connect(mapStateToProps)(withStyles(styles, {withTheme: true})(Index))
