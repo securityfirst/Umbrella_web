@@ -128,7 +128,7 @@ class LessonsLevel extends React.Component {
 	}
 
 	componentDidMount() {
-		const { router, dispatch, content, locale, systemLocaleMap } = this.props
+		const { router, dispatch, content, systemLocaleMap } = this.props
 		const { locale, category, level } = router.query
 
 		dispatch(setAppbarTitle(systemLocaleMap[locale].lesson_title))
