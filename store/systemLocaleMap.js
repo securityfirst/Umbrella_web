@@ -104,6 +104,7 @@ export default {
 		"password_one_capital": "يجب أن يكون لكلمة المرور حرف واحد كبير على الأقل",
 		"password_one_small": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل",
 		"password_too_short": "كلمة المرور قصيرة جدا",
+		"password_empty": "لا يمكن أن تكون كلمة المرور فارغة",
 		"skip_password_warning": "هل تريد بالتأكيد الاستمرار في استخدام التطبيق بدون تعيين كلمة المرور؟ \n\n يؤدي هذا إلى تقليل سلامتك بشكل كبير في ما يتعلق بأي بيانات يمكن تحديدها وإدخالها في Umbrella",
 		"error_password": "خطأ عند محاولة تغيير كلمة المرور الخاصة بك.",
 		"password_changed": "تم تغيير كلمة السر.",
@@ -186,7 +187,14 @@ export default {
 		"status": "الحالة",
 		"disclaimer": "تنصل",
 		"disclaimer_description": "لا نقوم بتخزين أي بيانات على خوادمنا أثناء استخدامك ، بما في ذلك كلمة مرورك. تم إنشاء كلمة المرور الخاصة بك وتخزينها على المستعرض الخاص بك ، ويتم استخدامها لترميز معلومات أخرى قمت باختيارها لتخزينها. يرجى عدم استخدام مجموعة كلمات مرور حساسة في حالة ضمه.",
-		"confirm_delete_cache": "هل تريد بالتأكيد حذف ذاكرة التخزين المؤقت الخاصة بك؟ سيؤدي ذلك إلى إزالة جميع البيانات ، بما في ذلك كلمة المرور الخاصة بك."
+		"confirm_delete_cache": "هل تريد بالتأكيد حذف ذاكرة التخزين المؤقت الخاصة بك؟ سيؤدي ذلك إلى إزالة جميع البيانات ، بما في ذلك كلمة المرور الخاصة بك.",
+		"password_not_set": "ليس لديك مجموعة كلمات مرور",
+		"old_password": "كلمة سر قديمة",
+		"new_password": "كلمة سر جديدة",
+		"general_error": "هناك خطأ ما",
+		"password_unset_success": "تم حذف كلمة المرور بنجاح",
+		"password_not_exist": "كلمة المرور غير موجودة",
+		"password_incorrect": "كلمة المرور غير صحيحة"
 	},
 	"en": {
 		"app_name": "Umbrella",
@@ -293,6 +301,7 @@ export default {
 		"password_one_capital": "Password must have at least one capital letter",
 		"password_one_small": "Password must have at least one small letter",
 		"password_too_short": "Password too short",
+		"password_empty": "Password cannot be empty",
 		"skip_password_warning": "Are you sure you want to continue using the app without setting the password?\n\nThis significantly diminishes your safety in regards with any identifiable data you input into Umbrella",
 		"error_password": "Error when try to change your password.",
 		"password_changed": "Password changed.",
@@ -376,7 +385,14 @@ export default {
 		"status": "Status",
 		"disclaimer": "Disclaimer",
 		"disclaimer_description": "WE DO NOT STORE ANY DATA ON OUR SERVERS DURING YOUR USAGE, INCLUDING YOUR PASSWORD. YOUR PASSWORD IS ENCODED AND STORED ON YOUR BROWSER, AND IT IS USED TO DECODE OTHER INFORMATION YOU CHOOSE TO STORE. PLEASE DO NOT USE A SENSITIVE PASSWORD COMBINATION IN CASE IT IS COMPROMISED.",
-		"confirm_delete_cache": "Are you sure you want to delete your cache? It will remove all data, including your password."
+		"confirm_delete_cache": "Are you sure you want to delete your cache? It will remove all data, including your password.",
+		"password_not_set": "You don't have a password set.",
+		"old_password": "Old Password",
+		"new_password": "New Password",
+		"general_error": "Something went wrong",
+		"password_unset_success": "Password was successfully deleted",
+		"password_not_exist": "Password does not exist",
+		"password_incorrect": "Password is incorrect"
 	},
 	"es": {
 		"app_name": "Umbrella",
@@ -483,6 +499,7 @@ export default {
 		"password_one_capital": "La contraseña debe tener al menos una letra mayúscula",
 		"password_one_small": "La contraseña debe tener al menos una letra minúscula",
 		"password_too_short": "Contraseña demasiado corta",
+		"password_empty": "La contraseña no puede estar vacía",
 		"skip_password_warning": "¿Está seguro de que desea continuar usando la aplicación sin establecer la contraseña?\n\nEsto disminuye significativamente su seguridad en relación con cualquier dato identificable que introduzca en Umbrella",
 		"error_password": "Error al intentar cambiar su contraseña",
 		"password_changed": "Contraseña cambiada",
@@ -565,7 +582,14 @@ export default {
 		"status": "Estado",
 		"disclaimer": "Descargo de responsabilidad",
 		"disclaimer_description": "NO ALMACENAMOS DATOS EN NUESTROS SERVIDORES DURANTE SU USO, INCLUIDA SU CONTRASEÑA. SU CONTRASEÑA ESTÁ CODIFICADA Y ALMACENADA EN SU NAVEGADOR, Y SE UTILIZA PARA DESCODIFICAR OTRA INFORMACIÓN QUE ELIJA ALMACENAR. POR FAVOR NO USE UNA COMBINACIÓN DE CONTRASEÑA SENSIBLE EN CASO DE QUE SE COMPROMETE.",
-		"confirm_delete_cache": "¿Estás seguro de que deseas eliminar tu caché? Eliminará todos los datos, incluida su contraseña."
+		"confirm_delete_cache": "¿Estás seguro de que deseas eliminar tu caché? Eliminará todos los datos, incluida su contraseña.",
+		"password_not_set": "No tienes una contraseña establecida",
+		"old_password": "Contraseña anterior",
+		"new_password": "Nueva contraseña",
+		"general_error": "Algo salió mal",
+		"password_unset_success": "La contraseña fue eliminada exitosamente",
+		"password_not_exist": "La contraseña no existe",
+		"password_incorrect": "La contraseña es incorrecta"
 	},
 	"fa": {
 		"app_name": "چتر",
@@ -672,6 +696,7 @@ export default {
 		"password_one_capital": "رمز عبور باید حداقل یک حرف بزرگ داشته باشد",
 		"password_one_small": "رمز عبور باید حداقل یک حرف کوچک داشته باشد",
 		"password_too_short": "رمز عبور خیلی کوتاه است",
+		"password_empty": "رمز عبور نمی تواند خالی باشد",
 		"skip_password_warning": "آیا مطمئن هستید که میخواهید بدون استفاده از گذرواژه از برنامه استفاده کنید؟ \n\n این امر ایمنی شما را با توجه به داده های قابل شناسایی که در چتر وارد می کنید، کاهش می دهد",
 		"error_password": "هنگام تلاش برای تغییر رمز عبور شما، خطایی رخ داده است",
 		"password_changed": "رمز عبور تغییر کرد.",
@@ -754,7 +779,14 @@ export default {
 		"status": "وضعیت",
 		"disclaimer": "سلب مسئولیت",
 		"disclaimer_description": "ما هیچ گونه اطلاعاتی را در سرویس دهندگان ما که از استفاده شما استفاده می کنند ، ذخیره نمی کنیم ، از جمله عبور شما. رمز عبور شما در مرورگر شما وارد شده و در آن ذخيره شده است ، و از آن براي رمزگشايي اطلاعات ديگري كه براي خريد آن استفاده مي كنيد ، استفاده مي شود. لطفا از ترکیب حسگر عبور در مواردی که جمع می شود استفاده نکنید.",
-		"confirm_delete_cache": "مطمئن هستید که می خواهید حافظه نهان خود را حذف کنید؟ تمام داده ها ، از جمله رمز عبور شما را حذف می کند."
+		"confirm_delete_cache": "مطمئن هستید که می خواهید حافظه نهان خود را حذف کنید؟ تمام داده ها ، از جمله رمز عبور شما را حذف می کند.",
+		"password_not_set": "شما یک مجموعه رمز عبور ندارید",
+		"old_password": "رمز عبور قدیمی",
+		"new_password": "رمز عبور جدید",
+		"general_error": "مشکلی پیش آمد",
+		"password_unset_success": "رمز عبور با موفقیت حذف شد",
+		"password_not_exist": "رمز عبور وجود ندارد",
+		"password_incorrect": "رمز عبور نادرست است"
 	},
 	"ru": {
 		"app_name": "Umbrella",
@@ -861,6 +893,7 @@ export default {
 		"password_one_capital": "Пароль должен содержать хотя бы одну заглавную букву",
 		"password_one_small": "Пароль должен содержать хотя бы одну маленькую букву",
 		"password_too_short": "Пароль слишком короткий",
+		"password_empty": "Пароль не может быть пустым",
 		"skip_password_warning": "Вы уверены, что хотите продолжать использовать приложение без установки пароля? \n \n Это значительно снижает вашу безопасность в отношении любых идентифицируемых данных, которые вы вводите в Umbrella",
 		"error_password": "Ошибка при попытке сменить пароль.",
 		"password_changed": "Пароль изменен.",
@@ -943,7 +976,14 @@ export default {
 		"status": "Статус",
 		"disclaimer": "отказ",
 		"disclaimer_description": "Мы не храним никаких данных о наших серверах во время вашего использования, включая ваш пароль. Ваш пароль кодируется и хранится на вашем браузере, и он используется для расшифровки другой информации, которую вы выбираете для хранения. ПОЖАЛУЙСТА, НЕ ИСПОЛЬЗУЙТЕ ЧУВСТВИТЕЛЬНУЮ ПАРОЛЬНУЮ КОМБИНАЦИЮ В СЛУЧАЕ, КОТОРЫЙ СУЩЕСТВУЕТ.",
-		"confirm_delete_cache": "Вы уверены, что хотите удалить свой кеш? Это удалит все данные, включая ваш пароль."
+		"confirm_delete_cache": "Вы уверены, что хотите удалить свой кеш? Это удалит все данные, включая ваш пароль.",
+		"password_not_set": "У вас нет пароля",
+		"old_password": "Прежний пароль",
+		"new_password": "Новый пароль",
+		"general_error": "Что-то пошло не так",
+		"password_unset_success": "Пароль был успешно удален",
+		"password_not_exist": "Пароль не существует",
+		"password_incorrect": "Неверный пароль"
 	},
 	"zh-Hant": {
 		"app_name": "Umbrella",
@@ -1050,6 +1090,7 @@ export default {
 		"password_one_capital": "密碼至少要有一個大寫字母",
 		"password_one_small": "密碼至少要有一個小寫字母",
 		"password_too_short": "密碼太短",
+		"password_empty": "密碼不能為空",
 		"skip_password_warning": "您確定要在不設置密碼的情況下繼續使用該應用程序嗎？ \n\n對於您在umbrella輸入的任何可識別數據，這會大大降低您的安全性。",
 		"error_password": "嘗試更改密碼時出錯。",
 		"password_changed": "密碼已更改。",
@@ -1132,6 +1173,13 @@ export default {
 		"status": "狀態",
 		"disclaimer": "放棄",
 		"disclaimer_description": "在您使用期間，我們不會在我們的服務器上存儲任何數據，包括您的密碼。 您的密碼已編碼並存儲在您的瀏覽器中，並用於解碼您選擇存儲的其他信息。 請不要使用敏感的密碼組合，以免造成損壞。",
-		"confirm_delete_cache": "您確定要刪除緩存嗎？ 它將刪除所有數據，包括您的密碼。"
+		"confirm_delete_cache": "您確定要刪除緩存嗎？ 它將刪除所有數據，包括您的密碼。",
+		"password_not_set": "您沒有設置密碼",
+		"old_password": "舊密碼",
+		"new_password": "新密碼",
+		"general_error": "出問題了",
+		"password_unset_success": "密碼已成功刪除",
+		"password_not_exist": "密碼不存在",
+		"password_incorrect": "密碼錯誤"
 	}
 }

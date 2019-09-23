@@ -119,7 +119,6 @@ class Account extends React.Component {
 		const { dispatch, router, locale, systemLocaleMap } = this.props
 		const { query } = router
 		if (query && query.setpassword) this.setState({expanded: 2})
-			console.log("systemLocaleMap[locale].account_title: ", systemLocaleMap[locale].account_title);
 		dispatch(setAppbarTitle(systemLocaleMap[locale].account_title))
 	}
 
@@ -188,24 +187,19 @@ class Account extends React.Component {
 	}
 
 	checkPassword = type => {
+		const { locale, systemLocaleMap } = this.props
 		const value = this.state[type]
 
 		if (!value) {
 			this.setState({
 				[`${type}Error`]: true,
-				[`${type}ErrorMessage`]: 'Password cannot be empty',
+				[`${type}ErrorMessage`]: systemLocaleMap[locale].password_empty,
 			})
 			return false
-		} else if (value.length < 8) {
+		} else if (value.length < 8 || !RegExp('[A-Z]+[0-9]*').test(value)) {
 			this.setState({
 				[`${type}Error`]: true,
-				[`${type}ErrorMessage`]: 'Password must be at least 8 characters long',
-			})
-			return false
-		} else if (!RegExp('[A-Z]+[0-9]*').test(value)) {
-			this.setState({
-				[`${type}Error`]: true,
-				[`${type}ErrorMessage`]: 'Password must include at least one digit and one capital letter',
+				[`${type}ErrorMessage`]: systemLocaleMap[locale].account_password_alert_description,
 			})
 			return false
 		} else {
@@ -220,7 +214,7 @@ class Account extends React.Component {
 	savePassword = e => {
 		!!e && e.preventDefault()
 
-		const { dispatch, router, passwordExists } = this.props
+		const { dispatch, router, locale, systemLocaleMap, passwordExists } = this.props
 		const { password, passwordConfirm, passwordOld } = this.state
 
 		if (
@@ -228,7 +222,7 @@ class Account extends React.Component {
 			this.checkPassword('passwordConfirm')
 		) {
 			if (password !== passwordConfirm) {
-				return dispatch(openAlert('error', 'Passwords do not match - please try again'))
+				return dispatch(openAlert('error', systemLocaleMap[locale].confirm_password_error_message))
 			}
 
 			if (passwordExists) {
@@ -266,10 +260,10 @@ class Account extends React.Component {
 	}
 
 	unsetPassword = e => {
-		const { dispatch, passwordExists, isProtected } = this.props
+		const { dispatch, locale, systemLocaleMap, passwordExists, isProtected } = this.props
 
 		if (!passwordExists || !isProtected) {
-			return dispatch(openAlert('warning', 'You don\'t have a password set.'))
+			return dispatch(openAlert('warning', systemLocaleMap[locale].password_not_set))
 		}
 
 		dispatch(unsetPassword())
@@ -416,7 +410,10 @@ class Account extends React.Component {
 					id="reg-password"
 					className={classes.input}
 					type="password"
-					label={systemLocaleMap[locale].account_password_alert_password}
+					label={passwordExists
+						? systemLocaleMap[locale].new_password
+						: systemLocaleMap[locale].account_password_alert_password
+					}
 					value={password}
 					error={passwordError}
 					errorMessage={passwordErrorMessage}
@@ -429,7 +426,10 @@ class Account extends React.Component {
 					id="reg-passwordConfirm"
 					className={classes.input}
 					type="password"
-					label={passwordExists ? systemLocaleMap[locale].reset_password_title : systemLocaleMap[locale].account_password_alert_confirm}
+					label={passwordExists 
+						? systemLocaleMap[locale].reset_password_title 
+						: systemLocaleMap[locale].account_password_alert_confirm
+					}
 					value={passwordConfirm}
 					error={passwordConfirmError}
 					errorMessage={passwordConfirmErrorMessage}
