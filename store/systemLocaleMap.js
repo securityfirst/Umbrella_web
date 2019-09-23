@@ -194,7 +194,17 @@ export default {
 		"general_error": "هناك خطأ ما",
 		"password_unset_success": "تم حذف كلمة المرور بنجاح",
 		"password_not_exist": "كلمة المرور غير موجودة",
-		"password_incorrect": "كلمة المرور غير صحيحة"
+		"password_incorrect": "كلمة المرور غير صحيحة",
+		"confirm_delete_rss": "هل أنت متأكد من أنك تريد حذف مصدر RSS هذا؟",
+		"url_invalid": "الإدخال ليس عنوان URL صالحًا",
+		"feed_location_required": "موقع التغذية مطلوب",
+		"feed_sources_required": "مصادر التغذية مطلوبة",
+		"feed_location_saved": "تم حفظ الموقع",
+		"feed_rss_saved": "تم حفظ مصدر RSS",
+		"feed_rss_exists": "تمت إضافة مصدر RSS هذا بالفعل إلى قائمتك",
+		"feed_rss_not_exist": "مصدر RSS هذا غير موجود في قائمتك",
+		"feed_rss_removed": "تم إزالة مصدر RSS",
+		"url_check": "يرجى التحقق من عنوان URL الخاص بك"
 	},
 	"en": {
 		"app_name": "Umbrella",
@@ -392,7 +402,17 @@ export default {
 		"general_error": "Something went wrong",
 		"password_unset_success": "Password was successfully deleted",
 		"password_not_exist": "Password does not exist",
-		"password_incorrect": "Password is incorrect"
+		"password_incorrect": "Password is incorrect",
+		"confirm_delete_rss": "Are you sure you want to delete this RSS source?",
+		"url_invalid": "Input is not a valid URL",
+		"feed_location_required": "Feed location is required",
+		"feed_sources_required": "Feed sources are required",
+		"feed_location_saved": "Location saved",
+		"feed_rss_saved": "RSS source saved",
+		"feed_rss_exists": "This RSS source is already added to your list",
+		"feed_rss_not_exist": "This RSS source does not exist on your list",
+		"feed_rss_removed": "RSS source has been removed",
+		"url_check": "Please check your URL"
 	},
 	"es": {
 		"app_name": "Umbrella",
@@ -589,7 +609,17 @@ export default {
 		"general_error": "Algo salió mal",
 		"password_unset_success": "La contraseña fue eliminada exitosamente",
 		"password_not_exist": "La contraseña no existe",
-		"password_incorrect": "La contraseña es incorrecta"
+		"password_incorrect": "La contraseña es incorrecta",
+		"confirm_delete_rss": "¿Seguro que quieres eliminar esta fuente RSS?",
+		"url_invalid": "La entrada no es una URL válida",
+		"feed_location_required": "Se requiere ubicación de alimentación",
+		"feed_sources_required": "Se requieren fuentes de alimentación",
+		"feed_location_saved": "Ubicación guardada",
+		"feed_rss_saved": "Fuente RSS guardada",
+		"feed_rss_exists": "Esta fuente RSS ya está agregada a su lista",
+		"feed_rss_not_exist": "Esta fuente RSS no existe en su lista",
+		"feed_rss_removed": "La fuente RSS ha sido eliminada",
+		"url_check": "Por favor revise su URL"
 	},
 	"fa": {
 		"app_name": "چتر",
@@ -786,7 +816,17 @@ export default {
 		"general_error": "مشکلی پیش آمد",
 		"password_unset_success": "رمز عبور با موفقیت حذف شد",
 		"password_not_exist": "رمز عبور وجود ندارد",
-		"password_incorrect": "رمز عبور نادرست است"
+		"password_incorrect": "رمز عبور نادرست است",
+		"confirm_delete_rss": "آیا مطمئن هستید که می خواهید این منبع RSS را حذف کنید؟",
+		"url_invalid": "ورودی یک URL معتبر نیست",
+		"feed_location_required": "مکان خوراک مورد نیاز است",
+		"feed_sources_required": "منابع خوراک مورد نیاز است",
+		"feed_location_saved": "مکان ذخیره شد",
+		"feed_rss_saved": "منبع RSS ذخیره شد",
+		"feed_rss_exists": "این منبع RSS قبلاً به لیست شما اضافه شده است",
+		"feed_rss_not_exist": "این منبع RSS در لیست شما وجود ندارد",
+		"feed_rss_removed": "منبع RSS حذف شده است",
+		"url_check": "لطفا آدرس اینترنتی خود را بررسی کنید"
 	},
 	"ru": {
 		"app_name": "Umbrella",
@@ -983,7 +1023,17 @@ export default {
 		"general_error": "Что-то пошло не так",
 		"password_unset_success": "Пароль был успешно удален",
 		"password_not_exist": "Пароль не существует",
-		"password_incorrect": "Неверный пароль"
+		"password_incorrect": "Неверный пароль",
+		"confirm_delete_rss": "Вы уверены, что хотите удалить этот источник RSS?",
+		"url_invalid": "Введен неверный URL",
+		"feed_location_required": "Место подачи обязательно",
+		"feed_sources_required": "Требуются источники кормов",
+		"feed_location_saved": "Местоположение сохранено",
+		"feed_rss_saved": "RSS источник сохранен",
+		"feed_rss_exists": "Этот источник RSS уже добавлен в ваш список",
+		"feed_rss_not_exist": "Этот источник RSS не существует в вашем списке",
+		"feed_rss_removed": "RSS источник удален",
+		"url_check": "Пожалуйста, проверьте ваш URL"
 	},
 	"zh-Hant": {
 		"app_name": "Umbrella",
@@ -1180,6 +1230,16 @@ export default {
 		"general_error": "出問題了",
 		"password_unset_success": "密碼已成功刪除",
 		"password_not_exist": "密碼不存在",
-		"password_incorrect": "密碼錯誤"
+		"password_incorrect": "密碼錯誤",
+		"confirm_delete_rss": "您確定要刪除此RSS源嗎？",
+		"url_invalid": "輸入的網址無效",
+		"feed_location_required": "提要位置是必需的",
+		"feed_sources_required": "飼料來源是必需的",
+		"feed_location_saved": "位置已保存",
+		"feed_rss_saved": "RSS源已保存",
+		"feed_rss_exists": "此RSS來源已添加到您的列表中",
+		"feed_rss_not_exist": "此RSS來源在您的列表中不存在",
+		"feed_rss_removed": "RSS源已被刪除",
+		"url_check": "請檢查您的網址"
 	}
 }

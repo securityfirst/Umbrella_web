@@ -44,10 +44,10 @@ class RssSourceAdd extends React.Component {
 	handleSubmit = e => {
 		!!e && e.preventDefault()
 
-		const { dispatch, closeModal } = this.props
+		const { dispatch, locale, systemLocaleMap, closeModal } = this.props
 		const { source } = this.state
 
-		if (!isUrl(source)) return dispatch(openAlert('error', 'Input is not a valid URL'))
+		if (!isUrl(source)) return dispatch(openAlert('error', systemLocaleMap[locale].url_invalid))
 
 		dispatch(addRssSource(source, closeModal))
 	}
