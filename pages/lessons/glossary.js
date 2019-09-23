@@ -39,13 +39,19 @@ const styles = theme => ({
 })
 
 class LessonsGlossary extends React.Component {
-	componentWillUnmount() {
-		this.props.dispatch(toggleLessonsMenu(false))
-	}
-
 	componentDidMount() {
 		const { dispatch, locale, systemLocaleMap } = this.props
 		dispatch(setAppbarTitle(systemLocaleMap[locale].lesson_title))
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].lesson_title))
+		}
+	}
+
+	componentWillUnmount() {
+		this.props.dispatch(toggleLessonsMenu(false))
 	}
 
 	render() {

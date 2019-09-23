@@ -53,6 +53,12 @@ class Forms extends React.Component {
 		dispatch(setAppbarTitle(systemLocaleMap[locale].form_title))
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].form_title))
+		}
+	}
+
 	checkLogin = e => {
 		const { dispatch, isProtected, password } = this.props
 

@@ -85,6 +85,12 @@ class LessonsCategory extends React.Component {
 		dispatch(setAppbarTitle(systemLocaleMap[locale].lesson_title))
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].lesson_title))
+		}
+	}
+
 	componentWillUnmount() {
 		this.props.dispatch(toggleLessonsMenu(false))
 	}

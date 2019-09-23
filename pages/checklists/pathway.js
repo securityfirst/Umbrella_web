@@ -62,6 +62,12 @@ class Pathway extends React.Component {
 		dispatch(setAppbarTitle(systemLocaleMap[locale].checklist_title))
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].checklist_title))
+		}
+	}
+
 	findMatchingPathway = pathways => {
 		const { currentPathwayFile } = this.props
 

@@ -84,6 +84,12 @@ class FormEdit extends React.Component {
 		}))
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].form_title))
+		}
+	}
+
 	onChange = (field, value) => {
 		const { activeStep, formState } = this.state
 

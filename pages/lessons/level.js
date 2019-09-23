@@ -152,6 +152,12 @@ class LessonsLevel extends React.Component {
 
 		this.setState({files, checklist})
 	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].lesson_title))
+		}
+	}
 	
 	componentWillUnmount() {
 		this.props.dispatch(toggleLessonsMenu(false))

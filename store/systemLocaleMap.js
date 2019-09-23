@@ -180,7 +180,13 @@ export default {
 		"no_thanks_button": "لا شكرا ، سأستكشف وحدي",
 		"pathways_text": "حدد دليلًا لبدء رحلة الأمان أو \n قم بوضع إشارة على أي دليل لاحقًا",
 		"pathways_title": "ماذا تحتاج أكثر؟",
-		"see_all": "اظهار الكل"
+		"see_all": "اظهار الكل",
+		"delete_cache": "حذف ذاكرة التخزين المؤقت",
+		"delete_cache_description": "جميع الإعدادات والتفضيلات ، بما في ذلك كلمة المرور الخاصة بك ، يتم تشفيرها وتخزينها في مخزن المتصفح المحلي. سيؤدي حذف ذاكرة التخزين المؤقت إلى إزالة جميع البيانات ، بما في ذلك كلمة المرور الخاصة بك.",
+		"status": "الحالة",
+		"disclaimer": "تنصل",
+		"disclaimer_description": "لا نقوم بتخزين أي بيانات على خوادمنا أثناء استخدامك ، بما في ذلك كلمة مرورك. تم إنشاء كلمة المرور الخاصة بك وتخزينها على المستعرض الخاص بك ، ويتم استخدامها لترميز معلومات أخرى قمت باختيارها لتخزينها. يرجى عدم استخدام مجموعة كلمات مرور حساسة في حالة ضمه.",
+		"confirm_delete_cache": "هل تريد بالتأكيد حذف ذاكرة التخزين المؤقت الخاصة بك؟ سيؤدي ذلك إلى إزالة جميع البيانات ، بما في ذلك كلمة المرور الخاصة بك."
 	},
 	"en": {
 		"app_name": "Umbrella",
@@ -364,7 +370,13 @@ export default {
 		"no_thanks_button": "No thanks, I'll explore on my own",
 		"pathways_text": "Select a guide to start your security journey or \nbookmark any guide for later",
 		"pathways_title": "What do you need most?",
-		"see_all": "See all"
+		"see_all": "See all",
+		"delete_cache": "Delete cache",
+		"delete_cache_description": "All settings and preferences, including your password, are encrypted and stored in your local browser storage. Deleting your cache will remove all data, including your password.",
+		"status": "Status",
+		"disclaimer": "Disclaimer",
+		"disclaimer_description": "WE DO NOT STORE ANY DATA ON OUR SERVERS DURING YOUR USAGE, INCLUDING YOUR PASSWORD. YOUR PASSWORD IS ENCODED AND STORED ON YOUR BROWSER, AND IT IS USED TO DECODE OTHER INFORMATION YOU CHOOSE TO STORE. PLEASE DO NOT USE A SENSITIVE PASSWORD COMBINATION IN CASE IT IS COMPROMISED.",
+		"confirm_delete_cache": "Are you sure you want to delete your cache? It will remove all data, including your password."
 	},
 	"es": {
 		"app_name": "Umbrella",
@@ -547,7 +559,13 @@ export default {
 		"no_thanks_button": "No gracias, exploraré por mi cuenta",
 		"pathways_text": "Seleccione una guía para comenzar su viaje de seguridad o \nmarque cualquier guía para más adelante",
 		"pathways_title": "¿Qué es lo que más necesita",
-		"see_all": "Ver todo"
+		"see_all": "Ver todo",
+		"delete_cache": "Eliminar caché",
+		"delete_cache_description": "Todas las configuraciones y preferencias, incluida su contraseña, se cifran y almacenan en el almacenamiento de su navegador local. Eliminar su caché eliminará todos los datos, incluida su contraseña.",
+		"status": "Estado",
+		"disclaimer": "Descargo de responsabilidad",
+		"disclaimer_description": "NO ALMACENAMOS DATOS EN NUESTROS SERVIDORES DURANTE SU USO, INCLUIDA SU CONTRASEÑA. SU CONTRASEÑA ESTÁ CODIFICADA Y ALMACENADA EN SU NAVEGADOR, Y SE UTILIZA PARA DESCODIFICAR OTRA INFORMACIÓN QUE ELIJA ALMACENAR. POR FAVOR NO USE UNA COMBINACIÓN DE CONTRASEÑA SENSIBLE EN CASO DE QUE SE COMPROMETE.",
+		"confirm_delete_cache": "¿Estás seguro de que deseas eliminar tu caché? Eliminará todos los datos, incluida su contraseña."
 	},
 	"fa": {
 		"app_name": "چتر",
@@ -730,7 +748,13 @@ export default {
 		"no_thanks_button": "نه ممنون، خودم تنهایی کاوش خواهم کرد",
 		"pathways_text": "یک راهنمایی برای شروع سفر امنیتی خود انتخاب کنید یا \nbookmark هر راهنمایی برای بعد انتخاب کنید",
 		"pathways_title": "به چه چیزی بیشتر نیاز دارید؟",
-		"see_all": "همه را ببین"
+		"see_all": "همه را ببین",
+		"delete_cache": "حافظه نهان را حذف کنید",
+		"delete_cache_description": "کلیه تنظیمات و تنظیمات برگزیده از جمله رمز عبور شما رمزگذاری شده و در حافظه محلی مرورگر شما ذخیره می شود. با حذف حافظه نهان ، همه داده ها ، از جمله گذرواژه شما حذف می شود.",
+		"status": "وضعیت",
+		"disclaimer": "سلب مسئولیت",
+		"disclaimer_description": "ما هیچ گونه اطلاعاتی را در سرویس دهندگان ما که از استفاده شما استفاده می کنند ، ذخیره نمی کنیم ، از جمله عبور شما. رمز عبور شما در مرورگر شما وارد شده و در آن ذخيره شده است ، و از آن براي رمزگشايي اطلاعات ديگري كه براي خريد آن استفاده مي كنيد ، استفاده مي شود. لطفا از ترکیب حسگر عبور در مواردی که جمع می شود استفاده نکنید.",
+		"confirm_delete_cache": "مطمئن هستید که می خواهید حافظه نهان خود را حذف کنید؟ تمام داده ها ، از جمله رمز عبور شما را حذف می کند."
 	},
 	"ru": {
 		"app_name": "Umbrella",
@@ -913,7 +937,13 @@ export default {
 		"no_thanks_button": "Нет, спасибо, я буду следить за этим самостоятельно",
 		"pathways_text": "Выберите руководство, чтобы начать безопасное путешествие, или \n добавьте любое руководство в закладки",
 		"pathways_title": "Что тебе нужно больше всего?",
-		"see_all": "Посмотреть все"
+		"see_all": "Посмотреть все",
+		"delete_cache": "Удалить кеш",
+		"delete_cache_description": "Все настройки и настройки, включая ваш пароль, зашифрованы и хранятся в вашем локальном хранилище браузера. Удаление кеша удалит все данные, включая ваш пароль.",
+		"status": "Статус",
+		"disclaimer": "отказ",
+		"disclaimer_description": "Мы не храним никаких данных о наших серверах во время вашего использования, включая ваш пароль. Ваш пароль кодируется и хранится на вашем браузере, и он используется для расшифровки другой информации, которую вы выбираете для хранения. ПОЖАЛУЙСТА, НЕ ИСПОЛЬЗУЙТЕ ЧУВСТВИТЕЛЬНУЮ ПАРОЛЬНУЮ КОМБИНАЦИЮ В СЛУЧАЕ, КОТОРЫЙ СУЩЕСТВУЕТ.",
+		"confirm_delete_cache": "Вы уверены, что хотите удалить свой кеш? Это удалит все данные, включая ваш пароль."
 	},
 	"zh-Hant": {
 		"app_name": "Umbrella",
@@ -1096,6 +1126,12 @@ export default {
 		"no_thanks_button": "不，謝謝，我將獨自探索",
 		"pathways_text": "選擇一個指南以開始您的安全旅程，或者 \n為任何指南添加標記以供日後使用",
 		"pathways_title": "你最需要什麼？",
-		"see_all": "查看全部"
+		"see_all": "查看全部",
+		"delete_cache": "刪除緩存",
+		"delete_cache_description": "所有設置和首選項（包括您的密碼）均已加密並存儲在本地瀏覽器存儲中。 刪除緩存將刪除所有數據，包括密碼。",
+		"status": "狀態",
+		"disclaimer": "放棄",
+		"disclaimer_description": "在您使用期間，我們不會在我們的服務器上存儲任何數據，包括您的密碼。 您的密碼已編碼並存儲在您的瀏覽器中，並用於解碼您選擇存儲的其他信息。 請不要使用敏感的密碼組合，以免造成損壞。",
+		"confirm_delete_cache": "您確定要刪除緩存嗎？ 它將刪除所有數據，包括您的密碼。"
 	}
 }

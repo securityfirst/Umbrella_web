@@ -119,7 +119,14 @@ class Account extends React.Component {
 		const { dispatch, router, locale, systemLocaleMap } = this.props
 		const { query } = router
 		if (query && query.setpassword) this.setState({expanded: 2})
+			console.log("systemLocaleMap[locale].account_title: ", systemLocaleMap[locale].account_title);
 		dispatch(setAppbarTitle(systemLocaleMap[locale].account_title))
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].account_title))
+		}
 	}
 
 	handlePanelToggle = i => (e, expanded) => {
@@ -127,7 +134,9 @@ class Account extends React.Component {
 	}
 
 	clearDb = () => {
-		if (confirm('Are you sure you want to delete your cache? It will remove all data, including your password.')) {
+		const { locale, systemLocaleMap } = this.props
+
+		if (confirm(systemLocaleMap[locale].confirm_delete_cache)) {
 			this.props.dispatch(clearDb())
 		}
 	}
@@ -317,11 +326,11 @@ class Account extends React.Component {
 
 				<div className={classes.settingsRow}>
 					<div className={classes.settingsColumnLeft}>
-						<Button color="primary" onClick={this.clearDb}>Delete Cache</Button>
+						<Button color="primary" onClick={this.clearDb}>{systemLocaleMap[locale].delete_cache}</Button>
 					</div>
 					<div className={classes.settingsColumnRight}>
 						<Typography variant="caption">
-							All settings and preferences, including your password, are encrypted and stored in your local browser storage. Deleting your cache will remove all data, including your password.
+							{systemLocaleMap[locale].delete_cache_description}
 						</Typography>
 					</div>
 				</div>
@@ -450,14 +459,11 @@ class Account extends React.Component {
 
 		return (
 			<React.Fragment>
-				<Typography paragraph><strong>Status: </strong>{
+				<Typography paragraph><strong>{systemLocaleMap[locale].status}: </strong>{
 					passwordExists ? systemLocaleMap[locale].password_success : systemLocaleMap[locale].settings_title_skip_pw
 				}</Typography>
 				<Typography className={classes.disclaimerLarge}>
-					<strong>DISCLAIMER: </strong> We do not store any data on our servers during your 
-					usage, including your password. Your password is encoded and stored on your browser, 
-					and it is used to decode other information you choose to store. Please do not use a 
-					sensitive password combination in case it is compromised.
+					<strong>{systemLocaleMap[locale].disclaimer}: </strong> {systemLocaleMap[locale].disclaimer_description}
 				</Typography>
 				{this.renderPasswordForm()}
 			</React.Fragment>

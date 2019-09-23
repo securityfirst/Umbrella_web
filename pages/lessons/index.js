@@ -54,10 +54,19 @@ const styles = theme => ({
 })
 
 class Lessons extends React.Component {
-	componentWillUnmount() {
+	componentDidMount() {
 		const { dispatch, locale, systemLocaleMap } = this.props
 		dispatch(setAppbarTitle(systemLocaleMap[locale].lesson_title))
-		dispatch(toggleLessonsMenu(false))
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].lesson_title))
+		}
+	}
+
+	componentWillUnmount() {
+		this.props.dispatch(toggleLessonsMenu(false))
 	}
 
 	render() {

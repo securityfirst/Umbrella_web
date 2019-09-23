@@ -66,10 +66,15 @@ const styles = theme => ({
 })
 
 class Index extends React.Component {
-	static async getInitialProps({reduxStore}) {
-		const state = reduxStore.getState()
-		const { locale, systemLocaleMap } = state.view
-		await reduxStore.dispatch(setAppbarTitle(systemLocaleMap[locale].app_name))
+	componentDidMount() {
+		const { dispatch, locale, systemLocaleMap } = this.props
+		dispatch(setAppbarTitle(systemLocaleMap[locale].app_name))
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].app_name))
+		}
 	}
 
 	render() {

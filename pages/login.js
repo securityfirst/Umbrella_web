@@ -71,6 +71,12 @@ class Login extends React.Component {
 		if (typeof window !== 'undefined') dispatch(checkPassword())
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].login_message_button))
+		}
+	}
+
 	handleLoginSubmit = e => {
 		!!e && e.preventDefault()
 
