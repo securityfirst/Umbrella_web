@@ -113,6 +113,8 @@ class Account extends React.Component {
 		passwordErrorMessage: '',
 		passwordConfirmError: null,
 		passwordConfirmErrorMessage: '',
+		passwordOldError: null,
+		passwordOldErrorMessage: '',
 	}
 
 	componentDidMount() {
@@ -195,20 +197,25 @@ class Account extends React.Component {
 				[`${type}Error`]: true,
 				[`${type}ErrorMessage`]: systemLocaleMap[locale].password_empty,
 			})
+
 			return false
-		} else if (value.length < 8 || !RegExp('[A-Z]+[0-9]*').test(value)) {
+		}
+
+		if (value.length < 8 || !RegExp('[A-Z]+[0-9]*').test(value)) {
 			this.setState({
 				[`${type}Error`]: true,
 				[`${type}ErrorMessage`]: systemLocaleMap[locale].account_password_alert_description,
 			})
+
 			return false
-		} else {
-			this.setState({
-				[`${type}Error`]: null,
-				[`${type}ErrorMessage`]: null,
-			})
-			return true
 		}
+
+		this.setState({
+			[`${type}Error`]: null,
+			[`${type}ErrorMessage`]: null,
+		})
+
+		return true
 	}
 
 	savePassword = e => {
@@ -226,17 +233,19 @@ class Account extends React.Component {
 			}
 
 			if (passwordExists) {
-				dispatch(resetPassword(password, passwordOld, () => {
-					this.setState({
-						password: '',
-						passwordConfirm: '',
-						passwordOld: '',
-						passwordError: null,
-						passwordErrorMessage: '',
-						passwordConfirmError: null,
-						passwordConfirmErrorMessage: '',
-					})
-				}))
+				if (this.checkPassword('passwordOld')) {
+					dispatch(resetPassword(password, passwordOld, () => {
+						this.setState({
+							password: '',
+							passwordConfirm: '',
+							passwordOld: '',
+							passwordError: null,
+							passwordErrorMessage: '',
+							passwordConfirmError: null,
+							passwordConfirmErrorMessage: '',
+						})
+					}))
+				}
 			} else {
 				dispatch(savePassword(password, () => {
 					if (router.pathname.indexOf('account') === -1) router.back()
@@ -389,6 +398,8 @@ class Account extends React.Component {
 			passwordErrorMessage,
 			passwordConfirmError, 
 			passwordConfirmErrorMessage,
+			passwordOldError,
+			passwordOldErrorMessage
 		} = this.state
 
 		return (
@@ -397,10 +408,10 @@ class Account extends React.Component {
 					id="old-password"
 					className={classes.input}
 					type="password"
-					label="Old Password"
+					label={systemLocaleMap[locale].old_password}
 					value={passwordOld}
-					error={passwordError}
-					errorMessage={passwordErrorMessage}
+					error={passwordOldError}
+					errorMessage={passwordOldErrorMessage}
 					onChange={this.handlePasswordChange('passwordOld')}
 					inputProps={{
 						onBlur: this.clearPasswordErrors

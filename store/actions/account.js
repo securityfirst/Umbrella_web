@@ -10,7 +10,8 @@ import { openAlert, setLocale } from './view'
 export const login = (password, cb) => (dispatch, getState) => {
 	dispatch(pending(accountTypes.LOGIN))
 	
-	const { locale, systemLocaleMap } = getState().view
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	try {
 		const ClientDB = require('../../db')
@@ -57,7 +58,8 @@ export const login = (password, cb) => (dispatch, getState) => {
 export const checkProtected = () => async (dispatch, getState) => {
 	dispatch(pending(accountTypes.CHECK_PROTECTED))
 
-	const { locale, systemLocaleMap } = getState().view
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 	
 	try {
 		const ClientDB = require('../../db')
@@ -80,7 +82,8 @@ export const checkProtected = () => async (dispatch, getState) => {
 export const checkPassword = () => async (dispatch, getState) => {
 	dispatch(pending(accountTypes.CHECK_PASSWORD))
 	
-	const { locale, systemLocaleMap } = getState().view
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	try {
 		const ClientDB = require('../../db')
@@ -103,7 +106,8 @@ export const checkPassword = () => async (dispatch, getState) => {
 export const savePassword = (password, cb) => (dispatch, getState) => {
 	dispatch(pending(accountTypes.SAVE_PASSWORD))
 	
-	const { locale, systemLocaleMap } = getState().view
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	try {
 		const ClientDB = require('../../db')
@@ -149,7 +153,8 @@ export const savePassword = (password, cb) => (dispatch, getState) => {
 export const resetPassword = (newPassword, oldPassword, cb) => async (dispatch, getState) => {
 	dispatch(pending(accountTypes.RESET_PASSWORD))
 
-	const { locale, systemLocaleMap } = getState().view
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	if (!oldPassword) {
 		if (!confirm(systemLocaleMap[locale].reset_password_text)) {
@@ -231,14 +236,13 @@ export const unsetPassword = () => async (dispatch, getState) => {
 	const { locale, systemLocaleMap } = state.view
 
 	try {
+		const Account  = require('../../account')
 
 		if (!isProtected) return dispatch(fulfilled(accountTypes.UNSET_PASSWORD))
 
 		if (!confirm(systemLocaleMap[locale].reset_password_text)) {
 			return dispatch(rejected(accountTypes.UNSET_PASSWORD, 'Action cancelled'))
 		}
-
-		const { locale } = state.view
 
 		await dispatch(clearDb())
 		await dispatch(setLocale(locale))
