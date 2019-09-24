@@ -270,7 +270,7 @@ export default {
 		"downloading_html": "جارٍ تنزيل HTML ...",
 		"downloading_pdf": "جارٍ تنزيل PDF ...",
 		"downloading_docx": "جارٍ تنزيل DOCX ...",
-		"download": "تحميل",
+		"download_title": "تحميل",
 		"copied": "نسخ!",
 		"copy_link": "انسخ الرابط",
 		"logout_success": "لقد تم تسجيل الخروج"
@@ -823,7 +823,7 @@ export default {
 		"downloading_html": "Descargando HTML ...",
 		"downloading_pdf": "Descargando PDF ...",
 		"downloading_docx": "Descargando DOCX ...",
-		"download": "Descargar",
+		"download_title": "Descargar",
 		"copied": "Copiado!",
 		"copy_link": "Copiar link",
 		"logout_success": "Has sido desconectado"
@@ -1099,7 +1099,7 @@ export default {
 		"downloading_html": "در حال بارگیری HTML ...",
 		"downloading_pdf": "در حال بارگیری PDF ...",
 		"downloading_docx": "در حال بارگیری DOCX ...",
-		"download": "دانلود",
+		"download_title": "دانلود",
 		"copied": "کپی شد!",
 		"copy_link": "پیوند را کپی کنید",
 		"logout_success": "شما خارج شده اید"
@@ -1375,7 +1375,7 @@ export default {
 		"downloading_html": "Загрузка HTML ...",
 		"downloading_pdf": "Загрузка PDF ...",
 		"downloading_docx": "Загрузка DOCX ...",
-		"download": "Скачать",
+		"download_title": "Скачать",
 		"copied": "Скопировано!",
 		"copy_link": "Копировать ссылку",
 		"logout_success": "Вы вышли из системы"
@@ -1651,7 +1651,7 @@ export default {
 		"downloading_html": "正在下載HTML ...",
 		"downloading_pdf": "正在下載PDF ...",
 		"downloading_docx": "正在下載DOCX ...",
-		"download": "下載",
+		"download_title": "下載",
 		"copied": "複製！",
 		"copy_link": "複製鏈接",
 		"logout_success": "您已註銷"
