@@ -272,7 +272,8 @@ export default {
 		"downloading_docx": "جارٍ تنزيل DOCX ...",
 		"download": "تحميل",
 		"copied": "نسخ!",
-		"copy_link": "انسخ الرابط"
+		"copy_link": "انسخ الرابط",
+		"logout_success": "لقد تم تسجيل الخروج"
 	},
 	"en": {
 		"app_name": "Umbrella",
@@ -548,7 +549,8 @@ export default {
 		"downloading_docx": "Downloading DOCX...",
 		"download_title": "Download",
 		"copied": "Copied!",
-		"copy_link": "Copy Link"
+		"copy_link": "Copy Link",
+		"logout_success": "You have been logged out"
 	},
 	"es": {
 		"app_name": "Umbrella",
@@ -823,7 +825,8 @@ export default {
 		"downloading_docx": "Descargando DOCX ...",
 		"download": "Descargar",
 		"copied": "Copiado!",
-		"copy_link": "Copiar link"
+		"copy_link": "Copiar link",
+		"logout_success": "Has sido desconectado"
 	},
 	"fa": {
 		"app_name": "چتر",
@@ -1098,7 +1101,8 @@ export default {
 		"downloading_docx": "در حال بارگیری DOCX ...",
 		"download": "دانلود",
 		"copied": "کپی شد!",
-		"copy_link": "پیوند را کپی کنید"
+		"copy_link": "پیوند را کپی کنید",
+		"logout_success": "شما خارج شده اید"
 	},
 	"ru": {
 		"app_name": "Umbrella",
@@ -1373,7 +1377,8 @@ export default {
 		"downloading_docx": "Загрузка DOCX ...",
 		"download": "Скачать",
 		"copied": "Скопировано!",
-		"copy_link": "Копировать ссылку"
+		"copy_link": "Копировать ссылку",
+		"logout_success": "Вы вышли из системы"
 	},
 	"zh-Hant": {
 		"app_name": "Umbrella",
@@ -1648,6 +1653,7 @@ export default {
 		"downloading_docx": "正在下載DOCX ...",
 		"download": "下載",
 		"copied": "複製！",
-		"copy_link": "複製鏈接"
+		"copy_link": "複製鏈接",
+		"logout_success": "您已註銷"
 	}
 }

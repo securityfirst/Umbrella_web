@@ -58,12 +58,12 @@ const styles = theme => ({
 
 class Appbar extends React.Component {
 	logout = () => {
-		const { dispatch } = this.props
+		const { dispatch, locale, systemLocaleMap } = this.props
 		const Account = require('../../account')
 
 		Account.default.logout()
 
-		dispatch(openAlert('success', 'You have been logged out'))
+		dispatch(openAlert('success', systemLocaleMap[locale].logout_success))
 
 		window.location.reload()
 	}
