@@ -241,7 +241,11 @@ export default {
 		"lesson_favorite_exists": "هذا الدرس موجود بالفعل في قائمة المفضلة لديك",
 		"lesson_favorite_added": "الدرس يضاف إلى المفضلة",
 		"lesson_favorite_removed": "تمت إزالة الدرس من المفضلة",
-		"lesson_favorite_not_exist": "هذا الدرس غير موجود في قائمة المفضلة لديك"
+		"lesson_favorite_not_exist": "هذا الدرس غير موجود في قائمة المفضلة لديك",
+		"database_sync_failure": "فشلت مزامنة قاعدة البيانات في المصادقة",
+		"database_already_encrypted": "قاعدة البيانات مشفرة بالفعل",
+		"database_reset_failure": "فشل إعادة تعيين قاعدة البيانات",
+		"database_already_cleared": "تم مسح قاعدة البيانات"
 	},
 	"en": {
 		"app_name": "Umbrella",
@@ -486,7 +490,11 @@ export default {
 		"lesson_favorite_exists": "This lesson already exists in your Favorites list",
 		"lesson_favorite_added": "Lesson added to favorites",
 		"lesson_favorite_removed": "Lesson removed from favorites",
-		"lesson_favorite_not_exist": "This lesson does not exist in your favorites list"
+		"lesson_favorite_not_exist": "This lesson does not exist in your favorites list",
+		"database_sync_failure": "Database sync failed to authenticate",
+		"database_already_encrypted": "Database is already encrypted",
+		"database_reset_failure": "Database failed to reset",
+		"database_already_cleared": "Database has been cleared"
 	},
 	"es": {
 		"app_name": "Umbrella",
@@ -730,7 +738,11 @@ export default {
 		"lesson_favorite_exists": "Esta lección ya existe en tu lista de favoritos",
 		"lesson_favorite_added": "Lección agregada a favoritos",
 		"lesson_favorite_removed": "Lección eliminada de favoritos",
-		"lesson_favorite_not_exist": "Esta lección no existe en tu lista de favoritos."
+		"lesson_favorite_not_exist": "Esta lección no existe en tu lista de favoritos.",
+		"database_sync_failure": "La sincronización de la base de datos no pudo autenticarse",
+		"database_already_encrypted": "La base de datos ya está encriptada",
+		"database_reset_failure": "La base de datos no se pudo restablecer",
+		"database_already_cleared": "La base de datos ha sido borrada"
 	},
 	"fa": {
 		"app_name": "چتر",
@@ -974,7 +986,11 @@ export default {
 		"lesson_favorite_exists": "این درس از قبل در لیست موارد دلخواه شما وجود دارد",
 		"lesson_favorite_added": "درس اضافه شده به موارد دلخواه",
 		"lesson_favorite_removed": "درسی از موارد برگزیده حذف شد",
-		"lesson_favorite_not_exist": "این درس در لیست موارد دلخواه شما وجود ندارد"
+		"lesson_favorite_not_exist": "این درس در لیست موارد دلخواه شما وجود ندارد",
+		"database_sync_failure": "همگام سازی پایگاه داده در تأیید اعتبار انجام نشد",
+		"database_already_encrypted": "بانک اطلاعاتی قبلاً رمزگذاری شده است",
+		"database_reset_failure": "تنظیم مجدد پایگاه داده انجام نشد",
+		"database_already_cleared": "بانک اطلاعات پاک شده است"
 	},
 	"ru": {
 		"app_name": "Umbrella",
@@ -1218,7 +1234,11 @@ export default {
 		"lesson_favorite_exists": "Этот урок уже существует в вашем списке избранного",
 		"lesson_favorite_added": "Урок добавлен в избранное",
 		"lesson_favorite_removed": "Урок удален из избранного",
-		"lesson_favorite_not_exist": "Этот урок не существует в вашем списке избранного"
+		"lesson_favorite_not_exist": "Этот урок не существует в вашем списке избранного",
+		"database_sync_failure": "Синхронизация базы данных не прошла проверку подлинности",
+		"database_already_encrypted": "База данных уже зашифрована",
+		"database_reset_failure": "Сбой базы данных",
+		"database_already_cleared": "База данных была очищена"
 	},
 	"zh-Hant": {
 		"app_name": "Umbrella",
@@ -1462,6 +1482,10 @@ export default {
 		"lesson_favorite_exists": "本課已存在於您的收藏夾列表中",
 		"lesson_favorite_added": "課程已添加到收藏夾",
 		"lesson_favorite_removed": "從最愛中刪除的課程",
-		"lesson_favorite_not_exist": "該課程在您的收藏夾列表中不存在"
+		"lesson_favorite_not_exist": "該課程在您的收藏夾列表中不存在",
+		"database_sync_failure": "數據庫同步驗證失敗",
+		"database_already_encrypted": "База данных уже зашифрована",
+		"database_reset_failure": "數據庫重置失敗",
+		"database_already_cleared": "數據庫已清除"
 	}
 }

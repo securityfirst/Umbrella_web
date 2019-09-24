@@ -24,6 +24,9 @@ import { clearView, openAlert } from './view'
 export const syncDb = () => async (dispatch, getState) => {
 	await dispatch(pending(dbTypes.SYNC_DB))
 
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
+
 	try {
 		const ClientDB = require('../../db')
 		const Account = require('../../account')
@@ -33,7 +36,7 @@ export const syncDb = () => async (dispatch, getState) => {
 		const password = await Account.default.password()
 
 		if (isProtected && (!hash || !password)) {
-			return await dispatch(rejected(dbTypes.SYNC_DB, 'DB sync failed to authenticate'))
+			return await dispatch(rejected(dbTypes.SYNC_DB, systemLocaleMap[locale].database_sync_failure))
 		}
 		
 		let feedLocation = await ClientDB.default.get('fe_l', password, true)
@@ -106,15 +109,16 @@ export const syncDb = () => async (dispatch, getState) => {
 export const encryptDb = (key, password) => async (dispatch, getState) => {
 	await dispatch(pending(dbTypes.ENCRYPT_DB))
 
-	try {
-		const state = getState()
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
+	try {
 		const ClientDB = require('../../db')
 
 		const currentPassword = await ClientDB.default.get('h', key)
 
 		if (currentPassword) {
-			return await dispatch(rejected(dbTypes.ENCRYPT_DB, 'DB is already encrypted'))
+			return await dispatch(rejected(dbTypes.ENCRYPT_DB, systemLocaleMap[locale].database_already_encrypted))
 		}
 
 		let feedLocation = await ClientDB.default.get('fe_l', null, true)
@@ -142,14 +146,15 @@ export const encryptDb = (key, password) => async (dispatch, getState) => {
 export const resetDbEncryption = (key, newPassword) => async (dispatch, getState) => {
 	await dispatch(pending(dbTypes.RESET_DB_ENCRYPTION))
 
-	try {
-		const state = getState()
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
+	try {
 		const ClientDB = require('../../db')
 
 		const password = await ClientDB.default.get('h', key)
 
-		if (!password) return await dispatch(rejected(dbTypes.RESET_DB_ENCRYPTION, 'DB failed to reset'))
+		if (!password) return await dispatch(rejected(dbTypes.RESET_DB_ENCRYPTION, systemLocaleMap[locale].database_reset_failure))
 
 		let feedLocation = await ClientDB.default.get('fe_l', password, true)
 		let feedSources = await ClientDB.default.get('fe_s', password, true)
@@ -176,12 +181,15 @@ export const resetDbEncryption = (key, newPassword) => async (dispatch, getState
 export const clearDb = () => async (dispatch, getState) => {
 	await dispatch(pending(dbTypes.CLEAR_DB))
 
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
+
 	try {
 		const ClientDB = require('../../db')
 
 		await ClientDB.default.clear()
 
-		await dispatch(openAlert('success', 'Database has been cleared'))
+		await dispatch(openAlert('success', systemLocaleMap[locale].database_already_cleared))
 
 		await dispatch(clearPassword())
 		await dispatch(clearFeeds())

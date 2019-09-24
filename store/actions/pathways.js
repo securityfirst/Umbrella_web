@@ -11,6 +11,9 @@ import { decodeBlob } from '../../utils/github'
 export const getPathwayFile = sha => async (dispatch, getState) => {
 	dispatch(pending(pathwaysTypes.GET_PATHWAY_FILE))
 
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
+
 	await fetch(`${process.env.ROOT}/api/github/content/${sha}`)
 		.then(res => {
 			if (!res.ok) throw res
@@ -20,7 +23,7 @@ export const getPathwayFile = sha => async (dispatch, getState) => {
 			dispatch(fulfilled(pathwaysTypes.GET_PATHWAY_FILE, YAML.parse(decodeBlob(content))))
 		})
 		.catch(err => {
-			dispatch(openAlert('error', 'Something went wrong'))
+			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 			dispatch(rejected(pathwaysTypes.GET_PATHWAY_FILE, err))
 		})
 }
@@ -29,9 +32,10 @@ export const updatePathwaysChecked = (pathwayTitle, item) => async (dispatch, ge
 	dispatch(pending(pathwaysTypes.UPDATE_PATHWAYS_CHECKED))
 
 	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Login to update your checklist'
+		const message = systemLocaleMap[locale].login_your_password
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(pathwaysTypes.UPDATE_PATHWAYS_CHECKED, message))
 	}
@@ -59,11 +63,11 @@ export const updatePathwaysChecked = (pathwayTitle, item) => async (dispatch, ge
 				dispatch(fulfilled(pathwaysTypes.UPDATE_PATHWAYS_CHECKED, newPathwaysChecked))
 			})
 			.catch(err => {
-				dispatch(openAlert('error', 'Something went wrong'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 				dispatch(rejected(pathwaysTypes.UPDATE_PATHWAYS_CHECKED, err))
 			})
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		dispatch(rejected(pathwaysTypes.UPDATE_PATHWAYS_CHECKED, e))
 	}
 }
@@ -72,6 +76,7 @@ export const getPathwaysSaved = () => async (dispatch, getState) => {
 	dispatch(pending(pathwaysTypes.GET_PATHWAYS_SAVED))
 
 	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	if (state.account.isProtected && !state.account.password) {
 		return dispatch(fulfilled(pathwaysTypes.GET_PATHWAYS_SAVED, {}))
@@ -86,11 +91,11 @@ export const getPathwaysSaved = () => async (dispatch, getState) => {
 				dispatch(fulfilled(pathwaysTypes.GET_PATHWAYS_SAVED, pathwaysSaved || {}))
 			})
 			.catch(err => {
-				dispatch(openAlert('error', 'Something went wrong'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 				dispatch(rejected(pathwaysTypes.GET_PATHWAYS_SAVED, err))
 			})
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		dispatch(rejected(pathwaysTypes.GET_PATHWAYS_SAVED, e))
 	}
 }
@@ -99,9 +104,10 @@ export const updatePathwaysSaved = pathway => (dispatch, getState) => {
 	dispatch(pending(pathwaysTypes.UPDATE_PATHWAYS_SAVED))
 
 	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Login to update your saved checklist'
+		const message = systemLocaleMap[locale].login_your_password
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(pathwaysTypes.UPDATE_PATHWAYS_SAVED, message))
 	}
@@ -119,15 +125,15 @@ export const updatePathwaysSaved = pathway => (dispatch, getState) => {
 		ClientDB.default
 			.set('pa_s', newPathwaysSaved, state.account.password)
 			.then(() => {
-				dispatch(openAlert('success', 'Updated saved checklist'))
+				dispatch(openAlert('success', systemLocaleMap[locale].checklist_updated))
 				dispatch(fulfilled(pathwaysTypes.UPDATE_PATHWAYS_SAVED, newPathwaysSaved))
 			})
 			.catch(err => {
-				dispatch(openAlert('error', 'Something went wrong'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 				dispatch(rejected(pathwaysTypes.UPDATE_PATHWAYS_SAVED, err))
 			})
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		dispatch(rejected(pathwaysTypes.UPDATE_PATHWAYS_SAVED, e))
 	}
 }
