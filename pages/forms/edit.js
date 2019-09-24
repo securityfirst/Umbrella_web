@@ -146,7 +146,7 @@ class FormEdit extends React.Component {
 	}
 
 	onSave = () => {
-		const { dispatch, formSaved } = this.props
+		const { dispatch, locale, systemLocaleMap, formSaved } = this.props
 		const { formState } = this.state
 
 		const date = new Date()
@@ -158,12 +158,12 @@ class FormEdit extends React.Component {
 		}
 
 		dispatch(saveForm(formUpdated, () => {
-			dispatch(openAlert('success', 'Your form has been saved'))
+			dispatch(openAlert('success', systemLocaleMap[locale].form_saved))
 		}))
 	}
 
 	onFinish = () => {
-		const { dispatch, formSaved } = this.props
+		const { dispatch, locale, systemLocaleMap, formSaved } = this.props
 		const { formState } = this.state
 
 		const date = new Date()
@@ -176,7 +176,7 @@ class FormEdit extends React.Component {
 
 		dispatch(saveForm(formUpdated, () => {
 			dispatch(resetSaveForm())
-			dispatch(openAlert('success', 'Your form has been saved'))
+			dispatch(openAlert('success', systemLocaleMap[locale].form_saved))
 
 			Router.push('/forms')
 		}))
@@ -247,7 +247,7 @@ class FormEdit extends React.Component {
 	}
 
 	renderScreen = screen => {
-		const { classes, title, form } = this.props
+		const { classes, locale, systemLocaleMap, title, form } = this.props
 		const { activeStep } = this.state
 
 		return (
@@ -259,16 +259,16 @@ class FormEdit extends React.Component {
 				</form>
 
 				<FormControl className={classes.buttonsWrapper} fullWidth>
-					{activeStep !== form.screens.length - 1 && <Button onClick={this.onSave}>Save</Button>}
+					{activeStep !== form.screens.length - 1 && <Button onClick={this.onSave}>{systemLocaleMap[locale].save}</Button>}
 
-					{activeStep !== 0 && <Button onClick={this.onBack}>Go Back</Button>}
+					{activeStep !== 0 && <Button onClick={this.onBack}>{systemLocaleMap[locale].go_back}</Button>}
 
 					{activeStep !== form.screens.length - 1 
 						? <ClickAwayListener onClickAway={this.removeError}>
-							<Button color="secondary" onClick={this.onNext}>Next</Button>
+							<Button color="secondary" onClick={this.onNext}>{systemLocaleMap[locale].next}</Button>
 						</ClickAwayListener>
 						: <ClickAwayListener onClickAway={this.removeError}>
-							<Button color="secondary" onClick={this.onFinish}>Finish</Button>
+							<Button color="secondary" onClick={this.onFinish}>{systemLocaleMap[locale].finish}</Button>
 						</ClickAwayListener>
 					}
 				</FormControl>

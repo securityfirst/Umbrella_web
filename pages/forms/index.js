@@ -60,12 +60,12 @@ class Forms extends React.Component {
 	}
 
 	checkLogin = e => {
-		const { dispatch, isProtected, password } = this.props
+		const { dispatch, locale, systemLocaleMap, isProtected, password } = this.props
 
 		if (isProtected && !password) {
 			e.preventDefault()
 
-			return dispatch(openAlert('error', 'Please login to continue'))
+			return dispatch(openAlert('error', systemLocaleMap[locale].login_your_password))
 		}
 	}
 
@@ -74,28 +74,28 @@ class Forms extends React.Component {
 	handleClose = () => this.setState({ anchorEl: null })
 
 	downloadHtml = formSaved => async () => {
-		const { dispatch, form } = this.props
+		const { dispatch, locale, systemLocaleMap, form } = this.props
 
 		try {
-			await dispatch(openAlert('info', 'Your form is downloading...'))
+			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
 			await dispatch(getForm(formSaved.sha))
 			
 			const html = generateForm(form, formSaved)
 
 			downloadHtml(formSaved.filename, html)
 
-			dispatch(openAlert('success', 'Downloaded'))
+			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 		} catch (e) {
 			console.error('Download HTML error: ', e)
-			dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		}
 	}
 
 	downloadPdf = formSaved => async () => {
-		const { dispatch, form } = this.props
+		const { dispatch, locale, systemLocaleMap, form } = this.props
 
 		try {
-			await dispatch(openAlert('info', 'Your form is downloading...'))
+			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
 			
 			await dispatch(getForm(formSaved.sha))
 			
@@ -103,18 +103,18 @@ class Forms extends React.Component {
 
 			downloadPdf(formSaved.filename, html)
 
-			dispatch(openAlert('success', 'Downloaded'))
+			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 		} catch (e) {
 			console.error('Download PDF error: ', e)
-			dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		}
 	}
 
 	downloadDocx = formSaved => async () => {
-		const { dispatch, form } = this.props
+		const { dispatch, locale, systemLocaleMap, form } = this.props
 
 		try {
-			await dispatch(openAlert('info', 'Your form is downloading...'))
+			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
 			
 			await dispatch(getForm(formSaved.sha))
 			
@@ -122,19 +122,19 @@ class Forms extends React.Component {
 
 			downloadDocx(formSaved.filename, html)
 
-			dispatch(openAlert('success', 'Downloaded'))
+			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 		} catch (e) {
 			console.error('Download DOCX error: ', e)
-			dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		}
 	}
 
 	handleDelete = formSaved => () => {
-		const { dispatch } = this.props
+		const { dispatch, locale, systemLocaleMap } = this.props
 
-		if (confirm('Are you sure you want to delete this form?')) {
+		if (confirm(systemLocaleMap[locale].confirm_form_delete)) {
 			dispatch(deleteForm(formSaved, () => {
-				dispatch(openAlert('success', 'Your form has been deleted'))
+				dispatch(openAlert('success', systemLocaleMap[locale].form_deleted))
 			}))
 		}
 	}
