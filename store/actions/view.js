@@ -52,7 +52,7 @@ export const setLocale = locale => (dispatch, getState) => {
 	dispatch(pending(viewTypes.SET_LOCALE))
 
 	const state = getState()
-	const { locale, systemLocaleMap } = state.view
+	const { systemLocaleMap } = state.view
 
 	try {
 		const ClientDB = require('../../db')
