@@ -177,8 +177,9 @@ class LessonsLevel extends React.Component {
 	}
 
 	deleteChecklist = title => () => {
-		if (confirm('Are you sure you want to remove this checklist?')) {
-			this.props.dispatch(deleteChecklistSystem(title))
+		const { dispatch, locale, systemLocaleMap } = this.props
+		if (confirm(systemLocaleMap[locale].confirm_remove_checklist)) {
+			dispatch(deleteChecklistSystem(title))
 		}
 	}
 
@@ -220,7 +221,7 @@ class LessonsLevel extends React.Component {
 		return (
 			<Card className={classes.checklistCard}>
 				<CardContent className={classes.checklistCardHead}>
-					<Typography className={classes.checklistCardTitle}>Checklist</Typography>
+					<Typography className={classes.checklistCardTitle}>{systemLocaleMap[locale].checklistDetail_title}</Typography>
 					<div className={classes.checklist}>
 						{!!savedChecklist && <Button 
 							size="small" 

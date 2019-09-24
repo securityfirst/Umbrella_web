@@ -80,7 +80,7 @@ class Lessons extends React.Component {
 					<div className={classNames(classes.content, classes.contentAdditional)}>
 						<Paper className={classes.intro}>
 							<Typography className={classes.introTitle} variant="h2">{systemLocaleMap[locale].lesson_title}</Typography>
-							<Typography paragraph>Use the menu panel to navigate lesson categories.</Typography>
+							<Typography paragraph>{systemLocaleMap[locale].lesson_welcome_message}</Typography>
 						</Paper>
 					</div>
 				</div>

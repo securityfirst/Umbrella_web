@@ -85,7 +85,7 @@ class LessonsFavorites extends React.Component {
 					<LessonsMenu />
 
 					<div className={classNames(classes.content, classes.contentAdditional)}>
-						<Typography className={classes.label} variant="subtitle1">Lesson Favorites</Typography>
+						<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].lesson_favorites_title}</Typography>
 
 						{!lessonCardsFavorites.length
 							? <Paper className={classes.paper}>

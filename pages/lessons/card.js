@@ -160,7 +160,7 @@ class LessonCard extends React.Component {
 						? <div className={classes.grow}>
 							<Link href={`/lessons/${locale}/${category}/${level}`}>
 								<Button color="inherit">
-									Finish
+									{systemLocaleMap[locale].finish}
 									<DoneOutlineIcon className={classes.buttonRightIcon} />
 								</Button>
 							</Link>
@@ -170,13 +170,13 @@ class LessonCard extends React.Component {
 								<Link href={`/lessons/${locale}/${category}/${level}/${(lessons[lessonIndex - 1] || {}).sha}`}>
 									<Button color="inherit">
 										<ChevronLeftIcon className={classes.buttonLeftIcon} />
-										Prev
+										{systemLocaleMap[locale].prev}
 									</Button>
 								</Link>
 							}
 							<Link href={`/lessons/${locale}/${category}/${level}/${(lessons[lessonIndex + 1] || {}).sha}`}>
 								<Button color="inherit">
-									Next
+									{systemLocaleMap[locale].next}
 									<ChevronRightIcon className={classes.buttonRightIcon} />
 								</Button>
 							</Link>

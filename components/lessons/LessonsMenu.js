@@ -190,6 +190,7 @@ class LessonsMenu extends React.Component {
 		const { 
 			classes, 
 			locale, 
+			systemLocaleMap, 
 			getContentLocaleMapLoading, 
 			getContentLocaleMapError, 
 			contentLocaleMap,
@@ -206,7 +207,7 @@ class LessonsMenu extends React.Component {
 		return (
 			<div className={classNames(classes.menuWrapper, {[classes.menuWrapperOpened]: lessonsMenuOpened})}>
 				<div className={classes.menuToggleMobile} onClick={this.toggleMenuMobile}>
-					<Typography>Lessons Menu</Typography>
+					<Typography>{systemLocaleMap[locale].lesson_menu}</Typography>
 					{lessonsMenuOpened ? <ExpandLess /> : <ExpandMore />}
 				</div>
 				<List component="nav" className={classes.menuList}>
@@ -217,7 +218,7 @@ class LessonsMenu extends React.Component {
 								<ListItemIcon className={classes.menuListItemIcon}>
 									<BookmarkIcon className={classes.menuListItemMUIIcon} />
 								</ListItemIcon>
-								<ListItemText className={classes.menuListItemText} inset primary="Favorites" />
+								<ListItemText className={classes.menuListItemText} inset primary={systemLocaleMap[locale].favorites_title} />
 							</ListItem>
 						</Link>
 					</div>

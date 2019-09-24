@@ -319,7 +319,7 @@ class ChecklistsSystem extends React.Component {
 					<Typography className={classes.panelPercentage} variant="h6">{totalDonePercentage}%</Typography>
 				</Paper>
 
-				<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].checklist_favorites_title}</Typography>
+				<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].favorites_title}</Typography>
 
 				{this.renderLessonChecklistFavorites()}
 
