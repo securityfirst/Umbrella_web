@@ -245,7 +245,8 @@ export default {
 		"database_sync_failure": "فشلت مزامنة قاعدة البيانات في المصادقة",
 		"database_already_encrypted": "قاعدة البيانات مشفرة بالفعل",
 		"database_reset_failure": "فشل إعادة تعيين قاعدة البيانات",
-		"database_already_cleared": "تم مسح قاعدة البيانات"
+		"database_already_cleared": "تم مسح قاعدة البيانات",
+		"login_success": "قمت بتسجيل الدخول الآن في!"
 	},
 	"en": {
 		"app_name": "Umbrella",
@@ -376,7 +377,7 @@ export default {
 		"form_menu_edit": "Edit",
 		"form_menu_share": "Share",
 		"login_your_password": "Log in with your password",
-		"login_error_reset_password": "Fail to reset password.",
+		"login_error_reset_password": "Failed to reset password.",
 		"bookemarks_title": "Bookmarked",
 		"checklist_edit_item": "Edit checklist item",
 		"checklist_delete_item": "Delete checklist",
@@ -494,7 +495,8 @@ export default {
 		"database_sync_failure": "Database sync failed to authenticate",
 		"database_already_encrypted": "Database is already encrypted",
 		"database_reset_failure": "Database failed to reset",
-		"database_already_cleared": "Database has been cleared"
+		"database_already_cleared": "Database has been cleared",
+		"login_success": "You are now logged in!"
 	},
 	"es": {
 		"app_name": "Umbrella",
@@ -742,7 +744,8 @@ export default {
 		"database_sync_failure": "La sincronización de la base de datos no pudo autenticarse",
 		"database_already_encrypted": "La base de datos ya está encriptada",
 		"database_reset_failure": "La base de datos no se pudo restablecer",
-		"database_already_cleared": "La base de datos ha sido borrada"
+		"database_already_cleared": "La base de datos ha sido borrada",
+		"login_success": "Ahora está conectado!"
 	},
 	"fa": {
 		"app_name": "چتر",
@@ -990,7 +993,8 @@ export default {
 		"database_sync_failure": "همگام سازی پایگاه داده در تأیید اعتبار انجام نشد",
 		"database_already_encrypted": "بانک اطلاعاتی قبلاً رمزگذاری شده است",
 		"database_reset_failure": "تنظیم مجدد پایگاه داده انجام نشد",
-		"database_already_cleared": "بانک اطلاعات پاک شده است"
+		"database_already_cleared": "بانک اطلاعات پاک شده است",
+		"login_success": "شما اکنون وارد سیستم شده اید!"
 	},
 	"ru": {
 		"app_name": "Umbrella",
@@ -1238,7 +1242,8 @@ export default {
 		"database_sync_failure": "Синхронизация базы данных не прошла проверку подлинности",
 		"database_already_encrypted": "База данных уже зашифрована",
 		"database_reset_failure": "Сбой базы данных",
-		"database_already_cleared": "База данных была очищена"
+		"database_already_cleared": "База данных была очищена",
+		"login_success": "Вы вошли в систему!"
 	},
 	"zh-Hant": {
 		"app_name": "Umbrella",
@@ -1486,6 +1491,7 @@ export default {
 		"database_sync_failure": "數據庫同步驗證失敗",
 		"database_already_encrypted": "База данных уже зашифрована",
 		"database_reset_failure": "數據庫重置失敗",
-		"database_already_cleared": "數據庫已清除"
+		"database_already_cleared": "數據庫已清除",
+		"login_success": "您現在已登錄！"
 	}
 }

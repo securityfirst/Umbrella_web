@@ -80,18 +80,18 @@ class Login extends React.Component {
 	handleLoginSubmit = e => {
 		!!e && e.preventDefault()
 
-		const { dispatch, router } = this.props
+		const { dispatch, router, locale, systemLocaleMap } = this.props
 		const { password } = this.state
 
 		if (!password || !password.length) {
 			return this.setState({
 				error: true,
-				errorMessage: 'Password is required',
+				errorMessage: systemLocaleMap[locale].login_enter_pw,
 			})
 		}
 
 		dispatch(login(password, () => {
-			dispatch(openAlert('success', 'You are now logged in!'))
+			dispatch(openAlert('success', systemLocaleMap[locale].login_success))
 			if (router.pathname.indexOf('account') === -1) router.back()
 
 			setTimeout(() => {
@@ -144,7 +144,7 @@ class Login extends React.Component {
 									}
 								</ClickAwayListener>
 								
-								{(!!loginError && loginError.message === 'Password does not exist') &&
+								{(!!loginError && loginError.message === systemLocaleMap[locale].password_not_exist) &&
 									<Link href={{pathname: '/account', query: {setpassword: true}}}>
 										<Button 
 											className={classes.loginButton}
