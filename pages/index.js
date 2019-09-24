@@ -86,65 +86,56 @@ class Index extends React.Component {
 					<Paper className={classes.paper} elevation={1}>
 						<div className={classes.headerWrapper}>
 							<img className={classes.logo} src="/static/assets/images/umbrella_logo.png" alt="Umbrella logo"/>
-							<Typography className={classes.header} variant="h1">Welcome to Umbrella</Typography>
+							<Typography className={classes.header} variant="h1">{systemLocaleMap[locale].welcome_to_umbrella}</Typography>
 						</div>
 						
 						<Typography paragraph>
-							Make a better security plan. Stay safe at home and in the field with the latest security advice. 
-							Open source code trusted by journalists, activists, humanitarians. 
+							{systemLocaleMap[locale].welcome_paragraph_one}
 						</Typography>
 						<Typography paragraph>
-							Umbrella is your one stop shop for digital and physical security information, plus resources to 
-							manage team security on a budget. Umbrella helps you identify and respond to threats you face 
-							whenever you work, communicate, or travel. Get simple instructions to reduce your risk, even offline. 
-							Then make sure you act on them by following one of our checklists, or creating your own. Adapt your 
-							plans based on live threat alerts from trusted sources, or share incident forms with your team. 
-							Umbrella’s secure infrastructure is perfect for NGOs and people at risk, because it’s funded through 
-							grants and paid security training. All content and code is free to reuse under licence conditions. 
-							You can even customise the content, or add your own. Ask how at <a href="mailto:info@secfirst.org" target="_blank">info@secfirst.org</a>. 
+							{systemLocaleMap[locale].welcome_paragraph_two} <a href="mailto:info@secfirst.org" target="_blank">info@secfirst.org</a>. 
 						</Typography>
 
 						<Divider className={classes.divider} />
 
-						<Typography className={classes.title} variant="h2">What you can do with Umbrella</Typography>
+						<Typography className={classes.title} variant="h2">{systemLocaleMap[locale].welcome_subtitle_one}</Typography>
 						<Typography component="div">
 							<ul className={classes.list}>
-								<li>Protect yourself with lessons covering dozens of everyday and emergency situations, from sending a secure message to travelling safely in a dangerous country</li>
-								<li>Protect devices and data with simple step-by-step guides to digital security tools</li>
-								<li>Protect your team with shareable checklists and incident forms</li>
-								<li>Measure your progress on the dashboard</li>
-								<li>Monitor threats with location-based alerts from UN ReliefWeb, Centers for Disease Control, US State Department and more</li>
-								<li>Stay current with sources you trust through custom RSS feeds</li>
-								<li>Put your own security manual in Umbrella by forking our GitHub repo and loading yours</li>
-								<li>Much more to come. What do you need to stay secure? Tell us at <a href="mailto:feedback@secfirst.org" target="_blank">feedback@secfirst.org</a></li>
+								<li>{systemLocaleMap[locale].welcome_listitem_one}</li>
+								<li>{systemLocaleMap[locale].welcome_listitem_two}</li>
+								<li>{systemLocaleMap[locale].welcome_listitem_three}</li>
+								<li>{systemLocaleMap[locale].welcome_listitem_four}</li>
+								<li>{systemLocaleMap[locale].welcome_listitem_five}</li>
+								<li>{systemLocaleMap[locale].welcome_listitem_six}</li>
+								<li>{systemLocaleMap[locale].welcome_listitem_seven}</li>
+								<li>{systemLocaleMap[locale].welcome_listitem_eight} <a href="mailto:feedback@secfirst.org" target="_blank">feedback@secfirst.org</a></li>
 							</ul>
 						</Typography>
 
 						<Divider className={classes.divider} />
 
-						<Typography className={classes.title} variant="h2">How we help protect you</Typography>
+						<Typography className={classes.title} variant="h2">{systemLocaleMap[locale].welcome_subtitle_two}</Typography>
 						<Typography component="div">
 							<ul className={classes.list}>
-								<li>Password encrypts data on your device, we can’t access it</li>
-								<li>You enter your location, no GPS or data sharing - we don’t store your data</li>
-								<li>We welcome edits, issues, and responsible disclosure</li>
-								<li>Security advice sourced from EFF, Tactical Tech, Frontline Defenders, CPJ, ECHO, Protection International, and more</li>
+								<li>{systemLocaleMap[locale].welcome_listitem_nine}</li>
+								<li>{systemLocaleMap[locale].welcome_listitem_ten}</li>
+								<li>{systemLocaleMap[locale].welcome_listitem_eleven}</li>
+								<li>{systemLocaleMap[locale].welcome_listitem_twelve}</li>
 							</ul>
 						</Typography>
 
 						<Divider className={classes.divider} />
 
 						<Typography variant="caption" paragraph>
-							Our content is published under a Creative Commons licence, so feel free to reuse it. Check or 
-							contribute to content and code: <a href="https://github.com/securityfirst" target="_blank">https://github.com/securityfirst</a>
+							{systemLocaleMap[locale].welcome_paragraph_three} <a href="https://github.com/securityfirst" target="_blank">https://github.com/securityfirst</a>
 						</Typography>
 
 						<Typography className={classes.footerLinks} variant="caption" paragraph>
-							Terms: <a href="https://secfirst.org/terms/" target="_blank">https://secfirst.org/terms/</a>
+							{systemLocaleMap[locale].terms_conditions}: <a href="https://secfirst.org/terms/" target="_blank">https://secfirst.org/terms/</a>
 						</Typography>
 
 						<Typography className={classes.footerLinks} variant="caption" paragraph>
-							Privacy: <a href="https://secfirst.org/privacy/" target="_blank">https://secfirst.org/privacy/</a>
+							{systemLocaleMap[locale].welcome_privacy_title}: <a href="https://secfirst.org/privacy/" target="_blank">https://secfirst.org/privacy/</a>
 						</Typography>
 					</Paper>
 				</div>
