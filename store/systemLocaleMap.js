@@ -265,7 +265,14 @@ export default {
 		"welcome_listitem_eleven": "نحن نرحب بالتعديلات والقضايا والكشف المسؤول",
 		"welcome_listitem_twelve": "نصيحة أمنية مصدرها EFF ، تكتيك تك ، فرونت لاين ديفندرز ، لجنة حماية الصحفيين ، إيكو ، بروتكشن إنترناشيونال ، وأكثر",
 		"welcome_paragraph_three": "يتم نشر المحتوى الخاص بنا بموجب ترخيص المشاع الإبداعي ، لذلك لا تتردد في إعادة استخدامه. التحقق أو المساهمة في المحتوى والرمز:",
-		"welcome_privacy_title": "سياسة خاصة"
+		"welcome_privacy_title": "سياسة خاصة",
+		"browser_unsupported": "هذا غير مدعوم من متصفحك.",
+		"downloading_html": "جارٍ تنزيل HTML ...",
+		"downloading_pdf": "جارٍ تنزيل PDF ...",
+		"downloading_docx": "جارٍ تنزيل DOCX ...",
+		"download": "تحميل",
+		"copied": "نسخ!",
+		"copy_link": "انسخ الرابط"
 	},
 	"en": {
 		"app_name": "Umbrella",
@@ -534,7 +541,14 @@ export default {
 		"welcome_listitem_eleven": "We welcome edits, issues, and responsible disclosure",
 		"welcome_listitem_twelve": "Security advice sourced from EFF, Tactical Tech, Frontline Defenders, CPJ, ECHO, Protection International, and more",
 		"welcome_paragraph_three": "Our content is published under a Creative Commons licence, so feel free to reuse it. Check or contribute to content and code:",
-		"welcome_privacy_title": "Privacy Policy"
+		"welcome_privacy_title": "Privacy Policy",
+		"browser_unsupported": "This is not supported by your browser.",
+		"downloading_html": "Downloading HTML...",
+		"downloading_pdf": "Downloading PDF...",
+		"downloading_docx": "Downloading DOCX...",
+		"download_title": "Download",
+		"copied": "Copied!",
+		"copy_link": "Copy Link"
 	},
 	"es": {
 		"app_name": "Umbrella",
@@ -802,7 +816,14 @@ export default {
 		"welcome_listitem_eleven": "Damos la bienvenida a ediciones, problemas y divulgación responsable",
 		"welcome_listitem_twelve": "Asesoramiento de seguridad de EFF, Tactical Tech, Frontline Defenders, CPJ, ECHO, Protection International y más",
 		"welcome_paragraph_three": "Nuestro contenido se publica bajo una licencia Creative Commons, así que siéntase libre de reutilizarlo. Verificar o contribuir al contenido y al código:",
-		"welcome_privacy_title": "Política de privacidad"
+		"welcome_privacy_title": "Política de privacidad",
+		"browser_unsupported": "Esto no es compatible con su navegador.",
+		"downloading_html": "Descargando HTML ...",
+		"downloading_pdf": "Descargando PDF ...",
+		"downloading_docx": "Descargando DOCX ...",
+		"download": "Descargar",
+		"copied": "Copiado!",
+		"copy_link": "Copiar link"
 	},
 	"fa": {
 		"app_name": "چتر",
@@ -1070,7 +1091,14 @@ export default {
 		"welcome_listitem_eleven": "ما از ویرایش ها ، مسائل و افشای مسئولان استقبال می کنیم",
 		"welcome_listitem_twelve": "توصیه های امنیتی از EFF ، Tactical Tech، Frontline Defenders، CPJ، ECHO، Protection International و موارد دیگر",
 		"welcome_paragraph_three": "محتوای ما تحت مجوز Creative Commons منتشر شده است ، بنابراین در استفاده مجدد از آن احساس رایگان کنید. به محتوا و کد بررسی یا کمک کنید:",
-		"welcome_privacy_title": "سیاست حفظ حریم خصوصی"
+		"welcome_privacy_title": "سیاست حفظ حریم خصوصی",
+		"browser_unsupported": "این توسط مرورگر شما پشتیبانی نمی شود.",
+		"downloading_html": "در حال بارگیری HTML ...",
+		"downloading_pdf": "در حال بارگیری PDF ...",
+		"downloading_docx": "در حال بارگیری DOCX ...",
+		"download": "دانلود",
+		"copied": "کپی شد!",
+		"copy_link": "پیوند را کپی کنید"
 	},
 	"ru": {
 		"app_name": "Umbrella",
@@ -1338,7 +1366,14 @@ export default {
 		"welcome_listitem_eleven": "Мы приветствуем изменения, проблемы и ответственное раскрытие",
 		"welcome_listitem_twelve": "Рекомендации по безопасности получены от EFF, Tactical Tech, Frontline Defenders, CPJ, ECHO, Protection International и других",
 		"welcome_paragraph_three": "Наш контент публикуется по лицензии Creative Commons, поэтому не стесняйтесь использовать его повторно. Проверить или внести свой вклад в содержание и код:",
-		"welcome_privacy_title": "Политика конфиденциальности"
+		"welcome_privacy_title": "Политика конфиденциальности",
+		"browser_unsupported": "Это не поддерживается вашим браузером.",
+		"downloading_html": "Загрузка HTML ...",
+		"downloading_pdf": "Загрузка PDF ...",
+		"downloading_docx": "Загрузка DOCX ...",
+		"download": "Скачать",
+		"copied": "Скопировано!",
+		"copy_link": "Копировать ссылку"
 	},
 	"zh-Hant": {
 		"app_name": "Umbrella",
@@ -1606,6 +1641,13 @@ export default {
 		"welcome_listitem_eleven": "我們歡迎您進行編輯，發布問題和進行負責任的披露",
 		"welcome_listitem_twelve": "來自EFF，戰術技術，前線防御者，CPJ，ECHO，Protection International等的安全建議",
 		"welcome_paragraph_three": "我們的內容是根據知識共享許可發布的，因此隨時可以重複使用。 檢查或貢獻內容和代碼：",
-		"welcome_privacy_title": "隱私政策"
+		"welcome_privacy_title": "隱私政策",
+		"browser_unsupported": "您的瀏覽器不支持此功能。",
+		"downloading_html": "正在下載HTML ...",
+		"downloading_pdf": "正在下載PDF ...",
+		"downloading_docx": "正在下載DOCX ...",
+		"download": "下載",
+		"copied": "複製！",
+		"copy_link": "複製鏈接"
 	}
 }

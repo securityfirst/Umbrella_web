@@ -61,12 +61,12 @@ class FavoriteShareIcon extends React.Component {
 	handleClose = () => this.setState({ anchorEl: null })
 
 	handleCopyLink = () => {
-		const { dispatch } = this.props
+		const { dispatch, locale, systemLocaleMap } = this.props
 
 		if (typeof document === 'undefined') return false
 
 		if (!document.queryCommandSupported('copy')) {
-			dispatch(openAlert('error', 'This is not supported by your browser.'))
+			dispatch(openAlert('error', systemLocaleMap[locale].browser_unsupported))
 			return false
 		}
 
@@ -87,9 +87,9 @@ class FavoriteShareIcon extends React.Component {
 	}
 
 	downloadHtml = () => {
-		const { dispatch, name, sha } = this.props
+		const { dispatch, locale, systemLocaleMap, name, sha } = this.props
 
-		dispatch(openAlert('info', 'Downloading HTML...'))
+		dispatch(openAlert('info', systemLocaleMap[locale].downloading_html))
 
 		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
 			.then(res => {
@@ -98,19 +98,19 @@ class FavoriteShareIcon extends React.Component {
 			})
 			.then(content => {
 				downloadHtml(name, marked(decodeBlob(content)))
-				dispatch(openAlert('success', 'Downloaded'))
+				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 				this.handleClose()
 			})
 			.catch(err => {
 				console.error('FavoriteShareIcons handleDownload error: ', err)
-				dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 			})
 	}
 
 	downloadPdf = () => {
-		const { dispatch, name, sha } = this.props
+		const { dispatch, locale, systemLocaleMap, name, sha } = this.props
 
-		dispatch(openAlert('info', 'Downloading PDF...'))
+		dispatch(openAlert('info',systemLocaleMap[locale].downloading_pdf))
 
 		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
 			.then(res => {
@@ -119,19 +119,19 @@ class FavoriteShareIcon extends React.Component {
 			})
 			.then(content => {
 				downloadPdf(name, marked(decodeBlob(content)))
-				dispatch(openAlert('success', 'Downloaded'))
+				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 				this.handleClose()
 			})
 			.catch(err => {
 				console.error('FavoriteShareIcons handleDownload error: ', err)
-				dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 			})
 	}
 
 	downloadDocx = () => {
-		const { dispatch, name, sha } = this.props
+		const { dispatch, locale, systemLocaleMap, name, sha } = this.props
 
-		dispatch(openAlert('info', 'Downloading DOCX...'))
+		dispatch(openAlert('info', systemLocaleMap[locale].downloading_docx))
 
 		fetch(`${process.env.ROOT}/api/github/content/${sha}`)
 			.then(res => {
@@ -140,17 +140,27 @@ class FavoriteShareIcon extends React.Component {
 			})
 			.then(content => {
 				downloadDocx(name, marked(decodeBlob(content)))
-				dispatch(openAlert('success', 'Downloaded'))
+				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 				this.handleClose()
 			})
 			.catch(err => {
 				console.error('FavoriteShareIcons handleDownload error: ', err)
-				dispatch(openAlert('error', 'Something went wrong - refresh the page and try again'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 			})
 	}
 
 	render() {
-		const { classes, isFavorited, isFavoriteAdded, isLight, url, onFavoriteToggle, onFavoriteRemove } = this.props
+		const { 
+			classes, 
+			locale, 
+			systemLocaleMap, 
+			isFavorited, 
+			isFavoriteAdded, 
+			isLight, 
+			url, 
+			onFavoriteToggle, 
+			onFavoriteRemove 
+		} = this.props
 		const { anchorEl, tooltipOpen, downloadOpen } = this.state
 
 		return (
@@ -211,7 +221,7 @@ class FavoriteShareIcon extends React.Component {
 						<ListItemIcon className={classes.menuListItemIcon}>
 							<GetAppIcon />
 						</ListItemIcon>
-						<ListItemText className={classes.menuListItemText} inset primary="Download" />
+						<ListItemText className={classes.menuListItemText} inset primary={systemLocaleMap[locale].download_title} />
 
 						{downloadOpen ? <ExpandLess /> : <ExpandMore />}
 					</ListItem>
@@ -232,14 +242,14 @@ class FavoriteShareIcon extends React.Component {
 
 					{Boolean(url) && <Tooltip
 						open={tooltipOpen}
-						title="Copied!"
+						title={systemLocaleMap[locale].copied}
 						placement="right"
 					>
 						<ListItem onClick={this.handleCopyLink}>
 							<ListItemIcon>
 								<LinkIcon />
 							</ListItemIcon>
-							<ListItemText inset primary="Copy Link" />
+							<ListItemText inset primary={systemLocaleMap[locale].copy_link} />
 							<input 
 								ref={el => this.copyInput = el} 
 								className={classes.copyInput} 
@@ -257,4 +267,8 @@ class FavoriteShareIcon extends React.Component {
 	}
 }
 
-export default connect()(withStyles(styles)(FavoriteShareIcon))
+const mapStateToProps = state => ({
+	...state.view
+})
+
+export default connect(mapStateToProps)(withStyles(styles)(FavoriteShareIcon))
