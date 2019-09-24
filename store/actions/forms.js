@@ -30,9 +30,10 @@ export const getFormSaved = (id, successCb) => async (dispatch, getState) => {
 	dispatch(pending(formsTypes.GET_FORM_SAVED))
 
 	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Please login to edit your saved form'
+		const message = systemLocaleMap[locale].login_your_password
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(formsTypes.GET_FORM_SAVED, message))
 	}
@@ -48,11 +49,11 @@ export const getFormSaved = (id, successCb) => async (dispatch, getState) => {
 				!!successCb && successCb(form)
 			})
 			.catch(err => {
-				dispatch(openAlert('error', 'Something went wrong'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 				dispatch(rejected(formsTypes.GET_FORM_SAVED, err))
 			})
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		dispatch(rejected(formsTypes.GET_FORM_SAVED, e))
 	}
 }
@@ -61,9 +62,10 @@ export const saveForm = (form, successCb) => (dispatch, getState) => {
 	dispatch(pending(formsTypes.SAVE_FORM))
 
 	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Please login to save your form'
+		const message = systemLocaleMap[locale].login_your_password
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(formsTypes.SAVE_FORM, message))
 	}
@@ -80,16 +82,16 @@ export const saveForm = (form, successCb) => (dispatch, getState) => {
 		ClientDB.default
 			.set('fo_s', forms, state.account.password)
 			.then(() => {
-				dispatch(openAlert('success', 'Form saved'))
+				dispatch(openAlert('success', systemLocaleMap[locale].form_saved))
 				dispatch(fulfilled(formsTypes.SAVE_FORM, forms))
 				!!successCb && successCb()
 			})
 			.catch(err => {
-				dispatch(openAlert('error', 'Something went wrong'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 				dispatch(rejected(formsTypes.SAVE_FORM, err))
 			})
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		dispatch(rejected(formsTypes.SAVE_FORM, e))
 	}
 }
@@ -98,9 +100,10 @@ export const deleteForm = (form, successCb) => (dispatch, getState) => {
 	dispatch(pending(formsTypes.DELETE_FORM))
 
 	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Please login to delete forms'
+		const message = systemLocaleMap[locale].login_your_password
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(formsTypes.DELETE_FORM, message))
 	}
@@ -109,7 +112,7 @@ export const deleteForm = (form, successCb) => (dispatch, getState) => {
 		const index = state.forms.formsSaved.findIndex(f => f.id === form.id)
 
 		if (index === -1) {
-			const message = 'Something went wrong - the form was not found'
+			const message = systemLocaleMap[locale].general_error
 			dispatch(openAlert('error', message))
 			return dispatch(rejected(formsTypes.DELETE_FORM, message))
 		}
@@ -122,16 +125,16 @@ export const deleteForm = (form, successCb) => (dispatch, getState) => {
 		ClientDB.default
 			.set('fo_s', forms, state.account.password)
 			.then(() => {
-				dispatch(openAlert('success', 'Form deleted'))
+				dispatch(openAlert('success', systemLocaleMap[locale].form_deleted))
 				dispatch(fulfilled(formsTypes.DELETE_FORM, forms))
 				!!successCb && successCb()
 			})
 			.catch(err => {
-				dispatch(openAlert('error', 'Something went wrong'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 				dispatch(rejected(formsTypes.DELETE_FORM, err))
 			})
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		dispatch(rejected(formsTypes.DELETE_FORM, e))
 	}
 }
