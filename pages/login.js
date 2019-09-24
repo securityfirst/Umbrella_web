@@ -18,7 +18,7 @@ import FormControlInput from '../components/common/FormControlInput'
 import { contentStyles } from '../utils/view'
 
 import { checkPassword, login } from '../store/actions/account'
-import { openAlert } from '../store/actions/view'
+import { setAppbarTitle, openAlert } from '../store/actions/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -63,29 +63,35 @@ class Login extends React.Component {
 	}
 
 	componentDidMount() {
-		const { query } = this.props.router
-		if (query && query.setpassword) this.setState({expanded: 1})
+		const { dispatch, router, locale, systemLocaleMap } = this.props
+		const { query } = router
 
-		if (typeof window !== 'undefined') {
-			this.props.dispatch(checkPassword())
+		dispatch(setAppbarTitle(systemLocaleMap[locale].login_message_button))
+		if (query && query.setpassword) this.setState({expanded: 1})
+		if (typeof window !== 'undefined') dispatch(checkPassword())
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].login_message_button))
 		}
 	}
 
 	handleLoginSubmit = e => {
 		!!e && e.preventDefault()
 
-		const { dispatch, router } = this.props
+		const { dispatch, router, locale, systemLocaleMap } = this.props
 		const { password } = this.state
 
 		if (!password || !password.length) {
 			return this.setState({
 				error: true,
-				errorMessage: 'Password is required',
+				errorMessage: systemLocaleMap[locale].login_enter_pw,
 			})
 		}
 
 		dispatch(login(password, () => {
-			dispatch(openAlert('success', 'You are now logged in!'))
+			dispatch(openAlert('success', systemLocaleMap[locale].login_success))
 			if (router.pathname.indexOf('account') === -1) router.back()
 
 			setTimeout(() => {
@@ -97,21 +103,21 @@ class Login extends React.Component {
 	removeError = () => this.setState({error: false, errorMessage: null})
 
 	render() {
-		const { classes, loginLoading, loginError, checkPassword } = this.props
+		const { classes, locale, systemLocaleMap, loginLoading, loginError, checkPassword } = this.props
 		const { password, error, errorMessage } = this.state
 
 		return (
-			<Layout title="Umbrella | Login" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].login_message_button}`} description="Umbrella web application">
 				<div className={classes.content}>
 					<Paper className={classes.paper} elevation={1}>
 						<img className={classes.logo} src="/static/assets/images/umbrella_logo.png" alt="Umbrella logo"/>
 						
-						<Typography className={classes.description} variant="h6" align="center">Log in with your password</Typography>
+						<Typography className={classes.description} variant="h6" align="center">{systemLocaleMap[locale].login_your_password}</Typography>
 
 						<form onSubmit={this.handleLoginSubmit}>
 							<FormControlInput 
 								id="login-password"
-								label="Password*"
+								label={`${systemLocaleMap[locale].account_password_alert_password}*`}
 								value={password}
 								type="password"
 								error={error || !!loginError}
@@ -133,19 +139,19 @@ class Login extends React.Component {
 											color="secondary"
 											onClick={this.handleLoginSubmit}
 										>
-											Login
+											{systemLocaleMap[locale].login_message_button}
 										</Button>
 									}
 								</ClickAwayListener>
 								
-								{(!!loginError && loginError.message === 'Password does not exist') &&
+								{(!!loginError && loginError.message === systemLocaleMap[locale].password_not_exist) &&
 									<Link href={{pathname: '/account', query: {setpassword: true}}}>
 										<Button 
 											className={classes.loginButton}
 											component="button" 
 											color="primary"
 										>
-											Set Password
+											{systemLocaleMap[locale].account_set_password}
 										</Button>
 									</Link>
 								}
@@ -159,7 +165,8 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = state => ({
-	...state.account
+	...state.view,
+	...state.account,
 })
 
 export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Login)))

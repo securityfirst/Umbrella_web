@@ -49,7 +49,7 @@ class FormsNewSubmit extends React.Component {
 
 				<div className={classes.buttonsWrapper}>
 					<Button onClick={this.onGoBack}>Go Back</Button>
-					<Button color="secondary" onClick={this.onSubmit}>Try Again</Button>
+					<Button color="secondary" onClick={this.onSubmit}>{systemLocaleMap[locale].try_again}</Button>
 				</div>
 			</div>
 		)
@@ -60,23 +60,23 @@ class FormsNewSubmit extends React.Component {
 
 		return (
 			<div>
-				<Typography className={classes.copy} paragraph>Your form has been submitted.</Typography>
+				<Typography className={classes.copy} paragraph>{systemLocaleMap[locale].form_submitted}</Typography>
 
 				<div className={classes.buttonsWrapper}>
 					<Link href="/forms/new"><Button>{systemLocaleMap[locale].message_body_form_new}</Button></Link>
-					<Link href="/forms"><Button color="secondary">Finish</Button></Link>
+					<Link href="/forms"><Button color="secondary">{systemLocaleMap[locale].finish}</Button></Link>
 				</div>
 			</div>
 		)
 	}
 
 	render() {
-		const { classes, saveFormLoading, saveFormError, saveFormSuccess } = this.props
+		const { classes, locale, systemLocaleMap, saveFormLoading, saveFormError, saveFormSuccess } = this.props
 
 		return (
 			<Paper className={classes.wrapper} square>
-				<Typography variant="h6" color="primary">Submit</Typography>
-				<Typography className={classes.hint}>Placeholder</Typography>
+				<Typography variant="h6" color="primary">{systemLocaleMap[locale].submit}</Typography>
+				<Typography className={classes.hint}>{systemLocaleMap[locale].placeholder}</Typography>
 
 				{saveFormLoading
 					? <Loading />

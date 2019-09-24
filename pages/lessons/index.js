@@ -13,7 +13,7 @@ import LessonsMenu from '../../components/lessons/LessonsMenu'
 
 import { contentStyles, paperStyles } from '../../utils/view'
 
-import { toggleLessonsMenu } from '../../store/actions/view'
+import { setAppbarTitle, toggleLessonsMenu } from '../../store/actions/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -54,22 +54,33 @@ const styles = theme => ({
 })
 
 class Lessons extends React.Component {
+	componentDidMount() {
+		const { dispatch, locale, systemLocaleMap } = this.props
+		dispatch(setAppbarTitle(systemLocaleMap[locale].lesson_title))
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].lesson_title))
+		}
+	}
+
 	componentWillUnmount() {
 		this.props.dispatch(toggleLessonsMenu(false))
 	}
 
 	render() {
-		const { classes } = this.props
+		const { classes, locale, systemLocaleMap } = this.props
 
 		return (
-			<Layout title="Umbrella | Lessons" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].lesson_title}`} description="Umbrella web application">
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 
 					<div className={classNames(classes.content, classes.contentAdditional)}>
 						<Paper className={classes.intro}>
-							<Typography className={classes.introTitle} variant="h2">Lessons</Typography>
-							<Typography paragraph>Use the menu panel on the <span className={classes.descriptionDesktop}>left</span><span className={classes.descriptionMobile}>top</span> to navigate lesson categories.</Typography>
+							<Typography className={classes.introTitle} variant="h2">{systemLocaleMap[locale].lesson_title}</Typography>
+							<Typography paragraph>{systemLocaleMap[locale].lesson_welcome_message}</Typography>
 						</Paper>
 					</div>
 				</div>
@@ -78,4 +89,8 @@ class Lessons extends React.Component {
 	}
 }
 
-export default connect()(withStyles(styles, { withTheme: true })(Lessons))
+const mapStateToProps = (state) => ({
+	...state.view,
+})
+
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(Lessons))

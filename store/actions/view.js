@@ -27,6 +27,9 @@ export const togglePathwayModal = opened => {
 export const dismissPathwayModal = opened => (dispatch, getState) => {
 	dispatch(pending(viewTypes.DISMISS_PATHWAY_MODAL))
 
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
+
 	try {
 		const ClientDB = require('../../db')
 
@@ -36,17 +39,20 @@ export const dismissPathwayModal = opened => (dispatch, getState) => {
 				dispatch(fulfilled(viewTypes.DISMISS_PATHWAY_MODAL))
 			})
 			.catch(err => {
-				dispatch(openAlert('error', 'Something went wrong'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 				dispatch(rejected(viewTypes.DISMISS_PATHWAY_MODAL, err))
 			})
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		dispatch(rejected(viewTypes.DISMISS_PATHWAY_MODAL, e))
 	}
 }
 
 export const setLocale = locale => (dispatch, getState) => {
 	dispatch(pending(viewTypes.SET_LOCALE))
+
+	const state = getState()
+	const { systemLocaleMap } = state.view
 
 	try {
 		const ClientDB = require('../../db')
@@ -60,7 +66,7 @@ export const setLocale = locale => (dispatch, getState) => {
 				dispatch(rejected(viewTypes.SET_LOCALE, err))
 			})
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		dispatch(rejected(viewTypes.SET_LOCALE, e))
 	}
 }

@@ -13,16 +13,17 @@ import Crypto from '../../utils/crypto'
 export const getFeeds = () => async (dispatch, getState) => {
 	dispatch(pending(feedsTypes.GET_FEEDS))
 
-	const store = getState()
+	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
-	if (!store.feeds.feedLocation) {
-		const message = 'Feed location is required'
+	if (!state.feeds.feedLocation) {
+		const message = systemLocaleMap[locale].feed_location_required
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(feedsTypes.GET_FEEDS, message))
 	}
 	
-	if (!store.feeds.feedSources.length) {
-		const message = 'Feed sources are required'
+	if (!state.feeds.feedSources.length) {
+		const message = systemLocaleMap[locale].feed_sources_required
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(feedsTypes.GET_FEEDS, message))
 	}
@@ -35,8 +36,8 @@ export const getFeeds = () => async (dispatch, getState) => {
 				'Accept': 'application/json',
 			},
 			body: JSON.stringify({
-				location: store.feeds.feedLocation.properties.short_code,
-				sources: store.feeds.feedSources,
+				location: state.feeds.feedLocation.properties.short_code,
+				sources: state.feeds.feedSources,
 			}),
 		})
 			.then(res => {
@@ -58,9 +59,10 @@ export const setFeedLocation = location => (dispatch, getState) => {
 	dispatch(pending(feedsTypes.SET_FEED_LOCATION))
 
 	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Login to update the feed location'
+		const message = systemLocaleMap[locale].login_your_password
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(feedsTypes.SET_FEED_LOCATION, message))
 	}
@@ -70,10 +72,10 @@ export const setFeedLocation = location => (dispatch, getState) => {
 
 		ClientDB.default.set('fe_l', location, state.account.password)
 
-		dispatch(openAlert('success', 'Location saved'))
+		dispatch(openAlert('success', systemLocaleMap[locale].feed_location_saved))
 		dispatch(fulfilled(feedsTypes.SET_FEED_LOCATION, location))
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		dispatch(rejected(feedsTypes.SET_FEED_LOCATION, e))
 	}
 }
@@ -82,9 +84,10 @@ export const setFeedSources = sources => (dispatch, getState) => {
 	dispatch(pending(feedsTypes.SET_FEED_SOURCES))
 
 	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Login to update the feed sources'
+		const message = systemLocaleMap[locale].login_your_password
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(feedsTypes.SET_FEED_SOURCES, message))
 	}
@@ -94,10 +97,10 @@ export const setFeedSources = sources => (dispatch, getState) => {
 
 		ClientDB.default.set('fe_s', sources, state.account.password)
 
-		dispatch(openAlert('success', 'Sources saved'))
+		dispatch(openAlert('success', systemLocaleMap[locale].feed_rss_saved))
 		dispatch(fulfilled(feedsTypes.SET_FEED_SOURCES, sources))
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		dispatch(rejected(feedsTypes.SET_FEED_SOURCES, e))
 	}
 }
@@ -111,6 +114,7 @@ export const getRss = () => (dispatch, getState) => {
 	}
 
 	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	try {
 		fetch(`${process.env.ROOT}/api/feeds/rss`, {
@@ -129,11 +133,11 @@ export const getRss = () => (dispatch, getState) => {
 				dispatch(fulfilled(feedsTypes.GET_RSS, data))
 			})
 			.catch(err => {
-				dispatch(openAlert('error', 'Something went wrong'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 				dispatch(rejected(feedsTypes.GET_RSS, err))
 			})
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		return dispatch(rejected(feedsTypes.GET_RSS, e))
 	}
 }
@@ -142,15 +146,16 @@ export const addRssSource = (source, successCb) => (dispatch, getState) => {
 	dispatch(pending(feedsTypes.ADD_RSS_SOURCE))
 
 	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Login to update the RSS sources'
+		const message = systemLocaleMap[locale].login_your_password
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(feedsTypes.ADD_RSS_SOURCE, message))
 	}
 
 	if (state.feeds.rssSources.includes(source)) {
-		const message = 'This RSS source is already added to your list'
+		const message = systemLocaleMap[locale].feed_rss_exists
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(feedsTypes.ADD_RSS_SOURCE, message))
 	}
@@ -166,7 +171,7 @@ export const addRssSource = (source, successCb) => (dispatch, getState) => {
 		})
 			.then(res => {
 				if (!res.ok) {
-					dispatch(openAlert('error', `${res.statusText}\nPlease check your URL`))
+					dispatch(openAlert('error', `${res.statusText}\n${systemLocaleMap[locale].url_check}`))
 					throw res
 				}
 
@@ -180,16 +185,16 @@ export const addRssSource = (source, successCb) => (dispatch, getState) => {
 
 				ClientDB.default.set('rs_s', sources, state.account.password)
 
-				dispatch(openAlert('success', 'RSS source saved'))
+				dispatch(openAlert('success', systemLocaleMap[locale].feed_rss_saved))
 				dispatch(fulfilled(feedsTypes.ADD_RSS_SOURCE, {sources, rss}))
 				!!successCb && successCb()
 			})
 			.catch(err => {
-				dispatch(openAlert('error', 'Something went wrong'))
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 				dispatch(rejected(feedsTypes.ADD_RSS_SOURCE, err))
 			})
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		return dispatch(rejected(feedsTypes.ADD_RSS_SOURCE, e))
 	}
 }
@@ -198,16 +203,17 @@ export const removeRssSource = index => (dispatch, getState) => {
 	dispatch(pending(feedsTypes.REMOVE_RSS_SOURCE))
 
 	const state = getState()
+	const { locale, systemLocaleMap } = state.view
 	const source = state.feeds.rssSources[index]
 
 	if (state.account.isProtected && !state.account.password) {
-		const message = 'Login to update the RSS sources'
+		const message = systemLocaleMap[locale].login_your_password
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(feedsTypes.REMOVE_RSS_SOURCE, message))
 	}
 
 	if (!source) {
-		const message = 'This RSS source does not exist on your list'
+		const message = systemLocaleMap[locale].feed_rss_not_exist
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(feedsTypes.REMOVE_RSS_SOURCE, message))
 	}
@@ -220,10 +226,10 @@ export const removeRssSource = index => (dispatch, getState) => {
 
 		ClientDB.default.set('rs_s', sources, state.account.password)
 
-		dispatch(openAlert('success', 'RSS source has been removed'))		
+		dispatch(openAlert('success', systemLocaleMap[locale].feed_rss_removed))		
 		dispatch(fulfilled(feedsTypes.REMOVE_RSS_SOURCE, {sources, rss}))
 	} catch (e) {
-		dispatch(openAlert('error', 'Something went wrong'))
+		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
 		dispatch(rejected(feedsTypes.REMOVE_RSS_SOURCE, e))
 	}
 }

@@ -143,7 +143,7 @@ class ChecklistsPanel extends React.Component {
 	}
 
 	render() {
-		const { classes, index, checklist, expanded, handlePanelToggle, isCustom, } = this.props
+		const { classes, locale, systemLocaleMap, index, checklist, expanded, handlePanelToggle, isCustom } = this.props
 		const { itemText, error, errorMessage } = this.state
 
 		if (!checklist) return <Paper className={classes.formPanel} square></Paper>
@@ -170,7 +170,7 @@ class ChecklistsPanel extends React.Component {
 									{checklist.items.map(this.renderItem)}
 								</FormGroup>
 							</FormControl>
-							: <Typography className={classes.empty} paragraph>Checklist is empty</Typography>
+							: <Typography className={classes.empty} paragraph>{systemLocaleMap[locale].checklist_empty}</Typography>
 						}
 
 						{isCustom && 

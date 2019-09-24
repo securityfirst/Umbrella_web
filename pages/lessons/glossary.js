@@ -39,8 +39,15 @@ const styles = theme => ({
 })
 
 class LessonsGlossary extends React.Component {
-	static async getInitialProps({reduxStore, query}) {
-		await reduxStore.dispatch(setAppbarTitle(`Lessons / Glossary`))
+	componentDidMount() {
+		const { dispatch, locale, systemLocaleMap } = this.props
+		dispatch(setAppbarTitle(systemLocaleMap[locale].lesson_title))
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].lesson_title))
+		}
 	}
 
 	componentWillUnmount() {
@@ -48,7 +55,7 @@ class LessonsGlossary extends React.Component {
 	}
 
 	render() {
-		const { classes, router, content } = this.props
+		const { classes, router, content, systemLocaleMap } = this.props
 		const { locale } = router.query
 
 		const files = content[locale].glossary.content.reduce((acc, c) => {
@@ -63,7 +70,7 @@ class LessonsGlossary extends React.Component {
 		}, [])
 
 		return (
-			<Layout title="Umbrella | Lessons Glossary" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].lesson_title}`} description="Umbrella web application">
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 

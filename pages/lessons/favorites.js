@@ -50,12 +50,16 @@ const styles = theme => ({
 })
 
 class LessonsFavorites extends React.Component {
-	static async getInitialProps({reduxStore}) {
-		await reduxStore.dispatch(setAppbarTitle('Lessons / Favorites'))
+	componentDidMount() {
+		const { dispatch, locale, systemLocaleMap } = this.props
+		dispatch(getLessonCardsFavorites())
+		dispatch(setAppbarTitle(systemLocaleMap[locale].lesson_title))
 	}
 
-	componentDidMount() {
-		this.props.dispatch(getLessonCardsFavorites())
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].lesson_title))
+		}
 	}
 
 	componentWillUnmount() {
@@ -63,22 +67,29 @@ class LessonsFavorites extends React.Component {
 	}
 
 	render() {
-		const { classes, getLessonCardsFavoritesLoading, getLessonCardsFavoritesError, lessonCardsFavorites } = this.props
+		const { 
+			classes, 
+			locale, 
+			systemLocaleMap, 
+			getLessonCardsFavoritesLoading, 
+			getLessonCardsFavoritesError, 
+			lessonCardsFavorites 
+		} = this.props
 
 		if (getLessonCardsFavoritesLoading) return <Loading />
 		else if (getLessonCardsFavoritesError) return <ErrorMessage error={getLessonCardsFavoritesError} />
 
 		return (
-			<Layout title="Umbrella | Lessons Favorites" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].lesson_title}`} description="Umbrella web application">
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 
 					<div className={classNames(classes.content, classes.contentAdditional)}>
-						<Typography className={classes.label} variant="subtitle1">Lesson Favorites</Typography>
+						<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].lesson_favorites_title}</Typography>
 
 						{!lessonCardsFavorites.length
 							? <Paper className={classes.paper}>
-								<Typography>You do not have any favourite lessons saved.</Typography>
+								<Typography>{systemLocaleMap[locale].empty_favorites_message}</Typography>
 							</Paper>
 							: <div className={classes.cardsWrapper}>
 								{lessonCardsFavorites.map((file, i) => (
@@ -101,6 +112,7 @@ class LessonsFavorites extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.view,
 	...state.lessons,
 })
 

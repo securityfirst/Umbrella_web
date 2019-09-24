@@ -65,11 +65,21 @@ const styles = theme => ({
 class LessonCard extends React.Component {
 	static async getInitialProps({reduxStore, query}) {
 		await reduxStore.dispatch(getLessonFile(query.sha))
-		await reduxStore.dispatch(setAppbarTitle(`Lesson Card`))
 	}
 
 	state = {
 		anchorEl: null,
+	}
+
+	componentDidMount() {
+		const { dispatch, locale, systemLocaleMap } = this.props
+		dispatch(setAppbarTitle(systemLocaleMap[locale].lesson_title))
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].lesson_title))
+		}
 	}
 
 	componentWillUnmount() {
@@ -85,7 +95,7 @@ class LessonCard extends React.Component {
 	}
 
 	renderNavigation = () => {
-		const { router, classes, content, contentLocaleMap } = this.props
+		const { router, classes, content, contentLocaleMap, systemLocaleMap } = this.props
 		const { locale, category, level, sha } = router.query
 		const { anchorEl } = this.state
 
@@ -150,7 +160,7 @@ class LessonCard extends React.Component {
 						? <div className={classes.grow}>
 							<Link href={`/lessons/${locale}/${category}/${level}`}>
 								<Button color="inherit">
-									Finish
+									{systemLocaleMap[locale].finish}
 									<DoneOutlineIcon className={classes.buttonRightIcon} />
 								</Button>
 							</Link>
@@ -160,13 +170,13 @@ class LessonCard extends React.Component {
 								<Link href={`/lessons/${locale}/${category}/${level}/${(lessons[lessonIndex - 1] || {}).sha}`}>
 									<Button color="inherit">
 										<ChevronLeftIcon className={classes.buttonLeftIcon} />
-										Prev
+										{systemLocaleMap[locale].prev}
 									</Button>
 								</Link>
 							}
 							<Link href={`/lessons/${locale}/${category}/${level}/${(lessons[lessonIndex + 1] || {}).sha}`}>
 								<Button color="inherit">
-									Next
+									{systemLocaleMap[locale].next}
 									<ChevronRightIcon className={classes.buttonRightIcon} />
 								</Button>
 							</Link>
@@ -192,14 +202,14 @@ class LessonCard extends React.Component {
 	}
 
 	render() {
-		const { router, classes } = this.props
-		const { category } = router.query
+		const { router, classes, systemLocaleMap } = this.props
+		const { locale, category } = router.query
 
 		const cats = category.split('.')
 		const cat = cats[0]
 
 		return (
-			<Layout title="Umbrella | Lesson Card" description="Umbrella web application">
+			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].lesson_title}`} description="Umbrella web application">
 				<div className={classes.wrapper}>
 					<LessonsMenu />
 

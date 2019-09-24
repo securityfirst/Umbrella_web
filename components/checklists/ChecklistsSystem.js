@@ -163,8 +163,9 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	deleteChecklist = title => () => {
-		if (confirm('Are you sure you want to remove this checklist?')) {
-			this.props.dispatch(deleteChecklistSystem(title))
+		const { dispatch, locale, systemLocaleMap } = this.props
+		if (confirm(systemLocaleMap[locale].confirm_remove_checklist)) {
+			dispatch(deleteChecklistSystem(title))
 		}
 	}
 
@@ -207,12 +208,12 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	renderLessonChecklistFavorites = () => {
-		const { classes, checklistsSystem } = this.props
+		const { classes, locale, systemLocaleMap, checklistsSystem } = this.props
 		const { checklists } = this.state
 
 		const checklistsSystemKeys = Object.keys(checklistsSystem)
 
-		if (!checklistsSystemKeys.length) return this.renderPanel('No favorites saved')
+		if (!checklistsSystemKeys.length) return this.renderPanel(systemLocaleMap[locale].checklist_favorites_empty)
 
 		return (
 			<React.Fragment>
@@ -238,12 +239,12 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	renderLessonChecklists = () => {
-		const { classes, checklistsSystem } = this.props
+		const { classes, locale, systemLocaleMap, checklistsSystem } = this.props
 		const { checklists } = this.state
 
 		const checklistsSystemKeys = Object.keys(checklistsSystem)
 
-		if (!checklistsSystemKeys.length) return this.renderPanel('No checklists available')
+		if (!checklistsSystemKeys.length) return this.renderPanel(systemLocaleMap[locale].checklists_unavailable)
 
 		return (
 			<React.Fragment>
@@ -275,7 +276,7 @@ class ChecklistsSystem extends React.Component {
 			<React.Fragment>
 				{!pathwaysSaved.length 
 					? <Paper className={classes.panel}>
-						<Typography className={classes.pathwayTitle} variant="h6">You did not favorite any tips yet</Typography>
+						<Typography className={classes.pathwayTitle} variant="h6">{systemLocaleMap[locale].checklist_pathways_empty}</Typography>
 					</Paper>
 					: pathwaysSaved
 						.sort(pathway => pathway.filename)
@@ -291,7 +292,15 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	render() {
-		const { classes, getChecklistsSystemLoading, getChecklistsSystemError, checklistsSystem } = this.props
+		const { 
+			classes, 
+			content, 
+			locale, 
+			systemLocaleMap, 
+			getChecklistsSystemLoading, 
+			getChecklistsSystemError, 
+			checklistsSystem 
+		} = this.props
 		const { expanded, checklistCount } = this.state
 
 		if (getChecklistsSystemLoading) return <Loading />
@@ -306,7 +315,7 @@ class ChecklistsSystem extends React.Component {
 
 		return (
 			<div className={classes.content}>
-				<Typography className={classes.label} variant="subtitle1">Checklists Total</Typography>
+				<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].checklist_total_title}</Typography>
 
 				<Paper className={classes.panel}>
 					<div className={classes.panelTotalIconsWrapper}>
@@ -314,21 +323,21 @@ class ChecklistsSystem extends React.Component {
 						<img className={classNames(classes.panelTotalIcon, classes.panelTotalIconSecond)} src={`/static/assets/images/advanced.png`} alt={`Umbrella lesson intermediate icon`}/>
 						<img className={classNames(classes.panelTotalIcon, classes.panelTotalIconThird)} src={`/static/assets/images/expert.png`} alt={`Umbrella lesson expert icon`}/>
 					</div>
-					<Typography className={classes.panelTitle} variant="h6">Total done</Typography>
+					<Typography className={classes.panelTitle} variant="h6">{systemLocaleMap[locale].checklist_total_done}</Typography>
 					<Typography className={classes.panelPercentage} variant="h6">{totalDonePercentage}%</Typography>
 				</Paper>
 
-				<Typography className={classes.label} variant="subtitle1">Favourites</Typography>
+				<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].favorites_title}</Typography>
 
 				{this.renderLessonChecklistFavorites()}
 
-				<Typography className={classes.label} variant="subtitle1">My Checklists</Typography>
+				<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].checklist_lessons_title}</Typography>
 
 				{this.renderLessonChecklists()}
 
-				<Typography className={classes.label} variant="subtitle1">Top Tips</Typography>
+				{!!content[locale].pathways && <Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].checklist_pathways_title}</Typography>}
 
-				{this.renderPathways()}
+				{!!content[locale].pathways && this.renderPathways()}
 			</div>
 		)
 	}

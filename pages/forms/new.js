@@ -100,6 +100,12 @@ class FormsNew extends React.Component {
 		})
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].form_title))
+		}
+	}
+
 	onChange = (field, value) => {
 		const { activeStep, formState } = this.state
 
@@ -156,7 +162,7 @@ class FormsNew extends React.Component {
 	}
 
 	onFinish = () => {
-		const { dispatch, router, form } = this.props
+		const { dispatch, locale, systemLocaleMap, router, form } = this.props
 		const { formState } = this.state
 
 		this.setState({
@@ -176,7 +182,7 @@ class FormsNew extends React.Component {
 
 		dispatch(saveForm(newForm, () => {
 			dispatch(resetSaveForm())
-			dispatch(openAlert('success', 'Your form has been saved'))
+			dispatch(openAlert('success', systemLocaleMap[locale].form_saved))
 
 			Router.push('/forms')
 		}))
@@ -245,7 +251,7 @@ class FormsNew extends React.Component {
 	}
 
 	renderScreen = screen => {
-		const { classes, title, form } = this.props
+		const { classes, locale, systemLocaleMap, title, form } = this.props
 		const { activeStep } = this.state
 
 		return (
@@ -257,14 +263,14 @@ class FormsNew extends React.Component {
 				</form>
 
 				<FormControl className={classes.buttonsWrapper} fullWidth>
-					{activeStep !== 0 && <Button onClick={this.onBack}>Go Back</Button>}
+					{activeStep !== 0 && <Button onClick={this.onBack}>{systemLocaleMap[locale].go_back}</Button>}
 
 					{activeStep !== form.screens.length - 1 
 						? <ClickAwayListener onClickAway={this.removeError}>
-							<Button color="secondary" onClick={this.onNext}>Next</Button>
+							<Button color="secondary" onClick={this.onNext}>{systemLocaleMap[locale].next}</Button>
 						</ClickAwayListener>
 						: <ClickAwayListener onClickAway={this.removeError}>
-							<Button color="secondary" onClick={this.onFinish}>Finish</Button>
+							<Button color="secondary" onClick={this.onFinish}>{systemLocaleMap[locale].finish}</Button>
 						</ClickAwayListener>
 					}
 				</FormControl>

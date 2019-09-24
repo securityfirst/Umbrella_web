@@ -66,13 +66,13 @@ class ChecklistsCustom extends React.Component {
 	}
 
 	renderChecklists = () => {
-		const { classes, checklistsCustom } = this.props
+		const { classes, locale, systemLocaleMap, checklistsCustom } = this.props
 		const { expanded } = this.state
 
 		if (!checklistsCustom.length) return (
 			<Paper className={classes.panel} square>
 				<Typography className={classes.text} paragraph>
-					You do not have any checklists saved. Click the '+' button to create a custom checklist.
+					{systemLocaleMap[locale].empty_checklist_message}
 				</Typography>
 			</Paper>
 		)
@@ -94,14 +94,22 @@ class ChecklistsCustom extends React.Component {
 	}
 
 	render() {
-		const { classes, isProtected, password, getChecklistsCustomLoading, getChecklistsCustomError } = this.props
+		const { 
+			classes, 
+			locale, 
+			systemLocaleMap, 
+			isProtected, 
+			password, 
+			getChecklistsCustomLoading, 
+			getChecklistsCustomError 
+		} = this.props
 		const { modalOpen } = this.state
 
 		if (isProtected && !password) return (
 			<div className={classes.content}>
 				<Paper className={classes.panel} square>
 					<Typography className={classes.text} paragraph>
-						Login or set your password to manage your custom checklists.
+						{systemLocaleMap[locale].checklist_login}
 					</Typography>
 				</Paper>
 			</div>

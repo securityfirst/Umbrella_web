@@ -67,8 +67,10 @@ class FeedsRss extends React.Component {
 	}
 
 	handleSourceRemove = index => () => {
-		if (confirm('Are you sure you want to delete this RSS source?')) {
-			this.props.dispatch(removeRssSource(index))
+		const { dispatch, locale, systemLocaleMap } = this.props
+
+		if (confirm(systemLocaleMap[locale].confirm_delete_rss)) {
+			dispatch(removeRssSource(index))
 		}
 	}
 

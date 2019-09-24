@@ -113,6 +113,8 @@ class Account extends React.Component {
 		passwordErrorMessage: '',
 		passwordConfirmError: null,
 		passwordConfirmErrorMessage: '',
+		passwordOldError: null,
+		passwordOldErrorMessage: '',
 	}
 
 	componentDidMount() {
@@ -122,12 +124,20 @@ class Account extends React.Component {
 		dispatch(setAppbarTitle(systemLocaleMap[locale].account_title))
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].account_title))
+		}
+	}
+
 	handlePanelToggle = i => (e, expanded) => {
 		this.setState({expanded: expanded ? i : false})
 	}
 
 	clearDb = () => {
-		if (confirm('Are you sure you want to delete your cache? It will remove all data, including your password.')) {
+		const { locale, systemLocaleMap } = this.props
+
+		if (confirm(systemLocaleMap[locale].confirm_delete_cache)) {
 			this.props.dispatch(clearDb())
 		}
 	}
@@ -179,39 +189,39 @@ class Account extends React.Component {
 	}
 
 	checkPassword = type => {
+		const { locale, systemLocaleMap } = this.props
 		const value = this.state[type]
 
 		if (!value) {
 			this.setState({
 				[`${type}Error`]: true,
-				[`${type}ErrorMessage`]: 'Password cannot be empty',
+				[`${type}ErrorMessage`]: systemLocaleMap[locale].password_empty,
 			})
+
 			return false
-		} else if (value.length < 8) {
-			this.setState({
-				[`${type}Error`]: true,
-				[`${type}ErrorMessage`]: 'Password must be at least 8 characters long',
-			})
-			return false
-		} else if (!RegExp('[A-Z]+[0-9]*').test(value)) {
-			this.setState({
-				[`${type}Error`]: true,
-				[`${type}ErrorMessage`]: 'Password must include at least one digit and one capital letter',
-			})
-			return false
-		} else {
-			this.setState({
-				[`${type}Error`]: null,
-				[`${type}ErrorMessage`]: null,
-			})
-			return true
 		}
+
+		if (value.length < 8 || !RegExp('[A-Z]+[0-9]*').test(value)) {
+			this.setState({
+				[`${type}Error`]: true,
+				[`${type}ErrorMessage`]: systemLocaleMap[locale].account_password_alert_description,
+			})
+
+			return false
+		}
+
+		this.setState({
+			[`${type}Error`]: null,
+			[`${type}ErrorMessage`]: null,
+		})
+
+		return true
 	}
 
 	savePassword = e => {
 		!!e && e.preventDefault()
 
-		const { dispatch, router, passwordExists } = this.props
+		const { dispatch, router, locale, systemLocaleMap, passwordExists } = this.props
 		const { password, passwordConfirm, passwordOld } = this.state
 
 		if (
@@ -219,21 +229,23 @@ class Account extends React.Component {
 			this.checkPassword('passwordConfirm')
 		) {
 			if (password !== passwordConfirm) {
-				return dispatch(openAlert('error', 'Passwords do not match - please try again'))
+				return dispatch(openAlert('error', systemLocaleMap[locale].confirm_password_error_message))
 			}
 
 			if (passwordExists) {
-				dispatch(resetPassword(password, passwordOld, () => {
-					this.setState({
-						password: '',
-						passwordConfirm: '',
-						passwordOld: '',
-						passwordError: null,
-						passwordErrorMessage: '',
-						passwordConfirmError: null,
-						passwordConfirmErrorMessage: '',
-					})
-				}))
+				if (this.checkPassword('passwordOld')) {
+					dispatch(resetPassword(password, passwordOld, () => {
+						this.setState({
+							password: '',
+							passwordConfirm: '',
+							passwordOld: '',
+							passwordError: null,
+							passwordErrorMessage: '',
+							passwordConfirmError: null,
+							passwordConfirmErrorMessage: '',
+						})
+					}))
+				}
 			} else {
 				dispatch(savePassword(password, () => {
 					if (router.pathname.indexOf('account') === -1) router.back()
@@ -257,10 +269,10 @@ class Account extends React.Component {
 	}
 
 	unsetPassword = e => {
-		const { dispatch, passwordExists, isProtected } = this.props
+		const { dispatch, locale, systemLocaleMap, passwordExists, isProtected } = this.props
 
 		if (!passwordExists || !isProtected) {
-			return dispatch(openAlert('warning', 'You don\'t have a password set.'))
+			return dispatch(openAlert('warning', systemLocaleMap[locale].password_not_set))
 		}
 
 		dispatch(unsetPassword())
@@ -317,11 +329,11 @@ class Account extends React.Component {
 
 				<div className={classes.settingsRow}>
 					<div className={classes.settingsColumnLeft}>
-						<Button color="primary" onClick={this.clearDb}>Delete Cache</Button>
+						<Button color="primary" onClick={this.clearDb}>{systemLocaleMap[locale].delete_cache}</Button>
 					</div>
 					<div className={classes.settingsColumnRight}>
 						<Typography variant="caption">
-							All settings and preferences, including your password, are encrypted and stored in your local browser storage. Deleting your cache will remove all data, including your password.
+							{systemLocaleMap[locale].delete_cache_description}
 						</Typography>
 					</div>
 				</div>
@@ -386,6 +398,8 @@ class Account extends React.Component {
 			passwordErrorMessage,
 			passwordConfirmError, 
 			passwordConfirmErrorMessage,
+			passwordOldError,
+			passwordOldErrorMessage
 		} = this.state
 
 		return (
@@ -394,10 +408,10 @@ class Account extends React.Component {
 					id="old-password"
 					className={classes.input}
 					type="password"
-					label="Old Password"
+					label={systemLocaleMap[locale].old_password}
 					value={passwordOld}
-					error={passwordError}
-					errorMessage={passwordErrorMessage}
+					error={passwordOldError}
+					errorMessage={passwordOldErrorMessage}
 					onChange={this.handlePasswordChange('passwordOld')}
 					inputProps={{
 						onBlur: this.clearPasswordErrors
@@ -407,7 +421,10 @@ class Account extends React.Component {
 					id="reg-password"
 					className={classes.input}
 					type="password"
-					label={systemLocaleMap[locale].account_password_alert_password}
+					label={passwordExists
+						? systemLocaleMap[locale].new_password
+						: systemLocaleMap[locale].account_password_alert_password
+					}
 					value={password}
 					error={passwordError}
 					errorMessage={passwordErrorMessage}
@@ -420,7 +437,10 @@ class Account extends React.Component {
 					id="reg-passwordConfirm"
 					className={classes.input}
 					type="password"
-					label={passwordExists ? systemLocaleMap[locale].reset_password_title : systemLocaleMap[locale].account_password_alert_confirm}
+					label={passwordExists 
+						? systemLocaleMap[locale].reset_password_title 
+						: systemLocaleMap[locale].account_password_alert_confirm
+					}
 					value={passwordConfirm}
 					error={passwordConfirmError}
 					errorMessage={passwordConfirmErrorMessage}
@@ -430,13 +450,7 @@ class Account extends React.Component {
 					}}
 				/>
 				<Typography className={classes.description} paragraph>
-					* {systemLocaleMap[locale].password_one_digit}
-				</Typography>
-				<Typography className={classes.description} paragraph>
-					* {systemLocaleMap[locale].password_one_capital}
-				</Typography>
-				<Typography className={classes.description} paragraph>
-					* {systemLocaleMap[locale].password_one_small}
+					* {systemLocaleMap[locale].account_password_alert_description}
 				</Typography>
 				<div className={classes.buttonWrapper}>
 					<Button color="primary" variant="contained" onClick={this.savePassword}>{systemLocaleMap[locale].account_password_alert_confirm}</Button>
@@ -456,14 +470,11 @@ class Account extends React.Component {
 
 		return (
 			<React.Fragment>
-				<Typography paragraph><strong>Status: </strong>{
+				<Typography paragraph><strong>{systemLocaleMap[locale].status}: </strong>{
 					passwordExists ? systemLocaleMap[locale].password_success : systemLocaleMap[locale].settings_title_skip_pw
 				}</Typography>
 				<Typography className={classes.disclaimerLarge}>
-					<strong>DISCLAIMER: </strong> We do not store any data on our servers during your 
-					usage, including your password. Your password is encoded and stored on your browser, 
-					and it is used to decode other information you choose to store. Please do not use a 
-					sensitive password combination in case it is compromised.
+					<strong>{systemLocaleMap[locale].disclaimer}: </strong> {systemLocaleMap[locale].disclaimer_description}
 				</Typography>
 				{this.renderPasswordForm()}
 			</React.Fragment>

@@ -127,8 +127,6 @@ const view = {
 	getContentLocaleMapLoading: true,
 	getContentLocaleMapError: null,
 	contentLocaleMap: {},
-	// getSystemLocaleMapLoading: true,
-	// getSystemLocaleMapError: null,
 	systemLocaleMap: systemLocaleMap,
 	alertOpen: false,
 	alertType: null,

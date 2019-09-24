@@ -46,6 +46,12 @@ class Feeds extends React.Component {
 		dispatch(setAppbarTitle(systemLocaleMap[locale].feed_title))
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.locale !== this.props.locale) {
+			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].feed_title))
+		}
+	}
+
 	handleTabSelect = (e, v) => {
 		let state = {tabIndex: v}
 		if (v !== 0) state['isEdit'] = false

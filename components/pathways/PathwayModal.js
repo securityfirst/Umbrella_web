@@ -102,7 +102,7 @@ class PathwayModal extends React.Component {
 	}
 
 	render() {
-		const { classes, content, locale, pathwayModalOpened } = this.props
+		const { classes, content, locale, systemLocaleMap, pathwayModalOpened } = this.props
 
 		return (
 			<Dialog
@@ -118,8 +118,8 @@ class PathwayModal extends React.Component {
 					</IconButton>
 
 					<div className={classes.panelsWrapper}>
-						<Typography className={classes.modalContentTitle}>What do you need most?</Typography>
-						<Typography className={classes.modalContentDescription}>Select a guide to start your security journey, or bookmark any guide for later.</Typography>
+						<Typography className={classes.modalContentTitle}>{systemLocaleMap[locale].pathways_title}</Typography>
+						<Typography className={classes.modalContentDescription}>{systemLocaleMap[locale].pathways_text}</Typography>
 						{content[locale].pathways.content
 							.sort(pathway => pathway.filename)
 							.map((pathway, i) => {
@@ -138,7 +138,7 @@ class PathwayModal extends React.Component {
 							color="secondary"
 							onClick={this.handleDismiss}
 						>
-							Show Me
+							{systemLocaleMap[locale].show_me_button}
 						</Button>
 					</Link>
 
@@ -146,7 +146,7 @@ class PathwayModal extends React.Component {
 						className={classes.bottomText}
 						paragraph
 						onClick={this.handleDismiss}
-					>No thanks, I'll explore on my own</Typography>
+					>{systemLocaleMap[locale].no_thanks_button}</Typography>
 				</Paper>
 			</Dialog>
 		)
