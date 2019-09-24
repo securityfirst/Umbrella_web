@@ -150,13 +150,13 @@ class Forms extends React.Component {
 				</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
-					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].message_body_form_new}</Button></Link>
+					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].form_menu_edit}</Button></Link>
 					<Button 
 						component="button" 
 						aria-owns={anchorEl ? 'active-download-menu' : undefined}
 						aria-haspopup="true"
 						onClick={this.handleClick}
-					>Download</Button>
+					>{systemLocaleMap[locale].download_title}</Button>
 					<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>{systemLocaleMap[locale].delete}</Button>
 
 					<Menu
