@@ -208,7 +208,7 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	renderLessonChecklistFavorites = () => {
-		const { classes, checklistsSystem } = this.props
+		const { classes, locale, systemLocaleMap, checklistsSystem } = this.props
 		const { checklists } = this.state
 
 		const checklistsSystemKeys = Object.keys(checklistsSystem)
@@ -292,7 +292,15 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	render() {
-		const { classes, getChecklistsSystemLoading, getChecklistsSystemError, checklistsSystem } = this.props
+		const { 
+			classes, 
+			content, 
+			locale, 
+			systemLocaleMap, 
+			getChecklistsSystemLoading, 
+			getChecklistsSystemError, 
+			checklistsSystem 
+		} = this.props
 		const { expanded, checklistCount } = this.state
 
 		if (getChecklistsSystemLoading) return <Loading />
@@ -327,9 +335,9 @@ class ChecklistsSystem extends React.Component {
 
 				{this.renderLessonChecklists()}
 
-				<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].checklist_pathways_title}</Typography>
+				{!!content[locale].pathways && <Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].checklist_pathways_title}</Typography>}
 
-				{this.renderPathways()}
+				{!!content[locale].pathways && this.renderPathways()}
 			</div>
 		)
 	}

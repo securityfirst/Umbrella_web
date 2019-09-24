@@ -155,7 +155,7 @@ class LessonsLevel extends React.Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.locale !== this.props.locale) {
-			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].lesson_title))
+			this.props.dispatch(setAppbarTitle(this.props.systemLocaleMap[nextProps.locale].lesson_title))
 		}
 	}
 	
@@ -194,7 +194,8 @@ class LessonsLevel extends React.Component {
 		const { 
 			router,
 			classes,
-			content,  
+			content, 
+			systemLocaleMap,  
 			getLessonChecklistLoading, 
 			getLessonChecklistError, 
 			currentLessonChecklist, 
