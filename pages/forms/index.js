@@ -1,6 +1,8 @@
+import 'isomorphic-unfetch'
 import React from 'react'
 import Link from 'next/link'
 import { connect } from 'react-redux'
+import YAML from 'yaml'
 
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -20,6 +22,7 @@ import { setAppbarTitle, openAlert } from '../../store/actions/view'
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
 import { generateForm } from '../../utils/forms'
 import { downloadPdf, downloadHtml, downloadDocx } from '../../utils/dom'
+import { decodeBlob } from '../../utils/github'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -114,15 +117,25 @@ class Forms extends React.Component {
 		const { dispatch, locale, systemLocaleMap, form } = this.props
 
 		try {
-			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
-			
-			await dispatch(getForm(formSaved.sha))
-			
-			const html = generateForm(form, formSaved)
+			dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
 
-			downloadDocx(formSaved.filename, html)
+			fetch(`${process.env.ROOT}/api/github/content/${formSaved.sha}`)
+				.then(res => {
+					if (!res.ok) throw res
+					return res.text()
+				})
+				.then(content => {
+					const form = YAML.parse(decodeBlob(content))
+					const html = generateForm(form, formSaved)
 
-			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+					downloadDocx(formSaved.filename, html)
+
+					dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+				})
+				.catch(err => {
+					console.error('Get form error: ', err)
+					dispatch(openAlert('error', systemLocaleMap[locale].general_error))
+				})
 		} catch (e) {
 			console.error('Download DOCX error: ', e)
 			dispatch(openAlert('error', systemLocaleMap[locale].general_error))

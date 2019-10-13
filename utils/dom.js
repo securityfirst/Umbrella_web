@@ -1,4 +1,5 @@
 import * as Blob from 'blob'
+import htmlDocx from 'html-docx-js'
 
 export const downloadPdf = (name = 'download', marked) => {
 	if (typeof window === 'undefined') return false
@@ -74,8 +75,18 @@ export const downloadDocx = async (name = 'download', marked) => {
 				<body>${marked}</body>
 			</html>
 		`
-		const blob = new Blob(['\ufeff', html], {type: 'application/msword'})
-		const url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html)
+		// const html = `
+		// 		<div>${marked}</div>
+		// `
+
+		console.log("html: ", html);
+		// const blob = new Blob(['\ufeff', html], {type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})
+		const blob = htmlDocx.asBlob(content)
+		console.log("blob: ", blob);
+		// const url = URL.createObjectURL(blob)
+		// console.log("url: ", url);
+		// const url = 'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;charset=utf-8,' + encodeURIComponent(html)
+		const url = 'data:application/vnd.openxmlformats-officedocument.wordprocessingml.document,' + '\uFEFF' + encodeURIComponent(html)
 		
 		save(blob, url, name + '.docx')
 	} catch (e) {

@@ -30,8 +30,8 @@ const styles = theme => ({
 		backgroundColor: theme.palette.primary.main,
 		[theme.breakpoints.down('sm')]: {
 			height: '100%',
-			maxHeight: '30rem',
-			margin: '1rem',
+			// maxHeight: '30rem',
+			// margin: '1rem',
 		},
 	},
 	closeButton: {
