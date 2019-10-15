@@ -29,7 +29,7 @@ import { setAppbarTitle, toggleLessonsMenu } from '../../store/actions/view'
 import { getLessonFile } from '../../store/actions/lessons'
 
 import { contentStyles, paperStyles } from '../../utils/view'
-import { decodeBlob } from '../../utils/github'
+import { formatContentUrls } from '../../utils/github'
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -194,11 +194,15 @@ class LessonCard extends React.Component {
 	}
 
 	renderContent = () => {
-		const { currentLessonFile, getLessonFileLoading, getLessonFileError } = this.props
+		const { router, currentLessonFile, getLessonFileLoading, getLessonFileError } = this.props
+		const { locale } = router.query
 
 		if (getLessonFileLoading) return <Loading />
 		else if (getLessonFileError) return <ErrorMessage error={getLessonFileError} />
-		return <Marked content={decodeBlob(currentLessonFile)} />
+
+		const formattedContent = formatContentUrls({ blob: currentLessonFile, locale }) 
+
+		return <Marked content={formattedContent} />
 	}
 
 	render() {
