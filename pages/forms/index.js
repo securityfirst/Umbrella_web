@@ -264,7 +264,7 @@ class Forms extends React.Component {
 						<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].form_menu_edit}</Button></Link>
 						<Button 
 							component="button" 
-							aria-owns={activeAnchorEl ? 'active-download-menu' : undefined}
+							aria-owns={activeAnchorEl ? `active-download-menu-${i}` : undefined}
 							aria-haspopup="true"
 							onClick={e => this.setState({ activeAnchorEl: e.currentTarget })}
 						>{systemLocaleMap[locale].download_title}</Button>
