@@ -163,7 +163,6 @@ class FormsNew extends React.Component {
 				dispatch(openAlert('success', systemLocaleMap[locale].form_saved))
 
 				dispatch(getFormSaved(id, formSavedRetrieved => {
-					console.log("formSavedRetrieved: ", formSavedRetrieved);
 					this.setState({formState: formSavedRetrieved.state})
 				}))
 			}))
