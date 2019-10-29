@@ -273,7 +273,11 @@ export default {
 		"download_title": "تحميل",
 		"copied": "نسخ!",
 		"copy_link": "انسخ الرابط",
-		"logout_success": "لقد تم تسجيل الخروج"
+		"logout_success": "لقد تم تسجيل الخروج",
+		"date_created": "تاريخ الإنشاء",
+		"date_modified": "التاريخ عدل",
+		"confirm_form_close": "هل أنت متأكد من أنك تريد إغلاق النموذج؟ سيتم فقد أي إدخالات لم يتم حفظها.",
+		"close": "قريب"
 	},
 	"en": {
 		"app_name": "Umbrella",
@@ -550,7 +554,11 @@ export default {
 		"download_title": "Download",
 		"copied": "Copied!",
 		"copy_link": "Copy Link",
-		"logout_success": "You have been logged out"
+		"logout_success": "You have been logged out",
+		"date_created": "Date Created",
+		"date_modified": "Date Modified",
+		"confirm_form_close": "Are you sure you want to close the form? Any unsaved entries will be lost.",
+		"close": "Close"
 	},
 	"es": {
 		"app_name": "Umbrella",
@@ -826,7 +834,11 @@ export default {
 		"download_title": "Descargar",
 		"copied": "Copiado!",
 		"copy_link": "Copiar link",
-		"logout_success": "Has sido desconectado"
+		"logout_success": "Has sido desconectado",
+		"date_created": "Fecha de Creacion",
+		"date_modified": "Fecha Modificada",
+		"confirm_form_close": "¿Seguro que quieres cerrar el formulario? Cualquier entrada no guardada se perderá.",
+		"close": "Cerrar"
 	},
 	"fa": {
 		"app_name": "چتر",
@@ -1102,7 +1114,11 @@ export default {
 		"download_title": "دانلود",
 		"copied": "کپی شد!",
 		"copy_link": "پیوند را کپی کنید",
-		"logout_success": "شما خارج شده اید"
+		"logout_success": "شما خارج شده اید",
+		"date_created": "تاریخ ایجاد",
+		"date_modified": "تاریخ اصلاح شد",
+		"confirm_form_close": "آیا مطمئن هستید که می خواهید فرم را ببندید؟ هر نوع ورودی ذخیره نشده از بین می رود.",
+		"close": "نزدیک"
 	},
 	"ru": {
 		"app_name": "Umbrella",
@@ -1378,7 +1394,11 @@ export default {
 		"download_title": "Скачать",
 		"copied": "Скопировано!",
 		"copy_link": "Копировать ссылку",
-		"logout_success": "Вы вышли из системы"
+		"logout_success": "Вы вышли из системы",
+		"date_created": "Дата создания",
+		"date_modified": "Дата изменена",
+		"confirm_form_close": "Вы уверены, что хотите закрыть форму? Любые несохраненные записи будут потеряны.",
+		"close": "близко"
 	},
 	"zh-Hant": {
 		"app_name": "Umbrella",
@@ -1654,6 +1674,10 @@ export default {
 		"download_title": "下載",
 		"copied": "複製！",
 		"copy_link": "複製鏈接",
-		"logout_success": "您已註銷"
+		"logout_success": "您已註銷",
+		"date_created": "創建日期",
+		"date_modified": "修改日期",
+		"confirm_form_close": "您確定要關閉表格嗎？ 所有未保存的條目將丟失。",
+		"close": "關"
 	}
 }

@@ -59,6 +59,8 @@ const styles = theme => ({
 	buttonsWrapper: {
 		margin: '1rem 0 0',
 		...buttonWrapperStyles(theme),
+		justifyContent: 'space-between',
+		alignItems: 'center'
 	},
 })
 
@@ -117,6 +119,19 @@ class FormEdit extends React.Component {
 		}
 
 		this.setState({formState: newState})
+	}
+
+	onClose = e => {
+		const { locale, systemLocaleMap } = this.props
+
+		if (confirm(systemLocaleMap[locale].confirm_form_close)) {
+			this.setState({
+				activeStep: 0,
+				progress: 0,
+			})
+
+			Router.push('/forms')
+		}
 	}
 
 	onNext = e => {
@@ -259,18 +274,23 @@ class FormEdit extends React.Component {
 				</form>
 
 				<FormControl className={classes.buttonsWrapper} fullWidth>
-					{activeStep !== form.screens.length - 1 && <Button onClick={this.onSave}>{systemLocaleMap[locale].save}</Button>}
+					<div>
+						<Button onClick={this.onClose}>{systemLocaleMap[locale].close}</Button>
+					</div>
+					<div>
+						{activeStep !== form.screens.length - 1 && <Button onClick={this.onSave}>{systemLocaleMap[locale].save}</Button>}
 
-					{activeStep !== 0 && <Button onClick={this.onBack}>{systemLocaleMap[locale].go_back}</Button>}
+						{activeStep !== 0 && <Button onClick={this.onBack}>{systemLocaleMap[locale].go_back}</Button>}
 
-					{activeStep !== form.screens.length - 1 
-						? <ClickAwayListener onClickAway={this.removeError}>
-							<Button color="secondary" onClick={this.onNext}>{systemLocaleMap[locale].next}</Button>
-						</ClickAwayListener>
-						: <ClickAwayListener onClickAway={this.removeError}>
-							<Button color="secondary" onClick={this.onFinish}>{systemLocaleMap[locale].finish}</Button>
-						</ClickAwayListener>
-					}
+						{activeStep !== form.screens.length - 1 
+							? <ClickAwayListener onClickAway={this.removeError}>
+								<Button color="secondary" onClick={this.onNext}>{systemLocaleMap[locale].next}</Button>
+							</ClickAwayListener>
+							: <ClickAwayListener onClickAway={this.removeError}>
+								<Button color="secondary" onClick={this.onFinish}>{systemLocaleMap[locale].finish}</Button>
+							</ClickAwayListener>
+						}
+					</div>
 				</FormControl>
 			</Paper>
 		)

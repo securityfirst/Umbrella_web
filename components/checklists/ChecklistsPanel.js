@@ -8,6 +8,9 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import Typography from '@material-ui/core/Typography'
 import FormControl from '@material-ui/core/FormControl'
 import FormGroup from '@material-ui/core/FormGroup'
+import Menu from '@material-ui/core/Menu'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
@@ -19,6 +22,8 @@ import FormControlInput from '../common/FormControlInput'
 import cyan from '@material-ui/core/colors/cyan'
 
 import { paperStyles } from '../../utils/view'
+import { generateChecklist } from '../../utils/forms'
+import { downloadPdf, downloadHtml, downloadDocx } from '../../utils/dom'
 
 import { updateChecklistCustom, deleteChecklistCustom } from '../../store/actions/checklists'
 import { openAlert } from '../../store/actions/view'
@@ -26,10 +31,18 @@ import { openAlert } from '../../store/actions/view'
 const styles = theme => ({
 	header: {
 		justifyContent: 'space-between',
+		alignItems: 'center',
 	},
 	name: {
 		display: 'inline-block',
 		fontWeight: 'normal',
+	},
+	rightWrapper: {
+		display: 'flex',
+    	alignItems: 'center',
+	},
+	downloadButton: {
+		marginRight: '1rem',
 	},
 	percentage: {
 		display: 'inline-block',
@@ -69,6 +82,7 @@ class ChecklistsPanel extends React.Component {
 		itemText: '',
 		error: null,
 		errorMessage: null,
+		anchorEl: null,
 	}
 
 	handleChecked = i => e => {
@@ -121,6 +135,60 @@ class ChecklistsPanel extends React.Component {
 		dispatch(deleteChecklistCustom(index))
 	}
 
+	downloadHtml = (checklist, percentage) => async () => {
+		const { dispatch, locale, systemLocaleMap, form } = this.props
+
+		try {
+			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
+			
+			const name = checklist.name.replace(/ /g, '_')
+			const html = generateChecklist(checklist, percentage)
+
+			downloadHtml(name, html)
+
+			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+		} catch (e) {
+			console.error('Download HTML error: ', e)
+			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
+		}
+	}
+
+	downloadPdf = (checklist, percentage) => async () => {
+		const { dispatch, locale, systemLocaleMap, form } = this.props
+
+		try {
+			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
+			
+			const name = checklist.name.replace(/ /g, '')
+			const html = generateChecklist(checklist, percentage)
+
+			downloadPdf(name, html)
+
+			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+		} catch (e) {
+			console.error('Download PDF error: ', e)
+			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
+		}
+	}
+
+	downloadDocx = (checklist, percentage) => async () => {
+		const { dispatch, locale, systemLocaleMap, form } = this.props
+
+		try {
+			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
+			
+			const name = checklist.name.replace(/ /g, '')
+			const html = generateChecklist(checklist, percentage)
+
+			downloadDocx(name, html)
+
+			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+		} catch (e) {
+			console.error('Download DOCX error: ', e)
+			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
+		}
+	}
+	
 	renderItem = (item, i) => {
 		const { classes, isCustom } = this.props
 
@@ -144,7 +212,7 @@ class ChecklistsPanel extends React.Component {
 
 	render() {
 		const { classes, locale, systemLocaleMap, index, checklist, expanded, handlePanelToggle, isCustom } = this.props
-		const { itemText, error, errorMessage } = this.state
+		const { itemText, error, errorMessage, anchorEl } = this.state
 
 		if (!checklist) return <Paper className={classes.formPanel} square></Paper>
 
@@ -159,8 +227,40 @@ class ChecklistsPanel extends React.Component {
 		return (
 			<ExpansionPanel expanded={expanded === index} onChange={handlePanelToggle(index)}>
 				<ExpansionPanelSummary classes={{content: classes.header}} expandIcon={<ExpandMoreIcon />}>
-					<Typography className={classes.name} variant="h6">{checklist.name}</Typography>
-					<Typography className={classes.percentage} variant="h6">{percentage}%</Typography>
+					<div>
+						<Typography className={classes.name} variant="h6">{checklist.name}</Typography>
+					</div>
+					<div className={classes.rightWrapper}>
+						<Button 
+							className={classes.downloadButton}
+							component="button" 
+							aria-owns={anchorEl ? `active-download-menu-${index}` : undefined}
+							aria-haspopup="true"
+							onClick={e => {
+								e.stopPropagation()
+								this.setState({ anchorEl: e.currentTarget })
+							}}
+						>{systemLocaleMap[locale].download_title}</Button>
+
+						<Typography className={classes.percentage} variant="h6">{percentage}%</Typography>
+
+						<Menu
+							id={`active-download-menu-${index}`}
+							anchorEl={anchorEl}
+							open={Boolean(anchorEl)}
+							onClose={() => this.setState({ anchorEl: null })}
+						>
+							<ListItem button onClick={this.downloadHtml(checklist, percentage)}>
+								<ListItemText primary={systemLocaleMap[locale].html_name} />
+							</ListItem>
+							<ListItem button onClick={this.downloadPdf(checklist, percentage)}>
+								<ListItemText primary={systemLocaleMap[locale].pdf_name} />
+							</ListItem>
+							<ListItem button onClick={this.downloadDocx(checklist, percentage)}>
+								<ListItemText primary={systemLocaleMap[locale].docx_name} />
+							</ListItem>
+						</Menu>
+					</div>
 				</ExpansionPanelSummary>
 				<ExpansionPanelDetails>
 					<form className={classes.form} onSubmit={this.addItem}>

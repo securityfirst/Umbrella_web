@@ -15,10 +15,12 @@ export const generateForm = (form, formSaved) => {
 	}
 
 	try {
-		return `<h1>${form.title}</h1>` + 
-			form.screens.map((screen, i) => {
-				return `<h2 style="margin-top:40px">${screen.title}</h2>` + 
-					screen.items.map(item => {
+		return `
+			<h1>${form.title}</h1>
+			${form.screens.map((screen, i) => {
+				return `
+					<h2 style="margin-top:40px">${screen.title}</h2>
+					${screen.items.map(item => {
 						switch (item.type) {
 							case 'text_input': 
 							case 'text_area': 
@@ -38,8 +40,37 @@ export const generateForm = (form, formSaved) => {
 									<ul>${values}</ul>
 								`
 						}
-					}).join('')
-			}).join('')
+					}).join('')}
+				`
+			}).join('')}
+		`
+	} catch (e) {
+		throw e
+	}
+}
+
+export const generateChecklist = (checklist, percentage) => {
+	if (typeof window === 'undefined') return false
+
+	if (
+		!checklist || 
+		!checklist.name ||
+		isNaN(percentage)
+	) {
+		alert('Something went wrong. Please refresh the page and try again.')
+		return false
+	}
+
+	try {
+		return `
+			<h1>${checklist.name}</h1>
+			<h2>${percentage}%</h2>
+			${(checklist.items && checklist.items.length)
+				? `<ul>${checklist.items.map((item, i) => {
+					return `<li><strong>${item.text}</strong>: ${item.done ? '✓' : '✕'}</li>`
+				}).join('')}</ul>`
+				: ''}
+		`
 	} catch (e) {
 		throw e
 	}

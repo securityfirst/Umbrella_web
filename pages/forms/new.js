@@ -22,7 +22,7 @@ import FormControlRadios from '../../components/common/FormControlRadios'
 
 import teal from '@material-ui/core/colors/teal'
 
-import { getForm, saveForm, resetSaveForm } from '../../store/actions/forms'
+import { getForm, getFormSaved, saveForm, resetSaveForm } from '../../store/actions/forms'
 import { setAppbarTitle, openAlert } from '../../store/actions/view'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
@@ -59,6 +59,8 @@ const styles = theme => ({
 	buttonsWrapper: {
 		margin: '1rem 0 0',
 		...buttonWrapperStyles(theme),
+		justifyContent: 'space-between',
+		alignItems: 'center'
 	},
 })
 
@@ -135,6 +137,65 @@ class FormsNew extends React.Component {
 		this.setState({formState: newState})
 	}
 
+	onSave = e => {
+		const { dispatch, router, locale, systemLocaleMap, form, formSaved } = this.props
+		const { formState } = this.state
+
+		if (!formSaved) {
+			this.setState({
+				activeStep: 0,
+				progress: 0,
+			})
+
+			const date = new Date()
+			const id = ID()
+
+			const newForm = {
+				id: id,
+				sha: router.query.sha,
+				filename: form.title,
+				state: formState,
+				dateCreated: date.valueOf()
+			}
+
+			return dispatch(saveForm(newForm, () => {
+				dispatch(resetSaveForm())
+				dispatch(openAlert('success', systemLocaleMap[locale].form_saved))
+
+				dispatch(getFormSaved(id, formSavedRetrieved => {
+					console.log("formSavedRetrieved: ", formSavedRetrieved);
+					this.setState({formState: formSavedRetrieved.state})
+				}))
+			}))
+		}
+
+		const date = new Date()
+
+		const formUpdated = {
+			...formSaved,
+			state: formState,
+			dateModified: date.valueOf(),
+		}
+
+		return dispatch(saveForm(formUpdated, () => {
+			dispatch(openAlert('success', systemLocaleMap[locale].form_saved))
+
+		}))
+	}
+
+	onClose = e => {
+		const { locale, systemLocaleMap } = this.props
+
+		if (confirm(systemLocaleMap[locale].confirm_form_close)) {
+			this.setState({
+				activeStep: 0,
+				progress: 0,
+			})
+
+			Router.push('/forms')
+		}
+	}
+
 	onNext = e => {
 		!!e && e.preventDefault()
 
@@ -162,7 +223,7 @@ class FormsNew extends React.Component {
 	}
 
 	onFinish = () => {
-		const { dispatch, locale, systemLocaleMap, router, form } = this.props
+		const { dispatch, router, locale, systemLocaleMap, form } = this.props
 		const { formState } = this.state
 
 		this.setState({
@@ -263,16 +324,22 @@ class FormsNew extends React.Component {
 				</form>
 
 				<FormControl className={classes.buttonsWrapper} fullWidth>
-					{activeStep !== 0 && <Button onClick={this.onBack}>{systemLocaleMap[locale].go_back}</Button>}
+					<div>
+						<Button onClick={this.onSave}>{systemLocaleMap[locale].save}</Button>
+						<Button onClick={this.onClose}>{systemLocaleMap[locale].close}</Button>
+					</div>
+					<div>
+						{activeStep !== 0 && <Button onClick={this.onBack}>{systemLocaleMap[locale].go_back}</Button>}
 
-					{activeStep !== form.screens.length - 1 
-						? <ClickAwayListener onClickAway={this.removeError}>
-							<Button color="secondary" onClick={this.onNext}>{systemLocaleMap[locale].next}</Button>
-						</ClickAwayListener>
-						: <ClickAwayListener onClickAway={this.removeError}>
-							<Button color="secondary" onClick={this.onFinish}>{systemLocaleMap[locale].finish}</Button>
-						</ClickAwayListener>
-					}
+						{activeStep !== form.screens.length - 1 
+							? <ClickAwayListener onClickAway={this.removeError}>
+								<Button color="secondary" onClick={this.onNext}>{systemLocaleMap[locale].next}</Button>
+							</ClickAwayListener>
+							: <ClickAwayListener onClickAway={this.removeError}>
+								<Button color="secondary" onClick={this.onFinish}>{systemLocaleMap[locale].finish}</Button>
+							</ClickAwayListener>
+						}
+					</div>
 				</FormControl>
 			</Paper>
 		)
