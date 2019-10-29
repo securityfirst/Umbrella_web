@@ -40,6 +40,8 @@ const styles = theme => ({
 	},
 	formPanelButtonsWrapper: {
 		...buttonWrapperStyles(theme),
+		justifyContent: 'space-between',
+		alignItems: 'center'
 	},
 })
 
@@ -150,31 +152,41 @@ class Forms extends React.Component {
 				</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
-					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].form_menu_edit}</Button></Link>
-					<Button 
-						component="button" 
-						aria-owns={anchorEl ? 'active-download-menu' : undefined}
-						aria-haspopup="true"
-						onClick={this.handleClick}
-					>{systemLocaleMap[locale].download_title}</Button>
-					<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>{systemLocaleMap[locale].delete}</Button>
+					<div>
+						<Typography className={classes.label}>
+							<strong>{systemLocaleMap[locale].date_created}</strong>: {new Date(formSaved.dateCreated).toLocaleString()}
+						</Typography>
+						{formSaved.dateModified && <Typography className={classes.label}>
+							<strong>{systemLocaleMap[locale].date_modified}</strong>: {new Date(formSaved.dateModified).toLocaleString()}
+						</Typography>}
+					</div>
+					<div>
+						<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].form_menu_edit}</Button></Link>
+						<Button 
+							component="button" 
+							aria-owns={anchorEl ? 'active-download-menu' : undefined}
+							aria-haspopup="true"
+							onClick={this.handleClick}
+						>{systemLocaleMap[locale].download_title}</Button>
+						<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>{systemLocaleMap[locale].delete}</Button>
 
-					<Menu
-						id={`active-download-menu-${i}`}
-						anchorEl={anchorEl}
-						open={Boolean(anchorEl)}
-						onClose={this.handleClose}
-					>
-						<ListItem button onClick={this.downloadHtml(formSaved)}>
-							<ListItemText primary={systemLocaleMap[locale].html_name} />
-						</ListItem>
-						<ListItem button onClick={this.downloadPdf(formSaved)}>
-							<ListItemText primary={systemLocaleMap[locale].pdf_name} />
-						</ListItem>
-						<ListItem button onClick={this.downloadDocx(formSaved)}>
-							<ListItemText primary={systemLocaleMap[locale].docx_name} />
-						</ListItem>
-					</Menu>
+						<Menu
+							id={`active-download-menu-${i}`}
+							anchorEl={anchorEl}
+							open={Boolean(anchorEl)}
+							onClose={this.handleClose}
+						>
+							<ListItem button onClick={this.downloadHtml(formSaved)}>
+								<ListItemText primary={systemLocaleMap[locale].html_name} />
+							</ListItem>
+							<ListItem button onClick={this.downloadPdf(formSaved)}>
+								<ListItemText primary={systemLocaleMap[locale].pdf_name} />
+							</ListItem>
+							<ListItem button onClick={this.downloadDocx(formSaved)}>
+								<ListItemText primary={systemLocaleMap[locale].docx_name} />
+							</ListItem>
+						</Menu>
+					</div>
 				</div>
 			</Paper>
 		)
@@ -190,53 +202,10 @@ class Forms extends React.Component {
 				</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
+					<div></div>
 					<Link href={`/forms/${form.sha}`}>
 						<Button color="primary" onClick={this.checkLogin}>{systemLocaleMap[locale].message_body_form_new}</Button>
 					</Link>
-				</div>
-			</Paper>
-		)
-	}
-
-	renderFilledPanel = (formSaved, i) => {
-		const { dispatch, classes, locale, systemLocaleMap } = this.props
-		const { anchorEl } = this.state
-
-		const date = new Date(formSaved.dateCompleted)
-
-		return (
-			<Paper key={i} className={classes.formPanel} square>
-				<Typography className={classes.formPanelTitle} variant="h6">
-					{formSaved.filename}
-				</Typography>
-				<Typography paragraph>{date.toLocaleString()}</Typography>
-
-				<div className={classes.formPanelButtonsWrapper}>
-					<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].form_menu_edit}</Button></Link>
-					<Button 
-						component="button" 
-						aria-owns={anchorEl ? 'saved-download-menu' : undefined}
-						aria-haspopup="true"
-						onClick={this.handleClick}
-					>Download</Button>
-					<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>{systemLocaleMap[locale].delete}</Button>
-
-					<Menu
-						id={`saved-download-menu-${i}`}
-						anchorEl={anchorEl}
-						open={Boolean(anchorEl)}
-						onClose={this.handleClose}
-					>
-						<ListItem button onClick={this.downloadHtml(formSaved)}>
-							<ListItemText primary={systemLocaleMap[locale].html_name} />
-						</ListItem>
-						<ListItem button onClick={this.downloadPdf(formSaved)}>
-							<ListItemText primary={systemLocaleMap[locale].pdf_name} />
-						</ListItem>
-						<ListItem button onClick={this.downloadDocx(formSaved)}>
-							<ListItemText primary={systemLocaleMap[locale].docx_name} />
-						</ListItem>
-					</Menu>
 				</div>
 			</Paper>
 		)

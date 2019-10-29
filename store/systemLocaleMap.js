@@ -273,7 +273,9 @@ export default {
 		"download_title": "تحميل",
 		"copied": "نسخ!",
 		"copy_link": "انسخ الرابط",
-		"logout_success": "لقد تم تسجيل الخروج"
+		"logout_success": "لقد تم تسجيل الخروج",
+		"date_created": "تاريخ الإنشاء",
+		"date_modified": "التاريخ عدل"
 	},
 	"en": {
 		"app_name": "Umbrella",
@@ -550,7 +552,9 @@ export default {
 		"download_title": "Download",
 		"copied": "Copied!",
 		"copy_link": "Copy Link",
-		"logout_success": "You have been logged out"
+		"logout_success": "You have been logged out",
+		"date_created": "Date Created",
+		"date_modified": "Date Modified"
 	},
 	"es": {
 		"app_name": "Umbrella",
@@ -826,7 +830,9 @@ export default {
 		"download_title": "Descargar",
 		"copied": "Copiado!",
 		"copy_link": "Copiar link",
-		"logout_success": "Has sido desconectado"
+		"logout_success": "Has sido desconectado",
+		"date_created": "Fecha de Creacion",
+		"date_modified": "Fecha Modificada"
 	},
 	"fa": {
 		"app_name": "چتر",
@@ -1102,7 +1108,9 @@ export default {
 		"download_title": "دانلود",
 		"copied": "کپی شد!",
 		"copy_link": "پیوند را کپی کنید",
-		"logout_success": "شما خارج شده اید"
+		"logout_success": "شما خارج شده اید",
+		"date_created": "تاریخ ایجاد",
+		"date_modified": "تاریخ اصلاح شد"
 	},
 	"ru": {
 		"app_name": "Umbrella",
@@ -1378,7 +1386,9 @@ export default {
 		"download_title": "Скачать",
 		"copied": "Скопировано!",
 		"copy_link": "Копировать ссылку",
-		"logout_success": "Вы вышли из системы"
+		"logout_success": "Вы вышли из системы",
+		"date_created": "Дата создания",
+		"date_modified": "Дата изменена"
 	},
 	"zh-Hant": {
 		"app_name": "Umbrella",
@@ -1654,6 +1664,8 @@ export default {
 		"download_title": "下載",
 		"copied": "複製！",
 		"copy_link": "複製鏈接",
-		"logout_success": "您已註銷"
+		"logout_success": "您已註銷",
+		"date_created": "創建日期",
+		"date_modified": "修改日期"
 	}
 }
