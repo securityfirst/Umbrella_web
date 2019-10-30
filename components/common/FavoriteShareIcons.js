@@ -159,9 +159,11 @@ class FavoriteShareIcon extends React.Component {
 			isLight, 
 			url, 
 			onFavoriteToggle, 
-			onFavoriteRemove 
+			onFavoriteRemove
 		} = this.props
 		const { anchorEl, tooltipOpen, downloadOpen } = this.state
+
+		const index = Math.floor(Math.random() * 1000000)
 
 		return (
 			<React.Fragment>
@@ -204,7 +206,7 @@ class FavoriteShareIcon extends React.Component {
 							? classes.cardActionIconWhite 
 							: null
 					)} 
-					aria-owns={anchorEl ? 'share-menu' : undefined}
+					aria-owns={anchorEl ? `share-menu-${index}` : undefined}
 					aria-haspopup="true"
 					onClick={this.handleClick}
 				>
@@ -212,7 +214,7 @@ class FavoriteShareIcon extends React.Component {
 				</Button>
 
 				<Menu
-					id="share-menu"
+					id={`share-menu-${index}`}
 					anchorEl={anchorEl}
 					open={Boolean(anchorEl)}
 					onClose={this.handleClose}

@@ -310,7 +310,7 @@ class Forms extends React.Component {
 						<Button 
 							size="small" 
 							className={classes.cardActionIcon} 
-							aria-owns={newAnchorEl ? 'share-menu' : undefined}
+							aria-owns={newAnchorEl ? `share-menu-${i}` : undefined}
 							aria-haspopup="true"
 							onClick={e => this.setState({ newAnchorEl: e.currentTarget })}
 						>
@@ -320,7 +320,7 @@ class Forms extends React.Component {
 							<Button color="primary" onClick={this.checkLogin}>{systemLocaleMap[locale].message_body_form_new}</Button>
 						</Link>
 						<Menu
-							id="share-menu"
+							id={`share-menu-${i}`}
 							anchorEl={newAnchorEl}
 							open={Boolean(newAnchorEl)}
 							onClose={() => this.setState({ newAnchorEl: null })}
