@@ -47,7 +47,7 @@ class Checklists extends React.Component {
 					onChange={this.handleTabSelect}
 				>
 					<Tab label={systemLocaleMap[locale].checklist_title_tab} />
-					<Tab label={systemLocaleMap[locale].custom_checklist_title_tab} />
+					<Tab label={systemLocaleMap[locale].checklist_custom_title_tab} />
 				</Tabs>
 
 				{tabIndex === 1

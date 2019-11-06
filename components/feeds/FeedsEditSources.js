@@ -114,9 +114,9 @@ class FeedsEditSources extends React.Component {
 					</FormControl>
 
 					<FormControl className={classes.buttonsWrapper} fullWidth>
-						<Button component="button" onClick={this.handleCancel}>{systemLocaleMap[locale].account_cancel}</Button>
+						<Button component="button" onClick={this.handleCancel}>{systemLocaleMap[locale].cancel}</Button>
 						<ClickAwayListener onClickAway={this.handleRemoveError}>
-							<Button color="secondary" onClick={this.handleSubmit}>{systemLocaleMap[locale].account_ok}</Button>
+							<Button color="secondary" onClick={this.handleSubmit}>{systemLocaleMap[locale].ok}</Button>
 						</ClickAwayListener>
 					</FormControl>
 				</form>

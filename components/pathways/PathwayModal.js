@@ -138,7 +138,7 @@ class PathwayModal extends React.Component {
 							color="secondary"
 							onClick={this.handleDismiss}
 						>
-							{systemLocaleMap[locale].show_me_button}
+							{systemLocaleMap[locale].pathways_show_me_button}
 						</Button>
 					</Link>
 
@@ -146,7 +146,7 @@ class PathwayModal extends React.Component {
 						className={classes.bottomText}
 						paragraph
 						onClick={this.handleDismiss}
-					>{systemLocaleMap[locale].no_thanks_button}</Typography>
+					>{systemLocaleMap[locale].pathways_no_thanks_button}</Typography>
 				</Paper>
 			</Dialog>
 		)

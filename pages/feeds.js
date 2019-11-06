@@ -91,7 +91,7 @@ class Feeds extends React.Component {
 					onChange={this.handleTabSelect}
 				>
 					<Tab label={systemLocaleMap[locale].feed_title_tab} />
-					<Tab label={systemLocaleMap[locale].rss_title_tab} />
+					<Tab label={systemLocaleMap[locale].feed_rss_title_tab} />
 				</Tabs>
 
 				<div className={classes.content}>

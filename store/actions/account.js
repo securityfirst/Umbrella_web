@@ -29,12 +29,12 @@ export const login = (password, cb) => (dispatch, getState) => {
 			.get('h', key)
 			.then(async data => {
 				if (!data) {
-					return dispatch(rejected(accountTypes.LOGIN, systemLocaleMap[locale].password_not_exist))
+					return dispatch(rejected(accountTypes.LOGIN, systemLocaleMap[locale].account_password_not_exist))
 				}
 
 				// if given password doesn't match decrypted password
 				if (password !== data) {
-					return dispatch(rejected(accountTypes.LOGIN, systemLocaleMap[locale].password_incorrect))
+					return dispatch(rejected(accountTypes.LOGIN, systemLocaleMap[locale].account_password_incorrect))
 				}
 
 				// Success and sync database to store
@@ -127,7 +127,7 @@ export const savePassword = (password, cb) => (dispatch, getState) => {
 			ClientDB.default
 			.set('h', password, key)
 			.then(() => {
-				dispatch(openAlert('success', systemLocaleMap[locale].password_success))
+				dispatch(openAlert('success', systemLocaleMap[locale].account_password_success))
 
 				Account.default.login(password)
 
@@ -157,7 +157,7 @@ export const resetPassword = (newPassword, oldPassword, cb) => async (dispatch, 
 	const { locale, systemLocaleMap } = state.view
 
 	if (!oldPassword) {
-		if (!confirm(systemLocaleMap[locale].reset_password_text)) {
+		if (!confirm(systemLocaleMap[locale].account_reset_password_text)) {
 			return dispatch(rejected(accountTypes.RESET_PASSWORD, 'Action cancelled'))
 		}
 
@@ -188,7 +188,7 @@ export const resetPassword = (newPassword, oldPassword, cb) => async (dispatch, 
 				const password = await ClientDB.default.get('h', key)
 
 				if (password !== oldPassword) {
-					const message = systemLocaleMap[locale].confirm_password_error_message
+					const message = systemLocaleMap[locale].confirm_account_password_error_message
 					dispatch(openAlert('error', message))
 					return dispatch(rejected(accountTypes.RESET_PASSWORD, message))
 				}
@@ -206,7 +206,7 @@ export const resetPassword = (newPassword, oldPassword, cb) => async (dispatch, 
 					// login with new password
 					await Account.default.login(newPassword)
 
-					dispatch(openAlert('success', systemLocaleMap[locale].password_changed))
+					dispatch(openAlert('success', systemLocaleMap[locale].account_password_changed))
 
 					dispatch(fulfilled(accountTypes.RESET_PASSWORD, newPassword))
 					
@@ -240,7 +240,7 @@ export const unsetPassword = () => async (dispatch, getState) => {
 
 		if (!isProtected) return dispatch(fulfilled(accountTypes.UNSET_PASSWORD))
 
-		if (!confirm(systemLocaleMap[locale].reset_password_text)) {
+		if (!confirm(systemLocaleMap[locale].account_reset_password_text)) {
 			return dispatch(rejected(accountTypes.UNSET_PASSWORD, 'Action cancelled'))
 		}
 
@@ -250,7 +250,7 @@ export const unsetPassword = () => async (dispatch, getState) => {
 
 		// logout
 		await Account.default.logout()
-		await dispatch(openAlert('success', systemLocaleMap[locale].password_unset_success))
+		await dispatch(openAlert('success', systemLocaleMap[locale].account_password_unset_success))
 
 		setTimeout(() => window.location.reload(), 1000)
 	} catch (e) {

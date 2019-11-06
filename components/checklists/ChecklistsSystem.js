@@ -286,7 +286,7 @@ class ChecklistsSystem extends React.Component {
 							</div>
 						))
 				}
-				<Typography className={classes.pathwaySeeAll} onClick={this.openPathwaysModal}>{systemLocaleMap[locale].see_all}</Typography>
+				<Typography className={classes.pathwaySeeAll} onClick={this.openPathwaysModal}>{systemLocaleMap[locale].checklist_see_all}</Typography>
 			</React.Fragment>
 		)
 	}

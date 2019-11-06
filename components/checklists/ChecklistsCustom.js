@@ -72,7 +72,7 @@ class ChecklistsCustom extends React.Component {
 		if (!checklistsCustom.length) return (
 			<Paper className={classes.panel} square>
 				<Typography className={classes.text} paragraph>
-					{systemLocaleMap[locale].empty_checklist_message}
+					{systemLocaleMap[locale].checklist_empty_message}
 				</Typography>
 			</Paper>
 		)

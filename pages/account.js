@@ -34,6 +34,7 @@ import { contentStyles, buttonWrapperStyles } from '../utils/view'
 const localeMap = {
 	'en': 'English',
 	'es': 'Spanish',
+	'fr': 'French',
 	'ar': 'Arabic',
 	'fa': 'Persian',
 	'ru': 'Russian',
@@ -137,7 +138,7 @@ class Account extends React.Component {
 	clearDb = () => {
 		const { locale, systemLocaleMap } = this.props
 
-		if (confirm(systemLocaleMap[locale].confirm_delete_cache)) {
+		if (confirm(systemLocaleMap[locale].confirm_account_delete_cache)) {
 			this.props.dispatch(clearDb())
 		}
 	}
@@ -195,7 +196,7 @@ class Account extends React.Component {
 		if (!value) {
 			this.setState({
 				[`${type}Error`]: true,
-				[`${type}ErrorMessage`]: systemLocaleMap[locale].password_empty,
+				[`${type}ErrorMessage`]: systemLocaleMap[locale].account_password_empty,
 			})
 
 			return false
@@ -229,7 +230,7 @@ class Account extends React.Component {
 			this.checkPassword('passwordConfirm')
 		) {
 			if (password !== passwordConfirm) {
-				return dispatch(openAlert('error', systemLocaleMap[locale].confirm_password_error_message))
+				return dispatch(openAlert('error', systemLocaleMap[locale].confirm_account_password_error_message))
 			}
 
 			if (passwordExists) {
@@ -272,7 +273,7 @@ class Account extends React.Component {
 		const { dispatch, locale, systemLocaleMap, passwordExists, isProtected } = this.props
 
 		if (!passwordExists || !isProtected) {
-			return dispatch(openAlert('warning', systemLocaleMap[locale].password_not_set))
+			return dispatch(openAlert('warning', systemLocaleMap[locale].account_password_not_set))
 		}
 
 		dispatch(unsetPassword())
@@ -291,7 +292,7 @@ class Account extends React.Component {
 							aria-owns={anchorEl ? 'locale-menu' : undefined}
 							aria-haspopup="true"
 							onClick={this.handleLocaleMenuOpen}
-						>{systemLocaleMap[locale].settings_select_language}</Button>
+						>{systemLocaleMap[locale].account_select_language}</Button>
 
 						<Menu
 							id="locale-menu"
@@ -329,11 +330,11 @@ class Account extends React.Component {
 
 				<div className={classes.settingsRow}>
 					<div className={classes.settingsColumnLeft}>
-						<Button color="primary" onClick={this.clearDb}>{systemLocaleMap[locale].delete_cache}</Button>
+						<Button color="primary" onClick={this.clearDb}>{systemLocaleMap[locale].account_delete_cache}</Button>
 					</div>
 					<div className={classes.settingsColumnRight}>
 						<Typography variant="caption">
-							{systemLocaleMap[locale].delete_cache_description}
+							{systemLocaleMap[locale].account_delete_cache_description}
 						</Typography>
 					</div>
 				</div>
@@ -408,7 +409,7 @@ class Account extends React.Component {
 					id="old-password"
 					className={classes.input}
 					type="password"
-					label={systemLocaleMap[locale].old_password}
+					label={systemLocaleMap[locale].account_old_password}
 					value={passwordOld}
 					error={passwordOldError}
 					errorMessage={passwordOldErrorMessage}
@@ -422,7 +423,7 @@ class Account extends React.Component {
 					className={classes.input}
 					type="password"
 					label={passwordExists
-						? systemLocaleMap[locale].new_password
+						? systemLocaleMap[locale].account_new_password
 						: systemLocaleMap[locale].account_password_alert_password
 					}
 					value={password}
@@ -438,7 +439,7 @@ class Account extends React.Component {
 					className={classes.input}
 					type="password"
 					label={passwordExists 
-						? systemLocaleMap[locale].reset_password_title 
+						? systemLocaleMap[locale].account_reset_password_title 
 						: systemLocaleMap[locale].account_password_alert_confirm
 					}
 					value={passwordConfirm}
@@ -455,7 +456,7 @@ class Account extends React.Component {
 				<div className={classes.buttonWrapper}>
 					<Button color="primary" variant="contained" onClick={this.savePassword}>{systemLocaleMap[locale].account_password_alert_confirm}</Button>
 					{(passwordExists && isProtected) && 
-						<Button className={classes.skipButton} color="primary" onClick={this.unsetPassword}>{systemLocaleMap[locale].settings_title_skip_pw}</Button>
+						<Button className={classes.skipButton} color="primary" onClick={this.unsetPassword}>{systemLocaleMap[locale].account_title_skip_pw}</Button>
 					}
 				</div>
 			</form>
@@ -470,11 +471,11 @@ class Account extends React.Component {
 
 		return (
 			<React.Fragment>
-				<Typography paragraph><strong>{systemLocaleMap[locale].status}: </strong>{
-					passwordExists ? systemLocaleMap[locale].password_success : systemLocaleMap[locale].settings_title_skip_pw
+				<Typography paragraph><strong>{systemLocaleMap[locale].account_status}: </strong>{
+					passwordExists ? systemLocaleMap[locale].account_password_success : systemLocaleMap[locale].account_title_skip_pw
 				}</Typography>
 				<Typography className={classes.disclaimerLarge}>
-					<strong>{systemLocaleMap[locale].disclaimer}: </strong> {systemLocaleMap[locale].disclaimer_description}
+					<strong>{systemLocaleMap[locale].account_disclaimer}: </strong> {systemLocaleMap[locale].account_disclaimer_description}
 				</Typography>
 				{this.renderPasswordForm()}
 			</React.Fragment>
@@ -500,7 +501,7 @@ class Account extends React.Component {
 					{/* Feed Settings */}
 					<ExpansionPanel expanded={this.state.expanded === 1} onChange={this.handlePanelToggle(1)}>
 						<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-							<Typography className={classes.heading} variant="h6">{systemLocaleMap[locale].set_your_feed}</Typography>
+							<Typography className={classes.heading} variant="h6">{systemLocaleMap[locale].feed_set_your_feed}</Typography>
 						</ExpansionPanelSummary>
 						<ExpansionPanelDetails>
 							{this.renderFeedSettings()}

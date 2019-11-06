@@ -48,7 +48,7 @@ class ChecklistsCustomAdd extends React.Component {
 		const { name } = this.state
 
 		if (!name || !name.length) {
-			return dispatch(openAlert('error', systemLocaleMap[locale].invalid_name_custom_checklist_messenge))
+			return dispatch(openAlert('error', systemLocaleMap[locale].checklist_custom_invalid_name))
 		}
 
 		dispatch(addChecklistCustom(name.trim(), closeModal))
@@ -74,7 +74,7 @@ class ChecklistsCustomAdd extends React.Component {
 					<FormControlInput 
 						className={classes.formControlInput}
 						id="checklist-custom-form"
-						label={systemLocaleMap[locale].name_your_checklist}
+						label={systemLocaleMap[locale].checklist_name_your_checklist}
 						value={name}
 						type="string"
 						error={error}

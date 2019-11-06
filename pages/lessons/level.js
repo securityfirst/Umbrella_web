@@ -222,7 +222,7 @@ class LessonsLevel extends React.Component {
 		return (
 			<Card className={classes.checklistCard}>
 				<CardContent className={classes.checklistCardHead}>
-					<Typography className={classes.checklistCardTitle}>{systemLocaleMap[locale].checklistDetail_title}</Typography>
+					<Typography className={classes.checklistCardTitle}>{systemLocaleMap[locale].checklist_detail_title}</Typography>
 					<div className={classes.checklist}>
 						{!!savedChecklist && <Button 
 							size="small" 
