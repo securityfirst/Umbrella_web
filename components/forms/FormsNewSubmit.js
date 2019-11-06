@@ -63,7 +63,7 @@ class FormsNewSubmit extends React.Component {
 				<Typography className={classes.copy} paragraph>{systemLocaleMap[locale].form_submitted}</Typography>
 
 				<div className={classes.buttonsWrapper}>
-					<Link href="/forms/new"><Button>{systemLocaleMap[locale].message_body_form_new}</Button></Link>
+					<Link href="/forms/new"><Button>{systemLocaleMap[locale].form_message_body_form_new}</Button></Link>
 					<Link href="/forms"><Button color="secondary">{systemLocaleMap[locale].finish}</Button></Link>
 				</div>
 			</div>

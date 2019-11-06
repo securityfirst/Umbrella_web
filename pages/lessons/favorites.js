@@ -89,7 +89,7 @@ class LessonsFavorites extends React.Component {
 
 						{!lessonCardsFavorites.length
 							? <Paper className={classes.paper}>
-								<Typography>{systemLocaleMap[locale].empty_favorites_message}</Typography>
+								<Typography>{systemLocaleMap[locale].lesson_empty_favorites_message}</Typography>
 							</Paper>
 							: <div className={classes.cardsWrapper}>
 								{lessonCardsFavorites.map((file, i) => (

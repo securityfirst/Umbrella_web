@@ -66,7 +66,7 @@ class FeedsEdit extends React.Component {
 		const { dispatch, locale, systemLocaleMap, toggleEdit, feedLocation, feedSources } = this.props
 
 		if (!feedLocation || !feedSources.length) {
-			return dispatch(openAlert('error', systemLocaleMap[locale].set_your_feed_label))
+			return dispatch(openAlert('error', systemLocaleMap[locale].feed_set_your_feed_label))
 		}
 
 		dispatch(getFeeds())
@@ -81,13 +81,13 @@ class FeedsEdit extends React.Component {
 			<div>
 				{/* Info panel */}
 				<Paper className={classes.panel} square>
-					<Typography className={classes.panelTitle} variant="h6">{systemLocaleMap[locale].set_your_feed}</Typography>
-					<Typography className={classes.panelContent} paragraph>{systemLocaleMap[locale].set_your_feed_label}</Typography>
+					<Typography className={classes.panelTitle} variant="h6">{systemLocaleMap[locale].feed_set_your_feed}</Typography>
+					<Typography className={classes.panelContent} paragraph>{systemLocaleMap[locale].feed_set_your_feed_label}</Typography>
 				</Paper>
 
 				{/* Location panel */}
 				<Paper className={classes.panel} square>
-					<Typography className={classes.panelTitle} variant="h6">{systemLocaleMap[locale].location}</Typography>
+					<Typography className={classes.panelTitle} variant="h6">{systemLocaleMap[locale].feed_location}</Typography>
 					<Typography className={classes.panelContent} paragraph>{feedLocation ? feedLocation.place_name : systemLocaleMap[locale].feed_location_label}</Typography>
 					<div className={classes.changeButtonWrapper}>
 						<Button color="secondary" onClick={this.handleFormOpen('location')}>{systemLocaleMap[locale].feed_location_label}</Button>

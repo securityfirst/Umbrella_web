@@ -317,7 +317,7 @@ class Forms extends React.Component {
 							<ShareIcon />
 						</Button>
 						<Link href={`/forms/${form.sha}`}>
-							<Button color="primary" onClick={this.checkLogin}>{systemLocaleMap[locale].message_body_form_new}</Button>
+							<Button color="primary" onClick={this.checkLogin}>{systemLocaleMap[locale].form_message_body_form_new}</Button>
 						</Link>
 						<Menu
 							id={`share-menu-${i}`}
@@ -401,7 +401,7 @@ class Forms extends React.Component {
 						</React.Fragment>
 					}
 
-					<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].message_title_all_forms}</Typography>
+					<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].form_message_title_all_forms}</Typography>
 					{content[locale].forms.content
 						.filter(form => form.filename.indexOf('f_') === 0)
 						.map(this.renderAvailablePanel)

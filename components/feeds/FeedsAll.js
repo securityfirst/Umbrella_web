@@ -103,7 +103,7 @@ class FeedsAll extends React.Component {
 			<React.Fragment>
 				<ExpansionPanel className={classes.locationPanel} expanded={expanded === true} onChange={this.handleChange}>
 					<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-						<Typography className={classes.heading}>{systemLocaleMap[locale].location}: 
+						<Typography className={classes.heading}>{systemLocaleMap[locale].feed_location}: 
 							{!expanded && <span className={classes.headingLocation}>{feedLocation.place_name}</span>}
 						</Typography>
 					</ExpansionPanelSummary>
@@ -115,10 +115,10 @@ class FeedsAll extends React.Component {
 
 				{!feeds.length
 					? <Paper className={classes.feed} square>
-						<Typography className={classes.feedContent}>{systemLocaleMap[locale].dashboard_empty_text}</Typography>
+						<Typography className={classes.feedContent}>{systemLocaleMap[locale].feed_empty_text}</Typography>
 						
 						<div className={classes.buttonWrapper}>
-							<Button color="secondary" onClick={this.refreshFeeds}>{systemLocaleMap[locale].settings_refresh_from_the_server}</Button>
+							<Button color="secondary" onClick={this.refreshFeeds}>{systemLocaleMap[locale].feed_refresh_from_the_server}</Button>
 						</div>
 					</Paper>
 					: feeds.map((feed, i) => {

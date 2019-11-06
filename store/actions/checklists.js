@@ -155,7 +155,7 @@ export const addChecklistCustom = (name, successCb) => (dispatch, getState) => {
 	}
 
 	if (!name) {
-		const message = systemLocaleMap[locale].invalid_name_custom_checklist_messenge
+		const message = systemLocaleMap[locale].checklist_custom_invalid_name
 		dispatch(openAlert('error', message))
 		return dispatch(rejected(checklistsTypes.ADD_CHECKLIST_CUSTOM, message))
 	}

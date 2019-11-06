@@ -144,7 +144,7 @@ class Login extends React.Component {
 									}
 								</ClickAwayListener>
 								
-								{(!!loginError && loginError.message === systemLocaleMap[locale].password_not_exist) &&
+								{(!!loginError && loginError.message === systemLocaleMap[locale].account_password_not_exist) &&
 									<Link href={{pathname: '/account', query: {setpassword: true}}}>
 										<Button 
 											className={classes.loginButton}

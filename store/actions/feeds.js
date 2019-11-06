@@ -171,7 +171,7 @@ export const addRssSource = (source, successCb) => (dispatch, getState) => {
 		})
 			.then(res => {
 				if (!res.ok) {
-					dispatch(openAlert('error', `${res.statusText}\n${systemLocaleMap[locale].url_check}`))
+					dispatch(openAlert('error', `${res.statusText}\n${systemLocaleMap[locale].feed_url_check}`))
 					throw res
 				}
 
