@@ -24,7 +24,6 @@ import DoneAllIcon from '@material-ui/icons/DoneAll'
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 
-import { setAppbarTitle } from '../../store/actions/view'
 import { toggleMainMenu } from '../../store/actions/view'
 
 import { viewConstants } from '../../utils/view'
@@ -88,10 +87,6 @@ const styles = theme => ({
 class Menu extends React.Component {
 	handleDrawerClose = () => this.props.dispatch(toggleMainMenu(false))
 
-	handleMenuClick = link => () => {
-		this.props.dispatch(setAppbarTitle(link.name))
-	}
-
 	renderItems = () => {
 		const { router, locale, systemLocaleMap, classes } = this.props
 
@@ -107,14 +102,8 @@ class Menu extends React.Component {
 
 					return (
 						<Link key={i} href={link.path}>
-							<ListItem 
-								className={classes.drawerItem} 
-								title={link.name} 
-								onClick={this.handleMenuClick(link)}
-								button 
-							>
+							<ListItem className={classes.drawerItem} title={link.name} button>
 								<ListItemIcon>{link.icon(iconColor)}</ListItemIcon>
-
 								<ListItemText primary={systemLocaleMap[locale][link.key]} />
 							</ListItem>
 						</Link>
