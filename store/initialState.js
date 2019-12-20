@@ -134,7 +134,7 @@ const view = {
 }
 
 const db = {
-	loading: false,
+	loading: true,
 	error: null,
 }
 

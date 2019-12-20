@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { withRouter } from 'next/router'
+import Router, { withRouter } from 'next/router'
 import Link from 'next/link'
 
 import classNames from 'classnames'
@@ -65,7 +65,7 @@ class Appbar extends React.Component {
 
 		dispatch(openAlert('success', systemLocaleMap[locale].logout_success))
 
-		window.location.reload()
+		Router.push('/')
 	}
 
 	renderRightContent() {
