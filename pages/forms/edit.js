@@ -78,17 +78,20 @@ class FormEdit extends React.Component {
 	}
 
 	componentDidMount() {
-		const { dispatch, router, locale, systemLocaleMap } = this.props
+		const { dispatch, locale, systemLocaleMap } = this.props
 
 		dispatch(setAppbarTitle(systemLocaleMap[locale].form_title))
-		dispatch(getFormSaved(router.query.id, formSaved => {
-			this.setState({formState: formSaved.state})
-		}))
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.locale !== this.props.locale) {
 			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].form_title))
+		}
+
+		if (this.props.dbLoading && !nextProps.dbLoading) {
+			this.props.dispatch(getFormSaved(this.props.router.query.id, formSaved => {
+				this.setState({formState: formSaved.state})
+			}))
 		}
 	}
 
@@ -341,7 +344,8 @@ class FormEdit extends React.Component {
 
 const mapStateToProps = state => ({
 	...state.view,
-	...state.forms
+	...state.forms,
+	dbLoading: state.db.loading
 })
 
 export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(FormEdit)))
