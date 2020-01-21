@@ -9,7 +9,7 @@ export const decodeBlob = content => {
 	}).join(''))
 }
 
-export const formatContentUrls = ({ blob = '', locale = 'en' }) => {
+export const formatContentUrls = ({ blob = '', locale = 'en', category = '', level = '' }) => {
 	const domainString = process.env.ROOT + '/'
 	const decodedContent = decodeBlob(blob)
 
@@ -19,10 +19,10 @@ export const formatContentUrls = ({ blob = '', locale = 'en' }) => {
 
 	const urlRegex =/(\b(https?):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 
-	const formattedContent = replacedContent.replace(urlRegex, url => {
+	let formattedContent = replacedContent.replace(urlRegex, url => {
 		const index = url.indexOf(domainString)
 		
-		if (index < 0) return url;
+		if (index < 0) return url
 
 		const startIndex = domainString.length
 		const path = url.substring(startIndex, url.length)
@@ -31,6 +31,18 @@ export const formatContentUrls = ({ blob = '', locale = 'en' }) => {
 
 		return domainString + 'lessons/' + locale + '/' + replacedPath
 	});
+
+	const imageUrlRegex = /\(([^\)]+)\)/ig
+
+	formattedContent = formattedContent.replace(imageUrlRegex, url => {
+		let strings = url.split('.')
+
+		if (['jpg)', 'jpeg)', 'png)', 'svg)', 'gif)', 'bmp)'].includes(strings[1])) {
+			return `(https://raw.githubusercontent.com/securityfirst/umbrella-content/master/${locale}/${category.replace('.', '/')}/${level}/${url.replace('(', '').replace(')', '')})`
+		}
+
+		return url
+	})
 
 	return formattedContent
 }

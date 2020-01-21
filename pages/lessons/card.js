@@ -195,12 +195,12 @@ class LessonCard extends React.Component {
 
 	renderContent = () => {
 		const { router, currentLessonFile, getLessonFileLoading, getLessonFileError } = this.props
-		const { locale } = router.query
+		const { locale, category, level } = router.query
 
 		if (getLessonFileLoading) return <Loading />
 		else if (getLessonFileError) return <ErrorMessage error={getLessonFileError} />
 
-		const formattedContent = formatContentUrls({ blob: currentLessonFile, locale }) 
+		const formattedContent = formatContentUrls({ blob: currentLessonFile, locale, category, level }) 
 
 		return <Marked content={formattedContent} />
 	}
