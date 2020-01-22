@@ -26,7 +26,6 @@ export const formatContentUrls = ({ blob = '', locale = 'en', category = '', lev
 
 		const startIndex = domainString.length
 		const path = url.substring(startIndex, url.length)
-		const firstSlashIndex = path.indexOf('/')
 		const replacedPath = path.replace(/\//, '.')
 
 		return domainString + 'lessons/' + locale + '/' + replacedPath

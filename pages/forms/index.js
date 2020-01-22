@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import marked from 'marked'
+import YAML from 'yaml'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -63,6 +64,7 @@ class Forms extends React.Component {
 		newAnchorEl: null,
 		downloadOpen: false,
 		tooltipOpen: false,
+		forms: []
 	}
 
 	componentDidMount() {
@@ -73,6 +75,7 @@ class Forms extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.locale !== this.props.locale) {
 			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].form_title))
+			this.setFormData(nextProps.locale)
 		}
 	}
 
@@ -84,6 +87,25 @@ class Forms extends React.Component {
 
 			return dispatch(openAlert('error', systemLocaleMap[locale].login_your_password))
 		}
+	}
+
+	setFormData = async locale => {
+		const forms = this.props.content[locale].forms.content.filter(form => form.filename.indexOf('f_') === 0)
+
+		let formsList = []
+
+		for (let i=0; i<forms.length; i++) {
+			let formData = await fetch(`${process.env.ROOT}/api/github/content/${forms[i].sha}`)
+			formData = await formData.text()
+			formData = await YAML.parse(decodeBlob(formData))
+
+			formsList = formsList.concat([{
+				sha: forms[i].sha,
+				title: formData.title
+			}])
+		}
+
+		this.setState({ forms: formsList })
 	}
 
 	downloadHtml = formSaved => async () => {
@@ -301,7 +323,7 @@ class Forms extends React.Component {
 		return (
 			<Paper key={i} className={classes.formPanel} square>
 				<Typography className={classes.formPanelTitle} variant="h6">
-					{form.filename.slice(2, form.filename.length - 4).replace(/-/g, " ")}
+					{form.title}
 				</Typography>
 
 				<div className={classes.formPanelButtonsWrapper}>
@@ -388,6 +410,8 @@ class Forms extends React.Component {
 			formsSaved,
 		} = this.props
 
+		const { forms } = this.state
+
 		if (getContentLoading || getFormsSavedLoading) return <Loading />
 		else if (getContentError || getFormsSavedError) return <ErrorMessage error={getContentError || getFormsSavedError} />
 
@@ -402,10 +426,8 @@ class Forms extends React.Component {
 					}
 
 					<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].form_message_title_all_forms}</Typography>
-					{content[locale].forms.content
-						.filter(form => form.filename.indexOf('f_') === 0)
-						.map(this.renderAvailablePanel)
-					}
+
+					{forms.map(this.renderAvailablePanel)}
 				</div>
 			</Layout>
 		)
