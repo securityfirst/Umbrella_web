@@ -64,7 +64,9 @@ class Forms extends React.Component {
 		newAnchorEl: null,
 		downloadOpen: false,
 		tooltipOpen: false,
-		forms: []
+		forms: this.props.content[this.props.locale].forms.content
+			.filter(form => form.filename.indexOf('f_') === 0)
+			.map(form => ({ sha: form.sha, title: form.filename.slice(2, form.filename.length - 4).replace(/-/g, " ") }))
 	}
 
 	componentDidMount() {
