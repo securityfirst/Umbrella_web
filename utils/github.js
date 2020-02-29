@@ -9,7 +9,7 @@ export const decodeBlob = content => {
 	}).join(''))
 }
 
-export const formatContentUrls = ({ blob = '', locale = 'en', category = '', level = '' }) => {
+export const formatContentUrls = ({ blob = '', locale = 'en', category = '', level = '', content = null }) => {
 	const domainString = process.env.ROOT + '/'
 	const decodedContent = decodeBlob(blob)
 
@@ -26,9 +26,46 @@ export const formatContentUrls = ({ blob = '', locale = 'en', category = '', lev
 
 		const startIndex = domainString.length
 		const path = url.substring(startIndex, url.length)
-		const replacedPath = path.replace(/\//, '.')
 
-		return domainString + 'lessons/' + locale + '/' + replacedPath
+		let newUrl = `${domainString}lessons/${locale}/`
+
+		let subpaths = path.split('/')
+		const category = subpaths[0]
+		const subcategory = subpaths[1]
+
+		if (path.indexOf('.md') == path.length - 3) {
+			const filename = subpaths[subpaths.length - 1]
+
+			if (path.indexOf('tools') === 0) {
+				const lesson = content[locale]['tools'][subcategory].content.find(c => c.filename == filename)
+				const sha = lesson ? lesson.sha : ''
+
+				newUrl += `tools.${subcategory}/-/${sha}`
+
+				return newUrl
+			} else {
+				const level = subpaths[2]
+				const lesson = content[locale][category][subcategory][level].content.find(c => c.filename == filename)
+				const sha = lesson ? lesson.sha : ''
+
+				newUrl += `${category}.${subcategory}/${level}/${sha}`
+
+				return newUrl
+			}
+		} else {
+			newUrl = `/lessons/${locale}/${category}.${subcategory}`
+
+			// If category is not Tools, check for level
+			if (url[1].indexOf('umbrella://tools') < 0) {
+				const level = subpaths[2]
+				
+				if (['beginner', 'advanced', 'expert'].includes(level)) {
+					newUrl += `/${level}`
+				}
+			}
+
+			return newUrl
+		}
 	});
 
 	const imageUrlRegex = /\(([^\)]+)\)/ig
@@ -37,7 +74,13 @@ export const formatContentUrls = ({ blob = '', locale = 'en', category = '', lev
 		let strings = url.split('.')
 
 		if (['jpg)', 'jpeg)', 'png)', 'svg)', 'gif)', 'bmp)'].includes(strings[1])) {
-			return `(https://raw.githubusercontent.com/securityfirst/umbrella-content/master/${locale}/${category.replace('.', '/')}/${level}/${url.replace('(', '').replace(')', '')})`
+			let subpath = ''
+
+			if (category == '-') subpath = 'about'
+			else if (category.indexOf('tools') > -1) subpath = `${category.replace('.', '/')}`
+			else subpath = `${category.replace('.', '/')}/${level}`
+
+			return `(https://raw.githubusercontent.com/securityfirst/umbrella-content/master/${locale}/${subpath}/${url.replace('(', '').replace(')', '')})`
 		}
 
 		return url
