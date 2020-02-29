@@ -14,10 +14,28 @@ router.get('/tree', async (req, res) => {
 	let lessons
 
 	try {
-		const repoReq = await fetch(`https://api.github.com/repos/${process.env.GITHUB_CONTENT_REPO}/branches/master?access_token=${process.env.GITHUB_ACCESS_TOKEN}`)
+		const repoReq = await fetch(
+			`https://api.github.com/repos/${process.env.GITHUB_CONTENT_REPO}/branches/master`, 
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': `token ${process.env.GITHUB_ACCESS_TOKEN}`
+				}
+			}
+		)
+
 		const repo = await repoReq.json()
 
-		const masterTreeReq = await fetch(`https://api.github.com/repos/${process.env.GITHUB_CONTENT_REPO}/git/trees/${repo.commit.sha}?recursive=1&access_token=${process.env.GITHUB_ACCESS_TOKEN}`)
+		const masterTreeReq = await fetch(
+			`https://api.github.com/repos/${process.env.GITHUB_CONTENT_REPO}/git/trees/${repo.commit.sha}?recursive=1`,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': `token ${process.env.GITHUB_ACCESS_TOKEN}`
+				}
+			}
+		)
+
 		lessons = await masterTreeReq.json()
 	} catch (err) {
 		console.error('[API] /github/tree - Tree fetch error: ', err)
@@ -71,7 +89,16 @@ router.get('/content/:sha', async (req, res) => {
 	let content
 
 	try {
-		const contentReq = await fetch(`https://api.github.com/repos/${process.env.GITHUB_CONTENT_REPO}/git/blobs/${req.params.sha}?access_token=${process.env.GITHUB_ACCESS_TOKEN}`)
+		const contentReq = await fetch(
+			`https://api.github.com/repos/${process.env.GITHUB_CONTENT_REPO}/git/blobs/${req.params.sha}`,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': `token ${process.env.GITHUB_ACCESS_TOKEN}`
+				}
+			}
+		)
+		
 		content = await contentReq.json()
 	} catch (err) {
 		console.error('[API] /github/content/:sha - Content fetch error: ', err)
