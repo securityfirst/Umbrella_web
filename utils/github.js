@@ -37,7 +37,13 @@ export const formatContentUrls = ({ blob = '', locale = 'en', category = '', lev
 		let strings = url.split('.')
 
 		if (['jpg)', 'jpeg)', 'png)', 'svg)', 'gif)', 'bmp)'].includes(strings[1])) {
-			return `(https://raw.githubusercontent.com/securityfirst/umbrella-content/master/${locale}/${category.replace('.', '/')}/${level}/${url.replace('(', '').replace(')', '')})`
+			let subpath = ''
+
+			if (category == '-') subpath = 'about'
+			else if (category.indexOf('tools') > -1) subpath = `${category.replace('.', '/')}`
+			else subpath = `${category.replace('.', '/')}/${level}`
+
+			return `(https://raw.githubusercontent.com/securityfirst/umbrella-content/master/${locale}/${subpath}/${url.replace('(', '').replace(')', '')})`
 		}
 
 		return url
