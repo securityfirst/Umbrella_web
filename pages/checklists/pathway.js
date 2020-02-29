@@ -95,7 +95,7 @@ class Pathway extends React.Component {
 	}
 
 	render() {
-		const { classes, locale, systemLocaleMap, currentPathwayFile, pathwaysChecked, pathwaysSaved } = this.props
+		const { classes, content, locale, systemLocaleMap, currentPathwayFile, pathwaysChecked, pathwaysSaved } = this.props
 		const isFavorited = !!this.findMatchingPathway(pathwaysSaved)
 
 		return (
@@ -114,10 +114,53 @@ class Pathway extends React.Component {
 
 						{currentPathwayFile.list.map((item, i) => {
 							/* Format incoming url with web app url */
-							let url = item.check.substring(item.check.lastIndexOf('(') + 1, item.check.lastIndexOf(')'))
-							url = `/lessons/${locale}/` + url.split('umbrella://')[1].replace(/\//, '.')
+							let textFormatted = item.check
 
-							const itemFormatted = item.check.replace(/\(.*\)/, `(${url})`)
+							let regExp = /\(([^)]+)\)/g
+
+							let url
+
+							while((url = regExp.exec(item.check)) !== null) {
+								let newUrl
+
+								if (url[1].indexOf('umbrella://') === 0) {
+									const subpaths = url[1].split('umbrella://')[1].split('/')
+									const category = subpaths[0]
+									const subcategory = subpaths[1]
+
+									if (url[1].indexOf('.md') == url[1].length - 3) {
+										const filename = subpaths[subpaths.length - 1]
+
+										if (category == 'tools') {
+											const lesson = content[locale]['tools'][subcategory].content.find(c => c.filename == filename)
+											const sha = lesson ? lesson.sha : ''
+
+											newUrl = `/lessons/${locale}/${category}.${subcategory}/-/${sha}`
+										} else {
+											const level = subpaths[2]
+											const lesson = content[locale][category][subcategory][level].content.find(c => c.filename == filename)
+											const sha = lesson ? lesson.sha : ''
+
+											newUrl = `/lessons/${locale}/${category}.${subcategory}/${level}/${sha}`
+										}
+									} 
+									// Otherwise link points to category or level
+									else {
+										newUrl = `/lessons/${locale}/${category}.${subcategory}`
+
+										// If category is not Tools, check for level
+										if (url[1].indexOf('umbrella://tools') < 0) {
+											const level = subpaths[2]
+											
+											if (['beginner', 'advanced', 'expert'].includes(level)) {
+												newUrl += `/${level}`
+											}
+										}
+									}
+
+									textFormatted = textFormatted.replace(url[1], newUrl)
+								}
+							}
 
 							const checked = !!(pathwaysChecked[currentPathwayFile.title] || [])
 											.find(checkedItem => checkedItem === item.check)
@@ -126,7 +169,7 @@ class Pathway extends React.Component {
 								<Paper key={i} className={classes.itemPaper} square>
 									<FormControlCheckbox
 										key={i}
-										name={<Marked content={itemFormatted} />}
+										name={<Marked content={textFormatted} />}
 										value={item.check}
 										checked={checked}
 										onChange={this.handleChecked(item)} 
