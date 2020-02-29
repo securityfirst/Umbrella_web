@@ -10,7 +10,7 @@ export const downloadPdf = (name = 'download', marked) => {
 
 	try {
 		const date = new Date()
-		const filename = `Umbrella_${name}_${date.valueOf()}.pdf`
+		const filename = `Umbrella_${name.trim()}_${date.valueOf()}.pdf`
 		const jsPDF = require('jspdf')
 		const html2canvas = require('html2canvas')
 
@@ -48,11 +48,62 @@ export const downloadHtml = (name = 'download', marked) => {
 	}
 
 	try {
-		const html = `<!doctype html><html><head></head><body>${marked}</body></html>`
+		const html = 
+			`<!doctype html>
+			<html>
+				<head>
+					<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
+					<style>
+						body {
+							max-width: 960px;
+							margin: 2rem auto;
+							font-size: 16px;
+							background-color: #ECECEC;
+							-ms-text-size-adjust: 100%;
+							-webkit-text-size-adjust: 100%;
+							line-height: 1.5;
+							color: #24292E;
+							font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+							font-size: 16px;
+							line-height: 1.5;
+							word-wrap: break-word;
+						}
+						h1 {
+							text-transform: capitalize;
+						}
+						a {
+							color: #0366D6;
+							text-decoration: none;
+						}
+						#content {
+							background-color: white;
+							padding: 1rem 2rem;
+						}
+						#title {
+							margin-bottom: 0;
+						}
+						#subtitle {
+							margin-top: 0;
+							color: #5E5E5E;
+							text-transform: capitalize;
+						}
+						#checklist ul {
+							list-style: none;
+							padding-inline-start: 0;
+						}
+					</style>
+				</head>
+				<body>
+					<div id="content">
+						${marked}
+					</div>
+				</body>
+			</html>
+			`
 		const blob = new Blob([html], {type : 'application/html'})
-		const url = 'data:text/html;charset=utf-8,,' + encodeURIComponent(html)
+		const url = 'data:text/html;charset=utf-8,' + encodeURIComponent(html)
 
-		save(blob, url, name + '.html')
+		save(blob, url, name.trim() + '.html')
 	} catch (e) {
 		console.error(`Failed to download ${name}.html: `, e)
 		throw e
@@ -77,7 +128,7 @@ export const downloadDocx = async (name = 'download', marked) => {
 		const blob = new Blob(['\ufeff', html], {type: 'application/msword'})
 		const url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html)
 		
-		save(blob, url, name + '.docx')
+		save(blob, url, name.trim() + '.docx')
 	} catch (e) {
 		console.error(`Failed to download ${name}.docx: `, e)
 		throw e

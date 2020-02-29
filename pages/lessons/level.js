@@ -233,6 +233,7 @@ class LessonsLevel extends React.Component {
 							<DeleteIcon />
 						</Button>}
 						<FavoriteShareIcons
+							type="checklist"
 							name={`${category}-${level}`}
 							sha={!!checklistFile ? checklistFile.sha : null}
 							url={`${process.env.ROOT}/lessons/${locale}/${category}/${level}`}
