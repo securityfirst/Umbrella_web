@@ -193,6 +193,7 @@ class Forms extends React.Component {
 	}
 
 	downloadNewFormHtml = (form) => () => {
+		console.log("form: ", form);
 		const { dispatch, locale, systemLocaleMap } = this.props
 
 		dispatch(openAlert('info', systemLocaleMap[locale].downloading_html))
@@ -203,7 +204,7 @@ class Forms extends React.Component {
 				return res.text()
 			})
 			.then(content => {
-				downloadHtml(form.filename.slice(2, form.filename.length - 4), marked(decodeBlob(content)))
+				downloadHtml(form.title.split(' ').join(''), marked(decodeBlob(content)))
 				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 				this.setState({ newAnchorEl: null })
 			})
@@ -224,7 +225,7 @@ class Forms extends React.Component {
 				return res.text()
 			})
 			.then(content => {
-				downloadPdf(form.filename.slice(2, form.filename.length - 4), marked(decodeBlob(content)))
+				downloadPdf(form.title.split(' ').join(''), marked(decodeBlob(content)))
 				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 				this.setState({ newAnchorEl: null })
 			})
@@ -245,7 +246,7 @@ class Forms extends React.Component {
 				return res.text()
 			})
 			.then(content => {
-				downloadDocx(form.filename.slice(2, form.filename.length - 4), marked(decodeBlob(content)))
+				downloadDocx(form.title.split(' ').join(''), marked(decodeBlob(content)))
 				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 				this.setState({ newAnchorEl: null })
 			})

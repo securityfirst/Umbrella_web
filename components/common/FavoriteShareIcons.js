@@ -1,7 +1,9 @@
 import 'isomorphic-unfetch'
 import React from 'react'
+import { withRouter } from 'next/router'
 import atob from 'atob'
 import marked from 'marked'
+import replace from 'batch-replace'
 import { connect } from 'react-redux'
 
 import classNames from 'classnames'
@@ -28,6 +30,7 @@ import yellow from '@material-ui/core/colors/yellow'
 
 import { openAlert } from '../../store/actions/view'
 
+import { formatContentUrls } from '../../utils/github'
 import { downloadPdf, downloadHtml, downloadDocx } from '../../utils/dom'
 import { decodeBlob } from '../../utils/github'
 
@@ -87,7 +90,7 @@ class FavoriteShareIcon extends React.Component {
 	}
 
 	downloadHtml = () => {
-		const { dispatch, locale, systemLocaleMap, name, sha } = this.props
+		const { router, dispatch, content, locale, systemLocaleMap, type, name, sha } = this.props
 
 		dispatch(openAlert('info', systemLocaleMap[locale].downloading_html))
 
@@ -97,8 +100,35 @@ class FavoriteShareIcon extends React.Component {
 				return res.text()
 			})
 			.then(content => {
-				downloadHtml(name, marked(decodeBlob(content)))
+				if (type === 'lesson') {
+					downloadHtml(name, 
+						'<h1 id="title">Umbrella Lesson</h1>' + 
+						`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+						marked(formatContentUrls({
+							blob: content,
+							locale,
+							category: router.query.category,
+							level: router.query.level,
+							content
+						}))
+					)
+				} else if (type === 'checklist') {
+					let markdown = marked(decodeBlob(content))
+					markdown = replace(/check\:/g)
+						.with('<input type="checkbox" style="margin-right: .5rem;" />')
+						.in(markdown)
+
+					downloadHtml(name, 
+						'<h1 id="title">Umbrella Checklist</h1>' + 
+						`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+						`<div id="checklist">${markdown}</div>`
+					)
+				} else {
+					downloadHtml(name, marked(decodeBlob(content)))
+				}
+
 				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+
 				this.handleClose()
 			})
 			.catch(err => {
@@ -270,7 +300,8 @@ class FavoriteShareIcon extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.content,
 	...state.view
 })
 
-export default connect(mapStateToProps)(withStyles(styles)(FavoriteShareIcon))
+export default withRouter(connect(mapStateToProps)(withStyles(styles)(FavoriteShareIcon)))

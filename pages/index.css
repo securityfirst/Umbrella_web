@@ -20,7 +20,8 @@ body {
 }
 
 .lessons-card .markdown-body>p:nth-child(2) {
-	display: none;
+    margin: 1rem 0;
+    font-weight: 500;
 }
 
 .lessons-card .markdown-body>h2:nth-child(3) {
