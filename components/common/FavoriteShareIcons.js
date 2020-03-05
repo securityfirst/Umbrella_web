@@ -99,13 +99,13 @@ class FavoriteShareIcon extends React.Component {
 				if (!res.ok) throw res
 				return res.text()
 			})
-			.then(content => {
+			.then(blob => {
 				if (type === 'lesson') {
 					downloadHtml(name, 
 						'<h1 id="title">Umbrella Lesson</h1>' + 
 						`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
 						marked(formatContentUrls({
-							blob: content,
+							blob,
 							locale,
 							category: router.query.category,
 							level: router.query.level,
@@ -113,7 +113,7 @@ class FavoriteShareIcon extends React.Component {
 						}))
 					)
 				} else if (type === 'checklist') {
-					let markdown = marked(decodeBlob(content))
+					let markdown = marked(decodeBlob(blob))
 					markdown = replace(/check\:/g)
 						.with('<input type="checkbox" style="margin-right: .5rem;" />')
 						.in(markdown)
@@ -124,7 +124,7 @@ class FavoriteShareIcon extends React.Component {
 						`<div id="checklist">${markdown}</div>`
 					)
 				} else {
-					downloadHtml(name, marked(decodeBlob(content)))
+					downloadHtml(name, marked(decodeBlob(blob)))
 				}
 
 				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
@@ -138,7 +138,7 @@ class FavoriteShareIcon extends React.Component {
 	}
 
 	downloadPdf = () => {
-		const { dispatch, locale, systemLocaleMap, name, sha } = this.props
+		const { router, dispatch, content, locale, systemLocaleMap, type, name, sha } = this.props
 
 		dispatch(openAlert('info',systemLocaleMap[locale].downloading_pdf))
 
@@ -147,8 +147,34 @@ class FavoriteShareIcon extends React.Component {
 				if (!res.ok) throw res
 				return res.text()
 			})
-			.then(content => {
-				downloadPdf(name, marked(decodeBlob(content)))
+			.then(blob => {
+				if (type === 'lesson') {
+					downloadPdf(name, 
+						'<h1 id="title">Umbrella Lesson</h1>' + 
+						`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+						marked(formatContentUrls({
+							blob,
+							locale,
+							category: router.query.category,
+							level: router.query.level,
+							content
+						}))
+					)
+				} else if (type === 'checklist') {
+					let markdown = marked(decodeBlob(blob))
+					markdown = replace(/check\:/g)
+						.with('<input type="checkbox" style="margin-right: .5rem;" />')
+						.in(markdown)
+
+					downloadPdf(name, 
+						'<h1 id="title">Umbrella Checklist</h1>' + 
+						`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+						`<div id="checklist">${markdown}</div>`
+					)
+				} else {
+					downloadPdf(name, marked(decodeBlob(blob)))
+				}
+
 				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 				this.handleClose()
 			})
@@ -168,8 +194,8 @@ class FavoriteShareIcon extends React.Component {
 				if (!res.ok) throw res
 				return res.text()
 			})
-			.then(content => {
-				downloadDocx(name, marked(decodeBlob(content)))
+			.then(blob => {
+				downloadDocx(name, marked(decodeBlob(blob)))
 				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 				this.handleClose()
 			})

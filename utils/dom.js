@@ -1,5 +1,61 @@
 import * as Blob from 'blob'
 
+export const generateHTML = (marked = '') => {
+	console.log("marked: ", marked);
+	return `
+		<!doctype html>
+		<html>
+			<head>
+				<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
+				<style>
+					body {
+						max-width: 960px;
+						margin: 2rem auto;
+						font-size: 16px;
+						background-color: #ECECEC;
+						-ms-text-size-adjust: 100%;
+						-webkit-text-size-adjust: 100%;
+						line-height: 1.5;
+						color: #24292E;
+						font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+						font-size: 16px;
+						line-height: 1.5;
+						word-wrap: break-word;
+					}
+					h1 {
+						text-transform: capitalize;
+					}
+					a {
+						color: #0366D6;
+						text-decoration: none;
+					}
+					#content {
+						background-color: white;
+						padding: 1rem 2rem;
+					}
+					#title {
+						margin-bottom: 0;
+					}
+					#subtitle {
+						margin-top: 0;
+						color: #5E5E5E;
+						text-transform: capitalize;
+					}
+					#checklist ul {
+						list-style: none;
+						padding-inline-start: 0;
+					}
+				</style>
+			</head>
+			<body>
+				<div id="content">
+					${marked}
+				</div>
+			</body>
+		</html>
+	`
+}
+
 export const downloadPdf = (name = 'download', marked) => {
 	if (typeof window === 'undefined') return false
 
@@ -11,28 +67,26 @@ export const downloadPdf = (name = 'download', marked) => {
 	try {
 		const date = new Date()
 		const filename = `Umbrella_${name.trim()}_${date.valueOf()}.pdf`
-		const jsPDF = require('jspdf')
-		const html2canvas = require('html2canvas')
+		const html2pdf = require('html2pdf.js')
 
 		let placeholder = document.createElement('div')
-		const id = `pdf-${parseInt(Math.random() * 100)}`
-		placeholder.id = id
-		placeholder.className += 'markdown-body'
-		placeholder.setAttribute('style', 'position:absolute;z-index:-1;width:100vw;margin:1rem;')
-		placeholder.innerHTML = marked
-		document.body.appendChild(placeholder)
+		// placeholder.setAttribute('style', 'visibility:none;')
+		placeholder.innerHTML = generateHTML(marked)
+		// document.body.appendChild(placeholder)
 
-		html2canvas(placeholder, {
-			scale: 2,
-			logging: process.env.NODE_ENV !== 'production',
-		}).then(canvas => {
-			const letterWidth = 195
-			const imageHeight = parseInt((letterWidth * canvas.height) / canvas.width)
-			let pdf = new jsPDF({format: 'letter', orientation: 'portrait', unit: 'mm'})
-			pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 0, letterWidth, imageHeight)
-			pdf.save(filename)
-			placeholder.remove()
-		})
+		const worker = html2pdf()
+			.set({
+				margin: 0.5,
+				filename: filename,
+				image: { type: 'jpeg', quality: 0.98 },
+				html2canvas: { scale: 2, imageTimeout: 15000 },
+				jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+			})
+			.from(placeholder)
+			.save()
+			.then(() => {
+				placeholder.remove()
+			})
 	} catch (e) {
 		console.error(e)
 		throw e
@@ -48,58 +102,7 @@ export const downloadHtml = (name = 'download', marked) => {
 	}
 
 	try {
-		const html = 
-			`<!doctype html>
-			<html>
-				<head>
-					<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
-					<style>
-						body {
-							max-width: 960px;
-							margin: 2rem auto;
-							font-size: 16px;
-							background-color: #ECECEC;
-							-ms-text-size-adjust: 100%;
-							-webkit-text-size-adjust: 100%;
-							line-height: 1.5;
-							color: #24292E;
-							font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-							font-size: 16px;
-							line-height: 1.5;
-							word-wrap: break-word;
-						}
-						h1 {
-							text-transform: capitalize;
-						}
-						a {
-							color: #0366D6;
-							text-decoration: none;
-						}
-						#content {
-							background-color: white;
-							padding: 1rem 2rem;
-						}
-						#title {
-							margin-bottom: 0;
-						}
-						#subtitle {
-							margin-top: 0;
-							color: #5E5E5E;
-							text-transform: capitalize;
-						}
-						#checklist ul {
-							list-style: none;
-							padding-inline-start: 0;
-						}
-					</style>
-				</head>
-				<body>
-					<div id="content">
-						${marked}
-					</div>
-				</body>
-			</html>
-			`
+		const html = generateHTML(marked)
 		const blob = new Blob([html], {type : 'application/html'})
 		const url = 'data:text/html;charset=utf-8,' + encodeURIComponent(html)
 
