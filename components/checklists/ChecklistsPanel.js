@@ -1,5 +1,4 @@
 import React from 'react'
-import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -137,7 +136,7 @@ class ChecklistsPanel extends React.Component {
 	}
 
 	downloadHtml = (checklist, percentage) => async () => {
-		const { router, dispatch, locale, systemLocaleMap, form } = this.props
+		const { dispatch, locale, systemLocaleMap, form } = this.props
 
 		try {
 			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
@@ -146,8 +145,7 @@ class ChecklistsPanel extends React.Component {
 			const markdown = generateChecklist(checklist, percentage)
 
 			downloadHtml(name, 
-				'<h1 id="title">Umbrella Checklist</h1>' + 
-				`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+				'<h1 id="title">Umbrella Checklist</h1>' +
 				`<div id="checklist">${markdown}</div>`
 			)
 
@@ -159,7 +157,7 @@ class ChecklistsPanel extends React.Component {
 	}
 
 	downloadPdf = (checklist, percentage) => async () => {
-		const { router, dispatch, locale, systemLocaleMap, form } = this.props
+		const { dispatch, locale, systemLocaleMap, form } = this.props
 
 		try {
 			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
@@ -169,7 +167,6 @@ class ChecklistsPanel extends React.Component {
 
 			downloadPdf(name, 
 				'<h1 id="title">Umbrella Checklist</h1>' + 
-				`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
 				`<div id="checklist">${markdown}</div>`
 			)
 
@@ -324,4 +321,4 @@ const mapStateToProps = (state) => ({
 	...state.view,
 })
 
-export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(ChecklistsPanel)))
+export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(ChecklistsPanel))
