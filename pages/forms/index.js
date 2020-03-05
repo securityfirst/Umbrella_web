@@ -203,8 +203,8 @@ class Forms extends React.Component {
 				if (!res.ok) throw res
 				return res.text()
 			})
-			.then(content => {
-				downloadHtml(form.title.split(' ').join(''), marked(decodeBlob(content)))
+			.then(blob => {
+				downloadHtml(form.title.split(' ').join(''), marked(decodeBlob(blob)))
 				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 				this.setState({ newAnchorEl: null })
 			})
@@ -224,8 +224,8 @@ class Forms extends React.Component {
 				if (!res.ok) throw res
 				return res.text()
 			})
-			.then(content => {
-				downloadPdf(form.title.split(' ').join(''), marked(decodeBlob(content)))
+			.then(blob => {
+				downloadPdf(form.title.split(' ').join(''), marked(decodeBlob(blob)))
 				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 				this.setState({ newAnchorEl: null })
 			})
@@ -245,8 +245,8 @@ class Forms extends React.Component {
 				if (!res.ok) throw res
 				return res.text()
 			})
-			.then(content => {
-				downloadDocx(form.title.split(' ').join(''), marked(decodeBlob(content)))
+			.then(blob => {
+				downloadDocx(form.title.split(' ').join(''), marked(decodeBlob(blob)))
 				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 				this.setState({ newAnchorEl: null })
 			})

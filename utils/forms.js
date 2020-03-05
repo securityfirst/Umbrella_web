@@ -67,7 +67,7 @@ export const generateChecklist = (checklist, percentage) => {
 			<h2>${percentage}%</h2>
 			${(checklist.items && checklist.items.length)
 				? `<ul>${checklist.items.map((item, i) => {
-					return `<li><strong>${item.text}</strong>: ${item.done ? '✓' : '✕'}</li>`
+					return `<li><input type="checkbox" style="margin-right: .5rem;"${item.done ? ' checked' : ''}/>${item.text}</li>`
 				}).join('')}</ul>`
 				: ''}
 		`

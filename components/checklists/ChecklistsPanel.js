@@ -1,4 +1,5 @@
 import React from 'react'
+import { withRouter } from 'next/router'
 import { connect } from 'react-redux'
 
 import { withStyles } from '@material-ui/core/styles'
@@ -136,15 +137,19 @@ class ChecklistsPanel extends React.Component {
 	}
 
 	downloadHtml = (checklist, percentage) => async () => {
-		const { dispatch, locale, systemLocaleMap, form } = this.props
+		const { router, dispatch, locale, systemLocaleMap, form } = this.props
 
 		try {
 			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
 			
 			const name = checklist.name.replace(/ /g, '_')
-			const html = generateChecklist(checklist, percentage)
+			const markdown = generateChecklist(checklist, percentage)
 
-			downloadHtml(name, html)
+			downloadHtml(name, 
+				'<h1 id="title">Umbrella Checklist</h1>' + 
+				`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+				`<div id="checklist">${markdown}</div>`
+			)
 
 			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 		} catch (e) {
@@ -154,15 +159,19 @@ class ChecklistsPanel extends React.Component {
 	}
 
 	downloadPdf = (checklist, percentage) => async () => {
-		const { dispatch, locale, systemLocaleMap, form } = this.props
+		const { router, dispatch, locale, systemLocaleMap, form } = this.props
 
 		try {
 			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
 			
 			const name = checklist.name.replace(/ /g, '')
-			const html = generateChecklist(checklist, percentage)
+			const markdown = generateChecklist(checklist, percentage)
 
-			downloadPdf(name, html)
+			downloadPdf(name, 
+				'<h1 id="title">Umbrella Checklist</h1>' + 
+				`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+				`<div id="checklist">${markdown}</div>`
+			)
 
 			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 		} catch (e) {
@@ -172,7 +181,7 @@ class ChecklistsPanel extends React.Component {
 	}
 
 	downloadDocx = (checklist, percentage) => async () => {
-		const { dispatch, locale, systemLocaleMap, form } = this.props
+		const { router, dispatch, locale, systemLocaleMap, form } = this.props
 
 		try {
 			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
@@ -315,4 +324,4 @@ const mapStateToProps = (state) => ({
 	...state.view,
 })
 
-export default connect(mapStateToProps)(withStyles(styles, { withTheme: true })(ChecklistsPanel))
+export default withRouter(connect(mapStateToProps)(withStyles(styles, { withTheme: true })(ChecklistsPanel)))
