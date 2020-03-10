@@ -1,27 +1,11 @@
 import * as Blob from 'blob'
 
 export const generateHTML = (marked = '') => {
-	console.log("marked: ", marked);
 	return `
 		<!doctype html>
 		<html>
 			<head>
-				<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
 				<style>
-					body {
-						max-width: 960px;
-						margin: 2rem auto;
-						font-size: 16px;
-						background-color: #ECECEC;
-						-ms-text-size-adjust: 100%;
-						-webkit-text-size-adjust: 100%;
-						line-height: 1.5;
-						color: #24292E;
-						font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-						font-size: 16px;
-						line-height: 1.5;
-						word-wrap: break-word;
-					}
 					h1 {
 						text-transform: capitalize;
 					}
@@ -30,8 +14,19 @@ export const generateHTML = (marked = '') => {
 						text-decoration: none;
 					}
 					#content {
-						background-color: white;
+						max-width: 960px;
+						margin: 2rem auto;
 						padding: 1rem 2rem;
+						font-size: 16px;
+						-ms-text-size-adjust: 100%;
+						-webkit-text-size-adjust: 100%;
+						line-height: 1.5;
+						color: #24292E;
+						font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+						font-size: 16px;
+						line-height: 1.5;
+						word-wrap: break-word;
+						background-color: white;
 					}
 					#title {
 						margin-bottom: 0;
@@ -70,9 +65,8 @@ export const downloadPdf = (name = 'download', marked) => {
 		const html2pdf = require('html2pdf.js')
 
 		let placeholder = document.createElement('div')
-		// placeholder.setAttribute('style', 'visibility:none;')
 		placeholder.innerHTML = generateHTML(marked)
-		// document.body.appendChild(placeholder)
+		document.body.appendChild(placeholder)
 
 		const worker = html2pdf()
 			.set({
