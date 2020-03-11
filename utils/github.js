@@ -86,6 +86,8 @@ export const formatContentUrls = ({ blob = '', locale = 'en', category = '', lev
 		return url
 	})
 
+	formattedContent = formattedContent.replace(/index\: [0-9]/, '').replace('title', 'Title')
+
 	return formattedContent
 }
 
