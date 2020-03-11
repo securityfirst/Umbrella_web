@@ -14,7 +14,7 @@ import FormControl from '@material-ui/core/FormControl'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormLabel from '@material-ui/core/FormLabel'
 import Fab from '@material-ui/core/Fab'
-import DeleteIcon from '@material-ui/icons/Delete'
+import ClearAllIcon from '@material-ui/icons/ClearAll'
 
 import yellow from '@material-ui/core/colors/yellow'
 
@@ -230,7 +230,7 @@ class LessonsLevel extends React.Component {
 							aria-haspopup="true"
 							onClick={this.deleteChecklist(listKey)}
 						>
-							<DeleteIcon />
+							<ClearAllIcon />
 						</Button>}
 						<FavoriteShareIcons
 							type="checklist"
