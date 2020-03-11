@@ -30,9 +30,337 @@ import { getForm, deleteForm } from '../../store/actions/forms'
 import { setAppbarTitle, openAlert } from '../../store/actions/view'
 
 import { contentStyles, paperStyles, buttonWrapperStyles } from '../../utils/view'
-import { generateForm } from '../../utils/forms'
+import { generateFormSaved, generateFormNew } from '../../utils/forms'
 import { downloadPdf, downloadHtml, downloadDocx } from '../../utils/dom'
 import { decodeBlob } from '../../utils/github'
+
+class ActivePanel extends React.Component {
+	state = {
+		newAnchorEl: null,
+	}
+
+	downloadHtml = (formSaved) => {
+		const { dispatch, locale, systemLocaleMap } = this.props
+
+		dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
+
+		fetch(`${process.env.ROOT}/api/github/content/${formSaved.sha}`)
+			.then(res => {
+				if (!res.ok) throw res
+				return res.text()
+			})
+			.then(content => {
+				const form = YAML.parse(decodeBlob(content))
+				const html = generateFormSaved(form, formSaved)
+
+				downloadHtml(formSaved.filename, html)
+
+				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+			})
+			.catch(err => {
+				console.error('downloadHtml error: ', err)
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
+			})
+	}
+
+	downloadPdf = (formSaved) => {
+		const { dispatch, locale, systemLocaleMap, form } = this.props
+
+		dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
+		
+		fetch(`${process.env.ROOT}/api/github/content/${formSaved.sha}`)
+			.then(res => {
+				if (!res.ok) throw res
+				return res.text()
+			})
+			.then(content => {
+				const form = YAML.parse(decodeBlob(content))
+				const html = generateFormSaved(form, formSaved)
+
+				downloadPdf(formSaved.filename, html)
+
+				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+			})
+			.catch(err => {
+				console.error('downloadPdf error: ', err)
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
+			})
+	}
+
+	downloadDocx = (formSaved) => {
+		const { dispatch, locale, systemLocaleMap, form } = this.props
+
+		dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
+		
+		fetch(`${process.env.ROOT}/api/github/content/${formSaved.sha}`)
+			.then(res => {
+				if (!res.ok) throw res
+				return res.text()
+			})
+			.then(content => {
+				const form = YAML.parse(decodeBlob(content))
+				const html = generateFormSaved(form, formSaved)
+
+				downloadDocx(formSaved.filename, html)
+
+				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+			})
+			.catch(err => {
+				console.error('downloadDocx error: ', err)
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
+			})
+	}
+	
+	delete = formSaved => () => {
+		const { dispatch, locale, systemLocaleMap } = this.props
+
+		if (confirm(systemLocaleMap[locale].confirm_form_delete)) {
+			dispatch(deleteForm(formSaved, () => {
+				dispatch(openAlert('success', systemLocaleMap[locale].form_deleted))
+			}))
+		}
+	}
+
+	render() {
+		const { formSaved, classes, locale, systemLocaleMap } = this.props
+		const { newAnchorEl } = this.state
+
+		const randomNumber = Math.random()
+
+		return (
+			<Paper className={classes.formPanel} square>
+				<Typography className={classes.formPanelTitle} variant="h6">
+					{formSaved.filename}
+				</Typography>
+
+				<div className={classes.formPanelButtonsWrapper}>
+					<div>
+						<Typography className={classes.label}>
+							<strong>{systemLocaleMap[locale].date_created}</strong>: {new Date(formSaved.dateCreated).toLocaleString()}
+						</Typography>
+						{formSaved.dateModified && <Typography className={classes.label}>
+							<strong>{systemLocaleMap[locale].date_modified}</strong>: {new Date(formSaved.dateModified).toLocaleString()}
+						</Typography>}
+					</div>
+					<div>
+						<Button 
+							component="button" 
+							aria-owns={newAnchorEl ? `active-download-menu-${randomNumber}` : undefined}
+							aria-haspopup="true"
+							onClick={e => this.setState({ newAnchorEl: e.currentTarget })}
+						><ShareIcon /></Button>
+						<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].form_menu_edit}</Button></Link>
+						<Button component="button" color="primary" onClick={this.delete(formSaved)}>{systemLocaleMap[locale].delete}</Button>
+
+						<Menu
+							id={`active-download-menu-${randomNumber}`}
+							anchorEl={newAnchorEl}
+							open={Boolean(newAnchorEl)}
+							onClose={() => this.setState({ newAnchorEl: null })}
+						>
+							<ListItem button onClick={() => this.downloadHtml(formSaved)}>
+								<ListItemText primary={systemLocaleMap[locale].html_name} />
+							</ListItem>
+							<ListItem button onClick={() => this.downloadPdf(formSaved)}>
+								<ListItemText primary={systemLocaleMap[locale].pdf_name} />
+							</ListItem>
+							<ListItem button onClick={() => this.downloadDocx(formSaved)}>
+								<ListItemText primary={systemLocaleMap[locale].docx_name} />
+							</ListItem>
+						</Menu>
+					</div>
+				</div>
+			</Paper>
+		)
+	}
+}
+
+class AvailablePanel extends React.Component {
+	state = {
+		newAnchorEl: null,
+		downloadOpen: false,
+		tooltipOpen: false,
+	}
+
+	downloadFormHtml = (form) => {
+		const { dispatch, locale, systemLocaleMap } = this.props
+
+		dispatch(openAlert('info', systemLocaleMap[locale].downloading_html))
+
+		fetch(`${process.env.ROOT}/api/github/content/${form.sha}`)
+			.then(res => {
+				if (!res.ok) throw res
+				return res.text()
+			})
+			.then(async blob => {
+				const formContent =  await YAML.parse(decodeBlob(blob))
+				downloadHtml(form.title.split(' ').join(''), generateFormNew(formContent))
+				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+				this.setState({ newAnchorEl: null })
+			})
+			.catch(err => {
+				console.error('downloadFormHtml error: ', err)
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
+			})
+	}
+
+	downloadFormPdf = (form) => {
+		const { dispatch, locale, systemLocaleMap } = this.props
+
+		dispatch(openAlert('info',systemLocaleMap[locale].downloading_pdf))
+
+		fetch(`${process.env.ROOT}/api/github/content/${form.sha}`)
+			.then(res => {
+				if (!res.ok) throw res
+				return res.text()
+			})
+			.then(async blob => {
+				const formContent =  await YAML.parse(decodeBlob(blob))
+				downloadPdf(form.title.split(' ').join(''), generateFormNew(formContent))
+				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+				this.setState({ newAnchorEl: null })
+			})
+			.catch(err => {
+				console.error('downloadFormPdf error: ', err)
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
+			})
+	}
+
+	downloadFormDocx = (form) => {
+		const { dispatch, locale, systemLocaleMap } = this.props
+
+		dispatch(openAlert('info', systemLocaleMap[locale].downloading_docx))
+
+		fetch(`${process.env.ROOT}/api/github/content/${form.sha}`)
+			.then(res => {
+				if (!res.ok) throw res
+				return res.text()
+			})
+			.then(async blob => {
+				const formContent =  await YAML.parse(decodeBlob(blob))
+				downloadDocx(form.title.split(' ').join(''), generateFormNew(formContent))
+				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
+				this.setState({ newAnchorEl: null })
+			})
+			.catch(err => {
+				console.error('downloadFormDocx error: ', err)
+				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
+			})
+	}
+
+	copyLink = () => {
+		const { dispatch, locale, systemLocaleMap } = this.props
+
+		if (typeof document === 'undefined') return false
+
+		if (!document.queryCommandSupported('copy')) {
+			dispatch(openAlert('error', systemLocaleMap[locale].browser_unsupported))
+			return false
+		}
+
+		this.copyInput.focus()
+		this.copyInput.select()
+
+		if (document.execCommand('copy')) {
+			this.setState({tooltipOpen: true}, () => {
+				setTimeout(() => {
+					this.setState({tooltipOpen: false})
+				}, 1500)
+			})
+		}
+	}
+
+	render() {
+		const { 
+			form,
+			classes, 
+			locale, 
+			systemLocaleMap, 
+			checkLogin,
+		} = this.props
+
+		const { newAnchorEl, downloadOpen, tooltipOpen } = this.state
+
+		const url = `${process.env.ROOT}/forms/${form.sha}`
+		const randomNumber = Math.random()
+
+		return (
+			<Paper className={classes.formPanel} square>
+				<Typography className={classes.formPanelTitle} variant="h6">
+					{form.title}
+				</Typography>
+
+				<div className={classes.formPanelButtonsWrapper}>
+					<div></div>
+					<div>
+						<Button 
+							size="small" 
+							className={classes.cardActionIcon} 
+							aria-owns={newAnchorEl ? `share-menu-${randomNumber}` : undefined}
+							aria-haspopup="true"
+							onClick={e => this.setState({ newAnchorEl: e.currentTarget })}
+						>
+							<ShareIcon />
+						</Button>
+						<Link href={`/forms/${form.sha}`}>
+							<Button color="primary" onClick={checkLogin}>{systemLocaleMap[locale].form_message_body_form_new}</Button>
+						</Link>
+						<Menu
+							id={`share-menu-${randomNumber}`}
+							anchorEl={newAnchorEl}
+							open={Boolean(newAnchorEl)}
+							onClose={() => this.setState({ newAnchorEl: null })}
+						>
+							<ListItem button onClick={() => this.setState({downloadOpen: !this.state.downloadOpen})}>
+								<ListItemIcon>
+									<GetAppIcon />
+								</ListItemIcon>
+								<ListItemText inset primary={systemLocaleMap[locale].download_title} />
+
+								{downloadOpen ? <ExpandLess /> : <ExpandMore />}
+							</ListItem>
+
+							<Collapse in={downloadOpen} timeout="auto" unmountOnExit>
+								<List component="div" disablePadding>
+									<ListItem button onClick={() => this.downloadFormHtml(form)}>
+										<ListItemText primary="HTML" />
+									</ListItem>
+									<ListItem button onClick={() => this.downloadFormPdf(form)}>
+										<ListItemText primary="PDF" />
+									</ListItem>
+									<ListItem button onClick={() => this.downloadFormDocx(form)}>
+										<ListItemText primary="DOCX" />
+									</ListItem>
+								</List>
+							</Collapse>
+
+							{Boolean(url) && <Tooltip
+								open={tooltipOpen}
+								title={systemLocaleMap[locale].copied}
+								placement="right"
+							>
+								<ListItem onClick={this.copyLink}>
+									<ListItemIcon>
+										<LinkIcon />
+									</ListItemIcon>
+									<ListItemText inset primary={systemLocaleMap[locale].copy_link} />
+									<input 
+										ref={el => this.copyInput = el} 
+										className={classes.copyInput} 
+										type="text"
+										tabIndex="-1" 
+										aria-hidden="true" 
+										defaultValue={url}
+									/>
+								</ListItem>
+							</Tooltip>}
+						</Menu>
+					</div>
+				</div>
+			</Paper>
+		)
+	}
+}
 
 const styles = theme => ({
 	...contentStyles(theme),
@@ -60,10 +388,6 @@ const styles = theme => ({
 
 class Forms extends React.Component {
 	state = {
-		activeAnchorEl: null,
-		newAnchorEl: null,
-		downloadOpen: false,
-		tooltipOpen: false,
 		forms: this.props.content[this.props.locale].forms.content
 			.filter(form => form.filename.indexOf('f_') === 0)
 			.map(form => ({ sha: form.sha, title: form.filename.slice(2, form.filename.length - 4).replace(/-/g, " ") }))
@@ -78,16 +402,6 @@ class Forms extends React.Component {
 		if (nextProps.locale !== this.props.locale) {
 			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].form_title))
 			this.setFormData(nextProps.locale)
-		}
-	}
-
-	checkLogin = e => {
-		const { dispatch, locale, systemLocaleMap, isProtected, password } = this.props
-
-		if (isProtected && !password) {
-			e.preventDefault()
-
-			return dispatch(openAlert('error', systemLocaleMap[locale].login_your_password))
 		}
 	}
 
@@ -110,298 +424,19 @@ class Forms extends React.Component {
 		this.setState({ forms: formsList })
 	}
 
-	downloadHtml = formSaved => async () => {
-		const { dispatch, locale, systemLocaleMap, form } = this.props
+	checkLogin = e => {
+		const { dispatch, locale, systemLocaleMap, isProtected, password } = this.props
 
-		try {
-			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
-			await dispatch(getForm(formSaved.sha))
-			
-			const html = generateForm(form, formSaved)
+		if (isProtected && !password) {
+			e.preventDefault()
 
-			downloadHtml(formSaved.filename, html)
-
-			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
-		} catch (e) {
-			console.error('Download HTML error: ', e)
-			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
+			return dispatch(openAlert('error', systemLocaleMap[locale].login_your_password))
 		}
-	}
-
-	downloadPdf = formSaved => async () => {
-		const { dispatch, locale, systemLocaleMap, form } = this.props
-
-		try {
-			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
-			
-			await dispatch(getForm(formSaved.sha))
-			
-			const html = generateForm(form, formSaved)
-
-			downloadPdf(formSaved.filename, html)
-
-			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
-		} catch (e) {
-			console.error('Download PDF error: ', e)
-			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-		}
-	}
-
-	downloadDocx = formSaved => async () => {
-		const { dispatch, locale, systemLocaleMap, form } = this.props
-
-		try {
-			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
-			
-			await dispatch(getForm(formSaved.sha))
-			
-			const html = generateForm(form, formSaved)
-
-			downloadDocx(formSaved.filename, html)
-
-			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
-		} catch (e) {
-			console.error('Download DOCX error: ', e)
-			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-		}
-	}
-	
-	handleCopyLink = () => {
-		const { dispatch, locale, systemLocaleMap } = this.props
-
-		if (typeof document === 'undefined') return false
-
-		if (!document.queryCommandSupported('copy')) {
-			dispatch(openAlert('error', systemLocaleMap[locale].browser_unsupported))
-			return false
-		}
-
-		this.copyInput.focus()
-		this.copyInput.select()
-
-		if (document.execCommand('copy')) {
-			this.setState({tooltipOpen: true}, () => {
-				setTimeout(() => {
-					this.setState({tooltipOpen: false})
-				}, 1500)
-			})
-		}
-	}
-	
-	toggleDownloadList = () => {
-		this.setState({downloadOpen: !this.state.downloadOpen})
-	}
-
-	downloadNewFormHtml = (form) => () => {
-		console.log("form: ", form);
-		const { dispatch, locale, systemLocaleMap } = this.props
-
-		dispatch(openAlert('info', systemLocaleMap[locale].downloading_html))
-
-		fetch(`${process.env.ROOT}/api/github/content/${form.sha}`)
-			.then(res => {
-				if (!res.ok) throw res
-				return res.text()
-			})
-			.then(blob => {
-				downloadHtml(form.title.split(' ').join(''), marked(decodeBlob(blob)))
-				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
-				this.setState({ newAnchorEl: null })
-			})
-			.catch(err => {
-				console.error('downloadNewFormHtml error: ', err)
-				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-			})
-	}
-
-	downloadNewFormPdf = (form) => () => {
-		const { dispatch, locale, systemLocaleMap } = this.props
-
-		dispatch(openAlert('info',systemLocaleMap[locale].downloading_pdf))
-
-		fetch(`${process.env.ROOT}/api/github/content/${form.sha}`)
-			.then(res => {
-				if (!res.ok) throw res
-				return res.text()
-			})
-			.then(blob => {
-				downloadPdf(form.title.split(' ').join(''), marked(decodeBlob(blob)))
-				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
-				this.setState({ newAnchorEl: null })
-			})
-			.catch(err => {
-				console.error('downloadNewFormPdf error: ', err)
-				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-			})
-	}
-
-	downloadNewFormDocx = (form) => () => {
-		const { dispatch, locale, systemLocaleMap } = this.props
-
-		dispatch(openAlert('info', systemLocaleMap[locale].downloading_docx))
-
-		fetch(`${process.env.ROOT}/api/github/content/${form.sha}`)
-			.then(res => {
-				if (!res.ok) throw res
-				return res.text()
-			})
-			.then(blob => {
-				downloadDocx(form.title.split(' ').join(''), marked(decodeBlob(blob)))
-				dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
-				this.setState({ newAnchorEl: null })
-			})
-			.catch(err => {
-				console.error('downloadNewFormDocx error: ', err)
-				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-			})
-	}
-
-	handleDelete = formSaved => () => {
-		const { dispatch, locale, systemLocaleMap } = this.props
-
-		if (confirm(systemLocaleMap[locale].confirm_form_delete)) {
-			dispatch(deleteForm(formSaved, () => {
-				dispatch(openAlert('success', systemLocaleMap[locale].form_deleted))
-			}))
-		}
-	}
-
-	renderActivePanel = (formSaved, i) => {
-		const { classes, locale, systemLocaleMap } = this.props
-		const { activeAnchorEl } = this.state
-
-		return (
-			<Paper key={i} className={classes.formPanel} square>
-				<Typography className={classes.formPanelTitle} variant="h6">
-					{formSaved.filename}
-				</Typography>
-
-				<div className={classes.formPanelButtonsWrapper}>
-					<div>
-						<Typography className={classes.label}>
-							<strong>{systemLocaleMap[locale].date_created}</strong>: {new Date(formSaved.dateCreated).toLocaleString()}
-						</Typography>
-						{formSaved.dateModified && <Typography className={classes.label}>
-							<strong>{systemLocaleMap[locale].date_modified}</strong>: {new Date(formSaved.dateModified).toLocaleString()}
-						</Typography>}
-					</div>
-					<div>
-						<Button 
-							component="button" 
-							aria-owns={activeAnchorEl ? `active-download-menu-${i}` : undefined}
-							aria-haspopup="true"
-							onClick={e => this.setState({ activeAnchorEl: e.currentTarget })}
-						><ShareIcon /></Button>
-						<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].form_menu_edit}</Button></Link>
-						<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>{systemLocaleMap[locale].delete}</Button>
-
-						<Menu
-							id={`active-download-menu-${i}`}
-							anchorEl={activeAnchorEl}
-							open={Boolean(activeAnchorEl)}
-							onClose={() => this.setState({ activeAnchorEl: null })}
-						>
-							<ListItem button onClick={this.downloadHtml(formSaved)}>
-								<ListItemText primary={systemLocaleMap[locale].html_name} />
-							</ListItem>
-							<ListItem button onClick={this.downloadPdf(formSaved)}>
-								<ListItemText primary={systemLocaleMap[locale].pdf_name} />
-							</ListItem>
-							<ListItem button onClick={this.downloadDocx(formSaved)}>
-								<ListItemText primary={systemLocaleMap[locale].docx_name} />
-							</ListItem>
-						</Menu>
-					</div>
-				</div>
-			</Paper>
-		)
-	}
-
-	renderAvailablePanel = (form, i) => {
-		const { classes, locale, systemLocaleMap } = this.props
-		const { newAnchorEl, downloadOpen, tooltipOpen } = this.state
-
-		const url = `${process.env.ROOT}/forms/${form.sha}`
-
-		return (
-			<Paper key={i} className={classes.formPanel} square>
-				<Typography className={classes.formPanelTitle} variant="h6">
-					{form.title}
-				</Typography>
-
-				<div className={classes.formPanelButtonsWrapper}>
-					<div></div>
-					<div>
-						<Button 
-							size="small" 
-							className={classes.cardActionIcon} 
-							aria-owns={newAnchorEl ? `share-menu-${i}` : undefined}
-							aria-haspopup="true"
-							onClick={e => this.setState({ newAnchorEl: e.currentTarget })}
-						>
-							<ShareIcon />
-						</Button>
-						<Link href={`/forms/${form.sha}`}>
-							<Button color="primary" onClick={this.checkLogin}>{systemLocaleMap[locale].form_message_body_form_new}</Button>
-						</Link>
-						<Menu
-							id={`share-menu-${i}`}
-							anchorEl={newAnchorEl}
-							open={Boolean(newAnchorEl)}
-							onClose={() => this.setState({ newAnchorEl: null })}
-						>
-							<ListItem button onClick={this.toggleDownloadList}>
-								<ListItemIcon>
-									<GetAppIcon />
-								</ListItemIcon>
-								<ListItemText inset primary={systemLocaleMap[locale].download_title} />
-
-								{downloadOpen ? <ExpandLess /> : <ExpandMore />}
-							</ListItem>
-
-							<Collapse in={downloadOpen} timeout="auto" unmountOnExit>
-								<List component="div" disablePadding>
-									<ListItem button onClick={this.downloadNewFormHtml(form)}>
-										<ListItemText primary="HTML" />
-									</ListItem>
-									<ListItem button onClick={this.downloadNewFormPdf(form)}>
-										<ListItemText primary="PDF" />
-									</ListItem>
-									<ListItem button onClick={this.downloadNewFormDocx(form)}>
-										<ListItemText primary="DOCX" />
-									</ListItem>
-								</List>
-							</Collapse>
-
-							{Boolean(url) && <Tooltip
-								open={tooltipOpen}
-								title={systemLocaleMap[locale].copied}
-								placement="right"
-							>
-								<ListItem onClick={this.handleCopyLink}>
-									<ListItemIcon>
-										<LinkIcon />
-									</ListItemIcon>
-									<ListItemText inset primary={systemLocaleMap[locale].copy_link} />
-									<input 
-										ref={el => this.copyInput = el} 
-										className={classes.copyInput} 
-										type="text"
-										tabIndex="-1" 
-										aria-hidden="true" 
-										defaultValue={url}
-									/>
-								</ListItem>
-							</Tooltip>}
-						</Menu>
-					</div>
-				</div>
-			</Paper>
-		)
 	}
 
 	render() {
 		const { 
+			dispatch,
 			classes, 
 			locale, 
 			systemLocaleMap, 
@@ -424,13 +459,33 @@ class Forms extends React.Component {
 					{!!formsSaved.length &&
 						<React.Fragment>
 							<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].form_title}</Typography>
-							{formsSaved.map(this.renderActivePanel)}
+							{formsSaved.map((formSaved, i) => {
+								return <ActivePanel 
+									key={i}
+									formSaved={formSaved} 
+									dispatch={dispatch}
+									classes={classes} 
+									locale={locale} 
+									systemLocaleMap={systemLocaleMap} 
+									checkLogin={this.checkLogin}
+								/>
+							})}
 						</React.Fragment>
 					}
 
 					<Typography className={classes.label} variant="subtitle1">{systemLocaleMap[locale].form_message_title_all_forms}</Typography>
 
-					{forms.map(this.renderAvailablePanel)}
+					{forms.map((form, i) => {
+						return <AvailablePanel 
+							key={i}
+							form={form} 
+							dispatch={dispatch}
+							classes={classes} 
+							locale={locale} 
+							systemLocaleMap={systemLocaleMap} 
+							checkLogin={this.checkLogin}
+						/>
+					})}
 				</div>
 			</Layout>
 		)
