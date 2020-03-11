@@ -1,4 +1,4 @@
-export const generateForm = (form, formSaved) => {
+export const generateFormSaved = (form, formSaved) => {
 	if (typeof window === 'undefined') return false
 
 	if (
@@ -38,6 +38,49 @@ export const generateForm = (form, formSaved) => {
 								return `
 									<h3>${item.label}</h3>
 									<ul>${values}</ul>
+								`
+						}
+					}).join('')}
+				`
+			}).join('')}
+		`
+	} catch (e) {
+		throw e
+	}
+}
+
+export const generateFormNew = (form) => {
+	if (typeof window === 'undefined') return false
+
+	if (
+		!form || 
+		!form.title || 
+		!form.screens ||
+		!form.screens.length
+	) {
+		alert('Something went wrong. Please refresh the page and try again.')
+		return false
+	}
+
+	try {
+		return `
+			<h1>${form.title}</h1>
+			${form.screens.map((screen, i) => {
+				return `
+					<h2 style="margin-top:40px">${screen.title}</h2>
+					${screen.items.map(item => {
+						switch (item.type) {
+							case 'text_input': 
+							case 'text_area': 
+							case 'single_choice': 
+								return `
+									<h3 style="display:inline-block;margin:5px 0;">${item.label} </h3>
+									<br/>
+								`
+							case 'multiple_choice': 
+								return `
+									<h3>${item.label}</h3>
+									<ul>${item.options.map(li => `<li><input type="checkbox" style="margin-right: .5rem;"/>${li.label}</li>`).join('')}</ul>
 								`
 						}
 					}).join('')}
