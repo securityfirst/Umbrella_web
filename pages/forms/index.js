@@ -286,13 +286,13 @@ class Forms extends React.Component {
 						</Typography>}
 					</div>
 					<div>
-						<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].form_menu_edit}</Button></Link>
 						<Button 
 							component="button" 
 							aria-owns={activeAnchorEl ? `active-download-menu-${i}` : undefined}
 							aria-haspopup="true"
 							onClick={e => this.setState({ activeAnchorEl: e.currentTarget })}
-						>{systemLocaleMap[locale].download_title}</Button>
+						><ShareIcon /></Button>
+						<Link href={`/forms/${formSaved.sha}/${formSaved.id}`}><Button component="button">{systemLocaleMap[locale].form_menu_edit}</Button></Link>
 						<Button component="button" color="primary" onClick={this.handleDelete(formSaved)}>{systemLocaleMap[locale].delete}</Button>
 
 						<Menu
