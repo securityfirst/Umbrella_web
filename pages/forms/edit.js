@@ -88,10 +88,12 @@ class FormEdit extends React.Component {
 			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].form_title))
 		}
 
-		if (this.props.dbLoading && !nextProps.dbLoading) {
-			this.props.dispatch(getFormSaved(this.props.router.query.id, formSaved => {
-				this.setState({formState: formSaved.state})
-			}))
+		if (!nextProps.dbLoading) {
+			if (!this.props.password && !!nextProps.password) {
+				this.props.dispatch(getFormSaved(this.props.router.query.id, formSaved => {
+					this.setState({formState: formSaved.state})
+				}))				
+			}
 		}
 	}
 
@@ -343,6 +345,7 @@ class FormEdit extends React.Component {
 }
 
 const mapStateToProps = state => ({
+	...state.account,
 	...state.view,
 	...state.forms,
 	dbLoading: state.db.loading
