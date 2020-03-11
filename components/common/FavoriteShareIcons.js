@@ -47,6 +47,9 @@ const styles = theme => ({
 	cardActionIconTeal: {
 		color: teal[500],
 	},
+	cardActionIconTealLight: {
+		color: teal[200],
+	},
 	copyInput: {
 		maxWidth: '10rem',
 	},
@@ -223,37 +226,23 @@ class FavoriteShareIcon extends React.Component {
 
 		return (
 			<React.Fragment>
-				{isFavorited
-					? <Button 
-						size="small" 
-						className={classNames(
-							classes.cardActionIcon, 
-							isLight 
-								? classes.cardActionIconWhite 
-								: null
-						)} 
-						onClick={onFavoriteRemove}
-					>
-						<DeleteIcon />
-					</Button>
-					: <Button 
-						size="small" 
-						className={classNames(
-							classes.cardActionIcon, 
-							isLight 
-								? classes.cardActionIconWhite 
-								: null,
-							isFavoriteAdded
-								? isLight 
-									? classes.cardActionIconYellow
-									: classes.cardActionIconTeal
-								: null
-						)} 
-						onClick={onFavoriteToggle}
-					>
-						<BookmarkIcon />
-					</Button>
-				}
+				<Button 
+					size="small" 
+					className={classNames(
+						classes.cardActionIcon, 
+						isLight 
+							? classes.cardActionIconWhite 
+							: null,
+						isFavoriteAdded
+							? isLight 
+								? classes.cardActionIconTealLight
+								: classes.cardActionIconTeal
+							: null
+					)} 
+					onClick={onFavoriteToggle}
+				>
+					<BookmarkIcon />
+				</Button>
 				<Button 
 					size="small" 
 					className={classNames(
