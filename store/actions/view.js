@@ -48,7 +48,7 @@ export const dismissPathwayModal = opened => (dispatch, getState) => {
 	}
 }
 
-export const setLocale = locale => (dispatch, getState) => {
+export const setLocale = (locale, cb) => (dispatch, getState) => {
 	dispatch(pending(viewTypes.SET_LOCALE))
 
 	const state = getState()
@@ -61,6 +61,7 @@ export const setLocale = locale => (dispatch, getState) => {
 			.set('locale', locale)
 			.then(() => {
 				dispatch(fulfilled(viewTypes.SET_LOCALE, locale))
+				cb()
 			})
 			.catch(err => {
 				dispatch(rejected(viewTypes.SET_LOCALE, err))

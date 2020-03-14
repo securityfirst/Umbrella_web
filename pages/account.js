@@ -148,7 +148,11 @@ class Account extends React.Component {
 	handleLocaleMenuClose = () => this.setState({ anchorEl: null })
 
 	setLocale = locale => () => {
-		this.props.dispatch(setLocale(locale))
+		this.props.dispatch(setLocale(locale, () => {
+			this.props.dispatch(openAlert('success', 'Language updated! Reloading page...'))
+			setTimeout(() => window.location.reload(), 500)
+		}))
+		
 		this.handleLocaleMenuClose()
 	}
 
