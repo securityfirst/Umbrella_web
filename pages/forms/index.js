@@ -394,18 +394,18 @@ class Forms extends React.Component {
 	}
 
 	componentDidMount() {
-		const { dispatch, locale, systemLocaleMap } = this.props
-		dispatch(setAppbarTitle(systemLocaleMap[locale].form_title))
+		this.setFormData({ locale: this.props.locale })
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.locale !== this.props.locale) {
-			this.props.dispatch(setAppbarTitle(nextProps.systemLocaleMap[nextProps.locale].form_title))
-			this.setFormData(nextProps.locale)
+			this.setFormData({ locale: nextProps.locale })
 		}
 	}
 
-	setFormData = async locale => {
+	setFormData = async ({ locale }) => {
+		this.props.dispatch(setAppbarTitle(this.props.systemLocaleMap[locale].form_title))
+
 		const forms = this.props.content[locale].forms.content.filter(form => form.filename.indexOf('f_') === 0)
 
 		let formsList = []
