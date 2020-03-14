@@ -149,6 +149,7 @@ class Account extends React.Component {
 
 	setLocale = locale => () => {
 		this.props.dispatch(setLocale(locale))
+		
 		this.handleLocaleMenuClose()
 	}
 
