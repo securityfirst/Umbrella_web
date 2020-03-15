@@ -95,6 +95,7 @@ const styles = theme => ({
 	},
 	menuListItemText: {
 		textTransform: 'capitalize',
+		overflow: 'hidden',
 	},
 	menuListSubItem: {
 		paddingLeft: theme.spacing.unit * 3,
