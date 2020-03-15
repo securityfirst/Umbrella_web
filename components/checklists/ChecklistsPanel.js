@@ -184,9 +184,12 @@ class ChecklistsPanel extends React.Component {
 			await dispatch(openAlert('info', systemLocaleMap[locale].form_downloading))
 			
 			const name = checklist.name.replace(/ /g, '')
-			const html = generateChecklist(checklist, percentage)
+			const markdown = generateChecklist(checklist, percentage)
 
-			downloadDocx(name, html)
+			downloadDocx(name, 
+				'<h1 id="title">Umbrella Checklist</h1>' + 
+				`<div id="checklist">${markdown}</div>`
+			)
 
 			dispatch(openAlert('success', systemLocaleMap[locale].downloaded))
 		} catch (e) {
