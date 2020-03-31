@@ -28,7 +28,12 @@ class ClientDB {
 					this.db.setItem('protected', hash !== null)
 				}
 
-				if (locale === null) this.db.setItem('locale', 'en')
+				if (locale === null) {
+					const browserLanguage = window.navigator.userLanguage || window.navigator.language
+					const localeCode = browserLanguage ? browserLanguage.substr(0, 2) : 'en'
+
+					this.db.setItem('locale', 'en')
+				}
 				if (hidePathway === null) this.db.setItem('hidePathway', true)
 
 				return resolve()
