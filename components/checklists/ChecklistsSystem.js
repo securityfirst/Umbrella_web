@@ -14,9 +14,10 @@ import cyan from '@material-ui/core/colors/cyan'
 
 import Loading from '../common/Loading'
 import ErrorMessage from '../common/ErrorMessage'
+import FavoriteShareIcons from '../common/FavoriteShareIcons'
 import PathwayPanel from '../pathways/PathwayPanel'
 
-import { deleteChecklistSystem } from '../../store/actions/checklists'
+import { toggleChecklistFavorite, deleteChecklistSystem } from '../../store/actions/checklists'
 import { togglePathwayModal } from '../../store/actions/view'
 
 import { contentStyles } from '../../utils/view'
@@ -31,15 +32,23 @@ const styles = theme => ({
 	},
 	panelWrapper: {
 		position: 'relative',
+		[theme.breakpoints.down('sm')]: {
+			display: 'flex',
+			flexWrap: 'wrap',
+			height: '125px',
+		},
 	},
 	panel: {
 		display: 'flex',
 		justifyContent: 'left',
 		alignItems: 'center',
-		width: '97%',
+		width: '90%',
 		margin: '.5rem 0',
 		padding: '.75rem 1.5rem',
 		backgroundColor: theme.palette.common.white,
+		[theme.breakpoints.down('sm')]: {
+			width: '100%',
+		},
 	},
 	panelButtonInner: {
 		display: 'flex',
@@ -58,7 +67,7 @@ const styles = theme => ({
 	},
 	panelPercentage: {
 		display: 'inline-block',
-		marginLeft: 'auto',
+		marginLeft: '1rem',
 		fontWeight: 'normal',
 		color: cyan[500],
 	},
@@ -81,11 +90,29 @@ const styles = theme => ({
 	panelTotalIconThird: {
 		left: '2.5rem',
 	},
+	panelShareButton: {
+		top: '50%',
+		left: '92%',
+		position: 'absolute',
+		transform: 'translateY(-50%)',
+		[theme.breakpoints.down('sm')]: {
+			position: 'initial',
+			top: 'initial',
+			left: 'initial',
+			marginTop: '1rem',
+		},
+	},
 	panelActionButton: {
 		position: 'absolute',
 		left: '98%',
 		top: '50%',
     	transform: 'translateY(-50%)',
+    	[theme.breakpoints.down('sm')]: {
+    		position: 'initial',
+    		top: 'initial',
+			left: 'initial',
+			marginTop: '1rem',
+		},
 	},
 	pathwaySavedWrapper: {
 		width: '97%',
@@ -98,7 +125,7 @@ const styles = theme => ({
 		fontWeight: 'normal',
 	},
 	pathwaySeeAll: {
-		width: '97%',
+		width: '90%',
 		marginTop: '.5rem',
 		color: cyan[500],
 		textAlign: 'right',
@@ -106,6 +133,9 @@ const styles = theme => ({
 		transition: '200ms opacity linear',
 		'&:hover': {
 			opacity: '.7',
+		},
+		[theme.breakpoints.down('sm')]: {
+			width: '80%',
 		},
 	},
 })
@@ -162,6 +192,10 @@ class ChecklistsSystem extends React.Component {
 		const favorites = checklistFavorites
 	}
 
+	onChecklistFavoriteToggle = ({ category, level }) => () => {
+		this.props.dispatch(toggleChecklistFavorite(category, level))
+	}
+
 	deleteChecklist = title => () => {
 		const { dispatch, locale, systemLocaleMap } = this.props
 		if (confirm(systemLocaleMap[locale].confirm_remove_checklist)) {
@@ -184,8 +218,13 @@ class ChecklistsSystem extends React.Component {
 	}
 
 	renderPanelLink = (title, percentage, index) => {
-		const { classes, locale } = this.props
-		const level = title.split(' > ')[1]
+		const { classes, content, locale } = this.props
+		const params = title.split(' > ')
+		const category = params[0]
+		const cat = category.split('.')[0]
+		const subcat = category.split('.')[1]
+		const level = params[1]
+		const checklistFile = content[locale][cat][subcat][level].content.find(f => f.filename === 'c_checklist.yml')
 
 		return (
 			<div className={classes.panelWrapper} key={index}>
@@ -200,6 +239,17 @@ class ChecklistsSystem extends React.Component {
 						{percentage !== null && <Typography className={classes.panelPercentage} variant="h6">{percentage}%</Typography>}
 					</Button>
 				</Link>
+				<FavoriteShareIcons
+					classNameShare={classes.panelShareButton}
+					type="checklist"
+					name={`${category}-${level}`}
+					sha={!!checklistFile ? checklistFile.sha : null}
+					category={category}
+					level={level}
+					url={`${process.env.ROOT}/lessons/${locale}/${category}/${level}`}
+					onFavoriteToggle={this.onChecklistFavoriteToggle({category, level})}
+					onFavoriteRemove={this.onChecklistFavoriteToggle({category, level})}
+				/>
 				<IconButton className={classes.panelActionButton} aria-label="Delete" onClick={this.deleteChecklist(title)}>
 					<DeleteIcon />
 				</IconButton>

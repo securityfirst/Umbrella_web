@@ -238,7 +238,7 @@ class LessonsLevel extends React.Component {
 							sha={!!checklistFile ? checklistFile.sha : null}
 							url={`${process.env.ROOT}/lessons/${locale}/${category}/${level}`}
 							isLight
-							isFavorited={isFavorited}
+							isFavorited
 							isFavoriteAdded={isFavorited}
 							onFavoriteToggle={this.onChecklistFavoriteToggle(checklist)}
 							onFavoriteRemove={this.onChecklistFavoriteToggle(checklist)}

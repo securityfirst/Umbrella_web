@@ -93,8 +93,10 @@ class LessonCardTile extends React.Component {
 						name={title ? title.replace(/ /g, '') : 'file'}
 						sha={file.sha}
 						url={`${process.env.ROOT}${href}`}
+						category={category}
+						level={level}
 						onFavoriteToggle={this.onFavoriteToggle}
-						isFavorited={isFavorited}
+						isFavorited
 						isFavoriteAdded={isFavoriteAdded}
 						onFavoriteRemove={this.onFavoriteRemove}
 					/>
