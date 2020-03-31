@@ -10,13 +10,16 @@ import { withStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import IconButton from '@material-ui/core/IconButton'
+import Menu from '@material-ui/core/Menu'
 import MenuIcon from '@material-ui/icons/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
-import { toggleMainMenu, openAlert } from '../../store/actions/view'
+import { toggleMainMenu, setLocale, openAlert } from '../../store/actions/view'
 
-import { viewConstants } from '../../utils/view'
+import { viewConstants, localeMap } from '../../utils/view'
 
 const styles = theme => ({
 	appBar: {
@@ -51,12 +54,27 @@ const styles = theme => ({
 	title: {
 		flexGrow: 1,
 	},
+	localeIcon: {
+		display: 'inline-block',
+		width: '2rem',
+		marginRight: 0,
+	},
 	login: {
 	    padding: '8px 16px',
 	},
 })
 
 class Appbar extends React.Component {
+	state = {
+		anchorEl: null
+	}
+
+	setLocale = locale => () => {
+		this.props.dispatch(setLocale(locale))
+		
+		this.setState({ anchorEl: null })
+	}
+
 	logout = () => {
 		const { dispatch, locale, systemLocaleMap } = this.props
 		const Account = require('../../account')
@@ -71,25 +89,61 @@ class Appbar extends React.Component {
 	renderRightContent() {
 		const { classes, locale, systemLocaleMap, password } = this.props
 
-		if (password) {
-			return (
-				<Button 
-					classes={{root: classes.login}} 
-					component="button" 
-					color="inherit" 
-					onClick={this.logout}
-				>{systemLocaleMap[locale].logout}</Button>
-			)
-		}
-
-		return (
-			<Link href="/login">
+		const loginButton = !!password
+			? <Button 
+				classes={{root: classes.login}} 
+				component="button" 
+				color="inherit" 
+				onClick={this.logout}
+			>{systemLocaleMap[locale].logout}</Button>
+			: <Link href="/login">
 				<Button 
 					classes={{root: classes.login}} 
 					component="button" 
 					color="inherit"
 				>{systemLocaleMap[locale].login_message_button}</Button>
 			</Link>
+
+		return (
+			<div>
+				<IconButton
+					aria-label="more"
+					aria-controls="locale-menu"
+					aria-haspopup="true"
+					onClick={e => this.setState({ anchorEl: e.currentTarget })}
+				>
+					<img
+						className={classes.localeIcon}
+						src={`/static/assets/images/${locale}.png`}
+						alt={`Umbrella settings locale ${locale} icon`}
+					/>
+				</IconButton>
+
+				<Menu
+					id="locale-menu"
+					anchorEl={this.state.anchorEl}
+					open={Boolean(this.state.anchorEl)}
+					onClose={() => this.setState({ anchorEl: null })}
+				>
+					{Object.keys(localeMap).map((loc, i) => {
+						if (loc === locale) return null
+
+						return (
+							<MenuItem key={i} onClick={this.setLocale(loc)}>
+								<ListItemIcon className={classes.localeIcon}>
+									<img
+										className={classes.localeIcon}
+										src={`/static/assets/images/${loc}.png`}
+										alt={`Umbrella settings locale ${loc} icon`}
+									/>
+								</ListItemIcon>
+							</MenuItem>
+						)
+					})}
+				</Menu>
+
+				{ loginButton }
+			</div>
 		)
 	}
 

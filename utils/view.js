@@ -30,3 +30,13 @@ export const viewConstants = {
 	drawerWidth: 280,
 	drawerIconWidth: theme => theme.spacing.unit * 7 + 1
 }
+
+export const localeMap = {
+	'en': 'English',
+	'es': 'Spanish',
+	'fr': 'French',
+	'ar': 'Arabic',
+	'fa': 'Persian',
+	'ru': 'Russian',
+	'zh-Hant': 'Chinese - Traditional',
+}
