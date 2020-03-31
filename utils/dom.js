@@ -59,9 +59,10 @@ export const downloadPdf = (name = 'download', marked) => {
 		return false
 	}
 
+	const date = new Date()
+	const filename = `Umbrella_${name.trim()}_${date.getUTCFullYear()}${date.getMonth()+1}${date.getDate()}.pdf`
+
 	try {
-		const date = new Date()
-		const filename = `Umbrella_${name.trim()}_${date.valueOf()}.pdf`
 		const html2pdf = require('html2pdf.js')
 
 		let placeholder = document.createElement('div')
@@ -82,7 +83,7 @@ export const downloadPdf = (name = 'download', marked) => {
 				placeholder.remove()
 			})
 	} catch (e) {
-		console.error(e)
+		console.error(`Failed to download ${filename}: `, e)
 		throw e
 	}
 }
@@ -95,14 +96,17 @@ export const downloadHtml = (name = 'download', marked) => {
 		return false
 	}
 
+	const date = new Date()
+	const filename = `Umbrella_${name.trim()}_${date.getUTCFullYear()}${date.getMonth()+1}${date.getDate()}.html`
+
 	try {
 		const html = generateHTML(marked)
 		const blob = new Blob([html], {type : 'application/html'})
 		const url = 'data:text/html;charset=utf-8,' + encodeURIComponent(html)
 
-		save(blob, url, name.trim() + '.html')
+		save(blob, url, filename)
 	} catch (e) {
-		console.error(`Failed to download ${name}.html: `, e)
+		console.error(`Failed to download ${filename}: `, e)
 		throw e
 	}
 }
@@ -115,6 +119,9 @@ export const downloadDocx = async (name = 'download', marked) => {
 		return false
 	}
 
+	const date = new Date()
+	const filename = `Umbrella_${name.trim()}_${date.getUTCFullYear()}${date.getMonth()+1}${date.getDate()}.docx`
+
 	try {
 		const html = `
 			<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
@@ -125,9 +132,9 @@ export const downloadDocx = async (name = 'download', marked) => {
 		const blob = new Blob(['\ufeff', html], {type: 'application/msword'})
 		const url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html)
 		
-		save(blob, url, name.trim() + '.docx')
+		save(blob, url, filename)
 	} catch (e) {
-		console.error(`Failed to download ${name}.docx: `, e)
+		console.error(`Failed to download ${filename}: `, e)
 		throw e
 	}
 }
