@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -93,7 +93,10 @@ class FavoriteShareIcon extends React.Component {
 	}
 
 	downloadHtml = () => {
-		const { router, dispatch, content, locale, systemLocaleMap, type, name, sha } = this.props
+		const { router, dispatch, content, locale, systemLocaleMap, type, name, sha, category, level } = this.props
+
+		const cat = category || router.query.category
+		const lev = level || router.query.level
 
 		dispatch(openAlert('info', systemLocaleMap[locale].downloading_html))
 
@@ -106,12 +109,12 @@ class FavoriteShareIcon extends React.Component {
 				if (type === 'lesson') {
 					downloadHtml(name, 
 						'<h1 id="title">Umbrella Lesson</h1>' + 
-						`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+						`<h2 id="subtitle">${cat.split('.').join('/')}: ${lev}</h2>` + 
 						marked(formatContentUrls({
 							blob,
 							locale,
-							category: router.query.category,
-							level: router.query.level,
+							category: cat,
+							level: lev,
 							content
 						}))
 					)
@@ -123,7 +126,7 @@ class FavoriteShareIcon extends React.Component {
 
 					downloadHtml(name, 
 						'<h1 id="title">Umbrella Checklist</h1>' + 
-						`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+						`<h2 id="subtitle">${cat.split('.').join('/')}: ${lev}</h2>` + 
 						`<div id="checklist">${markdown}</div>`
 					)
 				} else {
@@ -141,7 +144,10 @@ class FavoriteShareIcon extends React.Component {
 	}
 
 	downloadPdf = () => {
-		const { router, dispatch, content, locale, systemLocaleMap, type, name, sha } = this.props
+		const { router, dispatch, content, locale, systemLocaleMap, type, name, sha, category, level } = this.props
+
+		const cat = category || router.query.category
+		const lev = level || router.query.level
 
 		dispatch(openAlert('info',systemLocaleMap[locale].downloading_pdf))
 
@@ -154,12 +160,12 @@ class FavoriteShareIcon extends React.Component {
 				if (type === 'lesson') {
 					downloadPdf(name, 
 						'<h1 id="title">Umbrella Lesson</h1>' + 
-						`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+						`<h2 id="subtitle">${cat.split('.').join('/')}: ${lev}</h2>` + 
 						marked(formatContentUrls({
 							blob,
 							locale,
-							category: router.query.category,
-							level: router.query.level,
+							category: cat,
+							level: lev,
 							content
 						}))
 					)
@@ -171,7 +177,7 @@ class FavoriteShareIcon extends React.Component {
 
 					downloadPdf(name, 
 						'<h1 id="title">Umbrella Checklist</h1>' + 
-						`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+						`<h2 id="subtitle">${cat.split('.').join('/')}: ${lev}</h2>` + 
 						`<div id="checklist">${markdown}</div>`
 					)
 				} else {
@@ -188,7 +194,10 @@ class FavoriteShareIcon extends React.Component {
 	}
 
 	downloadDocx = () => {
-		const { router, dispatch, content, locale, systemLocaleMap, type, name, sha } = this.props
+		const { router, dispatch, content, locale, systemLocaleMap, type, name, sha, category, level } = this.props
+
+		const cat = category || router.query.category
+		const lev = level || router.query.level
 
 		dispatch(openAlert('info', systemLocaleMap[locale].downloading_docx))
 
@@ -201,12 +210,12 @@ class FavoriteShareIcon extends React.Component {
 				if (type === 'lesson') {
 					downloadDocx(name, 
 						'<h1 id="title">Umbrella Lesson</h1>' + 
-						`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+						`<h2 id="subtitle">${cat.split('.').join('/')}: ${lev}</h2>` + 
 						marked(formatContentUrls({
 							blob,
 							locale,
-							category: router.query.category,
-							level: router.query.level,
+							category: cat,
+							level: lev,
 							content
 						}))
 					)
@@ -218,7 +227,7 @@ class FavoriteShareIcon extends React.Component {
 
 					downloadDocx(name, 
 						'<h1 id="title">Umbrella Checklist</h1>' + 
-						`<h2 id="subtitle">${router.query.category.split('.').join('/')}: ${router.query.level}</h2>` + 
+						`<h2 id="subtitle">${cat.split('.').join('/')}: ${lev}</h2>` + 
 						`<div id="checklist">${markdown}</div>`
 					)
 				} else {
@@ -239,6 +248,7 @@ class FavoriteShareIcon extends React.Component {
 			classes, 
 			locale, 
 			systemLocaleMap, 
+			classNameShare,
 			isFavorited, 
 			isFavoriteAdded, 
 			isLight, 
@@ -252,7 +262,7 @@ class FavoriteShareIcon extends React.Component {
 
 		return (
 			<React.Fragment>
-				<Button 
+				{isFavorited && <IconButton 
 					size="small" 
 					className={classNames(
 						classes.cardActionIcon, 
@@ -268,11 +278,12 @@ class FavoriteShareIcon extends React.Component {
 					onClick={onFavoriteToggle}
 				>
 					<BookmarkIcon />
-				</Button>
-				<Button 
+				</IconButton>}
+				<IconButton 
 					size="small" 
 					className={classNames(
 						classes.cardActionIcon,
+						classNameShare,
 						isLight 
 							? classes.cardActionIconWhite 
 							: null
@@ -282,7 +293,7 @@ class FavoriteShareIcon extends React.Component {
 					onClick={this.handleClick}
 				>
 					<ShareIcon />
-				</Button>
+				</IconButton>
 
 				<Menu
 					id={`share-menu-${index}`}

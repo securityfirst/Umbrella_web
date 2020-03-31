@@ -80,7 +80,7 @@ export const formatContentUrls = ({ blob = '', locale = 'en', category = '', lev
 			else if (category.indexOf('tools') > -1) subpath = `${category.replace('.', '/')}`
 			else subpath = `${category.replace('.', '/')}/${level}`
 
-			return `(https://raw.githubusercontent.com/securityfirst/umbrella-content/master/${locale}/${subpath}/${url.replace('(', '').replace(')', '')})`
+			return `(https://raw.githubusercontent.com/securityfirst/umbrella-content/master/en/${subpath}/${url.replace('(', '').replace(')', '')})`
 		}
 
 		return url

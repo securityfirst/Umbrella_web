@@ -16,6 +16,9 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
+import Tooltip from '@material-ui/core/Tooltip'
+import Fade from '@material-ui/core/Fade'
+import Zoom from '@material-ui/core/Zoom'
 
 import HomeIcon from '@material-ui/icons/Home'
 import CalendarViewDayIcon from '@material-ui/icons/CalendarViewDay'
@@ -88,7 +91,7 @@ class Menu extends React.Component {
 	handleDrawerClose = () => this.props.dispatch(toggleMainMenu(false))
 
 	renderItems = () => {
-		const { router, locale, systemLocaleMap, classes } = this.props
+		const { router, locale, systemLocaleMap, classes, mainMenuOpened } = this.props
 
 		return (
 			<List>
@@ -102,10 +105,17 @@ class Menu extends React.Component {
 
 					return (
 						<Link key={i} href={link.path}>
-							<ListItem className={classes.drawerItem} title={link.name} button>
-								<ListItemIcon>{link.icon(iconColor)}</ListItemIcon>
-								<ListItemText primary={systemLocaleMap[locale][link.key]} />
-							</ListItem>
+							<Tooltip 
+								title={systemLocaleMap[locale][link.key]} 
+								placement="right"
+								TransitionComponent={Fade} 
+								TransitionProps={{ timeout: 600 }}
+							>
+								<ListItem className={classes.drawerItem} title={link.name} button>
+									<ListItemIcon>{link.icon(iconColor)}</ListItemIcon>
+									<ListItemText primary={systemLocaleMap[locale][link.key]} />
+								</ListItem>
+							</Tooltip>
 						</Link>
 					)
 				})}

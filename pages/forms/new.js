@@ -5,8 +5,7 @@ import Router, { withRouter } from 'next/router'
 import { withStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
-import StepLabel from '@material-ui/core/StepLabel'
-import LinearProgress from '@material-ui/core/LinearProgress'
+import StepButton from '@material-ui/core/StepButton'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import FormControl from '@material-ui/core/FormControl'
@@ -37,18 +36,7 @@ const styles = theme => ({
 		maxWidth: '50rem',
 		margin: '0 auto',
 		padding: '1rem',
-	},
-	progressWrapper: {
-		flexGrow: 1,
-	},
-	progressRoot: {
-		height: '3px',
-	},
-	progressBackgroundColor: {
-		backgroundColor: theme.palette.grey[900],
-	},
-	percentage: {
-		marginTop: '1rem',
+		overflow: 'auto',
 	},
 	formWrapper: {
 		...paperStyles(theme),
@@ -71,7 +59,6 @@ class FormsNew extends React.Component {
 
 	state = {
 		activeStep: 0,
-		progress: 0,
 		formState: [],
 		error: null, 
 		errorMessage: null,
@@ -142,10 +129,7 @@ class FormsNew extends React.Component {
 		const { formState } = this.state
 
 		if (!formSaved) {
-			this.setState({
-				activeStep: 0,
-				progress: 0,
-			})
+			this.setState({ activeStep: 0 })
 
 			const date = new Date()
 			const id = ID()
@@ -186,10 +170,7 @@ class FormsNew extends React.Component {
 		const { locale, systemLocaleMap } = this.props
 
 		if (confirm(systemLocaleMap[locale].confirm_form_close)) {
-			this.setState({
-				activeStep: 0,
-				progress: 0,
-			})
+			this.setState({ activeStep: 0 })
 
 			Router.push('/forms')
 		}
@@ -199,36 +180,27 @@ class FormsNew extends React.Component {
 		!!e && e.preventDefault()
 
 		const { form } = this.props
-		const { activeStep, progress } = this.state
+		const { activeStep } = this.state
 
 		const stepCount = 100 / form.screens.length
 
-		this.setState({
-			activeStep: activeStep + 1,
-			progress: progress + stepCount,
-		})
+		this.setState({ activeStep: activeStep + 1 })
 	}
 
 	onBack = () => {
 		const { form } = this.props
-		const { activeStep, progress } = this.state
+		const { activeStep } = this.state
 
 		const stepCount = 100 / form.screens.length
 
-		this.setState(state => ({
-			activeStep: activeStep - 1, 
-			progress: progress - stepCount,
-		}))
+		this.setState(state => ({ activeStep: activeStep - 1 }))
 	}
 
 	onFinish = () => {
 		const { dispatch, router, locale, systemLocaleMap, form } = this.props
 		const { formState } = this.state
 
-		this.setState({
-			activeStep: 0,
-			progress: 0,
-		})
+		this.setState({ activeStep: 0 })
 
 		const date = new Date()
 
@@ -346,7 +318,7 @@ class FormsNew extends React.Component {
 
 	render() {
 		const { classes, locale, systemLocaleMap, getFormLoading, getFormError, form } = this.props
-		const { activeStep, progress, formState } = this.state
+		const { activeStep, formState } = this.state
 
 		if (getFormLoading || !formState.length) return <Loading />
 		else if (getFormError) return <ErrorMessage error={getFormError} />
@@ -356,28 +328,14 @@ class FormsNew extends React.Component {
 		return (
 			<Layout title={`${systemLocaleMap[locale].app_name} | ${systemLocaleMap[locale].form_title}`} description="Umbrella web application">
 				<div className={classes.stepperWrapper}>
-					<Stepper className={classes.stepper} activeStep={activeStep}>
+					<Stepper className={classes.stepper} activeStep={activeStep} nonLinear>
 						{form.screens.map((screen, i) => (
-							<Step key={i}>
-								<StepLabel>{form.screens.length <= 6 && screen.title}</StepLabel>
+							<Step key={i} onClick={() => this.setState({ activeStep: i })}>
+								<StepButton>{form.screens.length <= 6 && screen.title}</StepButton>
 							</Step>
 						))}
 					</Stepper>
 				</div>
-
-				<div className={classes.progressWrapper}>
-					<LinearProgress 
-						classes={{
-							root: classes.progressRoot,
-							colorSecondary: classes.progressBackgroundColor,
-						}}
-						color="secondary" 
-						variant="determinate" 
-						value={progress === 0 ? 1 : progress} 
-					/>
-				</div>
-
-				<Typography className={classes.percentage} align="center" color="secondary">{progress}%</Typography>
 
 				<div className={classes.content}>
 					{this.renderScreen(screen)}
