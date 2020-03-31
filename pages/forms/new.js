@@ -36,6 +36,7 @@ const styles = theme => ({
 		maxWidth: '50rem',
 		margin: '0 auto',
 		padding: '1rem',
+		overflow: 'auto',
 	},
 	formWrapper: {
 		...paperStyles(theme),
