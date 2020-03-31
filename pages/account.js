@@ -29,17 +29,7 @@ import { clearDb } from '../store/actions/db'
 import { setAppbarTitle, setLocale, openAlert } from '../store/actions/view'
 import { savePassword, resetPassword, unsetPassword } from '../store/actions/account'
 
-import { contentStyles, buttonWrapperStyles } from '../utils/view'
-
-const localeMap = {
-	'en': 'English',
-	'es': 'Spanish',
-	'fr': 'French',
-	'ar': 'Arabic',
-	'fa': 'Persian',
-	'ru': 'Russian',
-	'zh-Hant': 'Chinese - Traditional',
-}
+import { contentStyles, buttonWrapperStyles, localeMap } from '../utils/view'
 
 const styles = theme => ({
 	...contentStyles(theme),
