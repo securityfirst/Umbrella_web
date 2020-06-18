@@ -199,7 +199,7 @@ export default {
 		"feed_rss_title_tab": "RSS",
 		"feed_source": "Feed source",
 		"feed_set_your_feed": "Set your feed",
-		"feed_empty_text": "There are no events to display for you location. We'll display them when they will occour.",
+		"feed_empty_text": "There are no events to display for you location. We'll display them when they will occur.",
 		"feed_set_your_feed_label": "You haven’t set the country and the sources for the feed yet. You have to do it in order for the feed to start displaying, and you can change it any time later in the settings.",
 		"feed_location_label": "Enter location",
 		"feed_sources": "Feed sources",
