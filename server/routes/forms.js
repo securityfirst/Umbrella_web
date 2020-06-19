@@ -1,16 +1,19 @@
-const { renderAndCache } = require('../ssr')
+const { renderAndCache } = require("../ssr");
 
 exports.index = (app) => (req, res) => {
-	const actualPage = '/forms'
-	return renderAndCache(app, req, res, actualPage)
-}
+  const actualPage = "/forms";
+  return renderAndCache(app, req, res, actualPage);
+};
 
 exports.new = (app) => (req, res) => {
-	const actualPage = '/forms/new'
-	return renderAndCache(app, req, res, actualPage, {sha: req.params.sha})
-}
+  const actualPage = "/forms/new";
+  return renderAndCache(app, req, res, actualPage, { sha: req.params.sha });
+};
 
 exports.edit = (app) => (req, res) => {
-	const actualPage = '/forms/edit'
-	return renderAndCache(app, req, res, actualPage, {sha: req.params.sha, id: req.params.id})
-}
+  const actualPage = "/forms/edit";
+  return renderAndCache(app, req, res, actualPage, {
+    sha: req.params.sha,
+    id: req.params.id,
+  });
+};

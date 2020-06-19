@@ -18,13 +18,14 @@ Umbrella is a web application developed by [Security First](https://www.secfirst
 
 F-Droid fingerprint: 39EB57052F8D684514176819D1645F6A0A7BD943DBC31AB101949006AC0BC228
 
-
 ## Example Usage
+
 Umbrella is designed for everyone (people looking to increase their security, folks living in high risk areas, regular travellers, business people, techies, journalists, NGO staff, aid workers, human rights defenders, social workers, environmental activists etc).
 
 However, when we built Umbrella we tried to keep in mind the story of Glen Greenwald and Edward Snowden. Greenwald couldn't communicate with Snowden at the start because he found it cumbersome to setup encryption (he nearly missed one of the biggest stories of the decade because of this!). Also, when he (and Laura Poitras) travelled to Hong Kong - they didn't have much knowledge about how to meet securely with Snowden and detect surveillance. This is common problem for journalists and activists. Umbrella is designed to solve this problem (and others) by having nearly everything they would have needed to know in the one place - in their pocket.
 
 ## Main Parts of Umbrella
+
 **Introduction:**
 This is the part the user sees first. It explains briefly how the app works and the basic terms and conditions.
 
@@ -52,108 +53,110 @@ These are detailed guides about how to use software and apps mentioned in the le
 
 The general flow of lessons are presented in order to replicate the typical way that a user works. Protecting their own information -> Communicating with other people -> Arranging and travelling to a location -> Doing their operations and work -> Dealing with personal issues that may arise-> Seeking support if something goes wrong.
 
-***These are the lessons currently in Umbrella.***
+**_These are the lessons currently in Umbrella._**
 
 **Information:**
 These lessons mostly cover the security of information that is stored on your computers.
 
-* Managing information
-* Malware
-* Passwords
-* Protecting Files
-* Safely Deleting
-* Backing Up
+- Managing information
+- Malware
+- Passwords
+- Protecting Files
+- Safely Deleting
+- Backing Up
 
 **Communications:**
 These lessons mostly cover the security of information when it is sent or received.
 
-* Mobile Phones
-* Making a call
-* Sending a message
-* Email
-* The Internet
-* Social Media
-* Radios and Satellite Phones
-
+- Mobile Phones
+- Making a call
+- Sending a message
+- Email
+- The Internet
+- Social Media
+- Radios and Satellite Phones
 
 **Travel:**
 These lessons cover security of travelling in high risk areas.
 
-* Preparation
-* Borders
-* Vehicles
-* Checkpoints
-* Kidnapping
-
+- Preparation
+- Borders
+- Vehicles
+- Checkpoints
+- Kidnapping
 
 **Operations:**
 These lessons include topics that may affect you in your work.
 
-* Meetings
-* Counter-Surveillance
-* Protests
-* Arrests
-* Evacuation
-
+- Meetings
+- Counter-Surveillance
+- Protests
+- Arrests
+- Evacuation
 
 **Personal:**
 These lessons cover issues which may effect you personally.
 
-* Stress
-* Digital
+- Stress
+- Digital
 
 **Emergency Support:**
 Explains places to get extra help if you have a problem.
 
-* Physical
-* Digital
-
+- Physical
+- Digital
 
 ## Tools
+
 These are the tools currently covered in the tool guide. (A number of them are due to be changed, removed or updated.)
 
-* Adium
-* Android
-* Chatsecure
-* Cobian Backup
-* Facebook
-* K9 Mail & APG
-* KeePassX
-* ObscuraCam
-* Orbot & Orweb
-* PGP for Linux
-* PGP for Mac OS X
-* PGP for Windows
-* Pidgin
-* Psiphon
-* Rescuva
-* Signal
-* Tor for macOS
-* Tor for Windows
-* VeraCrypt
+- Adium
+- Android
+- Chatsecure
+- Cobian Backup
+- Facebook
+- K9 Mail & APG
+- KeePassX
+- ObscuraCam
+- Orbot & Orweb
+- PGP for Linux
+- PGP for Mac OS X
+- PGP for Windows
+- Pidgin
+- Psiphon
+- Rescuva
+- Signal
+- Tor for macOS
+- Tor for Windows
+- VeraCrypt
 
 ## Glossary
+
 Contains explanations of the various terms used in the app.
 
 ## About
+
 Explains the licences that we use for and by Umbrella. Also says a big THANKYOU to everyone who's work we built on to make it happen.
 
 ## Dashboard Feed Sources
+
 ![](https://github.com/rorymbyrne/Umbrella_android/blob/master/DASHBOARDLOGOS.png?raw=true)
 
 These are the sources that we currently include for real-time updated security customFeeds. For privacy reasons, users never connect directly to these services. We are always looking for more useful sources that will help users keep updated on the move.
-* [Centers for Disease Control](https://www.cdc.gov): updates on disease and health warnings
-* [Global Disaster Alert and Coordination System](http://www.gdacs.org): updates on natural disaster issues such as floods, earthquakes and tsunamis
-* [UN / ReliefWeb](http://reliefweb.int): excellent physical security updates that amalgamate information from the UN and various NGOs - though not available in every country
-* [US State Department](https://www.state.gov/travel/): updates mainly focused on the security situation for travellers and internationals - available for every country
+
+- [Centers for Disease Control](https://www.cdc.gov): updates on disease and health warnings
+- [Global Disaster Alert and Coordination System](http://www.gdacs.org): updates on natural disaster issues such as floods, earthquakes and tsunamis
+- [UN / ReliefWeb](http://reliefweb.int): excellent physical security updates that amalgamate information from the UN and various NGOs - though not available in every country
+- [US State Department](https://www.state.gov/travel/): updates mainly focused on the security situation for travellers and internationals - available for every country
 
 ## Settings
+
 The three vertical dots in the top of the app. Here you can:
 
-* Set a password
-* Change the refresh interval for the security customFeeds
-* Change your location
-* Change your feed sources
+- Set a password
+- Change the refresh interval for the security customFeeds
+- Change your location
+- Change your feed sources
 
 ## Requirements
 
@@ -213,7 +216,6 @@ forever start -a -o out.log -e err.log server.js // for production instances
 
 If you'd like to use a different branch for Umbrella content, in your terminal change directory to `/static/assets/content` (root dir for content git) and run `git checkout YOUR_BRANCH`. You will also need to change the branch in the repo fetch in `/server/api/github`.
 
-
 ---
 
 ### Contributors
@@ -221,10 +223,10 @@ If you'd like to use a different branch for Umbrella content, in your terminal c
 Thanks to everyone who has contributed code to Umbrella. It wouldn’t
 have happened without you.
 
-*   [Rok Biderman – Security First Lead Developer](https://github.com/Coccodrillo)
-*   [Vesna Planko – Security First Lead UI/UX Designer](https://github.com/VesnaPlanko)
-*   [Alex Guerrieri – Security First Developer](https://github.com/klaidliadon)
-*   [Adam Hani Schakaki – Security First Developer](https://github.com/krzd)
+- [Rok Biderman – Security First Lead Developer](https://github.com/Coccodrillo)
+- [Vesna Planko – Security First Lead UI/UX Designer](https://github.com/VesnaPlanko)
+- [Alex Guerrieri – Security First Developer](https://github.com/klaidliadon)
+- [Adam Hani Schakaki – Security First Developer](https://github.com/krzd)
 
 **Cryptography Notice**
 
@@ -235,7 +237,7 @@ using any encryption software, please check your country's laws,
 regulations and policies concerning the import, possession, or use, and
 re-export of encryption software, to see if this is permitted.
 
-See [*http://www.wassenaar.org/*](http://www.wassenaar.org/) for more
+See [_http://www.wassenaar.org/_](http://www.wassenaar.org/) for more
 information.
 
 **License**
@@ -244,4 +246,4 @@ Copyright 2013-2018 Global Security First Ltd. (trading as Security
 First)
 
 Licensed under the
-GPLv3: [*http://www.gnu.org/licenses/gpl-3.0.html*](http://www.gnu.org/licenses/gpl-3.0.html)
+GPLv3: [_http://www.gnu.org/licenses/gpl-3.0.html_](http://www.gnu.org/licenses/gpl-3.0.html)

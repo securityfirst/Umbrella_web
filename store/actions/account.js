@@ -1,262 +1,301 @@
-import 'isomorphic-unfetch'
-import Router from 'next/router'
+import "isomorphic-unfetch";
+import Router from "next/router";
 
-import { accountTypes } from '../types.js'
-import { pending, rejected, fulfilled } from '../helpers/asyncActionGenerator.js'
+import { accountTypes } from "../types.js";
+import {
+  pending,
+  rejected,
+  fulfilled,
+} from "../helpers/asyncActionGenerator.js";
 
-import { encryptDb, clearDb, resetDbEncryption } from './db'
-import { openAlert, setLocale } from './view'
+import { encryptDb, clearDb, resetDbEncryption } from "./db";
+import { openAlert, setLocale } from "./view";
 
 export const login = (password, cb) => (dispatch, getState) => {
-	dispatch(pending(accountTypes.LOGIN))
-	
-	const state = getState()
-	const { locale, systemLocaleMap } = state.view
+  dispatch(pending(accountTypes.LOGIN));
 
-	try {
-		const ClientDB = require('../../db')
-		const Account = require('../../account')
+  const state = getState();
+  const { locale, systemLocaleMap } = state.view;
 
-		// Get server key
-		fetch(`${process.env.ROOT}/api/auth/key`)
-		.then(res => {
-			if (!res.ok) throw res
-			return res.text()
-		})
-		.then(key => {
-			ClientDB.default
-			// get encrypted password
-			.get('h', key)
-			.then(async data => {
-				if (!data) {
-					return dispatch(rejected(accountTypes.LOGIN, systemLocaleMap[locale].account_password_not_exist))
-				}
+  try {
+    const ClientDB = require("../../db");
+    const Account = require("../../account");
 
-				// if given password doesn't match decrypted password
-				if (password !== data) {
-					return dispatch(rejected(accountTypes.LOGIN, systemLocaleMap[locale].account_password_incorrect))
-				}
+    // Get server key
+    fetch(`${process.env.ROOT}/api/auth/key`)
+      .then((res) => {
+        if (!res.ok) throw res;
+        return res.text();
+      })
+      .then((key) => {
+        ClientDB.default
+          // get encrypted password
+          .get("h", key)
+          .then(async (data) => {
+            if (!data) {
+              return dispatch(
+                rejected(
+                  accountTypes.LOGIN,
+                  systemLocaleMap[locale].account_password_not_exist
+                )
+              );
+            }
 
-				// Success and sync database to store
-				Account.default.login(password, async () => {
-					await dispatch(fulfilled(accountTypes.LOGIN, password))
+            // if given password doesn't match decrypted password
+            if (password !== data) {
+              return dispatch(
+                rejected(
+                  accountTypes.LOGIN,
+                  systemLocaleMap[locale].account_password_incorrect
+                )
+              );
+            }
 
-					!!cb && cb()
-				})
-			})
-		})
-		.catch(err => {
-			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-			return dispatch(rejected(accountTypes.LOGIN, err))
-		})
-	} catch (e) {
-		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-		dispatch(rejected(accountTypes.LOGIN, e))
-	}
-}
+            // Success and sync database to store
+            Account.default.login(password, async () => {
+              await dispatch(fulfilled(accountTypes.LOGIN, password));
+
+              !!cb && cb();
+            });
+          });
+      })
+      .catch((err) => {
+        dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+        return dispatch(rejected(accountTypes.LOGIN, err));
+      });
+  } catch (e) {
+    dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+    dispatch(rejected(accountTypes.LOGIN, e));
+  }
+};
 
 export const checkProtected = () => async (dispatch, getState) => {
-	dispatch(pending(accountTypes.CHECK_PROTECTED))
+  dispatch(pending(accountTypes.CHECK_PROTECTED));
 
-	const state = getState()
-	const { locale, systemLocaleMap } = state.view
-	
-	try {
-		const ClientDB = require('../../db')
+  const state = getState();
+  const { locale, systemLocaleMap } = state.view;
 
-		ClientDB.default
-		.get('protected')
-		.then(isProtected => {
-			dispatch(fulfilled(accountTypes.CHECK_PROTECTED, !!isProtected))
-		})
-		.catch(err => {
-			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-			dispatch(rejected(accountTypes.CHECK_PROTECTED, err))
-		})
-	} catch (e) {
-		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-		dispatch(rejected(accountTypes.CHECK_PROTECTED, e))
-	}
-}
+  try {
+    const ClientDB = require("../../db");
+
+    ClientDB.default
+      .get("protected")
+      .then((isProtected) => {
+        dispatch(fulfilled(accountTypes.CHECK_PROTECTED, !!isProtected));
+      })
+      .catch((err) => {
+        dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+        dispatch(rejected(accountTypes.CHECK_PROTECTED, err));
+      });
+  } catch (e) {
+    dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+    dispatch(rejected(accountTypes.CHECK_PROTECTED, e));
+  }
+};
 
 export const checkPassword = () => async (dispatch, getState) => {
-	dispatch(pending(accountTypes.CHECK_PASSWORD))
-	
-	const state = getState()
-	const { locale, systemLocaleMap } = state.view
+  dispatch(pending(accountTypes.CHECK_PASSWORD));
 
-	try {
-		const ClientDB = require('../../db')
+  const state = getState();
+  const { locale, systemLocaleMap } = state.view;
 
-		ClientDB.default
-		.get('h')
-		.then(hash => {
-			dispatch(fulfilled(accountTypes.CHECK_PASSWORD, !!hash))
-		})
-		.catch(err => {
-			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-			dispatch(rejected(accountTypes.CHECK_PASSWORD, err))
-		})
-	} catch (e) {
-		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-		dispatch(rejected(accountTypes.CHECK_PASSWORD, e))
-	}
-}
+  try {
+    const ClientDB = require("../../db");
+
+    ClientDB.default
+      .get("h")
+      .then((hash) => {
+        dispatch(fulfilled(accountTypes.CHECK_PASSWORD, !!hash));
+      })
+      .catch((err) => {
+        dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+        dispatch(rejected(accountTypes.CHECK_PASSWORD, err));
+      });
+  } catch (e) {
+    dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+    dispatch(rejected(accountTypes.CHECK_PASSWORD, e));
+  }
+};
 
 export const savePassword = (password, cb) => (dispatch, getState) => {
-	dispatch(pending(accountTypes.SAVE_PASSWORD))
-	
-	const state = getState()
-	const { locale, systemLocaleMap } = state.view
+  dispatch(pending(accountTypes.SAVE_PASSWORD));
 
-	try {
-		const ClientDB = require('../../db')
-		const Account = require('../../account')
+  const state = getState();
+  const { locale, systemLocaleMap } = state.view;
 
-		fetch(`${process.env.ROOT}/api/auth/key`)
-		.then(res => {
-			if (!res.ok) throw res
-			return res.text()
-		})
-		.then(async key => {
-			// First encrypt DB
-			await dispatch(encryptDb(key, password))
+  try {
+    const ClientDB = require("../../db");
+    const Account = require("../../account");
 
-			ClientDB.default.set('protected', true)
+    fetch(`${process.env.ROOT}/api/auth/key`)
+      .then((res) => {
+        if (!res.ok) throw res;
+        return res.text();
+      })
+      .then(async (key) => {
+        // First encrypt DB
+        await dispatch(encryptDb(key, password));
 
-			ClientDB.default
-			.set('h', password, key)
-			.then(() => {
-				dispatch(openAlert('success', systemLocaleMap[locale].account_password_success))
+        ClientDB.default.set("protected", true);
 
-				Account.default.login(password)
+        ClientDB.default
+          .set("h", password, key)
+          .then(() => {
+            dispatch(
+              openAlert(
+                "success",
+                systemLocaleMap[locale].account_password_success
+              )
+            );
 
-				dispatch(fulfilled(accountTypes.SAVE_PASSWORD, password))
-				
-				!!cb && cb()
-			})
-			.catch(err => {
-				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-				dispatch(rejected(accountTypes.SAVE_PASSWORD, err))
-			})
-		})
-		.catch(err => {
-			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-			dispatch(rejected(accountTypes.SAVE_PASSWORD, err))
-		})
-	} catch (e) {
-		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-		dispatch(rejected(accountTypes.SAVE_PASSWORD, e))
-	}
-}
+            Account.default.login(password);
 
-export const resetPassword = (newPassword, oldPassword, cb) => async (dispatch, getState) => {
-	dispatch(pending(accountTypes.RESET_PASSWORD))
+            dispatch(fulfilled(accountTypes.SAVE_PASSWORD, password));
 
-	const state = getState()
-	const { locale, systemLocaleMap } = state.view
+            !!cb && cb();
+          })
+          .catch((err) => {
+            dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+            dispatch(rejected(accountTypes.SAVE_PASSWORD, err));
+          });
+      })
+      .catch((err) => {
+        dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+        dispatch(rejected(accountTypes.SAVE_PASSWORD, err));
+      });
+  } catch (e) {
+    dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+    dispatch(rejected(accountTypes.SAVE_PASSWORD, e));
+  }
+};
 
-	if (!oldPassword) {
-		if (!confirm(systemLocaleMap[locale].account_reset_password_text)) {
-			return dispatch(rejected(accountTypes.RESET_PASSWORD, 'Action cancelled'))
-		}
+export const resetPassword = (newPassword, oldPassword, cb) => async (
+  dispatch,
+  getState
+) => {
+  dispatch(pending(accountTypes.RESET_PASSWORD));
 
-		try {
-			const state = getState()
-			const { locale } = state.view
+  const state = getState();
+  const { locale, systemLocaleMap } = state.view;
 
-			await dispatch(clearDb())
-			await dispatch(setLocale(locale))
-			await dispatch(savePassword(newPassword))
-			await dispatch(checkPassword())
+  if (!oldPassword) {
+    if (!confirm(systemLocaleMap[locale].account_reset_password_text)) {
+      return dispatch(
+        rejected(accountTypes.RESET_PASSWORD, "Action cancelled")
+      );
+    }
 
-			return dispatch(fulfilled(accountTypes.RESET_PASSWORD, newPassword))
-		} catch (e) {
-			return dispatch(rejected(accountTypes.RESET_PASSWORD, e))
-		}
-	} else {
-		try {
-			const ClientDB = require('../../db')
-			const Account  = require('../../account')
+    try {
+      const state = getState();
+      const { locale } = state.view;
 
-			fetch(`${process.env.ROOT}/api/auth/key`)
-			.then(res => {
-				if (!res.ok) throw res
-				return res.text()
-			})
-			.then(async key => {
-				const password = await ClientDB.default.get('h', key)
+      await dispatch(clearDb());
+      await dispatch(setLocale(locale));
+      await dispatch(savePassword(newPassword));
+      await dispatch(checkPassword());
 
-				if (password !== oldPassword) {
-					const message = systemLocaleMap[locale].confirm_account_password_error_message
-					dispatch(openAlert('error', message))
-					return dispatch(rejected(accountTypes.RESET_PASSWORD, message))
-				}
+      return dispatch(fulfilled(accountTypes.RESET_PASSWORD, newPassword));
+    } catch (e) {
+      return dispatch(rejected(accountTypes.RESET_PASSWORD, e));
+    }
+  } else {
+    try {
+      const ClientDB = require("../../db");
+      const Account = require("../../account");
 
-				// reset db
-				await dispatch(resetDbEncryption(key, newPassword))
+      fetch(`${process.env.ROOT}/api/auth/key`)
+        .then((res) => {
+          if (!res.ok) throw res;
+          return res.text();
+        })
+        .then(async (key) => {
+          const password = await ClientDB.default.get("h", key);
 
-				// reset password
-				ClientDB.default
-				.set('h', newPassword, key)
-				.then(async () => {
-					// logout
-					await Account.default.logout()
+          if (password !== oldPassword) {
+            const message =
+              systemLocaleMap[locale].confirm_account_password_error_message;
+            dispatch(openAlert("error", message));
+            return dispatch(rejected(accountTypes.RESET_PASSWORD, message));
+          }
 
-					// login with new password
-					await Account.default.login(newPassword)
+          // reset db
+          await dispatch(resetDbEncryption(key, newPassword));
 
-					dispatch(openAlert('success', systemLocaleMap[locale].account_password_changed))
+          // reset password
+          ClientDB.default
+            .set("h", newPassword, key)
+            .then(async () => {
+              // logout
+              await Account.default.logout();
 
-					dispatch(fulfilled(accountTypes.RESET_PASSWORD, newPassword))
-					
-					!!cb && cb()
-				})
-				.catch(err => {
-					dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-					dispatch(rejected(accountTypes.RESET_PASSWORD, err))
-				})
-			})
-			.catch(err => {
-				dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-				dispatch(rejected(accountTypes.RESET_PASSWORD, err))
-			})
-		} catch (e) {
-			dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-			dispatch(rejected(accountTypes.RESET_PASSWORD))
-		}
-	}
-}
+              // login with new password
+              await Account.default.login(newPassword);
+
+              dispatch(
+                openAlert(
+                  "success",
+                  systemLocaleMap[locale].account_password_changed
+                )
+              );
+
+              dispatch(fulfilled(accountTypes.RESET_PASSWORD, newPassword));
+
+              !!cb && cb();
+            })
+            .catch((err) => {
+              dispatch(
+                openAlert("error", systemLocaleMap[locale].general_error)
+              );
+              dispatch(rejected(accountTypes.RESET_PASSWORD, err));
+            });
+        })
+        .catch((err) => {
+          dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+          dispatch(rejected(accountTypes.RESET_PASSWORD, err));
+        });
+    } catch (e) {
+      dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+      dispatch(rejected(accountTypes.RESET_PASSWORD));
+    }
+  }
+};
 
 export const unsetPassword = () => async (dispatch, getState) => {
-	dispatch(pending(accountTypes.UNSET_PASSWORD))
+  dispatch(pending(accountTypes.UNSET_PASSWORD));
 
-	const state = getState()
-	const { passwordExists, isProtected } = state.account
-	const { locale, systemLocaleMap } = state.view
+  const state = getState();
+  const { passwordExists, isProtected } = state.account;
+  const { locale, systemLocaleMap } = state.view;
 
-	try {
-		const Account  = require('../../account')
+  try {
+    const Account = require("../../account");
 
-		if (!isProtected) return dispatch(fulfilled(accountTypes.UNSET_PASSWORD))
+    if (!isProtected) return dispatch(fulfilled(accountTypes.UNSET_PASSWORD));
 
-		if (!confirm(systemLocaleMap[locale].account_reset_password_text)) {
-			return dispatch(rejected(accountTypes.UNSET_PASSWORD, 'Action cancelled'))
-		}
+    if (!confirm(systemLocaleMap[locale].account_reset_password_text)) {
+      return dispatch(
+        rejected(accountTypes.UNSET_PASSWORD, "Action cancelled")
+      );
+    }
 
-		await dispatch(clearDb())
-		await dispatch(setLocale(locale))
-		await dispatch(checkPassword())
+    await dispatch(clearDb());
+    await dispatch(setLocale(locale));
+    await dispatch(checkPassword());
 
-		// logout
-		await Account.default.logout()
-		await dispatch(openAlert('success', systemLocaleMap[locale].account_password_unset_success))
+    // logout
+    await Account.default.logout();
+    await dispatch(
+      openAlert(
+        "success",
+        systemLocaleMap[locale].account_password_unset_success
+      )
+    );
 
-		setTimeout(() => window.location.reload(), 1000)
-	} catch (e) {
-		dispatch(openAlert('error', systemLocaleMap[locale].general_error))
-		dispatch(rejected(accountTypes.UNSET_PASSWORD))
-	}
-}
+    setTimeout(() => window.location.reload(), 1000);
+  } catch (e) {
+    dispatch(openAlert("error", systemLocaleMap[locale].general_error));
+    dispatch(rejected(accountTypes.UNSET_PASSWORD));
+  }
+};
 
-export const clearPassword = () => ({type: accountTypes.CLEAR_PASSWORD})
+export const clearPassword = () => ({ type: accountTypes.CLEAR_PASSWORD });
