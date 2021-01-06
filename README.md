@@ -56,8 +56,6 @@ The general flow of lessons is presented in order to replicate the typical way t
 
 ***These are the lessons currently in Umbrella.***
 
-***These are the lessons currently in Umbrella.***
-
 ### Access your risk
 
 - Security Planning
@@ -68,9 +66,9 @@ These lessons mostly cover the security of information that is stored on your co
 
 - Managing information
 - Malware
-- Password
+- Passwords
 - Protecting Files
-- Safety Deleting
+- Safely Deleting
 - Backing Up
 - Protect your workplace
 - Workplace raids
