@@ -44,7 +44,15 @@ Lessons are where users can learn about topics and things that they can do to im
 These are detailed guides about how to use software and apps mentioned in the lessons.
 
 **Checklists:**
-Checklists are quick and easy references to help users implement the advice in the lessons. You can tick them off as you complete each item. Items can be edited. You may also create custom checklists. If you start ticking a checklist, you will then see them on the Checklists page. Checklists can also be shared through other apps such as your email.
+Checklists are quick and easy references to help users implement the advice in the lessons. You can tick them off as you complete each item. Items can be edited. You may also create custom checklists. If you start ticking a checklist, you will then see them on the Checklists page. Checklists can also be shared throu
+
+1
+
+# Umbrella Web
+
+2
+
+​gh other apps such as your email.
 
 **Forms:**
 Forms allow a user to quickly fill out and share important information about issues such as their travel plan in a high-risk location or report on a digital/physical security incident.
@@ -60,6 +68,14 @@ The general flow of lessons is presented in order to replicate the typical way t
 
 - Security Planning
 
+
+1
+
+# Umbrella Web
+
+2
+
+​
 ### Information
 
 These lessons mostly cover the security of information that is stored on your computers.
@@ -81,6 +97,10 @@ These lessons mostly cover the security of information when it is sent or receiv
 - Making a call
 - Sending a message
 - Email
+
+35
+
+**Menu:** The bottom navigation menu is the main way for a user to navigate. It lists the feed, forms, lessons (with tool guides), checklists and account.
 - Censorship
 - Online Privacy
 - Phishing
@@ -88,6 +108,10 @@ These lessons mostly cover the security of information when it is sent or receiv
 - Online abuse
 
 ### Travel
+
+56
+
+​
 
 These lessons cover the security of travelling in high-risk areas.
 
@@ -197,7 +221,7 @@ Unfortunately stuff breaks sometimes. If you are in a hurry and have found a cod
 If the issue you have identified is a security risk to users, please
 read the documentation about our responsible disclosure policy here:
 
-<https://secfirst.org/legal.html>
+<https://secfirst.org/legal>
 
 If you wish to contact us via PGP, please drop a mail to
 <rory@secfirst.org> (2C1D3B4D)
