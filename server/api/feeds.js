@@ -1,117 +1,114 @@
-require('isomorphic-unfetch')
+require("isomorphic-unfetch");
 
-const express = require('express')
-const router = express.Router()
-const isUrl = require('is-url')
-const Parser = require('rss-parser')
-let parser = new Parser()
+const express = require("express");
+const router = express.Router();
+const isUrl = require("is-url");
+const Parser = require("rss-parser");
+let parser = new Parser();
 
-router.post('/', (req, res) => {
-	try {
-		const { location, sources } = req.body
+router.post("/", (req, res) => {
+  try {
+    const { location, sources } = req.body;
 
-		if (
-			!location || 
-			!(typeof location === 'string') || 
-			!sources || 
-			!(sources instanceof Array) ||
-			!sources.length
-		) {
-			console.error('[API] /feeds: Request incomplete')
-			res.statusMessage = 'Request incomplete'
-			return res.status(400).end()
-		}
+    if (
+      !location ||
+      !(typeof location === "string") ||
+      !sources ||
+      !(sources instanceof Array) ||
+      !sources.length
+    ) {
+      console.error("[API] /feeds: Request incomplete");
+      res.statusMessage = "Request incomplete";
+      return res.status(400).end();
+    }
 
-		let since = new Date()
-		since = since.valueOf() - 2592000000 // 30 days ago
+    let since = new Date();
+    since = since.valueOf() - 2592000000; // 30 days ago
 
-		const url = `${process.env.API_HOST}v3/feed?country=${location.toUpperCase()}&sources=${sources.join(',')}`
+    const url = `${
+      process.env.API_HOST
+    }v3/feed?country=${location.toUpperCase()}&sources=${sources.join(",")}`;
 
-		fetch(url)
-			.then(resp => {
-				if (!resp.ok) {
-					console.error('[API] /feeds response error: ', resp)
-					res.statusMessage = 'Failed to retrieve feeds'
-					return res.status(500).end()
-				}
+    fetch(url)
+      .then((resp) => {
+        if (!resp.ok) {
+          console.error("[API] /feeds response error: ", resp);
+          res.statusMessage = "Failed to retrieve feeds";
+          return res.status(500).end();
+        }
 
-				return resp.json()
-			})
-			.then(data => {
-				return res.status(200).send(data)
-			})
-			.catch(err => {
-				console.error('[API] /feeds catch error: ', JSON.stringify(err))
-				res.statusMessage = 'Failed to retrieve feeds'
-				return res.status(500).end()
-			})
-	} catch (e) {
-		console.error('[API] /feeds exception: ', e)
-		res.statusMessage = 'Failed to retrieve feeds'
-		res.status(500).end()
-	}
-})
+        return resp.json();
+      })
+      .then((data) => {
+        return res.status(200).send(data);
+      })
+      .catch((err) => {
+        console.error("[API] /feeds catch error: ", JSON.stringify(err));
+        res.statusMessage = "Failed to retrieve feeds";
+        return res.status(500).end();
+      });
+  } catch (e) {
+    console.error("[API] /feeds exception: ", e);
+    res.statusMessage = "Failed to retrieve feeds";
+    res.status(500).end();
+  }
+});
 
-router.post('/rss', async (req, res) => {
-	try {
-		const { sources } = req.body
+router.post("/rss", async (req, res) => {
+  try {
+    const { sources } = req.body;
 
-		if (
-			!sources || 
-			!(sources instanceof Array) ||
-			!sources.length
-		) {
-			console.error('[API] /feeds/rss: Request incomplete')
-			res.statusMessage = 'Request incomplete'
-			return res.status(400).end()
-		}
+    if (!sources || !(sources instanceof Array) || !sources.length) {
+      console.error("[API] /feeds/rss: Request incomplete");
+      res.statusMessage = "Request incomplete";
+      return res.status(400).end();
+    }
 
-		let data = []
+    let data = [];
 
-		for (let i = 0; i < sources.length; i++) {
-			try {
-				const rss = await parser.parseURL(sources[i])
-				data.push(rss)
-			} catch (e) {
-				console.error('[API] /feeds/rss parser exception: ', e)
-			}
+    for (let i = 0; i < sources.length; i++) {
+      try {
+        const rss = await parser.parseURL(sources[i]);
+        data.push(rss);
+      } catch (e) {
+        console.error("[API] /feeds/rss parser exception: ", e);
+      }
 
-			if (i === sources.length - 1) {
-				res.status(200).send(data)
-			}
-		}
-	} catch (e) {
-		console.error('[API] /feeds/rss exception: ', e)
-		res.statusMessage = 'Failed to retrieve RSS feeds'
-		res.status(500).end()
-	}
-})
+      if (i === sources.length - 1) {
+        res.status(200).send(data);
+      }
+    }
+  } catch (e) {
+    console.error("[API] /feeds/rss exception: ", e);
+    res.statusMessage = "Failed to retrieve RSS feeds";
+    res.status(500).end();
+  }
+});
 
-router.post('/rss/add', async (req, res) => {
-	try {
-		const { source } = req.body
+router.post("/rss/add", async (req, res) => {
+  try {
+    const { source } = req.body;
 
-		if (!source || !isUrl(source)) {
-			console.error('[API] /feeds/rss/add: Request incomplete')
-			res.statusMessage = 'Request incomplete'
-			return res.status(400).end()
-		}
+    if (!source || !isUrl(source)) {
+      console.error("[API] /feeds/rss/add: Request incomplete");
+      res.statusMessage = "Request incomplete";
+      return res.status(400).end();
+    }
 
-		const rss = await parser.parseURL(source)
+    const rss = await parser.parseURL(source);
 
-		if (!rss) {
-			console.error('[API] /feeds/rss/add: RSS source is not valid')
-			res.statusMessage = 'RSS source is not valid'
-			return res.status(500).end()
-		}
+    if (!rss) {
+      console.error("[API] /feeds/rss/add: RSS source is not valid");
+      res.statusMessage = "RSS source is not valid";
+      return res.status(500).end();
+    }
 
-		return res.status(200).send(rss)
+    return res.status(200).send(rss);
+  } catch (e) {
+    console.error("[API] /feeds/rss/add exception: ", e);
+    res.statusMessage = "Failed to add RSS source";
+    res.status(500).end();
+  }
+});
 
-	} catch (e) {
-		console.error('[API] /feeds/rss/add exception: ', e)
-		res.statusMessage = 'Failed to add RSS source'
-		res.status(500).end()
-	}
-})
-
-module.exports = router
+module.exports = router;
